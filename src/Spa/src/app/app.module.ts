@@ -7,15 +7,22 @@ import { checkIfUserIsAuthenticated } from './account/check-login-initializer';
 import { AccountService } from './account/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpConfigInterceptor } from './common/http-config.interceptor';
+import { AppBootstrapModule } from './common/app-bootstrap.module';
+import { LoginComponent } from './account/login/login.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AccountComponent
+    AccountComponent,
+    LoginComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+
+    AppBootstrapModule
   ],
   providers: [
     {
