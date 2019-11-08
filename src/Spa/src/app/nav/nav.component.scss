@@ -29,7 +29,9 @@
 }
 
 @media only screen and (max-width: 765px) {
-  .nav-content {
+  .app-nav-box {
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: initial;
   }
 }
