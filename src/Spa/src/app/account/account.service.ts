@@ -4,28 +4,31 @@ import { tap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { LoginCheck } from './models/check-login.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  private isUserAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private unAuthObj = new LoginCheck();
+  private isUserAuthenticatedSubject =
+    new BehaviorSubject<LoginCheck>(this.unAuthObj);
   isUserAuthenticated$ = this.isUserAuthenticatedSubject.asObservable();
 
   constructor(@Inject(DOCUMENT)
               private document: Document,
               private httpClient: HttpClient) { }
 
-  checkUserAuthenticationStatus(): Observable<boolean> {
-    return this.httpClient.get<boolean>(
+  checkUserAuthenticationStatus(): Observable<LoginCheck> {
+    return this.httpClient.get<LoginCheck>(
       `${environment.api.accountApi.isAuthenticated}`).pipe(tap(r => {
         this.isUserAuthenticatedSubject.next(r);
       }));
   }
 
   invalidateUserAuthentication(): void {
-    this.isUserAuthenticatedSubject.next(false);
+    this.isUserAuthenticatedSubject.next(this.unAuthObj);
   }
 
   login(): void {

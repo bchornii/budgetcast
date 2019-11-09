@@ -82,7 +82,11 @@ namespace BudgetCast.Dashboard.Api.Controllers
         [HttpGet("isAuthenticated")]
         public IActionResult IsAuthenticated()
         {
-            return Ok(User.Identity.IsAuthenticated);
+            return Ok(new 
+            {
+                User.Identity.IsAuthenticated,
+                UserName = User.Claims.LastOrDefault(c => c.Type == ClaimTypes.Name)?.Value
+            });
         }        
 
         [Authorize]

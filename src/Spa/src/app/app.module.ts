@@ -1,26 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { AccountComponent } from './account/account.component';
 import { checkIfUserIsAuthenticated } from './account/login/check-login-initializer';
 import { AccountService } from './account/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpConfigInterceptor } from './common/http-config.interceptor';
 import { AppBootstrapModule } from './common/app-bootstrap.module';
-import { LoginComponent } from './account/login/login.component';
 import { NavComponent } from './nav/nav.component';
+import { appRoutes } from './app.routes';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AccountComponent,
-    LoginComponent,
-    NavComponent
+    NavComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    RouterModule.forRoot(appRoutes),
 
     AppBootstrapModule
   ],
@@ -30,7 +31,8 @@ import { NavComponent } from './nav/nav.component';
       useClass: HttpConfigInterceptor,
       multi: true,
       deps: [AccountService]
-    },
+    }
+    ,
     {
       provide: APP_INITIALIZER,
       useFactory: checkIfUserIsAuthenticated,

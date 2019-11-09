@@ -3,7 +3,7 @@
   flex-direction: row;;
   align-items: center;
 
-  padding: 1rem;
+  padding: 1.2rem 0.8rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid #dee2e6;
   box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
@@ -12,20 +12,29 @@
 .app-nav-title {
   margin-right: auto;
   margin-bottom: 0;
+  font-weight: 600;
 }
 
-.app-nav-links {
-  padding-right: 1rem;
+.app-nav-link-container {
+  padding-right: 0.2rem;
 }
 
 .app-nav-link {
-  color: #343a40;
+  color: #4353ff;
   text-decoration: none;
-  padding-right: 1rem;
-}
+  padding: 0.8rem 0.9rem;
 
-.app-nav-link:hover {
-  text-decoration: underline;
+  &:hover {
+    background-color: rgba(67,83,255,.1);
+  }
+
+  &-active {
+    text-decoration: underline;
+  }
+
+  &-login {
+    margin-left: 2rem;
+  }
 }
 
 @media only screen and (max-width: 765px) {
@@ -33,5 +42,11 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: initial;
+  }
+
+  .app-nav-link {
+    &-login {
+      border: none;
+    }
   }
 }

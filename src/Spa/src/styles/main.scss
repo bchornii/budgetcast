@@ -1,7 +1,24 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import './controls/inputs';
 
 $main-font-size: 18px;
 
 html {
   font-size: $main-font-size;
+}
+
+@font-face {
+  font-family: HkGraphicMedium;
+  src: url('../assets/fonts/HKGrotesk-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: HkGraphicLight;
+  src: url('../assets/fonts/HKGrotesk-Light.otf') format('opentype');
+}
+
+* {
+  font-family: HkGraphicMedium;
+  margin: 0;
+  padding: 0;
 }

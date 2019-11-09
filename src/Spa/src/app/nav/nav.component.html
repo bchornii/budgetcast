@@ -1,8 +1,19 @@
 <div class="app-nav-box">
   <h5 class="app-nav-title">Budget Cast</h5>
-  <nav class="app-nav-links">
+  <nav class="app-nav-link-container">
+    <a class="app-nav-link"
+       [routerLink]="['/home']"
+       routerLinkActive="app-nav-link-active">Home</a>
+
     <a class="app-nav-link" href="#">Features</a>
+
     <a class="app-nav-link" href="#">Support</a>
+
+    <a class="app-nav-link app-nav-link-login"
+      *ngIf="!loginCheck.isAuthenticated"
+      [routerLink]="['account/login']">Login</a>
+
+    <a class="app-nav-link app-nav-link-login"
+       *ngIf="loginCheck.isAuthenticated">Hi, {{loginCheck.userName}}</a>
   </nav>
-  <a class="btn btn-outline-primary btn-sm" href="#">Login</a>
 </div>
