@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AccountService } from '../account/account.service';
 import { Subscription } from 'rxjs';
 import { LoginCheck } from '../account/models/check-login.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -10,16 +11,22 @@ import { LoginCheck } from '../account/models/check-login.model';
 })
 export class NavComponent implements OnInit, OnDestroy {
   loginCheck: LoginCheck;
-  subscription: Subscription;
+  authSubscription: Subscription;
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService,
+              private router: Router) { }
 
   ngOnInit() {
-    this.subscription = this.accountService.isUserAuthenticated$
+    this.authSubscription = this.accountService.isUserAuthenticated$
     .subscribe(loginCheck => this.loginCheck = loginCheck);
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.authSubscription.unsubscribe();
+  }
+
+  logOut() {
+    this.accountService.logout()
+      .subscribe(_ => this.router.navigate(['/home']));
   }
 }

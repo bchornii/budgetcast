@@ -1,6 +1,5 @@
 ﻿using BudgetCast.Dashboard.Api.AppSettings;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -85,15 +84,10 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Ok(new 
             {
                 User.Identity.IsAuthenticated,
-                UserName = User.Claims.LastOrDefault(c => c.Type == ClaimTypes.Name)?.Value
+                UserName = User.Claims.LastOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
+                GivenName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
+                SurName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value
             });
         }        
-
-        [Authorize]
-        [HttpGet("check")]
-        public IActionResult Check()
-        {
-            return Ok();
-        }
     }
 }

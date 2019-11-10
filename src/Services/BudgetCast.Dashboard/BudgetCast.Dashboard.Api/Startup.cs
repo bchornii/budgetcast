@@ -66,7 +66,7 @@ namespace BudgetCast.Dashboard.Api
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.SlidingExpiration = true;
 
                 options.Events.OnRedirectToLogin = redirectContext =>

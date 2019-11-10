@@ -1,19 +1,41 @@
 <div class="app-nav-box">
   <h5 class="app-nav-title">Budget Cast</h5>
-  <nav class="app-nav-link-container">
-    <a class="app-nav-link"
-       [routerLink]="['/home']"
-       routerLinkActive="app-nav-link-active">Home</a>
-
-    <a class="app-nav-link" href="#">Features</a>
-
-    <a class="app-nav-link" href="#">Support</a>
-
-    <a class="app-nav-link app-nav-link-login"
-      *ngIf="!loginCheck.isAuthenticated"
-      [routerLink]="['account/login']">Login</a>
-
-    <a class="app-nav-link app-nav-link-login"
-       *ngIf="loginCheck.isAuthenticated">Hi, {{loginCheck.userName}}</a>
+  <nav class="app-nav-menu-container">
+    <ul class="app-nav-menu">
+      <li class="app-nav-menu-item">
+        <a class="app-nav-menu-item-link" [routerLink]="['/home']"
+          routerLinkActive="app-nav-menu-item-link-active">Home</a>
+      </li>
+      <li class="app-nav-menu-item">
+        <a class="app-nav-menu-item-link" href="#">Features</a>
+      </li>
+      <li class="app-nav-menu-item">
+        <a class="app-nav-menu-item-link" href="#">Support</a>
+      </li>
+      <li class="app-nav-menu-item">
+        <a class="app-nav-menu-item-link"
+          *ngIf="!loginCheck.isAuthenticated"
+          [routerLink]="['account/login']">Log In</a>
+      </li>
+    </ul>
   </nav>
+  <div class="app-nav-user"
+       *ngIf="loginCheck.isAuthenticated"
+       ngbDropdown
+       #myDrop="ngbDropdown">
+      <button class="app-button-control app-nav-user-button"
+              id="dropdownManual"
+              ngbDropdownAnchor
+              (focus)="myDrop.open()">Hi, {{loginCheck.givenName}}</button>
+      <div class="app-nav-user-menu"
+           ngbDropdownMenu
+           aria-labelledby="dropdownManual">
+        <button class="app-nav-user-menu-btn"
+                ngbDropdownItem>Profile</button>
+
+        <button class="app-nav-user-menu-btn"
+                (click)="logOut()"
+                ngbDropdownItem>Log Out</button>
+      </div>
+    </div>
 </div>

@@ -11,7 +11,6 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   diplayNavBar = true;
-  title = 'budgetcast';
 
   constructor(private router: Router) {}
 

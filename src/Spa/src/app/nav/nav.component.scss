@@ -1,39 +1,81 @@
+$nav-ctrl-hover-color: rgba(67, 83, 255, 0.1);
+$nav-ctrl-color: #4353ff;
+
 .app-nav-box {
   display: flex;
-  flex-direction: row;;
+  flex-direction: row;
   align-items: center;
 
   padding: 1.2rem 0.8rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid #dee2e6;
-  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
 .app-nav-title {
   margin-right: auto;
   margin-bottom: 0;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-family: MontserratBold;
 }
 
-.app-nav-link-container {
+.app-nav-menu-container {
   padding-right: 0.2rem;
 }
 
-.app-nav-link {
-  color: #4353ff;
-  text-decoration: none;
-  padding: 0.8rem 0.9rem;
+.app-nav-menu {
+  list-style: none;
 
-  &:hover {
-    background-color: rgba(67,83,255,.1);
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+
+  &-item {
+    position: relative;
+
+    &-link {
+      color: $nav-ctrl-color;
+      text-decoration: none;
+      padding: 0.8rem 0.9rem;
+
+      &:hover {
+        background-color: $nav-ctrl-hover-color;
+      }
+
+      &-active {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.app-nav-user {
+  margin-left: 2rem;
+
+  &-button {
+    margin: 0;
+    padding: 0.7rem 1.5rem;
   }
 
-  &-active {
-    text-decoration: underline;
-  }
+  &-menu {
+    min-width: 9rem;
+    border-radius: 0;
+    padding: 0;
 
-  &-login {
-    margin-left: 2rem;
+    &-btn {
+      color: $nav-ctrl-color;
+      border-bottom: 1px solid darken($color: $nav-ctrl-hover-color, $amount: 40%);
+      padding: 0.5rem 0.9rem;
+
+      &:hover {
+        background-color: $nav-ctrl-hover-color;
+      }
+    }
+
+    &-btn:last-of-type {
+      border: none;
+    }
   }
 }
 
@@ -42,11 +84,5 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: initial;
-  }
-
-  .app-nav-link {
-    &-login {
-      border: none;
-    }
   }
 }
