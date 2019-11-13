@@ -1,0 +1,33 @@
+<div>
+  <h5>Edit your profile</h5>
+  <hr>
+  <div class="app-profile-form-container">
+    <div class="app-profile-form">
+      <form autocomplete="off" novalidate
+            [formGroup]="profileForm"
+            (ngSubmit)="updateProfile()">
+
+            <div class="app-form-group">
+              <label for="givenName">Given Name</label>
+              <input id="givenName" type="text" class="app-input-control" placeholder="Enter given name..."
+                    formControlName="givenName">
+            </div>
+            <div class="app-control-alert-red">Please input SurName.</div>
+
+            <div class="app-form-group">
+              <label for="surname">Sur Name</label>
+              <input id="surname" type="text" class="app-input-control" placeholder="Enter sur name..."
+                     formControlName="surName">
+            </div>
+            <div class="app-control-alert-red">Please input SurName.</div>
+
+            <input type="text" class="app-input-control" placeholder="Sur Name">
+
+            <button type="submit" class="app-button-control">Update</button>
+
+            <button type="submit" class="app-button-control"
+                    (click)="cancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

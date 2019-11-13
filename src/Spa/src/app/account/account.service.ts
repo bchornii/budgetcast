@@ -12,11 +12,11 @@ import { UserIdentity } from './models/check-login.model';
 export class AccountService {
 
   private invalidUserIdentity = new UserIdentity();
-  private isAuthenticated: boolean;
+  private userIdentitySnapshot: UserIdentity;
   private userIdentitySubject = new BehaviorSubject<UserIdentity>(this.invalidUserIdentity);
 
   userIdentity$ = this.userIdentitySubject.asObservable().pipe(
-    tap(userIdentity => this.isAuthenticated = userIdentity.isAuthenticated)
+    tap(userIdentity => this.userIdentitySnapshot = userIdentity)
   );
 
   constructor(@Inject(DOCUMENT)
@@ -35,7 +35,11 @@ export class AccountService {
   }
 
   get isUserValid(): boolean {
-    return this.isAuthenticated;
+    return this.userIdentitySnapshot.isAuthenticated;
+  }
+
+  get userIdentity(): UserIdentity {
+    return this.userIdentitySnapshot;
   }
 
   login(): void {
