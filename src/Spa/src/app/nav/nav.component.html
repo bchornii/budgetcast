@@ -14,19 +14,19 @@
       </li>
       <li class="app-nav-menu-item">
         <a class="app-nav-menu-item-link"
-          *ngIf="!loginCheck.isAuthenticated"
+          *ngIf="!userIdentity?.isAuthenticated"
           [routerLink]="['account/login']">Log In</a>
       </li>
     </ul>
   </nav>
   <div class="app-nav-user"
-       *ngIf="loginCheck.isAuthenticated"
+       *ngIf="userIdentity?.isAuthenticated"
        ngbDropdown
        #myDrop="ngbDropdown">
       <button class="app-button-control app-nav-user-button"
               id="dropdownManual"
               ngbDropdownAnchor
-              (focus)="myDrop.open()">Hi, {{loginCheck.givenName}}</button>
+              (focus)="myDrop.open()">Hi, {{userIdentity?.givenName}}</button>
       <div class="app-nav-user-menu"
            ngbDropdownMenu
            aria-labelledby="dropdownManual">

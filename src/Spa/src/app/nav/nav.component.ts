@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AccountService } from '../account/account.service';
 import { Subscription } from 'rxjs';
-import { LoginCheck } from '../account/models/check-login.model';
+import { UserIdentity } from '../account/models/check-login.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit, OnDestroy {
-  loginCheck: LoginCheck;
+  userIdentity: UserIdentity;
   authSubscription: Subscription;
 
   constructor(private accountService: AccountService,
               private router: Router) { }
 
   ngOnInit() {
-    this.authSubscription = this.accountService.isUserAuthenticated$
-    .subscribe(loginCheck => this.loginCheck = loginCheck);
+    this.authSubscription = this.accountService.userIdentity$
+      .subscribe(userIdentity => this.userIdentity = userIdentity);
   }
 
   ngOnDestroy() {

@@ -2,33 +2,40 @@ import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { LoginCheck } from './models/check-login.model';
+import { UserIdentity } from './models/check-login.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  private unAuthObj = new LoginCheck();
-  private isUserAuthenticatedSubject =
-    new BehaviorSubject<LoginCheck>(this.unAuthObj);
-  isUserAuthenticated$ = this.isUserAuthenticatedSubject.asObservable();
+  private invalidUserIdentity = new UserIdentity();
+  private isAuthenticated: boolean;
+  private userIdentitySubject = new BehaviorSubject<UserIdentity>(this.invalidUserIdentity);
+
+  userIdentity$ = this.userIdentitySubject.asObservable().pipe(
+    tap(userIdentity => this.isAuthenticated = userIdentity.isAuthenticated)
+  );
 
   constructor(@Inject(DOCUMENT)
               private document: Document,
               private httpClient: HttpClient) { }
 
-  checkUserAuthenticationStatus(): Observable<LoginCheck> {
-    return this.httpClient.get<LoginCheck>(
+  checkUserAuthenticationStatus(): Observable<UserIdentity> {
+    return this.httpClient.get<UserIdentity>(
       `${environment.api.accountApi.isAuthenticated}`).pipe(tap(r => {
-        this.isUserAuthenticatedSubject.next(r);
+        this.userIdentitySubject.next(r);
       }));
   }
 
   invalidateUserAuthentication(): void {
-    this.isUserAuthenticatedSubject.next(this.unAuthObj);
+    this.userIdentitySubject.next(this.invalidUserIdentity);
+  }
+
+  get isUserValid(): boolean {
+    return this.isAuthenticated;
   }
 
   login(): void {
