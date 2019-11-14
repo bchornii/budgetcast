@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { AccountService } from '../account.service';
+import { Router } from '@angular/router';
+import { UserProfile } from '../models/user-profile';
 
 @Component({
   selector: 'app-profile',
@@ -11,11 +13,32 @@ export class ProfileComponent{
 
   profileForm: FormGroup;
 
-  constructor(accountService: AccountService) {
+  constructor(private accountService: AccountService,
+              private router: Router) {
     const userIdentity = accountService.userIdentity;
     this.profileForm = new FormGroup({
-      givenName: new FormControl(userIdentity.givenName),
-      surName: new FormControl(userIdentity.surName)
+      givenName: new FormControl(
+        userIdentity.givenName,
+        [Validators.required, Validators.pattern('[a-zA-Z].*')]
+      ),
+      surName: new FormControl(
+        userIdentity.surName,
+        [Validators.required, Validators.pattern('[a-zA-Z].*')]
+      )
     });
+  }
+
+  updateProfile(): void {
+    if (this.profileForm.valid) {
+      const formValue = this.profileForm.value;
+      this.accountService.updateProfile({
+        givenName: formValue.givenName,
+        surName: formValue.surName
+      }).subscribe(_ => this.router.navigate(['/home']));
+    }
+  }
+
+  cancel(): void {
+    this.router.navigate(['/home']);
   }
 }

@@ -8,7 +8,6 @@
   border: none;
   box-shadow: none;
   width: 100%;
-  margin-bottom: 0.6rem;
 
   transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
 
@@ -17,3 +16,12 @@
   }
 }
 
+.app-input-control.ng-dirty.ng-invalid  {
+  border-left: 3px solid $error-text-color;
+  color: $error-text-color;
+}
+
+.app-input-control.ng-dirty.ng-invalid::placeholder {
+  color: $error-text-color;
+  font-family: HkGraphicLight;
+}

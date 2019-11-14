@@ -17,4 +17,9 @@
   &:hover {
     background-color: rgb(60, 72, 204);
   }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: default;
+  }
 }

@@ -8,7 +8,8 @@ const accountApi = {
   isAuthenticated: `${apiUrl}/account/isAuthenticated`,
   signInWithGoogle: `${apiUrl}/account/signInWithGoogle`,
   logout: `${apiUrl}/account/logout`,
-  check: `${apiUrl}/account/check`
+  check: `${apiUrl}/account/check`,
+  updateProfile: `${apiUrl}/account/updateProfile`
 };
 
 const api = {

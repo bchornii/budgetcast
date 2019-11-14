@@ -31,7 +31,8 @@
            ngbDropdownMenu
            aria-labelledby="dropdownManual">
         <button class="app-nav-user-menu-btn"
-                ngbDropdownItem>Profile</button>
+                ngbDropdownItem
+                [routerLink]="['/account/profile']">Profile</button>
 
         <button class="app-nav-user-menu-btn"
                 (click)="logOut()"

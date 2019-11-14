@@ -4,3 +4,4 @@ export class UserIdentity {
   givenName: string;
   surName: string;
 }
+
