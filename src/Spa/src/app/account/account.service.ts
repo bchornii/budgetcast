@@ -6,11 +6,12 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserIdentity } from './models/check-login.model';
 import { UserProfile } from './models/user-profile';
+import { BaseService } from '../common/services/base-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
+export class AccountService extends BaseService {
 
   private invalidUserIdentity = new UserIdentity();
   private userIdentitySnapshot: UserIdentity;
@@ -22,7 +23,9 @@ export class AccountService {
 
   constructor(@Inject(DOCUMENT)
               private document: Document,
-              private httpClient: HttpClient) { }
+              private httpClient: HttpClient) {
+    super();
+  }
 
   checkUserAuthenticationStatus(): Observable<UserIdentity> {
     return this.httpClient.get<UserIdentity>(
@@ -60,21 +63,5 @@ export class AccountService {
         flatMap(_ => this.checkUserAuthenticationStatus()),
         catchError(this.handleError)
       );
-  }
-
-  private handleError(err: any) {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
-    }
-    console.error(err);
-    return throwError(errorMessage);
   }
 }
