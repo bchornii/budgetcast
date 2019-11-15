@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Dashboard.Api.AppSettings;
+using BudgetCast.Dashboard.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -44,6 +46,11 @@ namespace BudgetCast.Dashboard.Api
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Budget Cast API", Version = "v1" });
+            });
+
             services.AddDbContext<IdentityDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["IdentityManagement:ConnectionString"],
@@ -59,9 +66,23 @@ namespace BudgetCast.Dashboard.Api
                     });
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services
+                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                 {
+                     options.Password.RequiredLength = 8;
+                     options.Password.RequireNonAlphanumeric = false;
+                     options.Password.RequireLowercase = true;
+                     options.Password.RequireUppercase = false;
+                     options.Password.RequireDigit = true;
+
+                     options.User.RequireUniqueEmail = true;
+                 })
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<EmailParameters>(
+                Configuration.GetSection("EmailParameters"));
+            services.AddScoped<EmailService>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -113,7 +134,14 @@ namespace BudgetCast.Dashboard.Api
                 app.UseStaticFiles();
             }            
 
-            app.UseHttpsRedirection();            
+            app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
+            });
+
             app.UseAuthentication();
             app.UseMvc();
         }

@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Dashboard.Api.Model
+﻿namespace BudgetCast.Dashboard.Api.ViewModels
 {
     public class UpdateProfileViewModel
     {

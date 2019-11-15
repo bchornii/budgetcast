@@ -1,11 +1,12 @@
 ﻿using BudgetCast.Dashboard.Api.AppSettings;
-using BudgetCast.Dashboard.Api.Model;
+using BudgetCast.Dashboard.Api.Extensions;
+using BudgetCast.Dashboard.Api.Services;
+using BudgetCast.Dashboard.Api.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,15 +19,18 @@ namespace BudgetCast.Dashboard.Api.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly EmailService _emailService;
         private readonly ExternalIdentityProviders _externalIdentityProviders;
 
         public AccountController(
             SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
+            EmailService emailService,
             IOptions<ExternalIdentityProviders> options)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
             _externalIdentityProviders = options.Value;
         }
 
@@ -73,11 +77,26 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Redirect(_externalIdentityProviders.UiRedirectUrl);
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(
+            [FromBody] RegisterViewModel model)
         {
-            await _signInManager.SignOutAsync();
-            return Ok();
+            var user = model.GetUser();
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {                
+                await _userManager.AddClaimsAsync(user, model.GetClaims());
+
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var callbackUrl = Url.Action("confirmEmail", "Account",
+                    new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);                                
+                await _emailService.SendEmailAsync(model.Email, callbackUrl);
+
+                return Ok();
+            }
+
+            return BadRequest(result.GetErrorMessage());
         }
 
         [HttpPost("updateProfile")]
@@ -86,12 +105,12 @@ namespace BudgetCast.Dashboard.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if(user == null)
+            if (user == null)
             {
                 return NotFound("User not found");
             }
-            
-            await RemoveClaimsAsync(user, 
+
+            await RemoveClaimsAsync(user,
                 ClaimTypes.GivenName, ClaimTypes.Surname);
 
             await _userManager.AddClaimsAsync(user, new[]
@@ -102,6 +121,59 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
             await _signInManager.RefreshSignInAsync(user);
 
+            return Ok();
+        }
+
+        [HttpGet("confirmEmail")]        
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if(string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+            {
+                return Redirect(_externalIdentityProviders.UiRedirectUrl);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return Redirect(_externalIdentityProviders.UiRedirectUrl);
+            }
+
+            await _userManager.ConfirmEmailAsync(user, code);
+
+            return Redirect(_externalIdentityProviders.UiRedirectUrl);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(
+            [FromBody] LoginViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+
+            if(!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return BadRequest("You haven't confirmed account. Please check your email.");
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized();
+            }
+            
+            return Ok();
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
             return Ok();
         }
 
