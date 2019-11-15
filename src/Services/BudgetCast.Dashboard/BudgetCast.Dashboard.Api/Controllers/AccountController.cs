@@ -3,6 +3,7 @@ using BudgetCast.Dashboard.Api.Extensions;
 using BudgetCast.Dashboard.Api.Services;
 using BudgetCast.Dashboard.Api.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -34,6 +35,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             _externalIdentityProviders = options.Value;
         }
 
+        [AllowAnonymous]
         [HttpGet("signInWithGoogle")]
         public IActionResult SignInWithGoogle()
         {
@@ -42,7 +44,8 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 googleProviderName, Url.Action(nameof(HandleExternalLogin)));
             return Challenge(authenticationProperties, googleProviderName);
         }
-        
+
+        [AllowAnonymous]
         [HttpGet("handleExternalLogin")]
         public async Task<IActionResult> HandleExternalLogin()
         {
@@ -77,6 +80,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Redirect(_externalIdentityProviders.UiRedirectUrl);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(
             [FromBody] RegisterViewModel model)
@@ -99,6 +103,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return BadRequest(result.GetErrorMessage());
         }
 
+        [Authorize]
         [HttpPost("updateProfile")]
         public async Task<IActionResult> UpdateProfile(
             [FromBody] UpdateProfileViewModel model)
@@ -124,6 +129,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("confirmEmail")]        
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
@@ -143,6 +149,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Redirect(_externalIdentityProviders.UiRedirectUrl);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(
             [FromBody] LoginViewModel model)
@@ -170,6 +177,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -177,6 +185,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("isAuthenticated")]
         public IActionResult IsAuthenticated()
         {
