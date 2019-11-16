@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -44,6 +45,10 @@ namespace BudgetCast.Dashboard.Api
             }            
 
             services.AddMvc()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblyContaining<Startup>();
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
