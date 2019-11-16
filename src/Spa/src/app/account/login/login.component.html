@@ -10,7 +10,7 @@
     </div>
     <div class="app-login-g-sigin">
       <div class="app-login-g-sigin-btn"
-           (click)="login()">
+           (click)="googleLogin()">
         <div class="app-login-g-sigin-btn-thmb">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48">
             <path fill="#EA4335"
@@ -34,11 +34,26 @@
     <div class="app-login-or-line">
       <span>or</span>
     </div>
-    <!-- <form>
-      <input type="text" class="app-input-control" placeholder="Email or Username">
-      <input type="text" class="app-input-control" placeholder="Password">
-      <button type="submit" class="app-button-control">Log In</button>
-    </form> -->
+    <form autocomplete="off" novalidate
+          [formGroup]="loginForm"
+          (ngSubmit)="login()">
+
+      <div class="app-form-group">
+        <input type="email" class="app-input-control" placeholder="Email"
+               formControlName="email">
+      </div>
+
+      <div class="app-form-group">
+        <input type="password" class="app-input-control" placeholder="Password"
+               formControlName="password">
+      </div>
+
+      <div *ngIf="invalidCredentials"
+           class="app-control-alert-red">Please check your credentials.</div>
+
+      <button type="submit" class="app-button-control"
+              [disabled]="loginForm.invalid || loginForm.pristine">Log In</button>
+    </form>
     <p class="app-login-link app-login-link-left">
       <a href="/">Don't have an account?</a>
     </p>

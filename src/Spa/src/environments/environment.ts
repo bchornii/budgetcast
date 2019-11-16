@@ -7,6 +7,7 @@ const apiUrl = 'https://localhost:44305/api';
 const accountApi = {
   isAuthenticated: `${apiUrl}/account/isAuthenticated`,
   signInWithGoogle: `${apiUrl}/account/signInWithGoogle`,
+  login: `${apiUrl}/account/login`,
   logout: `${apiUrl}/account/logout`,
   check: `${apiUrl}/account/check`,
   updateProfile: `${apiUrl}/account/updateProfile`

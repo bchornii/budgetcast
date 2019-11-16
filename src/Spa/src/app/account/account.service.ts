@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { UserIdentity } from './models/check-login.model';
 import { UserProfile } from './models/user-profile';
 import { BaseService } from '../common/services/base-data.service';
+import { UserLogin } from './models/user-login';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,14 @@ export class AccountService extends BaseService {
     return this.userIdentitySnapshot;
   }
 
-  login(): void {
+  login(userLogin: UserLogin): Observable<any> {
+    return this.httpClient.post(`${environment.api.accountApi.login}`, userLogin).pipe(
+      flatMap(_ => this.checkUserAuthenticationStatus()),
+      catchError(this.handleError)
+    );
+  }
+
+  googleLogin(): void {
     this.document.location.href = `${environment.api.accountApi.signInWithGoogle}`;
   }
 
