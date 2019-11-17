@@ -9,6 +9,8 @@ import { UserProfile } from './models/user-profile';
 import { BaseService } from '../common/services/base-data.service';
 import { UserLogin } from './models/user-login';
 import { UserRegistration } from './models/user-registration';
+import { ForgotPassword } from './models/forgot-password';
+import { ResetPassword } from './models/reset-password';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +73,20 @@ export class AccountService extends BaseService {
       `${environment.api.accountApi.register}`, userRegistration).pipe(
       catchError(this.handleError)
     );
+  }
+
+  forgotPassword(forgotPassword: ForgotPassword) {
+    return this.httpClient.post(
+      `${environment.api.accountApi.forgotPassword}`, forgotPassword).pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  resetPassword(resetPassword: ResetPassword) {
+    return this.httpClient.post(
+      `${environment.api.accountApi.resetPassword}`, resetPassword).pipe(
+        catchError(this.handleError)
+      );
   }
 
   updateProfile(userProfile: UserProfile): Observable<any> {

@@ -19,13 +19,15 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter(evt => evt instanceof NavigationEnd)
     ).subscribe((evt: RouterEvent) => {
-      const urlParts = evt.url.split('/');
+      const urlParts = evt.url.includes('?')
+        ? evt.url.slice(0, evt.url.indexOf('?')).split('/')
+        : evt.url.split('/');
       this.diplayNavBar = !this.getNonHeaderRoutes()
         .includes(urlParts[urlParts.length - 1]);
     });
   }
 
   private getNonHeaderRoutes() {
-    return ['login', 'register'];
+    return ['login', 'register', 'forgot-password', 'reset-password'];
   }
 }

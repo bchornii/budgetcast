@@ -108,6 +108,9 @@ namespace BudgetCast.Dashboard.Api
                 };
             });
 
+            services.Configure<UiLinks>(
+                Configuration.GetSection("UiLinks"));
+
             services.Configure<ExternalIdentityProviders>(
                 Configuration.GetSection("ExternalIdentityProviders"));
 

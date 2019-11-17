@@ -15,17 +15,30 @@ namespace BudgetCast.Dashboard.Api.Services
             _emailParameters = options.Value;
         }
 
-        public async Task SendEmailAsync(string email, string callback)
+        public Task ResetPassword(string email, string callback)
+        {
+            return SendEmailAsync(email, "Reset Password",
+                "In order to reset your password please follow " +
+               $"this <a href='{callback}'>link</a>.");
+        }
+
+        public Task ConfirmAccount(string email, string callback)
+        {
+            return SendEmailAsync(email, "Account Confirmation", 
+                "In order to confirm your account registration please " +
+               $"follow this <a href='{callback}'>link</a>.");
+        }
+
+        private async Task SendEmailAsync(string email, string subject, string callback)
         {
             var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress("Budget Cast", _emailParameters.From));
             emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = "Account Confirmation";
+            emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = "Please confirm your account registration " +
-                      $"by this <a href='{callback}'>link</a>."
+                Text = callback
             };
 
             using (var client = new SmtpClient())

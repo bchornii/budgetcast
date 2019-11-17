@@ -22,17 +22,20 @@ namespace BudgetCast.Dashboard.Api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly EmailService _emailService;
         private readonly ExternalIdentityProviders _externalIdentityProviders;
+        private readonly UiLinks _uiLinks;
 
         public AccountController(
             SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
             EmailService emailService,
-            IOptions<ExternalIdentityProviders> options)
+            IOptions<ExternalIdentityProviders> externalIdentityProvidersOptions,
+            IOptions<UiLinks> uiLinksOptions)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
-            _externalIdentityProviders = options.Value;
+            _externalIdentityProviders = externalIdentityProvidersOptions.Value;
+            _uiLinks = uiLinksOptions.Value;
         }
 
         [AllowAnonymous]
@@ -95,7 +98,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = Url.Action("confirmEmail", "Account",
                     new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);                                
-                await _emailService.SendEmailAsync(model.Email, callbackUrl);
+                await _emailService.ConfirmAccount(model.Email, callbackUrl);
 
                 return Ok();
             }
@@ -135,18 +138,18 @@ namespace BudgetCast.Dashboard.Api.Controllers
         {
             if(string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
             {
-                return Redirect(_externalIdentityProviders.UiRedirectUrl);
+                return Redirect(_uiLinks.Root);
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if(user == null)
             {
-                return Redirect(_externalIdentityProviders.UiRedirectUrl);
+                return Redirect(_uiLinks.Root);
             }
 
             await _userManager.ConfirmEmailAsync(user, code);
 
-            return Redirect(_externalIdentityProviders.UiRedirectUrl);
+            return Redirect(_uiLinks.Root);
         }
 
         [AllowAnonymous]
@@ -183,6 +186,44 @@ namespace BudgetCast.Dashboard.Api.Controllers
         {
             await _signInManager.SignOutAsync();
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(
+            [FromBody] ForgotPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if(user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return NotFound("User not found");
+            }
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = $"{_uiLinks.ResetPassword}?userId={user.Id}&code={code}";
+            await _emailService.ResetPassword(model.Email, callbackUrl);
+
+            return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(
+            [FromBody] ResetPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var result = await _userManager
+                .ResetPasswordAsync(user, model.Code, model.Password);
+
+            return result.Succeeded 
+                ? (IActionResult) Ok() 
+                : BadRequest(result.GetErrorMessage());
         }
 
         [AllowAnonymous]

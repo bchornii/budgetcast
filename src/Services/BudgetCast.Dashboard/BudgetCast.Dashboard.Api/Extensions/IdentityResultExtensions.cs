@@ -7,7 +7,7 @@ namespace BudgetCast.Dashboard.Api.Extensions
     {
         public static string GetErrorMessage(this IdentityResult result)
         {
-            return string.Join("; ", result.Errors.Select(r => r.Description));
+            return result.Errors.Select(r => r.Description).FirstOrDefault();
         }
     }
 }
