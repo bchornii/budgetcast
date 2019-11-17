@@ -19,7 +19,13 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter(evt => evt instanceof NavigationEnd)
     ).subscribe((evt: RouterEvent) => {
-      this.diplayNavBar = !evt.url.includes('login');
+      const urlParts = evt.url.split('/');
+      this.diplayNavBar = !this.getNonHeaderRoutes()
+        .includes(urlParts[urlParts.length - 1]);
     });
+  }
+
+  private getNonHeaderRoutes() {
+    return ['login', 'register'];
   }
 }

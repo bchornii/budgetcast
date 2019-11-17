@@ -10,7 +10,8 @@ const accountApi = {
   login: `${apiUrl}/account/login`,
   logout: `${apiUrl}/account/logout`,
   check: `${apiUrl}/account/check`,
-  updateProfile: `${apiUrl}/account/updateProfile`
+  updateProfile: `${apiUrl}/account/updateProfile`,
+  register: `${apiUrl}/account/register`
 };
 
 const api = {

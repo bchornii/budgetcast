@@ -8,6 +8,7 @@ import { UserIdentity } from './models/check-login.model';
 import { UserProfile } from './models/user-profile';
 import { BaseService } from '../common/services/base-data.service';
 import { UserLogin } from './models/user-login';
+import { UserRegistration } from './models/user-registration';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,13 @@ export class AccountService extends BaseService {
       `${environment.api.accountApi.logout}`, {}).pipe(
         tap(_ => this.invalidateUserAuthentication())
       );
+  }
+
+  register(userRegistration: UserRegistration) : Observable<any> {
+    return this.httpClient.post(
+      `${environment.api.accountApi.register}`, userRegistration).pipe(
+      catchError(this.handleError)
+    );
   }
 
   updateProfile(userProfile: UserProfile): Observable<any> {

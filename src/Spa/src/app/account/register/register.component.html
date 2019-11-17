@@ -1,0 +1,52 @@
+<div class="app-register-form-container">
+  <div class="app-25vw-form">
+    <div class="app-logo-small">
+      <a [routerLink]="['/home']">
+        <img src="../../../assets/logo-svg.svg" alt="logo">
+      </a>
+    </div>
+    <div class="app-register-heading">
+      Create Account
+    </div>
+    <form autocomplete="off" novalidate
+          [formGroup]="registerForm"
+          (ngSubmit)="register()">
+
+      <div class="app-form-group">
+        <input type="text" class="app-input-control" placeholder="Given Name"
+               formControlName="givenName">
+      </div>
+
+      <div class="app-form-group">
+        <input type="text" class="app-input-control" placeholder="Sur Name"
+               formControlName="surName">
+      </div>
+
+      <div class="app-form-group">
+        <input type="email" class="app-input-control" placeholder="Email"
+               formControlName="email">
+      </div>
+
+      <div class="app-form-group">
+        <input type="password" class="app-input-control" placeholder="Password"
+               formControlName="password">
+      </div>
+
+      <div class="app-form-group">
+        <input type="password" class="app-input-control" placeholder="Password confirmation"
+               formControlName="passwordConfirm">
+      </div>
+
+      <div *ngIf="registrationFailed" class="app-control-alert-red">
+           Something went wrong. Consider to put different
+           registration information.
+      </div>
+
+      <button type="submit" class="app-button-control"
+              [disabled]="registerForm.invalid || registerForm.pristine">
+        Register
+      </button>
+
+    </form>
+  </div>
+</div>

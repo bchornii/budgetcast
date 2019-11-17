@@ -11,7 +11,7 @@ export class BaseService {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+      errorMessage = err.error;
     }
     console.error(err);
     return throwError(errorMessage);

@@ -1,6 +1,6 @@
 <div class="app-login-form-container">
-  <div class="app-login-form">
-    <div class="app-login-logo">
+  <div class="app-25vw-form">
+    <div class="app-logo-small">
       <a [routerLink]="['/home']">
         <img src="../../../assets/logo-svg.svg" alt="logo">
       </a>
@@ -55,7 +55,7 @@
               [disabled]="loginForm.invalid || loginForm.pristine">Log In</button>
     </form>
     <p class="app-login-link app-login-link-left">
-      <a href="/">Don't have an account?</a>
+      <a [routerLink]="['/account/register']">Don't have an account?</a>
     </p>
     <p class="app-login-link app-login-link-right">
       <a href="/">Forgot password?</a>

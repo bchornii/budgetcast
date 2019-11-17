@@ -16,12 +16,12 @@
   }
 }
 
-.app-input-control.ng-dirty.ng-invalid  {
+.app-input-control.ng-touched.ng-invalid  {
   border-left: 3px solid $error-text-color;
   color: $error-text-color;
 }
 
-.app-input-control.ng-dirty.ng-invalid::placeholder {
+.app-input-control.ng-touched.ng-invalid::placeholder {
   color: $error-text-color;
   font-family: HkGraphicLight;
 }

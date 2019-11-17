@@ -31,10 +31,8 @@ export class ProfileComponent{
   updateProfile(): void {
     if (this.profileForm.valid) {
       const formValue = this.profileForm.value;
-      this.accountService.updateProfile({
-        givenName: formValue.givenName,
-        surName: formValue.surName
-      }).subscribe(_ => this.router.navigate(['/home']));
+      this.accountService.updateProfile(formValue)
+        .subscribe(_ => this.router.navigate(['/home']));
     }
   }
 
