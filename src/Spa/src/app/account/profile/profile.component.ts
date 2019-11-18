@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { AccountService } from '../account.service';
@@ -14,7 +15,8 @@ export class ProfileComponent{
   profileForm: FormGroup;
 
   constructor(private accountService: AccountService,
-              private router: Router) {
+              private router: Router,
+              private toastr: ToastrService) {
     const userIdentity = accountService.userIdentity;
     this.profileForm = new FormGroup({
       givenName: new FormControl(
@@ -32,7 +34,10 @@ export class ProfileComponent{
     if (this.profileForm.valid) {
       const formValue = this.profileForm.value;
       this.accountService.updateProfile(formValue)
-        .subscribe(_ => this.router.navigate(['/home']));
+        .subscribe(_ => {
+          this.toastr.success('Profile was updated.');
+          this.router.navigate(['/home']);
+        });
     }
   }
 

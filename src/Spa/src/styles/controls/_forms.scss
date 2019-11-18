@@ -10,3 +10,26 @@
 .app-25vw-form {
   width: 25vw;
 }
+
+.app-f-screen-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-form-heading {
+  padding: 0;
+  margin-top: 0;
+  color: #000;
+  font-size: 2rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.app-form-heading-large {
+  @extend .app-form-heading;
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+}

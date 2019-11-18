@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../account.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reset-password',
@@ -15,7 +16,8 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private accountService: AccountService,
-              private router: Router) {
+              private router: Router,
+              private toasrt: ToastrService) {
     this.resetPasswordForm = new FormGroup({
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required]),
@@ -39,7 +41,12 @@ export class ResetPasswordComponent implements OnInit {
         ...formValues,
         ...this.resetPasswordParams
       }).subscribe(
-        _ => this.router.navigate(['/account/login']),
+        _ => {
+          this.toasrt.success(
+            'Your password has been reset.' + 
+            'You can now login into application.');
+          this.router.navigate(['/account/login']);
+        },
         _ => {
           this.resetPasswordFailed = true;
           this.resetPasswordForm.markAsPristine();
