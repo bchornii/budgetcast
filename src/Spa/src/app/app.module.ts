@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { checkIfUserIsAuthenticated } from './account/login/check-login-initializer';
 import { AccountService } from './account/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HttpConfigInterceptor } from './common/http-config.interceptor';
+import { HttpConfigInterceptor } from './common/services/http-config.interceptor';
 import { AppBootstrapModule } from './common/app-bootstrap.module';
 import { NavComponent } from './nav/nav.component';
 import { appRoutes } from './app.routes';

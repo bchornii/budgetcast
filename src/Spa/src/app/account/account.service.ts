@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, catchError, flatMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +21,9 @@ export class AccountService extends BaseService {
   private userIdentitySnapshot: UserIdentity;
   private userIdentitySubject = new BehaviorSubject<UserIdentity>(this.invalidUserIdentity);
 
+  get isUserValid(): boolean { return this.userIdentitySnapshot.isAuthenticated; }
+  get userIdentity(): UserIdentity { return this.userIdentitySnapshot; }
+
   userIdentity$ = this.userIdentitySubject.asObservable().pipe(
     tap(userIdentity => this.userIdentitySnapshot = userIdentity)
   );
@@ -40,14 +43,6 @@ export class AccountService extends BaseService {
 
   invalidateUserAuthentication(): void {
     this.userIdentitySubject.next(this.invalidUserIdentity);
-  }
-
-  get isUserValid(): boolean {
-    return this.userIdentitySnapshot.isAuthenticated;
-  }
-
-  get userIdentity(): UserIdentity {
-    return this.userIdentitySnapshot;
   }
 
   login(userLogin: UserLogin): Observable<any> {
