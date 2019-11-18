@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserIdentity } from './models/check-login.model';
 import { UserProfile } from './models/user-profile';
-import { BaseService } from '../common/services/base-data.service';
+import { BaseService } from '../shared/services/base-data.service';
 import { UserLogin } from './models/user-login';
 import { UserRegistration } from './models/user-registration';
 import { ForgotPassword } from './models/forgot-password';

@@ -4,5 +4,6 @@
     {
         public string Root { get; set; }
         public string ResetPassword { get; set; }
+        public string Login { get; set; }
     }
 }

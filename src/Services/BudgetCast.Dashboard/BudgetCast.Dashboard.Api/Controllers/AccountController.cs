@@ -103,7 +103,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 return Ok();
             }
 
-            return BadRequest(result.GetErrorMessage());
+            return BadRequest("User creation failed.");
         }
 
         [Authorize]
@@ -115,7 +115,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
             if (user == null)
             {
-                return NotFound("User not found");
+                return NotFound("User not found.");
             }
 
             await RemoveClaimsAsync(user,
@@ -147,9 +147,9 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 return Redirect(_uiLinks.Root);
             }
 
-            await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, code);
 
-            return Redirect(_uiLinks.Root);
+            return result.Succeeded ? Redirect(_uiLinks.Login) : Redirect(_uiLinks.Root);
         }
 
         [AllowAnonymous]
@@ -161,7 +161,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             
             if(user == null)
             {
-                return Unauthorized();
+                return NotFound("User not found.");
             }
 
             if(!await _userManager.IsEmailConfirmedAsync(user))
@@ -174,7 +174,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
             if (!result.Succeeded)
             {
-                return Unauthorized();
+                return BadRequest("Please check your credentials.");
             }
             
             return Ok();
@@ -197,7 +197,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
             if(user == null || !await _userManager.IsEmailConfirmedAsync(user))
             {
-                return NotFound("User not found");
+                return NotFound("User not found.");
             }
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -215,7 +215,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return NotFound("User not found");
+                return NotFound("User not found.");
             }
 
             var result = await _userManager
@@ -223,7 +223,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
             return result.Succeeded 
                 ? (IActionResult) Ok() 
-                : BadRequest(result.GetErrorMessage());
+                : BadRequest("Reset password operation failed.");
         }
 
         [AllowAnonymous]

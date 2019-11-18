@@ -9,8 +9,8 @@ import { AppComponent } from './app.component';
 import { checkIfUserIsAuthenticated } from './account/login/check-login-initializer';
 import { AccountService } from './account/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HttpConfigInterceptor } from './common/services/http-config.interceptor';
-import { AppBootstrapModule } from './common/app-bootstrap.module';
+import { HttpConfigInterceptor } from './shared/services/http-config.interceptor';
+import { AppBootstrapModule } from './shared/app-bootstrap.module';
 import { NavComponent } from './nav/nav.component';
 import { appRoutes } from './app.routes';
 import { HomeComponent } from './home/home.component';
@@ -27,13 +27,13 @@ import { HomeComponent } from './home/home.component';
     RouterModule.forRoot(appRoutes),
 
     AppBootstrapModule,
-    BrowserAnimationsModule, 
+    BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
       closeButton: true
-    }) 
+    })
   ],
   providers: [
     {
