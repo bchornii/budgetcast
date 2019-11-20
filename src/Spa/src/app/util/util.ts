@@ -1,5 +1,11 @@
 import { FormGroup, FormControl } from '@angular/forms';
 
+let id = 0;
+
+export function getNewId(): number {
+	return ++id;
+}
+
 export function validateAllFormFields(formGroup: FormGroup) {
   Object.keys(formGroup.controls).forEach(field => {
     const control = formGroup.get(field);

@@ -18,13 +18,14 @@
 }
 
 .app-input-control:focus {
-  border-left: 3.5px solid $main-blue-color;
+  border-left: 3.5px solid get-color(primary, main-blue);
 }
 
 .app-input-control-invalid  {
-  border: 0.5px solid $error-text-color;
+  border: 0.5px solid get-color(alerts, error);
 }
 
 .app-input-control-invalid:focus {
-  border-left: 3.5px solid $error-text-color;
+  border-left: 3.5px solid get-color(alerts, error);
 }
+

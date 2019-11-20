@@ -1,4 +1,5 @@
 @import 'abstract/variables';
+@import 'abstract/colors';
 
 .app-home-container {
   display: flex;
@@ -46,7 +47,7 @@
 }
 
 .app-home-footer {
-  border-top: 1px solid $divider-color;
+  border-top: 1px solid get-color(cool-neutrals, cool-grey-6);
   margin-top: 5rem;
   margin-bottom: 1rem;
   padding-top: 1em;

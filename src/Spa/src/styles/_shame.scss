@@ -3,7 +3,7 @@ html {
 }
 
 * {
-  font-family: HkGraphicMedium;
+  font-family: HkGraphicLight;
   margin: 0;
   padding: 0;
 }
@@ -13,4 +13,8 @@ select:focus,
 textarea:focus,
 button:focus {
     outline: none;
+}
+
+.is-hidden {
+  display: none !important;
 }
