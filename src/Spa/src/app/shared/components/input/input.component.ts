@@ -9,60 +9,59 @@ export enum InputType {
 }
 
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
-  providers: [{
+	selector: 'app-input',
+	templateUrl: './input.component.html',
+	styleUrls: ['./input.component.scss'],
+	providers: [{
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: InputComponent,
 		multi: true
 	}]
 })
 export class InputComponent extends FormElement implements OnInit, AfterViewInit {
-  @Input() name: string = 'item';
+	@Input() name: string = 'item';
 	@Input() title: string;
 	@Input() disabled = false;
 	@Input() readonly = false;
 	@Input() type = InputType.TEXT;
-  @Input() isSearch: boolean = false;
+	@Input() isSearch: boolean = false;
 
-  @Output('blur') onBlurChange = new EventEmitter<Event>();
-  @Output('focus') onFocusChange = new EventEmitter<Event>();
-  
-  @ViewChild('input', { static: false }) input: ElementRef;
-  
-  defaultValue = '';
-  innerType: string = InputType.TEXT;
+	@Output('blur') onBlurChange = new EventEmitter<Event>();
+	@Output('focus') onFocusChange = new EventEmitter<Event>();
 
-  constructor(public elementRef: ElementRef) { 
-    super(elementRef);
-  }
+	@ViewChild('input', { static: false }) input: ElementRef;
 
-  ngOnInit() {
-    this.innerType = this.type;
-    this.setElementId();
-  }
+	defaultValue = '';
+	innerType: string = InputType.TEXT;
 
-  ngAfterViewInit() {
-    this.registerInputEvents(this.input.nativeElement);
-    
+	constructor(public elementRef: ElementRef) {
+		super(elementRef);
+	}
+
+	ngOnInit() {
+		this.innerType = this.type;
+		this.setElementId();
+	}
+
+	ngAfterViewInit() {
+		this.registerInputEvents(this.input.nativeElement);
+
 		// Define focus method for component, because custom element without tabindex doesn`t support it.
 		this.elementRef.nativeElement.focus = () => {
 			this.input.nativeElement.focus();
 		};
-  }
-  
-  showPassword() {
+	}
+
+	showPassword() {
 		this.innerType === 'text' ? this.innerType = 'password' : this.innerType = 'text';
 	}
 
-  containsNgClasses(): boolean {
+	containsNgClasses(): boolean {
 		const element = this.elementRef.nativeElement as HTMLElement;
-    
-		return element
-			? element.classList.contains('ng-touched') &&
-			  element.classList.contains('ng-invalid') &&
-			  element.classList.contains('ng-dirty')
-			: false;
+
+		return element && element.classList &&
+			element.classList.contains('ng-touched') &&
+			element.classList.contains('ng-invalid') &&
+			element.classList.contains('ng-dirty');
 	}
 }
