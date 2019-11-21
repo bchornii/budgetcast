@@ -13,32 +13,20 @@ import { UserProfile } from '../models/user-profile';
 export class ProfileComponent{
 
   profileForm: FormGroup;
+  profileModel = new UserProfile();
 
   constructor(private accountService: AccountService,
               private router: Router,
               private toastr: ToastrService) {
-    const userIdentity = accountService.userIdentity;
-    this.profileForm = new FormGroup({
-      givenName: new FormControl(
-        userIdentity.givenName,
-        [Validators.required, Validators.pattern('[a-zA-Z].*')]
-      ),
-      surName: new FormControl(
-        userIdentity.surName,
-        [Validators.required, Validators.pattern('[a-zA-Z].*')]
-      )
-    });
+    this.profileModel = accountService.userIdentity;
   }
 
   updateProfile(): void {
-    if (this.profileForm.valid) {
-      const formValue = this.profileForm.value;
-      this.accountService.updateProfile(formValue)
+    this.accountService.updateProfile(this.profileModel)
         .subscribe(_ => {
           this.toastr.success('Profile was updated.');
           this.router.navigate(['/home']);
         });
-    }
   }
 
   cancel(): void {

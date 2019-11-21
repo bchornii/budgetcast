@@ -3,24 +3,28 @@
   <hr>
   <div class="app-25vw-form">
     <form autocomplete="off" novalidate
-          [formGroup]="profileForm"
-          (ngSubmit)="updateProfile()">
+          appForm (appSubmit)="updateProfile()">
 
-          <div class="app-form-group">
-            <label for="givenName">Given Name</label>
-            <input id="givenName" type="text" class="app-input-control" placeholder="Please enter given name..."
-                  formControlName="givenName">
+          <div class="app-form-group">                        
+            <app-input
+              required
+              name="givenName"
+              title="GivenName"
+              [(ngModel)]="profileModel.givenName"
+            ></app-input>
           </div>
 
           <div class="app-form-group">
-            <label for="surname">Sur Name</label>
-            <input id="surname" type="text" class="app-input-control" placeholder="Please enter sur name..."
-                   formControlName="surName">
+            <app-input
+              required
+              name="surName"
+              title="SurName"
+              [(ngModel)]="profileModel.surName"
+            ></app-input>
           </div>
 
           <div class="d-flex">
-            <button type="submit" class="app-button-control"
-                    [disabled]="profileForm.invalid || profileForm.pristine">Update</button>
+            <button type="submit" class="app-button-control">Update</button>
 
             <button type="button" class="app-button-control"
                     (click)="cancel()">Cancel</button>

@@ -35,24 +35,33 @@
       <span>or</span>
     </div>
     <form autocomplete="off" novalidate
-          [formGroup]="loginForm"
-          (ngSubmit)="login()">
+          appForm
+          (appSubmit)="login()">
 
       <div class="app-form-group">
-        <input type="email" class="app-input-control" placeholder="Email"
-               formControlName="email">
+        <app-input
+          email
+          required
+          name="email"
+          title="Email"  
+          [(ngModel)] = "loginModel.email"
+        ></app-input>
       </div>
 
       <div class="app-form-group">
-        <input type="password" class="app-input-control" placeholder="Password"
-               formControlName="password">
+        <app-input          
+          required
+          name="password"
+          title="Password"  
+          type="password"
+          [(ngModel)] = "loginModel.password"
+        ></app-input>
       </div>
 
       <div *ngIf="invalidCredentials"
            class="app-control-alert-red">Please check your credentials.</div>
 
-      <button type="submit" class="app-button-control"
-              [disabled]="loginForm.invalid || loginForm.pristine">Log In</button>
+      <button type="submit" class="app-button-control">Log In</button>
     </form>
     <p class="app-login-link app-login-link-left">
       <a [routerLink]="['/account/register']">Don't have an account?</a>

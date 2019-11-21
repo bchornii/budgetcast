@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AccountService } from '../account.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserLogin } from '../models/user-login';
 
 @Component({
   selector: 'app-login',
@@ -10,27 +11,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  loginForm: FormGroup;
+  loginModel = new UserLogin();
   invalidCredentials: boolean;
 
   constructor(private accountService: AccountService,
-              private router: Router) {
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
-    });
+              private router: Router) {    
   }
 
-  login(): void {
-    if (this.loginForm.valid) {
-      const formValue = this.loginForm.value;
-      this.accountService.login(formValue).subscribe(
+  login(): void {    
+    this.accountService.login(this.loginModel).subscribe(
         _ => this.router.navigate(['/home']),
-        _ => {
-          this.invalidCredentials = true;
-          this.loginForm.markAsPristine();
-        });
-    }
+        _ => this.invalidCredentials = true);
   }
 
   googleLogin() {

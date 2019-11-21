@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../account.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ResetPassword } from '../models/reset-password';
 
 @Component({
   selector: 'app-reset-password',
@@ -11,17 +11,12 @@ import { ToastrService } from 'ngx-toastr';
 export class ResetPasswordComponent implements OnInit {
   resetPasswordFailed: boolean;
   resetPasswordParams: {code: string, userId: string};
-  resetPasswordForm: FormGroup;
+  resetPasswordModel = new ResetPassword();
 
   constructor(private activatedRoute: ActivatedRoute,
               private accountService: AccountService,
               private router: Router,
-              private toasrt: ToastrService) {
-    this.resetPasswordForm = new FormGroup({
-      email: new FormControl('', [Validators.email, Validators.required]),
-      password: new FormControl('', [Validators.required]),
-      passwordConfirm: new FormControl('', [Validators.required])
-    });
+              private toasrt: ToastrService) {    
   }
 
   ngOnInit() {
@@ -34,24 +29,20 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword(): void {
-    if (this.resetPasswordForm.valid) {
-      const formValues = this.resetPasswordForm.value;
-      this.accountService.resetPassword({
-        ...formValues,
-        ...this.resetPasswordParams
-      }).subscribe(
-        _ => {
-          this.toasrt.success(
-            'Your password has been reset.' + 
-            'You can now login into application.');
-          this.router.navigate(['/account/login']);
-        },
-        _ => {
-          this.resetPasswordFailed = true;
-          this.resetPasswordForm.markAsPristine();
-        }
-      );
-    }
+    this.accountService.resetPassword({
+      ...this.resetPasswordModel,
+      ...this.resetPasswordParams
+    }).subscribe(
+      _ => {
+        this.toasrt.success(
+          'Your password has been reset.' + 
+          'You can now login into application.');
+        this.router.navigate(['/account/login']);
+      },
+      _ => {
+        this.resetPasswordFailed = true;
+      }
+    );
   }
 
 }

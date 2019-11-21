@@ -24,7 +24,6 @@ export class ForgotPasswordComponent {
     private fb: FormBuilder) { }
 
   forgotPassword(): void {
-
     this.accountService.forgotPassword(this.forgotPasswordModel)
       .subscribe(
         _ => {
