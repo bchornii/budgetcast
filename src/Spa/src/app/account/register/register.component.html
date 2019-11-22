@@ -9,43 +9,67 @@
       Create Account
     </div>
     <form autocomplete="off" novalidate
-          [formGroup]="registerForm"
-          (ngSubmit)="register()">
+          appFieldsMatch fieldName="password" matchFieldName="passwordConfirm"
+          appForm (appSubmit)="register()" #f="ngForm">
 
       <div class="app-form-group">
-        <input type="text" class="app-input-control" placeholder="Given Name"
-               formControlName="givenName">
-      </div>
-
-      <div class="app-form-group">
-        <input type="text" class="app-input-control" placeholder="Sur Name"
-               formControlName="surName">
-      </div>
-
-      <div class="app-form-group">
-        <input type="email" class="app-input-control" placeholder="Email"
-               formControlName="email">
+        <app-input
+          required
+          name="givenName"
+          title="Given Name"
+          [(ngModel)]="registrationModel.givenName"
+        ></app-input>
       </div>
 
       <div class="app-form-group">
-        <input type="password" class="app-input-control" placeholder="Password"
-               formControlName="password">
+        <app-input
+          required
+          name="surName"
+          title="Sur Name"
+          [(ngModel)]="registrationModel.surName"
+        ></app-input>
       </div>
 
       <div class="app-form-group">
-        <input type="password" class="app-input-control" placeholder="Password confirmation"
-               formControlName="passwordConfirm">
+        <app-input
+          email
+          required
+          name="email"
+          title="Email"
+          [(ngModel)]="registrationModel.email"
+        ></app-input>
       </div>
 
-      <div *ngIf="registrationFailed" class="app-control-alert-red">
-           Something went wrong. Consider to put different
-           registration information.
+      <div class="app-form-group">
+        <app-input
+          required
+          name="password"
+          title="Password"
+          type="password"
+          [(ngModel)]="registrationModel.password"
+        ></app-input>
       </div>
 
-      <button type="submit" class="app-button-control"
-              [disabled]="registerForm.invalid || registerForm.pristine">
-        Register
-      </button>
+      <div class="app-form-group">
+        <app-input
+          required
+          name="passwordConfirm"
+          title="Confirmation Password"
+          type="password"
+          [(ngModel)]="registrationModel.passwordConfirm"
+        ></app-input>
+      </div>
+
+      <app-alert *ngIf="registrationFailed" alertType="error">
+        Something went wrong. Consider to put different
+        registration information.
+      </app-alert>     
+
+      <app-alert *ngIf="f.errors?.notMatch" alertType="error">
+        Passwords don't match.  
+      </app-alert>     
+
+      <button type="submit" class="app-button-control">Register</button>
 
     </form>
   </div>

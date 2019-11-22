@@ -58,14 +58,17 @@
         ></app-input>
       </div>
 
-      <div *ngIf="invalidCredentials"
-           class="app-control-alert-red">Please check your credentials.</div>
+      <app-alert *ngIf="invalidCredentials" alertType="error">
+            Please check your credentials.
+      </app-alert>  
 
       <button type="submit" class="app-button-control">Log In</button>
     </form>
+
     <p class="app-login-link app-login-link-left">
       <a [routerLink]="['/account/register']">Don't have an account?</a>
     </p>
+    
     <p class="app-login-link app-login-link-right">
       <a [routerLink]="['/account/forgot-password']">Forgot password?</a>
     </p>

@@ -1,0 +1,22 @@
+@import 'abstract/colors';
+
+.app-alert {
+  border: 1px solid get-color(cool-neutrals, cool-grey-4);
+  border-radius: 3px;
+
+  padding: 0.3rem 0.7rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.8rem;
+  font-family: HkGraphicLight;
+  font-weight: 600;
+
+  &--error {
+    box-shadow: 3px 0 0 inset get-color(alerts, error);
+    color: get-color(alerts, error);
+  }
+
+  &--info {
+    box-shadow: 3px 0 0 inset get-color(primary, azure-blue);    
+    color: get-color(primary, azure-blue);
+  }
+}

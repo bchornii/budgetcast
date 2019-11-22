@@ -1,4 +1,4 @@
 hr {
-  color: $divider-color;
+  color: get-color(cool-neutrals, cool-grey-4);
   margin: 1rem 0;
 }
