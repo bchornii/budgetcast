@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { InputComponent } from './components/input/input.component';
 import { FormDirective } from './directives/form.directive';
 import { FieldsMatchValidatorDirective } from './directives/fields-match.directive';
+import { GoogleSigninComponent } from './components/google-signin/google-signin.component';
 
 
 
@@ -16,14 +17,16 @@ import { FieldsMatchValidatorDirective } from './directives/fields-match.directi
     FieldsMatchValidatorDirective,
 
     InputComponent,
-    AlertComponent
+    AlertComponent,
+    GoogleSigninComponent
   ],
   exports: [
     FormDirective,
     FieldsMatchValidatorDirective,
 
     InputComponent,
-    AlertComponent
+    AlertComponent,
+    GoogleSigninComponent
   ]
 })
 export class SharedModule { }

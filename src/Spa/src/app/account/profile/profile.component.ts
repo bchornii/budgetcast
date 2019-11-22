@@ -18,7 +18,7 @@ export class ProfileComponent{
   constructor(private accountService: AccountService,
               private router: Router,
               private toastr: ToastrService) {
-    this.profileModel = accountService.userIdentity;
+    this.profileModel = ({...accountService.userIdentity});
   }
 
   updateProfile(): void {
