@@ -41,7 +41,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
           if (err.status === ResponseStatus.UNAUTHORIZED || 
               err.status === ResponseStatus.FORBIDDEN) {
             this.accountService.invalidateUserAuthentication();
-            this.router.navigate(['/home']);
+            this.router.navigate(['/account/login']);
             this.toastr.error('Please sign in.')
           }
         })
