@@ -1,8 +1,10 @@
 import { ToastrService } from 'ngx-toastr';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
 import { UserRegistration } from '../models/user-registration';
+import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.component';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -13,13 +15,18 @@ export class RegisterComponent {
   registrationMessage: string;
   registrationModel = new UserRegistration();
 
+  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
+
   constructor(private accountService: AccountService,
     private router: Router,
     private toastr: ToastrService) {
   }
 
   register(): void {
-    this.accountService.register(this.registrationModel).subscribe(
+    this.spinner.show();
+    this.accountService.register(this.registrationModel).pipe(
+      finalize(() => this.spinner.hide())
+    ).subscribe(
       _ => {
         this.toastr.success(
           'To finish account registration please' +

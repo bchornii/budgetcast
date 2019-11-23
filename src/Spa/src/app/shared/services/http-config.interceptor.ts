@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from '@angular/common/http';
 import { AccountService } from '../../account/account.service';
 import { tap } from 'rxjs/operators';
+import { ResponseStatus } from 'src/app/util/constants/response-status';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService,
+              private router: Router,
+              private toastr: ToastrService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
@@ -32,9 +37,12 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     });
 
     return next.handle(req).pipe(
-      tap(_ => _, (err: HttpErrorResponse) => {
-          if (err.status === 401 || err.status === 403) {
+      tap(null, (err: HttpErrorResponse) => {
+          if (err.status === ResponseStatus.UNAUTHORIZED || 
+              err.status === ResponseStatus.FORBIDDEN) {
             this.accountService.invalidateUserAuthentication();
+            this.router.navigate(['/home']);
+            this.toastr.error('Please sign in.')
           }
         })
     );

@@ -5,6 +5,7 @@ import { InputComponent } from './components/input/input.component';
 import { FormDirective } from './directives/form.directive';
 import { FieldsMatchValidatorDirective } from './directives/fields-match.directive';
 import { GoogleSigninComponent } from './components/google-signin/google-signin.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 
 
@@ -18,7 +19,8 @@ import { GoogleSigninComponent } from './components/google-signin/google-signin.
 
     InputComponent,
     AlertComponent,
-    GoogleSigninComponent
+    GoogleSigninComponent,
+    SpinnerComponent
   ],
   exports: [
     FormDirective,
@@ -26,7 +28,8 @@ import { GoogleSigninComponent } from './components/google-signin/google-signin.
 
     InputComponent,
     AlertComponent,
-    GoogleSigninComponent
+    GoogleSigninComponent,
+    SpinnerComponent
   ]
 })
 export class SharedModule { }

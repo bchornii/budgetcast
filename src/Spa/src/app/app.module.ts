@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { checkIfUserIsAuthenticated } from './account/login/check-login-initializer';
@@ -40,7 +40,7 @@ import { HomeComponent } from './home/home.component';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,
       multi: true,
-      deps: [AccountService]
+      deps: [AccountService, Router, ToastrService]
     }
     ,
     {

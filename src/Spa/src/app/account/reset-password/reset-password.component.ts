@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../account.service';
 import { ToastrService } from 'ngx-toastr';
 import { ResetPassword } from '../models/reset-password';
+import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.component';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reset-password',
@@ -12,6 +14,8 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordFailed: boolean;
   resetPasswordParams: {code: string, userId: string};
   resetPasswordModel = new ResetPassword();
+
+  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
               private accountService: AccountService,
@@ -29,10 +33,13 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword(): void {
+    this.spinner.show();
     this.accountService.resetPassword({
       ...this.resetPasswordModel,
       ...this.resetPasswordParams
-    }).subscribe(
+    }).pipe(
+      finalize(() => this.spinner.hide())
+    ).subscribe(
       _ => {
         this.toasrt.success(
           'Your password has been reset.' + 
