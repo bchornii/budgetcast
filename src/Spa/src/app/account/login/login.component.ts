@@ -34,4 +34,8 @@ export class LoginComponent {
   googleLogin() {
     this.accountService.googleLogin();
   }
+
+  fbLogin() {
+    this.accountService.facebookLogin();
+  }
 }

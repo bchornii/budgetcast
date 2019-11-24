@@ -56,6 +56,10 @@ export class AccountService extends BaseService {
     this.document.location.href = `${environment.api.accountApi.signInWithGoogle}`;
   }
 
+  facebookLogin(): void {
+    this.document.location.href = `${environment.api.accountApi.signInWithFacebook}`;
+  }
+
   logout() {
     return this.httpClient.post(
       `${environment.api.accountApi.logout}`, {}).pipe(

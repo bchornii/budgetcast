@@ -4,6 +4,7 @@
     {
         public string UiRedirectUrl { get; set; }
         public IdentityProvider Google { get; set; }
+        public IdentityProvider Facebook { get; set; }
     }
 
     public class IdentityProvider

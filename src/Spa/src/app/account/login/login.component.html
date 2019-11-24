@@ -10,9 +10,17 @@
       Log Into My Account
     </div>
 
-    <app-google-signin 
-      (signIn)="googleLogin()">      
-    </app-google-signin>
+    <div class="app-form-group">
+      <app-google-signin 
+        (signIn)="googleLogin()">      
+      </app-google-signin>
+    </div>
+
+    <div class="app-form-group">
+      <app-fb-signin
+        (signIn)="fbLogin()">
+      </app-fb-signin>
+    </div> 
 
     <div class="app-login-or-line">
       <span>or</span>

@@ -49,6 +49,16 @@ namespace BudgetCast.Dashboard.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("signInWithFacebook")]
+        public IActionResult SignInWithFacebook()
+        {
+            var facebookProviderName = _externalIdentityProviders.Facebook.Name;
+            var authenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties(
+                facebookProviderName, Url.Action(nameof(HandleExternalLogin)));
+            return Challenge(authenticationProperties, facebookProviderName);
+        }
+
+        [AllowAnonymous]
         [HttpGet("handleExternalLogin")]
         public async Task<IActionResult> HandleExternalLogin()
         {
@@ -59,24 +69,29 @@ namespace BudgetCast.Dashboard.Api.Controllers
             if (!result.Succeeded)
             {
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                var newUser = new IdentityUser
-                {
-                    UserName = email,
-                    Email = email,
-                    EmailConfirmed = true
-                };
-                var createResult = await _userManager.CreateAsync(newUser);
-                if (!createResult.Succeeded)
-                {
-                    throw new Exception(createResult.Errors.Select(e => e.Description).
-                        Aggregate((errors, error) => $"{errors}, {error}"));
-                }
+                var user = await _userManager.FindByEmailAsync(email);
 
-                await _userManager.AddLoginAsync(newUser, info);
+                if (user == null)
+                {
+                    user = new IdentityUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        EmailConfirmed = true
+                    };
+                    var createResult = await _userManager.CreateAsync(user);
+                    if (!createResult.Succeeded)
+                    {
+                        throw new Exception(createResult.Errors.Select(e => e.Description).
+                            Aggregate((errors, error) => $"{errors}, {error}"));
+                    }
+                } 
+                              
+                await _userManager.AddLoginAsync(user, info);
 
-                var newUserClaims = info.Principal.Claims.Append(new Claim("userId", newUser.Id));
-                await _userManager.AddClaimsAsync(newUser, newUserClaims);
-                await _signInManager.SignInAsync(newUser, isPersistent: false);                
+                var newUserClaims = info.Principal.Claims.Append(new Claim("userId", user.Id));
+                await _userManager.AddClaimsAsync(user, newUserClaims);
+                await _signInManager.SignInAsync(user, isPersistent: false);                
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             }
 

@@ -2,11 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const apiUrl = 'http://localhost:8200/api';
+const apiUrl = 'https://localhost:44305/api';
 
 const accountApi = {
   isAuthenticated: `${apiUrl}/account/isAuthenticated`,
   signInWithGoogle: `${apiUrl}/account/signInWithGoogle`,
+  signInWithFacebook: `${apiUrl}/account/signInWithFacebook`,
   login: `${apiUrl}/account/login`,
   logout: `${apiUrl}/account/logout`,
   check: `${apiUrl}/account/check`,

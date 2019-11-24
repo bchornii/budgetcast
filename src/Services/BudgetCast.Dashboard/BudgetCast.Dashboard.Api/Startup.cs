@@ -125,7 +125,14 @@ namespace BudgetCast.Dashboard.Api
                         options.CallbackPath = new PathString("/g-callback");
                         options.ClientId = Configuration["Social:Google:ClientId"];
                         options.ClientSecret = Configuration["Social:Google:ClientSecret"];
-                    });           
+                    })
+                .AddFacebook(Configuration["ExternalIdentityProviders:Facebook:Name"],
+                    options =>
+                    {
+                        options.CallbackPath = new PathString("/fb-callback");
+                        options.ClientId = Configuration["Social:Facebook:ClientId"];
+                        options.ClientSecret = Configuration["Social:Facebook:ClientSecret"];
+                    });
         }
 
         public void Configure(IApplicationBuilder app)
