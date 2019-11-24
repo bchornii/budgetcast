@@ -30,3 +30,5 @@ $default-palette: (
     @warn "Unknown `#{$group}` in palette.";
     @return null;
 }
+
+// get-color(cool-neutrals, cool-grey-1)

@@ -1,34 +1,36 @@
 <div>
   <h5>Edit your profile</h5>
   <hr>
-  <div class="app-25vw-form">
-    <form autocomplete="off" novalidate
+  <div class="app-q-container">
+    <form autocomplete="off" novalidate 
           appForm (appSubmit)="updateProfile()">
 
-          <div class="app-form-group">                        
-            <app-input
-              required
-              name="givenName"
-              title="GivenName"
-              [(ngModel)]="profileModel.givenName"
-            ></app-input>
-          </div>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input 
+            required 
+            name="givenName" 
+            title="GivenName" 
+            [(ngModel)]="profileModel.givenName"
+          ></app-input>
+        </div>
+      </div>
 
-          <div class="app-form-group">
-            <app-input
-              required
-              name="surName"
-              title="SurName"
-              [(ngModel)]="profileModel.surName"
-            ></app-input>
-          </div>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input 
+            required 
+            name="surName" 
+            title="SurName" 
+            [(ngModel)]="profileModel.surName"
+          ></app-input>
+        </div>
+      </div>
 
-          <div class="d-flex">
-            <button type="submit" class="app-button-control">Update</button>
-
-            <button type="button" class="app-button-control"
-                    (click)="cancel()">Cancel</button>
-          </div>
+      <div class="app-row">
+        <button type="submit" class="app-cell app-button-control">Update</button>
+        <button type="button" class="app-cell app-button-control" (click)="cancel()">Cancel</button>
+      </div>
     </form>
   </div>
 </div>

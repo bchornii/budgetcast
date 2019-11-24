@@ -5,8 +5,10 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   template: `
-    <app-nav *ngIf="diplayNavBar"></app-nav>
-    <router-outlet></router-outlet>
+    <div class="container">      
+      <app-nav *ngIf="diplayNavBar"></app-nav>
+      <router-outlet></router-outlet>
+    </div>    
   `
 })
 export class AppComponent implements OnInit {

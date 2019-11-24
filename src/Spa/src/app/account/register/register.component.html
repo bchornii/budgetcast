@@ -1,63 +1,73 @@
-<div class="app-f-screen-form-container">
-  <div class="app-25vw-form">
-    <div class="app-logo-small">
+<div class="app-full-scr-container">
+  <div class="app-q-container">
+    <div class="app-logo-sm">
       <a [routerLink]="['/home']">
         <img src="../../../assets/logo-svg.svg" alt="logo">
       </a>
     </div>
-    <div class="app-form-heading-large">
+    <div class="app-form-title-large">
       Create Account
     </div>
     <form autocomplete="off" novalidate
           appFieldsMatch fieldName="password" matchFieldName="passwordConfirm"
           appForm (appSubmit)="register()" #f="ngForm">
 
-      <div class="app-form-group">
-        <app-input
-          required
-          name="givenName"
-          title="Given Name"
-          [(ngModel)]="registrationModel.givenName"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            required
+            name="givenName"
+            title="Given Name"
+            [(ngModel)]="registrationModel.givenName"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="app-form-group">
-        <app-input
-          required
-          name="surName"
-          title="Sur Name"
-          [(ngModel)]="registrationModel.surName"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            required
+            name="surName"
+            title="Sur Name"
+            [(ngModel)]="registrationModel.surName"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="app-form-group">
-        <app-input
-          email
-          required
-          name="email"
-          title="Email"
-          [(ngModel)]="registrationModel.email"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            email
+            required
+            name="email"
+            title="Email"
+            [(ngModel)]="registrationModel.email"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="app-form-group">
-        <app-input
-          required
-          name="password"
-          title="Password"
-          type="password"
-          [(ngModel)]="registrationModel.password"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            required
+            name="password"
+            title="Password"
+            type="password"
+            [(ngModel)]="registrationModel.password"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="app-form-group">
-        <app-input
-          required
-          name="passwordConfirm"
-          title="Confirmation Password"
-          type="password"
-          [(ngModel)]="registrationModel.passwordConfirm"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            required
+            name="passwordConfirm"
+            title="Confirmation Password"
+            type="password"
+            [(ngModel)]="registrationModel.passwordConfirm"
+          ></app-input>
+        </div>
       </div>
 
       <app-alert *ngIf="registrationFailed" alertType="error">

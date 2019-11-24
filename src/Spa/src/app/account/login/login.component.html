@@ -1,12 +1,12 @@
-<div class="app-f-screen-form-container">
-  <div class="app-25vw-form">
+<div class="app-full-scr-container">
+  <div class="app-q-container">
     
-    <div class="app-logo-small">
+    <div class="app-logo-sm">
       <a [routerLink]="['/home']">
         <img src="../../../assets/logo-svg.svg" alt="logo">
       </a>
     </div>
-    <div class="app-form-heading-large">
+    <div class="app-form-title-large">
       Log Into My Account
     </div>
 
@@ -19,27 +19,30 @@
     </div>
 
     <form autocomplete="off" novalidate
-          appForm
-          (appSubmit)="login()">
+          appForm (appSubmit)="login()">
 
-      <div class="app-form-group">
-        <app-input
-          email
-          required
-          name="email"
-          title="Email"  
-          [(ngModel)] = "loginModel.email"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input
+            email
+            required
+            name="email"
+            title="Email"  
+            [(ngModel)] = "loginModel.email"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="app-form-group">
-        <app-input          
-          required
-          name="password"
-          title="Password"  
-          type="password"
-          [(ngModel)] = "loginModel.password"
-        ></app-input>
+      <div class="app-row">
+        <div class="app-cell app-form-group">
+          <app-input          
+            required
+            name="password"
+            title="Password"  
+            type="password"
+            [(ngModel)] = "loginModel.password"
+          ></app-input>
+        </div>
       </div>
 
       <app-alert *ngIf="invalidCredentials" alertType="error">
@@ -49,13 +52,15 @@
       <button type="submit" class="app-button-control">Log In</button>
     </form>
 
-    <p class="app-login-link app-login-link-left">
-      <a [routerLink]="['/account/register']">Don't have an account?</a>
-    </p>
-    
-    <p class="app-login-link app-login-link-right">
-      <a [routerLink]="['/account/forgot-password']">Forgot password?</a>
-    </p>
+    <div class="app-row">
+      <p class="app-cell app-login-link app-login-link-left">
+        <a [routerLink]="['/account/register']">Don't have an account?</a>
+      </p>
+      
+      <p class="app-cell app-login-link app-login-link-right">
+        <a [routerLink]="['/account/forgot-password']">Forgot password?</a>
+      </p>
+    </div>
   </div>
 </div>
 

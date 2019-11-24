@@ -1,0 +1,98 @@
+.app-full-scr-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-q-container {
+  width: 25%;
+}
+
+.app-logo-sm {
+  text-align: center;
+  img {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+.app-row {
+  display: flex;
+  flex-direction: row;
+  
+  .app-cell,
+  .app-cell-1,
+  .app-cell-2,
+  .app-cell-3,
+  .app-cell-4,
+  .app-cell-5,
+  .app-cell-6,
+  .app-cell-7,
+  .app-cell-8,
+  .app-cell-9,
+  .app-cell-10,
+  .app-cell-11
+  {
+    flex: auto;
+
+    & > * {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .input-box {
+      width: auto;
+    }
+
+    .checkbox {
+      margin-top: 8px;
+    }
+  }
+
+  .app-cell-1 {
+    flex: 0 0 8.3333%;
+    max-width: 8.3333%;
+  }
+  .app-cell-2 {
+    flex: 0 0 16.6666%;
+    max-width: 16.6666%;
+  }
+  .app-cell-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .app-cell-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  .app-cell-5 {
+    flex: 0 0 41.6666%;
+    max-width: 41.6666%;
+  }
+  .app-cell-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .app-cell-7 {
+    flex: 0 0 58.3333%;
+    max-width: 58.3333%;
+  }
+  .app-cell-8 {
+    flex: 0 0 66.6666%;
+    max-width: 66.6666%;
+  }
+  .app-cell-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+  .app-cell-10 {
+    flex: 0 0 83.3333%;
+    max-width: 83.3333%;
+  }
+  .app-cell-11 {
+    flex: 0 0 91.6666%;
+    max-width: 91.6666%;
+  }
+}

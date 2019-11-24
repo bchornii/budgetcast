@@ -1,6 +1,8 @@
+@import 'abstract/colors';
+
 .app-login-or-line {
   margin: 0.8rem 0 0.8rem 0;
-  color: #666;
+  color: get-color(cool-neutrals, cool-grey-1);
   text-align: center;
   font-size: 0.9rem;
   font-weight: 400;
@@ -15,18 +17,14 @@
   font-weight: 400;
   font-family: HkGraphicLight;
 
-  &-left {
-    text-align: left;
-  }
-
-  &-right {
-    text-align: right;
-  }
-
   a {
-    color: #666;
+    color: get-color(cool-neutrals, cool-grey-1);
     text-decoration: none;
-    border-bottom: 1px solid #666;
+    border-bottom: 1px solid get-color(cool-neutrals, cool-grey-1);
     font-family: inherit;
+  }
+  
+  &:last-of-type {
+    text-align: right;
   }
 }
