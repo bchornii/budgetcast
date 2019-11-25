@@ -1,61 +1,58 @@
-@import 'abstract/variables';
-@import 'abstract/colors';
+@import "abstract/variables";
+@import "abstract/colors";
 
-.app-home-container {
+.app-home {
   display: flex;
   padding-top: 4rem;
-}
 
-.app-home-screen {
-  width: 70%;
-  text-align: center;
-  margin: auto;
-  img {
-    height: auto;
-    width: 80%;
-    transition: transform 0.5s, filter 0.5s ease-in-out;
+  &__caption {
+    width: 30%;
+    margin-right: 1rem;
+    color: darken($color: darkgray, $amount: 45%);
+
+    &__title {
+      font-family: MontserratBold;
+      font-size: 2.5rem;
+      line-height: 1.2;
+      color: inherit;
+    }
+
+    &__description {
+      margin: 1rem 0;
+      font-family: HkGraphicLight;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: inherit;
+    }
   }
 
-  img:hover {
-    transform: scale(1.25);
+  &__img {
+    width: 70%;
+    text-align: center;
+    margin: auto;
+
+    img {
+      height: auto;
+      width: 80%;
+      transition: transform 0.5s, filter 0.5s ease-in-out;
+    }
+
+    img:hover {
+      transform: scale(1.25);
+    }
   }
-}
 
-.app-home-info {
-  width: 30%;
-  margin-right: 1rem;
-  color: darken($color: darkgray, $amount: 45%);
+  &__footer {
+    border-top: 1px solid get-color(cool-neutrals, cool-grey-6);
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+    padding-top: 1em;
+    display: flex;
+    justify-content: center;
 
-  &-title {
-    font-family: MontserratBold;
-    font-size: 2.5rem;
-    line-height: 1.2;
-    color: inherit;
-  }
-
-  &-description {
-    margin: 1rem 0;
-    font-family: HkGraphicLight;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: inherit;
-  }
-}
-
-.app-home-getstarted-btn {
-  margin-bottom: 0;
-}
-
-.app-home-footer {
-  border-top: 1px solid get-color(cool-neutrals, cool-grey-6);
-  margin-top: 5rem;
-  margin-bottom: 1rem;
-  padding-top: 1em;
-  display: flex;
-  justify-content: center;
-
-  &-text {
-    font-family: HkGraphicLight;
-    font-size: 0.8rem;
+    &__rights {
+      font-family: HkGraphicLight;
+      font-size: 0.8rem;
+    }
   }
 }

@@ -1,89 +1,77 @@
-$nav-ctrl-hover-color: rgba(67, 83, 255, 0.1);
-$nav-ctrl-color: #4353ff;
+@import 'abstract/colors';
 
-.app-nav-box {
+:host {
   display: flex;
   flex-direction: row;
   align-items: center;
 
   padding: 1.2rem 0.8rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-bottom: 1px solid get-color(primary, milky-white);
+  box-shadow: 0 0.125rem 0.25rem get-color(navbar, nav-shadow);
 }
 
-.app-nav-title {
+.app-name {
   margin-right: auto;
   margin-bottom: 0;
   font-size: 1.5rem;
   font-family: MontserratBold;
 }
 
-.app-nav-menu-container {
-  padding-right: 0.2rem;
-}
-
-.app-nav-menu {
-  list-style: none;
-
+.app-nav {
   display: flex;
-  justify-content: flex-end;
-  margin: 0;
-  padding: 0;
+  align-items: center;
 
-  &-item {
-    position: relative;
+  &__menu {
+    list-style: none;
 
-    &-link {
-      color: $nav-ctrl-color;
-      text-decoration: none;
-      padding: 0.8rem 0.9rem;
-      font-family: HkGraphicMedium;
-
-      &:hover {
-        background-color: $nav-ctrl-hover-color;
-      }
-
-      &-active {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-.app-nav-user {
-  margin-left: 2rem;
-
-  &-button {
+    display: flex;
+    justify-content: flex-end;
     margin: 0;
-    padding: 0.7rem 1.5rem;
-  }
-
-  &-menu {
-    min-width: 9rem;
-    border-radius: 0;
     padding: 0;
 
-    &-btn {
-      color: $nav-ctrl-color;
-      border-bottom: 1px solid darken($color: $nav-ctrl-hover-color, $amount: 40%);
-      padding: 0.5rem 0.9rem;
+    &__item {
+      position: relative;
 
-      &:hover {
-        background-color: $nav-ctrl-hover-color;
+      &__link {
+        color: get-color(primary, mail-blue);
+        text-decoration: none;
+        padding: 0.8rem 0.9rem;
+        font-family: HkGraphicMedium;
+
+        &:hover {
+          background-color: get-color(navbar, item-hover);
+        }
+
+        &--active {
+          text-decoration: underline;
+        }
       }
     }
-
-    &-btn:last-of-type {
-      border: none;
-    }
   }
-}
 
-@media only screen and (max-width: 765px) {
-  .app-nav-box {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: initial;
+  &__dropdown {
+    margin-left: 2rem;
+
+    &__anchor {
+      margin: 0;
+      padding: 0.7rem 1.5rem;
+    }
+
+    &__options {
+      min-width: 9rem;
+      border-radius: 0;
+      padding: 0;
+
+      &__btn {
+        color: get-color(primary, mail-blue);
+        border-bottom: 1px solid darken($color: get-color(navbar, item-hover), $amount: 40%);
+        padding: 0.5rem 0.9rem;
+
+        &:hover {
+          background-color: get-color(navbar, item-hover);
+        }
+      }
+    }
   }
 }

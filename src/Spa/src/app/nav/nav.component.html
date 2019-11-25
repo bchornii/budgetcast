@@ -1,42 +1,46 @@
-<div class="app-nav-box">
-  <h5 class="app-nav-title">Budget Cast</h5>
-  <nav class="app-nav-menu-container">
-    <ul class="app-nav-menu">
-      <li class="app-nav-menu-item">
-        <a class="app-nav-menu-item-link" [routerLink]="['/home']"
-          routerLinkActive="app-nav-menu-item-link-active">Home</a>
+  <h5 class="app-name">Budget Cast</h5>
+  <nav class="app-nav">
+    <ul class="app-nav__menu">
+      <li class="app-nav__menu__item">
+        <a class="app-nav__menu__item__link" [routerLink]="['/home']"
+            routerLinkActive="app-nav__menu__item__link--active">Home</a>
       </li>
-      <li class="app-nav-menu-item">
-        <a class="app-nav-menu-item-link" href="#">Features</a>
+      <li class="app-nav__menu__item">
+        <a class="app-nav__menu__item__link" href="#">Features</a>
       </li>
-      <li class="app-nav-menu-item">
-        <a class="app-nav-menu-item-link" href="#">Support</a>
+      <li class="app-nav__menu__item">
+        <a class="app-nav__menu__item__link" href="#">Support</a>
       </li>
-      <li class="app-nav-menu-item">
-        <a class="app-nav-menu-item-link"
+      <li class="app-nav__menu__item">
+        <a class="app-nav__menu__item__link"
           *ngIf="!userIdentity?.isAuthenticated"
           [routerLink]="['account/login']">Log In</a>
-      </li>
+      </li>    
     </ul>
-  </nav>
-  <div class="app-nav-user"
-       *ngIf="userIdentity?.isAuthenticated"
-       ngbDropdown
-       #myDrop="ngbDropdown">
-      <button class="app-button-control app-nav-user-button"
-              id="dropdownManual"
-              ngbDropdownAnchor
-              (focus)="myDrop.open()">Hi, {{userIdentity?.givenName}}</button>
-      <div class="app-nav-user-menu"
-           ngbDropdownMenu
-           aria-labelledby="dropdownManual">
-        <button class="app-nav-user-menu-btn"
-                ngbDropdownItem
-                [routerLink]="['/account/profile']">Profile</button>
-
-        <button class="app-nav-user-menu-btn"
-                (click)="logOut()"
-                ngbDropdownItem>Log Out</button>
-      </div>
+    <div class="app-nav__dropdown"
+        *ngIf="userIdentity?.isAuthenticated"
+        ngbDropdown
+        #myDrop="ngbDropdown">
+        <button class="app-button-control app-nav__dropdown__anchor"
+                id="dropdownManual" ngbDropdownAnchor
+                (focus)="myDrop.open()">
+          Hi, {{userIdentity?.givenName}}
+        </button>
+        <div class="app-nav__dropdown__options"
+             ngbDropdownMenu
+             aria-labelledby="dropdownManual">
+          <button class="app-nav__dropdown__options__btn"
+                  ngbDropdownItem
+                  [routerLink]="['/account/profile']">
+            Profile
+          </button>
+      
+          <button class="app-nav__dropdown__options__btn"
+                  (click)="logOut()"
+                  ngbDropdownItem>
+            Log Out
+          </button>
+          
+        </div>
     </div>
-</div>
+  </nav>
