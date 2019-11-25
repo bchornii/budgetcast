@@ -7,8 +7,7 @@
         [type]="innerType"
         [ngClass]="{
             'input-box__input' : true,
-            'input-box__input--has-value' : !!innerValue,
-            'input-box__input--has-error' : containsNgClasses()
+            'input-box__input--has-value' : !!innerValue
            }"
         (blur)="onBlur($event)"
 		(focus)="onFocus($event)">

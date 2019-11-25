@@ -70,13 +70,6 @@
       box-shadow: 6px 0 0 inset get-color(primary, azure-blue);
     }
 
-    &--has-error {
-      border: 1px solid get-color(alerts, error);
-      &:focus {
-        box-shadow: 6px 0 0 inset get-color(alerts, error);
-      }
-    }
-
     &:disabled {
       border-color: get-color(cool-neutrals, cool-grey-3) !important;
 
@@ -95,5 +88,16 @@
     font-size: 0.9rem;
     transition: transform 0.2s ease, color 0.5s ease, font-size 0.2s ease;
     transform-origin: 0 0;
+  }
+}
+
+:host {
+  &.ng-invalid.ng-dirty.ng-touched {
+    .input-box__input {
+      border: 1px solid get-color(alerts, error);
+      &:focus {
+        box-shadow: 6px 0 0 inset get-color(alerts, error);
+      }
+    }
   }
 }

@@ -9,7 +9,7 @@ export enum InputType {
 }
 
 @Component({
-	selector: 'app-input',
+	selector: 'app-input',	
 	templateUrl: './input.component.html',
 	styleUrls: ['./input.component.scss'],
 	providers: [{
@@ -54,14 +54,5 @@ export class InputComponent extends FormElement implements OnInit, AfterViewInit
 
 	showPassword() {
 		this.innerType === 'text' ? this.innerType = 'password' : this.innerType = 'text';
-	}
-
-	containsNgClasses(): boolean {
-		const element = this.elementRef.nativeElement as HTMLElement;
-
-		return element && element.classList &&
-			element.classList.contains('ng-touched') &&
-			element.classList.contains('ng-invalid') &&
-			element.classList.contains('ng-dirty');
 	}
 }
