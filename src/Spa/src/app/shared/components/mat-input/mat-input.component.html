@@ -1,0 +1,29 @@
+<mat-form-field appearance="standard" [hideRequiredMarker]="true">
+  <mat-label>{{label}}</mat-label>
+  <input
+        #input
+        matInput
+        [id]="id"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [value]="innerValue"
+        [type]="innerType"
+        [formControl]="inputControl">
+  <mat-error>Hello error</mat-error>
+  <button
+        *ngIf="type === 'password'"
+        mat-icon-button
+        matSuffix
+        (click)="showPassword()"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+
+  <button
+        *ngIf="isSearch"
+        mat-icon-button
+        matSuffix>
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>
