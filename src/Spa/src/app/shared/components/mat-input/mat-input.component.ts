@@ -1,14 +1,24 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Self, OnDestroy, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  Self,
+  OnDestroy,
+  EventEmitter,
+  Output
+} from '@angular/core';
 import { InputType } from '../input/input.component';
-import { FormControl, NgControl, ControlValueAccessor } from '@angular/forms';
-import { getNewId } from 'src/app/util/util';
-import { Subscription } from 'rxjs';
+import { NgControl } from '@angular/forms';
+import { MatFormElement } from '../mat-form-element';
 
 @Component({
   selector: 'app-mat-input',
   templateUrl: './mat-input.component.html'
 })
-export class MatInputComponent implements OnInit, OnDestroy, AfterViewInit, ControlValueAccessor {
+export class MatInputComponent extends MatFormElement implements OnInit, OnDestroy, AfterViewInit {
   @Input() name = 'item';
   @Input() label: string;
   @Input() readonly = false;
@@ -18,26 +28,20 @@ export class MatInputComponent implements OnInit, OnDestroy, AfterViewInit, Cont
 
   @ViewChild('input', { static: false }) input: ElementRef;
 
-  id: string;
   hide: boolean;
-  inputControl: FormControl;
   innerType: string = InputType.TEXT;
-  valueChangesSubstription: Subscription;
-  propagateTouch: () => {};
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
 
   constructor(public elementRef: ElementRef,
-              @Self() private ngCrtl: NgControl) { }
+              @Self() public ngCrtl: NgControl) {
+    super(ngCrtl);
+  }
 
   ngOnInit() {
-    this.id = [this.name, getNewId().toString()].join('-');
-    this.ngCrtl.valueAccessor = this;
-    this.inputControl = new FormControl('', this.ngCrtl.validator);
+    this.setElementId();
     this.innerType = this.type;
-
-    this.inputControl.valueChanges.subscribe(x => console.log(x));
   }
 
   ngOnDestroy() {
@@ -48,35 +52,6 @@ export class MatInputComponent implements OnInit, OnDestroy, AfterViewInit, Cont
     this.elementRef.nativeElement.focus = () => {
       this.input.nativeElement.focus();
     };
-  }
-
-  onBlur($event?: Event) {
-    this.propagateTouch();
-
-    if (this.onBlurChange) {
-      this.onBlurChange.emit($event);
-    }
-  }
-
-  onFocus($event: Event) {
-    if (this.onFocusChange) {
-      this.onFocusChange.emit($event);
-    }
-  }
-
-  writeValue(value: any) {
-    if (value) {
-      this.inputControl.setValue(value, { emitEvent: false});
-    }
-  }
-
-  registerOnChange(fn) {
-    this.valueChangesSubstription =
-      this.inputControl.valueChanges.subscribe(fn);
-  }
-
-  registerOnTouched(fn) {
-    this.propagateTouch = fn;
   }
 
   showPassword($event: MouseEvent) {
