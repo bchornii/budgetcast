@@ -34,6 +34,8 @@ import {
     MatTooltipModule
 } from '@angular/material';
 
+import {MatBadgeModule} from '@angular/material/badge';
+
 import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
@@ -70,7 +72,8 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule
 ],
 exports: [
     CdkTableModule,
@@ -105,7 +108,8 @@ exports: [
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule
 ]
 })
 export class MaterialModule { }

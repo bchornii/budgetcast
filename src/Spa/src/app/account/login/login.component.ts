@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { AccountService } from '../account.service';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserLogin } from '../models/user-login';
 import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.component';
@@ -19,10 +18,10 @@ export class LoginComponent {
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
   constructor(private accountService: AccountService,
-              private router: Router) {    
+              private router: Router) {
   }
 
-  login(): void {    
+  login(): void {
     this.spinner.show();
     this.accountService.login(this.loginModel).pipe(
       finalize(() => this.spinner.hide())

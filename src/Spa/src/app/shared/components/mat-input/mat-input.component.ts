@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Injector } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Injector, AfterViewInit } from '@angular/core';
 import { InputType } from '../input/input.component';
-import { FormControl, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormControl, NgControl, NG_VALUE_ACCESSOR, FormControlName } from '@angular/forms';
 import { FormElement } from '../form-element';
 
 @Component({
@@ -12,19 +12,20 @@ import { FormElement } from '../form-element';
     multi: true
   }]
 })
-export class MatInputComponent extends FormElement implements OnInit {
+export class MatInputComponent extends FormElement implements OnInit, AfterViewInit {
   @Input() name = 'item';
   @Input() label: string;
-  @Input() disabled = false;
   @Input() readonly = false;
   @Input() type: string = InputType.TEXT;
   @Input() isSearch = false;
+  @Input() errMsg = 'Invalid input.';
 
   @ViewChild('input', { static: false }) input: ElementRef;
 
   hide: boolean;
   innerValue: any;
   inputControl: FormControl;
+  ngControl: NgControl;
   defaultValue = '';
   innerType: string = InputType.TEXT;
 
@@ -40,7 +41,18 @@ export class MatInputComponent extends FormElement implements OnInit {
     this.setElementId();
   }
 
-  showPassword() {
+  ngAfterViewInit() {
+    this.registerInputEvents(this.input.nativeElement);
+
+    this.elementRef.nativeElement.focus = () => {
+      this.input.nativeElement.focus();
+    };
+  }
+
+  showPassword($event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
+
     this.hide = !this.hide;
     this.innerType === 'text'
     ? this.innerType = 'password'

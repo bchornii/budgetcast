@@ -1,6 +1,6 @@
 <div class="app-full-scr-container">
   <div class="app-q-container">
-    
+
     <div class="app-logo-sm">
       <a [routerLink]="['/home']">
         <img src="../../../assets/logo-svg.svg" alt="logo">
@@ -11,8 +11,8 @@
     </div>
 
     <div class="app-form-group">
-      <app-google-signin 
-        (signIn)="googleLogin()">      
+      <app-google-signin
+        (signIn)="googleLogin()">
       </app-google-signin>
     </div>
 
@@ -20,7 +20,7 @@
       <app-fb-signin
         (signIn)="fbLogin()">
       </app-fb-signin>
-    </div> 
+    </div>
 
     <div class="app-login-or-line">
       <span>or</span>
@@ -31,31 +31,33 @@
 
       <div class="app-row">
         <div class="app-cell app-form-group">
-          <app-input
+          <app-mat-input
             email
             required
             name="email"
-            title="Email"  
+            label="Email"
+            errMsg="Please provide valid email."
             [(ngModel)] = "loginModel.email"
-          ></app-input>
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
         <div class="app-cell app-form-group">
-          <app-input          
+          <app-mat-input
             required
             name="password"
-            title="Password"  
+            label="Password"
             type="password"
+            errMsg="Please provide password."
             [(ngModel)] = "loginModel.password"
-          ></app-input>
+          ></app-mat-input>
         </div>
       </div>
 
       <app-alert *ngIf="invalidCredentials" alertType="error">
             Please check your credentials.
-      </app-alert>  
+      </app-alert>
 
       <button type="submit" class="app-button-control">Log In</button>
     </form>
@@ -64,7 +66,7 @@
       <p class="app-cell app-login-link app-login-link-left">
         <a [routerLink]="['/account/register']">Don't have an account?</a>
       </p>
-      
+
       <p class="app-cell app-login-link app-login-link-right">
         <a [routerLink]="['/account/forgot-password']">Forgot password?</a>
       </p>

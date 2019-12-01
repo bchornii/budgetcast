@@ -9,12 +9,15 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FbSigninComponent } from './components/fb-signin/fb-signin.component';
 import { MaterialModule } from './material.module';
 import { MatInputComponent } from './components/mat-input/mat-input.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+
+    ReactiveFormsModule
   ],
   declarations: [
     FormDirective,
