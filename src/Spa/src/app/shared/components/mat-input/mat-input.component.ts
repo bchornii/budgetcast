@@ -1,16 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Injector, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Self } from '@angular/core';
 import { InputType } from '../input/input.component';
-import { FormControl, NgControl, NG_VALUE_ACCESSOR, FormControlName } from '@angular/forms';
+import { FormControl, NgControl } from '@angular/forms';
 import { FormElement } from '../form-element';
 
 @Component({
   selector: 'app-mat-input',
-  templateUrl: './mat-input.component.html',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: MatInputComponent,
-    multi: true
-  }]
+  templateUrl: './mat-input.component.html'
 })
 export class MatInputComponent extends FormElement implements OnInit, AfterViewInit {
   @Input() name = 'item';
@@ -25,18 +20,18 @@ export class MatInputComponent extends FormElement implements OnInit, AfterViewI
   hide: boolean;
   innerValue: any;
   inputControl: FormControl;
-  ngControl: NgControl;
   defaultValue = '';
   innerType: string = InputType.TEXT;
 
-  constructor(private injector: Injector,
-              public elementRef: ElementRef) {
+  constructor(public elementRef: ElementRef,
+              @Self() private ngCrtl: NgControl) {
     super(elementRef);
   }
 
   ngOnInit() {
-    this.inputControl = this.injector
-      .get(NgControl).control;
+    this.ngCrtl.valueAccessor = this;
+    this.inputControl = this.ngCrtl
+      .control as FormControl;
     this.innerType = this.type;
     this.setElementId();
   }
