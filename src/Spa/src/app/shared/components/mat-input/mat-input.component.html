@@ -5,9 +5,10 @@
         matInput
         [id]="id"
         [readonly]="readonly"
-        [value]="innerValue"
         [type]="innerType"
-        [formControl]="inputControl">
+        [formControl]="inputControl"
+        (blur)="onBlur($event)"
+        (focus)="onFocus($event)">
   <mat-error>{{errMsg}}</mat-error>
   <button
         *ngIf="type === 'password'"
