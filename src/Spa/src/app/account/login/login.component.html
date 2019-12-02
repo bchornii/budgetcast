@@ -30,7 +30,7 @@
           appForm (appSubmit)="login()">
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
+        <div class="app-cell">
           <app-mat-input
             email
             required
@@ -43,7 +43,7 @@
       </div>
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
+        <div class="app-cell">
           <app-mat-input
             required
             name="password"
@@ -56,7 +56,7 @@
       </div>
 
       <app-alert *ngIf="invalidCredentials" alertType="error">
-            Please check your credentials.
+        Please check your credentials.
       </app-alert>
 
       <button type="submit" class="app-button-control">Log In</button>

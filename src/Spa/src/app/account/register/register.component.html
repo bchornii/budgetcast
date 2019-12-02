@@ -13,60 +13,65 @@
           appForm (appSubmit)="register()" #f="ngForm">
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-input
+        <div class="app-cell">
+          <app-mat-input
             required
             name="givenName"
-            title="Given Name"
-            [(ngModel)]="registrationModel.givenName"
-          ></app-input>
+            label="Given Name"            
+            errMsg="Please provide given name."
+            [(ngModel)] = "registrationModel.givenName"
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-input
+        <div class="app-cell">
+          <app-mat-input
             required
             name="surName"
-            title="Sur Name"
-            [(ngModel)]="registrationModel.surName"
-          ></app-input>
+            label="Sur Name"            
+            errMsg="Please provide sur name."
+            [(ngModel)] = "registrationModel.surName"
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-input
+        <div class="app-cell">
+          <app-mat-input
             email
             required
             name="email"
-            title="Email"
-            [(ngModel)]="registrationModel.email"
-          ></app-input>
+            label="Email"            
+            errMsg="Please provide valid email."
+            [(ngModel)] = "registrationModel.email"
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-input
+        <div class="app-cell">
+          <app-mat-input            
             required
             name="password"
-            title="Password"
-            type="password"
-            [(ngModel)]="registrationModel.password"
-          ></app-input>
+            label="Password"    
+            type="password"        
+            errMsg="Please provide password."
+            [(ngModel)] = "registrationModel.password"
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-input
+        <div class="app-cell">
+          <app-mat-input            
             required
             name="passwordConfirm"
-            title="Confirmation Password"
-            type="password"
-            [(ngModel)]="registrationModel.passwordConfirm"
-          ></app-input>
+            label="Confirmation Password"    
+            type="password"        
+            errMsg="Please provide password."
+            [(ngModel)] = "registrationModel.passwordConfirm"
+          ></app-mat-input>
         </div>
       </div>
 
