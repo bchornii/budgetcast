@@ -13,6 +13,7 @@ import {
 import { InputType } from '../input/input.component';
 import { NgControl } from '@angular/forms';
 import { MatFormElement } from '../mat-form-element';
+import { MatInput } from '@angular/material';
 
 @Component({
   selector: 'app-mat-input',
@@ -26,13 +27,18 @@ export class MatInputComponent extends MatFormElement implements OnInit, OnDestr
   @Input() isSearch = false;
   @Input() errMsg = 'Invalid input.';
 
-  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('input', { static: false }) input: ElementRef;  
+  @ViewChild('input', { static: false, read: MatInput }) inputDir: MatInput;
 
   hide: boolean;
   innerType: string = InputType.TEXT;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
+
+  get hasError(): boolean {
+    return this.inputDir && this.inputDir.errorState;
+  }
 
   constructor(public elementRef: ElementRef,
               @Self() public ngCrtl: NgControl) {

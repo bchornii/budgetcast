@@ -2,7 +2,8 @@ $default-palette: (
     primary: (
         azure-blue: #008cfd,
         main-blue: #4253FF,
-        milky-white: #ededed
+        milky-white: #ededed,
+        dark: #343a40
     ),
     cool-neutrals: (
         cool-grey-0: #303538,
@@ -15,7 +16,7 @@ $default-palette: (
         cool-grey-7: rgb(255, 251, 251)
     ),
     alerts: (
-        error: #df0000
+        error: #f44336
     ),
     navbar: (
         item-hover: rgba(67, 83, 255, 0.1),

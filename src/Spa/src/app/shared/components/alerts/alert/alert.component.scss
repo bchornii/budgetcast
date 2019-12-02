@@ -1,22 +1,23 @@
 @import 'abstract/colors';
 
 .app-alert {
-  border: 1px solid get-color(cool-neutrals, cool-grey-4);
-  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  padding: 0.3rem 0.7rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.3rem;
   margin-bottom: 0.8rem;
   font-size: 0.8rem;
   font-family: HkGraphicLight;
-  font-weight: 600;
+  font-weight: 600;  
 
   &--error {
-    box-shadow: 3px 0 0 inset get-color(alerts, error);
+    box-shadow: 2px 0 0 inset get-color(alerts, error);
     color: get-color(alerts, error);
   }
 
   &--info {
-    box-shadow: 3px 0 0 inset get-color(primary, azure-blue);    
+    box-shadow: 2px 0 0 inset get-color(primary, dark);     
     color: get-color(primary, azure-blue);
   }
 }
