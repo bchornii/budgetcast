@@ -27,10 +27,13 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [              
+            "styles": [
+              {
+                "input": "src/styles/themes/t-main.scss"
+              },
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
-              "src/styles/main.scss"              
+              "src/styles/main.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

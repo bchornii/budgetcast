@@ -7,3 +7,21 @@
     display: block;
   }
 }
+
+app-mat-input {
+  color: get-color(cool-neutrals, cool-grey-0);
+
+  .mat-form-field-label {
+    color: get-color(cool-neutrals, cool-grey-2);
+  }
+
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: get-color(cool-neutrals, cool-grey-2);
+  }
+
+  &.ng-dirty.ng-invalid.ng-touched {
+    .mat-form-field.mat-focused .mat-form-field-label {
+      color: get-color(alerts, error);
+    }
+  }
+}
