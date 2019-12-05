@@ -10,6 +10,7 @@ import { FbSigninComponent } from './components/fb-signin/fb-signin.component';
 import { MaterialModule } from './material.module';
 import { MatInputComponent } from './components/mat-input/mat-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AlertComponent,
     GoogleSigninComponent,
     SpinnerComponent,
-    FbSigninComponent
+    FbSigninComponent,
+    DropdownComponent
   ],
   exports: [
     FormDirective,
@@ -41,7 +43,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AlertComponent,
     GoogleSigninComponent,
     SpinnerComponent,
-    FbSigninComponent
+    FbSigninComponent,
+
+    MaterialModule
   ]
 })
 export class SharedModule { }

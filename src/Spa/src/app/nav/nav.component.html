@@ -15,7 +15,7 @@
         <a class="app-nav__menu__item__link"
           *ngIf="!userIdentity?.isAuthenticated"
           [routerLink]="['account/login']">Log In</a>
-      </li>    
+      </li>
     </ul>
     <div class="app-nav__dropdown"
         *ngIf="userIdentity?.isAuthenticated"
@@ -34,13 +34,25 @@
                   [routerLink]="['/account/profile']">
             Profile
           </button>
-      
+
           <button class="app-nav__dropdown__options__btn"
                   (click)="logOut()"
                   ngbDropdownItem>
             Log Out
           </button>
-          
+
         </div>
+    </div>
+    <div>
+      <mat-menu #appMenu="matMenu">
+        <button mat-menu-item>Settings</button>
+        <button mat-menu-item>Help</button>
+      </mat-menu>
+
+      <button mat-button
+              [matMenuTriggerFor]="appMenu">
+        Hi, Bohdan
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
     </div>
   </nav>

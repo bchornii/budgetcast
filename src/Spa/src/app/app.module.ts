@@ -14,6 +14,7 @@ import { AppBootstrapModule } from './shared/app-bootstrap.module';
 import { NavComponent } from './nav/nav.component';
 import { appRoutes } from './app.routes';
 import { HomeComponent } from './home/home.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { HomeComponent } from './home/home.component';
 
     AppBootstrapModule,
     BrowserAnimationsModule,
+    SharedModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
