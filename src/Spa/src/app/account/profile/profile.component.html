@@ -2,28 +2,30 @@
   <h5>Edit your profile</h5>
   <hr>
   <div class="app-q-container">
-    <form autocomplete="off" novalidate 
+    <form autocomplete="off" novalidate
           appForm (appSubmit)="updateProfile()">
 
       <div class="app-row">
         <div class="app-cell app-form-group">
-          <app-input 
-            required 
-            name="givenName" 
-            title="GivenName" 
-            [(ngModel)]="profileModel.givenName"
-          ></app-input>
+          <app-mat-input
+            required
+            name="givenName"
+            label="GivenName"
+            errMsg="Please provide given name."
+            [(ngModel)] = "profileModel.givenName"
+          ></app-mat-input>
         </div>
       </div>
 
       <div class="app-row">
         <div class="app-cell app-form-group">
-          <app-input 
-            required 
-            name="surName" 
-            title="SurName" 
-            [(ngModel)]="profileModel.surName"
-          ></app-input>
+          <app-mat-input
+            required
+            name="surName"
+            label="SurName"
+            errMsg="Please provide sur name."
+            [(ngModel)] = "profileModel.surName"
+          ></app-mat-input>
         </div>
       </div>
 
