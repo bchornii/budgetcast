@@ -10,24 +10,24 @@ import { checkIfUserIsAuthenticated } from './account/login/check-login-initiali
 import { AccountService } from './account/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpConfigInterceptor } from './shared/services/http-config.interceptor';
-import { AppBootstrapModule } from './shared/app-bootstrap.module';
 import { NavComponent } from './nav/nav.component';
 import { appRoutes } from './app.routes';
 import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
+import { UserProfileActionsComponent } from './nav/user-profile-actions/user-profile-actions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    HomeComponent
+    HomeComponent,
+    UserProfileActionsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
 
-    AppBootstrapModule,
     BrowserAnimationsModule,
     SharedModule,
     ToastrModule.forRoot({

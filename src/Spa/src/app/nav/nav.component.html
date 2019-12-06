@@ -1,4 +1,4 @@
-  <h5 class="app-name">Budget Cast</h5>
+  <h5 class="app-name">Budget cast</h5>
   <nav class="app-nav">
     <ul class="app-nav__menu">
       <li class="app-nav__menu__item">
@@ -17,42 +17,7 @@
           [routerLink]="['account/login']">Log In</a>
       </li>
     </ul>
-    <div class="app-nav__dropdown"
-        *ngIf="userIdentity?.isAuthenticated"
-        ngbDropdown
-        #myDrop="ngbDropdown">
-        <button class="app-button-control app-nav__dropdown__anchor"
-                id="dropdownManual" ngbDropdownAnchor
-                (focus)="myDrop.open()">
-          Hi, {{userIdentity?.givenName}}
-        </button>
-        <div class="app-nav__dropdown__options"
-             ngbDropdownMenu
-             aria-labelledby="dropdownManual">
-          <button class="app-nav__dropdown__options__btn"
-                  ngbDropdownItem
-                  [routerLink]="['/account/profile']">
-            Profile
-          </button>
-
-          <button class="app-nav__dropdown__options__btn"
-                  (click)="logOut()"
-                  ngbDropdownItem>
-            Log Out
-          </button>
-
-        </div>
-    </div>
-    <div>
-      <mat-menu #appMenu="matMenu">
-        <button mat-menu-item>Settings</button>
-        <button mat-menu-item>Help</button>
-      </mat-menu>
-
-      <button mat-button
-              [matMenuTriggerFor]="appMenu">
-        Hi, Bohdan
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </div>
+    <app-user-profile-actions
+      *ngIf="userIdentity?.isAuthenticated">
+    </app-user-profile-actions>
   </nav>

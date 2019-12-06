@@ -10,7 +10,6 @@ import { FbSigninComponent } from './components/fb-signin/fb-signin.component';
 import { MaterialModule } from './material.module';
 import { MatInputComponent } from './components/mat-input/mat-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DropdownComponent } from './components/dropdown/dropdown.component';
 
 
 @NgModule({
@@ -31,7 +30,6 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
     GoogleSigninComponent,
     SpinnerComponent,
     FbSigninComponent,
-    DropdownComponent
   ],
   exports: [
     FormDirective,

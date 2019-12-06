@@ -48,30 +48,5 @@
         }
       }
     }
-  }
-
-  &__dropdown {
-    margin-left: 2rem;
-
-    &__anchor {
-      margin: 0;
-      padding: 0.7rem 1.5rem;
-    }
-
-    &__options {
-      min-width: 9rem;
-      border-radius: 0;
-      padding: 0;
-
-      &__btn {
-        color: get-color(primary, mail-blue);
-        border-bottom: 1px solid darken($color: get-color(navbar, item-hover), $amount: 40%);
-        padding: 0.5rem 0.9rem;
-
-        &:hover {
-          background-color: get-color(navbar, item-hover);
-        }
-      }
-    }
-  }
+  }  
 }

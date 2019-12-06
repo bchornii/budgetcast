@@ -21,7 +21,6 @@
     "@angular/platform-browser": "~8.2.9",
     "@angular/platform-browser-dynamic": "~8.2.9",
     "@angular/router": "~8.2.9",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "bootstrap": "^4.3.1",
     "ngx-bootstrap": "^5.2.0",
     "ngx-toastr": "^11.2.1",
