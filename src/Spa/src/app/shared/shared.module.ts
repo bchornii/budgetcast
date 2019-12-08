@@ -10,6 +10,7 @@ import { FbSigninComponent } from './components/fb-signin/fb-signin.component';
 import { MaterialModule } from './material.module';
 import { MatInputComponent } from './components/mat-input/mat-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteComponent } from './components/mat-autocomplete/mat-autocomplete.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     GoogleSigninComponent,
     SpinnerComponent,
     FbSigninComponent,
+    MatAutocompleteComponent,
   ],
   exports: [
     FormDirective,
@@ -42,6 +44,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     GoogleSigninComponent,
     SpinnerComponent,
     FbSigninComponent,
+    MatAutocompleteComponent,
 
     MaterialModule
   ]
