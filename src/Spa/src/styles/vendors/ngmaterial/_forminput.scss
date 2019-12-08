@@ -25,3 +25,8 @@ app-mat-input {
     }
   }
 }
+
+.is-loading .mat-option-text {
+  display: flex;
+  justify-content: center;
+}
