@@ -18,15 +18,12 @@ import { ResetPassword } from './models/reset-password';
 export class AccountService extends BaseService {
 
   private invalidUserIdentity = new UserIdentity();
-  private userIdentitySnapshot: UserIdentity;
   private userIdentitySubject = new BehaviorSubject<UserIdentity>(this.invalidUserIdentity);
 
-  get isUserValid(): boolean { return this.userIdentitySnapshot.isAuthenticated; }
-  get userIdentity(): UserIdentity { return this.userIdentitySnapshot; }
+  get isUserValid(): boolean { return this.userIdentity.isAuthenticated; }
+  get userIdentity(): UserIdentity { return this.userIdentitySubject.value; }
 
-  userIdentity$ = this.userIdentitySubject.asObservable().pipe(
-    tap(userIdentity => this.userIdentitySnapshot = userIdentity)
-  );
+  userIdentity$ = this.userIdentitySubject.asObservable();
 
   constructor(@Inject(DOCUMENT)
               private document: Document,
