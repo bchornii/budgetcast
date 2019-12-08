@@ -38,11 +38,11 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       tap(null, (err: HttpErrorResponse) => {
-          if (err.status === ResponseStatus.UNAUTHORIZED || 
+          if (err.status === ResponseStatus.UNAUTHORIZED ||
               err.status === ResponseStatus.FORBIDDEN) {
             this.accountService.invalidateUserAuthentication();
             this.router.navigate(['/account/login']);
-            this.toastr.error('Please sign in.')
+            this.toastr.error('Please sign in.');
           }
         })
     );

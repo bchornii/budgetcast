@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
-import { debounceTime, tap } from 'rxjs/operators';
+import { debounceTime, tap, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mat-autocomplete',
@@ -57,7 +57,8 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
   registerOnChange(fn) {
     this.valueChangesSubstription =
       this.inputControl.valueChanges.pipe(
-        debounceTime(this.debounceTime)
+        debounceTime(this.debounceTime),
+        distinctUntilChanged()
       ).subscribe(fn);
   }
 
