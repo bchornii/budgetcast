@@ -17,8 +17,13 @@ const accountApi = {
   resetPassword: `${apiUrl}/account/resetPassword`
 };
 
+const recipesApi = {
+  categories: `${apiUrl}/recipes/categories`
+};
+
 const api = {
-  accountApi
+  accountApi,
+  recipesApi
 };
 
 export const environment = {

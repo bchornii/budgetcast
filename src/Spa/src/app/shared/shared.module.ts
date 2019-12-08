@@ -11,6 +11,7 @@ import { MaterialModule } from './material.module';
 import { MatInputComponent } from './components/mat-input/mat-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteComponent } from './components/mat-autocomplete/mat-autocomplete.component';
+import { MatChipsAutocompleteComponent } from './components/mat-chips-autocomplete/mat-chips-autocomplete.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { MatAutocompleteComponent } from './components/mat-autocomplete/mat-auto
     SpinnerComponent,
     FbSigninComponent,
     MatAutocompleteComponent,
+    MatChipsAutocompleteComponent,
   ],
   exports: [
     FormDirective,
@@ -45,6 +47,7 @@ import { MatAutocompleteComponent } from './components/mat-autocomplete/mat-auto
     SpinnerComponent,
     FbSigninComponent,
     MatAutocompleteComponent,
+    MatChipsAutocompleteComponent,
 
     MaterialModule
   ]

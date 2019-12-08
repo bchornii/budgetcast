@@ -1,0 +1,30 @@
+<!-- <div class="app-row">
+  <div class="app-cell">
+    <app-mat-autocomplete
+      required
+      name="category"
+      label="Produt Category"
+      errMsg="Please specify product category."
+      [initialValue]="initialCategoryName"
+      [options]="categories"
+      [isLoading]="categoriesIsLoading"
+      ngModel
+      (ngModelChange)="onCategoryModelChange($event)">
+    </app-mat-autocomplete>
+  </div>
+</div> -->
+
+<div class="app-row">
+    <div class="app-cell">
+      <app-mat-chips-autocomplete
+        name="category"
+        label="Produt Category"
+        errMsg="Please specify product category."
+        [data]="tags"
+        [options]="categories"
+        [isLoading]="categoriesIsLoading"
+        ngModel
+        (ngModelChange)="onCategoryModelChange($event)">
+      </app-mat-chips-autocomplete>
+    </div>
+  </div>
