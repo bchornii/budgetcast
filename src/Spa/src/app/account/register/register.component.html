@@ -1,4 +1,4 @@
-<div class="app-full-scr-container">
+<div class="app-full-scr-container app-full-scr-container__centered">
   <div class="app-q-container">
     <div class="app-logo-sm">
       <a [routerLink]="['/home']">
@@ -17,7 +17,7 @@
           <app-mat-input
             required
             name="givenName"
-            label="Given Name"            
+            label="Given Name"
             errMsg="Please provide given name."
             [(ngModel)] = "registrationModel.givenName"
           ></app-mat-input>
@@ -29,7 +29,7 @@
           <app-mat-input
             required
             name="surName"
-            label="Sur Name"            
+            label="Sur Name"
             errMsg="Please provide sur name."
             [(ngModel)] = "registrationModel.surName"
           ></app-mat-input>
@@ -42,7 +42,7 @@
             email
             required
             name="email"
-            label="Email"            
+            label="Email"
             errMsg="Please provide valid email."
             [(ngModel)] = "registrationModel.email"
           ></app-mat-input>
@@ -51,11 +51,11 @@
 
       <div class="app-row">
         <div class="app-cell">
-          <app-mat-input            
+          <app-mat-input
             required
             name="password"
-            label="Password"    
-            type="password"        
+            label="Password"
+            type="password"
             errMsg="Please provide password."
             [(ngModel)] = "registrationModel.password"
           ></app-mat-input>
@@ -64,11 +64,11 @@
 
       <div class="app-row">
         <div class="app-cell">
-          <app-mat-input            
+          <app-mat-input
             required
             name="passwordConfirm"
-            label="Confirmation Password"    
-            type="password"        
+            label="Confirmation Password"
+            type="password"
             errMsg="Please provide password."
             [(ngModel)] = "registrationModel.passwordConfirm"
           ></app-mat-input>
@@ -78,11 +78,11 @@
       <app-alert *ngIf="registrationFailed" alertType="error">
         Something went wrong. Consider to put different
         registration information.
-      </app-alert>     
+      </app-alert>
 
       <app-alert *ngIf="f.errors?.notMatch" alertType="error">
-        Passwords don't match.  
-      </app-alert>     
+        Passwords don't match.
+      </app-alert>
 
       <button type="submit" class="app-button-control">Register</button>
 
