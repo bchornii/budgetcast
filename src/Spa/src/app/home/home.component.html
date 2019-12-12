@@ -1,24 +1,32 @@
-<div class="app-header">
-  <h1 class="app-header__name">Budget Cast</h1>
-  <button class="app-header__action">Sign In</button>
-  <button class="app-header__action">Sign Up</button>
-</div>
-<div class="app-home">
-  <div class="app-home__caption">
-    <h1 class="app-home__caption__title">There's a better way to track your budget.</h1>
-    <h6 class="app-home__caption__description">
-        Keeping track of payment history and spendings helps
-        to analize your monthly budget needs. View analitical
-        data based on product and services categories, places,
-        dates and many more will even help to predict how much
-        you money you need to cover all your needs in the future.
-    </h6>
-    <button class="app-button-control"
-            (click)="getStarted()"
-            type="button">Get started - it's free</button>
+<div class="app-full-scr-container">
+  <div class="home-header">
+    <h1 class="home-header__name">Budget Cast</h1>
+    <a class="home-header__action"
+            [routerLink]="['/account/login']">
+      Sign In
+    </a>
+    <a class="home-header__action"
+            [routerLink]="['/account/register']">
+      Sign Up
+    </a>
   </div>
-
-</div>
-<div class="app-home__footer">
-    <div class="app-home__footer__rights ">All rights received. © 2019</div>
+  <div class="home-content">
+    <div class="home-content__caption">
+      <h1 class="home-content__caption__title">There's a better way to track your budget.</h1>
+      <h6 class="home-content__caption__description">
+          Keeping track of payment history and spendings helps
+          to analize your monthly budget needs. View analitical
+          data based on product and services categories, places,
+          dates and many more will even help to predict how much
+          you money you need to cover all your needs in the future.
+      </h6>
+      <button class="app-button-control"
+            (click)="getStarted()"
+            type="button">Get started - it's free
+      </button>
+    </div>
+  </div>
+  <div class="home-footer">
+      <div class="home-footer__rights ">All rights received. © 2019</div>
+  </div>
 </div>

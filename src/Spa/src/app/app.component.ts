@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   template: `
-    <div class="container">
+    <div [ngClass]="getContainerCss()">
       <app-nav *ngIf="diplayNavBar"></app-nav>
       <router-outlet></router-outlet>
     </div>
@@ -30,6 +30,14 @@ export class AppComponent implements OnInit {
   }
 
   private getNonHeaderRoutes() {
-    return ['login', 'register', 'forgot-password', 'reset-password'];
+    return ['login', 'register', 'forgot-password', 'reset-password', 'home'];
+  }
+
+  private getContainerCss() {
+    if (this.diplayNavBar) {
+      return ['container'];
+    }
+
+    return [];
   }
 }
