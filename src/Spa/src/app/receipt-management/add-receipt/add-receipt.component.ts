@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { RecipeService } from '../recipe.service';
+import { RecipeService } from '../receipt.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-add-recipe',
-  templateUrl: './add-recipe.component.html'
+  selector: 'app-add-receipt',
+  templateUrl: './add-receipt.component.html'
 })
-export class AddRecipeComponent implements OnInit {
+export class AddReceiptComponent implements OnInit {
   categories: string[];
   initialCategoryName = 'Food';
   categoriesIsLoading = false;

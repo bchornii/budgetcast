@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AccountModule } from './account/account.module';
-import { RecipeManagementModule } from './recipe-management/recipe-management.module';
+import { RecipeManagementModule } from './receipt-management/receipt-management.module';
 
 export const appRoutes: Routes = [
   {
@@ -13,12 +13,12 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./account/account.module').then(m => AccountModule)
   },
   {
-    path: 'recipe',
-    loadChildren: () => import('./recipe-management/recipe-management.module').then(m => RecipeManagementModule)
+    path: 'receipt',
+    loadChildren: () => import('./receipt-management/receipt-management.module').then(m => RecipeManagementModule)
   },
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: 'receipt',
     pathMatch: 'full'
   },
   {

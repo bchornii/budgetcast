@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+  isAuthenticated = false;
+
   private authSubscription: Subscription;
-  private isAuthenticated = false;
 
   constructor(private accountService: AccountService,
               private router: Router) { }
@@ -27,7 +28,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getStarted() {
     this.isAuthenticated
-      ? this.router.navigate(['/home'])
+      ? this.router.navigate(['/receipt/receipt-dashboard'])
       : this.router.navigate(['/account/login']);
+  }
+
+  logOut() {
+    this.accountService.logout().subscribe();
   }
 }

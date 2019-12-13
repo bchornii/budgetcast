@@ -1,14 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddRecipeComponent } from './add-recipe/add-recipe.component';
+import { AddReceiptComponent } from './add-receipt/add-receipt.component';
 import { RouterModule } from '@angular/router';
-import { RecipeManagementRoutes } from './recipe-management.routes';
+import { RecipeManagementRoutes } from './receipt-management.routes';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { ReceiptDashboardComponent } from './receipt-dashboard/receipt-dashboard.component';
 
 @NgModule({
   declarations: [
-    AddRecipeComponent
+    AddReceiptComponent,
+    ReceiptDashboardComponent
   ],
   imports: [
     CommonModule,
