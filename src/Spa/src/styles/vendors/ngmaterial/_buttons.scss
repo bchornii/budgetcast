@@ -1,0 +1,5 @@
+@import "abstract/colors";
+
+.mat-chip.mat-standard-chip.mat-chip-selected.mat-primary {
+  background-color: get-color(primary, main-blue);
+}
