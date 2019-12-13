@@ -1,18 +1,6 @@
 @import "abstract/variables";
 @import "abstract/colors";
-
-@mixin skew-border($w: 100%, $h: 100%, $top: 0%, $bottom: 0%, $left: 0%, $right: 0%) {
-  position: absolute;
-  background-color: black;
-  width: $w;
-  height: $h;
-
-  top: $top;
-  bottom: $bottom;
-  left: $left;
-  right: $right;
-  transform: translateX(-50%) skew(-70deg);
-}
+@import "abstract/mixins";
 
 .app-full-scr-container {
   display: flex;
@@ -97,7 +85,7 @@
   justify-content: center;
 
   &__caption {
-    margin-right: 1rem;
+    margin: auto;
     width: 50%;
     text-align: center;
     position: relative;
