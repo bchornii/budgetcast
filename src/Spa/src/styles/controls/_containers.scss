@@ -98,3 +98,28 @@
     max-width: 91.6666%;
   }
 }
+
+.container-slidein-from-bottom {
+  animation-name: slidein, opacityin;
+  animation-duration: 1s, 1.5s;
+  animation-timing-function: ease;
+  position: relative;
+}
+
+@keyframes slidein {
+  from {
+    top: 200px;
+  }
+  to {
+    top: 0px;
+  }
+}
+
+@keyframes opacityin {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

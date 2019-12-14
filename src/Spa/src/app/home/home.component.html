@@ -2,20 +2,24 @@
   <div class="home-header">
     <h1 class="home-header__name">Budget Cast</h1>
     <ng-container *ngIf="!isAuthenticated; else loggedIn">
-      <a class="home-header__action"
-              [routerLink]="['/account/login']">
-        Sign In
-      </a>
-      <a class="home-header__action"
-              [routerLink]="['/account/register']">
-        Sign Up
-      </a>
+      <div class="container-slidein-from-bottom">
+        <a class="home-header__action"
+                [routerLink]="['/account/login']">
+          Sign In
+        </a>
+        <a class="home-header__action"
+                [routerLink]="['/account/register']">
+          Sign Up
+        </a>
+      </div>
     </ng-container>
     <ng-template #loggedIn>
-      <button class="home-header__action"
-         (click)="logOut()">
-        Log Out
-      </button>
+      <div class="container-slidein-from-bottom">
+        <button class="home-header__action"
+           (click)="logOut()">
+          Log Out
+        </button>
+      </div>
     </ng-template>
   </div>
   <div class="home-content">
@@ -28,7 +32,7 @@
           dates and many more will even help to predict how much
           you money you need to cover all your needs in the future.
       </h6>
-      <button class="app-button-control"
+      <button class="app-glowing-border"
             (click)="getStarted()"
             type="button">Get started - it's free
       </button>
