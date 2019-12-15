@@ -1,26 +1,28 @@
 <div class="app-full-scr-container">
   <div class="home-header">
     <h1 class="home-header__name">Budget Cast</h1>
-    <ng-container *ngIf="!isAuthenticated; else loggedIn">
-      <div class="container-slidein-from-bottom">
-        <a class="home-header__action"
-                [routerLink]="['/account/login']">
-          Sign In
-        </a>
-        <a class="home-header__action"
-                [routerLink]="['/account/register']">
-          Sign Up
-        </a>
-      </div>
-    </ng-container>
-    <ng-template #loggedIn>
-      <div class="container-slidein-from-bottom">
-        <button class="home-header__action"
-           (click)="logOut()">
-          Log Out
-        </button>
-      </div>
-    </ng-template>
+    <div class="home-header__actions">
+        <ng-container *ngIf="!isAuthenticated; else loggedIn">
+        <div class="container-slidein-from-bottom">
+          <a class="home-header__actions__item"
+                  [routerLink]="['/account/login']">
+            Sign In
+          </a>
+          <a class="home-header__actions__item"
+                  [routerLink]="['/account/register']">
+            Sign Up
+          </a>
+        </div>
+      </ng-container>
+      <ng-template #loggedIn>
+        <div class="container-slidein-from-bottom">
+          <button class="home-header__actions__item"
+             (click)="logOut()">
+            Log Out
+          </button>
+        </div>
+      </ng-template>
+    </div>
   </div>
   <div class="home-content">
     <div class="home-content__caption">

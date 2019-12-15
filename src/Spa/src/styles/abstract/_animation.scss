@@ -27,14 +27,6 @@
   border-radius: 10px;
 }
 
-.app-glowing-border:active {
-  color: #000
-}
-
-.app-glowing-border:active:after {
-  background: transparent;
-}
-
 .app-glowing-border:after {
   z-index: -1;
   content: '';
@@ -45,6 +37,14 @@
   left: 0;
   top: 0;
   border-radius: 10px;
+}
+
+.app-glowing-border:active {
+  color: #000
+}
+
+.app-glowing-border:active:after {
+  background: transparent;
 }
 
 @keyframes glowing {
