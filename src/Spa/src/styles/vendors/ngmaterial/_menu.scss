@@ -1,5 +1,5 @@
 
-app-user-profile-actions {
+app-nav {
   .mat-button {
     padding: 0.6rem 0.5rem 0.6rem 1rem;
     font-size: 0.9rem;
@@ -8,25 +8,12 @@ app-user-profile-actions {
     text-align: center;
     width: 100%;
     cursor: pointer;
-    background-color: #4253FF;
-    color: white;
     text-decoration: none;
-    border-radius: 0;  
-    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
-  
-    &:hover {
-      background-color: rgb(60, 72, 204);
-    }
-  
-    &:disabled {
-      opacity: 0.65;
-      cursor: default;
-    }
   }
-  
+
   .mat-button-wrapper {
     display: flex;
-    align-items: center;    
+    align-items: center;
   }
 
   .mat-button-wrapper .mat-icon {
@@ -39,18 +26,19 @@ app-user-profile-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  
-    padding: 0 5px 0 12px;
+
+    padding: 0 12px 0 18px;
     font-size: 0.9rem;
 
     .mat-icon {
       margin-right: 2px;
-    }  
+      margin-left: 24px;
+    }
 
     &:hover {
       background-color: get-color(navbar, item-hover);
     }
-  }    
+  }
 }
 
 .mat-menu-panel[role="menu"] {

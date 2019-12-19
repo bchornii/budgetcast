@@ -14,14 +14,12 @@ import { NavComponent } from './nav/nav.component';
 import { appRoutes } from './app.routes';
 import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
-import { UserProfileActionsComponent } from './nav/user-profile-actions/user-profile-actions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     HomeComponent,
-    UserProfileActionsComponent
   ],
   imports: [
     BrowserModule,
