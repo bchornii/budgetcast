@@ -26,7 +26,6 @@ namespace BudgetCast.Dashboard.Api
             }            
         }
 
-        https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-2.2
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
