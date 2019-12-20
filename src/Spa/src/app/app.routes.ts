@@ -10,11 +10,11 @@ export const appRoutes: Routes = [
   },
   {
     path: 'account',
-    loadChildren: () => import('./account/account.module').then(m => AccountModule)
+    loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
   },
   {
     path: 'receipt',
-    loadChildren: () => import('./receipt-management/receipt-management.module').then(m => RecipeManagementModule)
+    loadChildren: () => import('./receipt-management/receipt-management.module').then(m => m.RecipeManagementModule)
   },
   {
     path: '',

@@ -25,7 +25,7 @@
     <mat-option *ngIf="isLoading" class="is-loading">
       <mat-spinner diameter="25"></mat-spinner>
     </mat-option>
-    <mat-option *ngFor="let option of options" [value]="fruit">
+    <mat-option *ngFor="let option of options" [value]="option">
       {{option}}
     </mat-option>
   </mat-autocomplete>

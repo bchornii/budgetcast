@@ -151,14 +151,18 @@ namespace BudgetCast.Dashboard.Api
 
             app.UseHttpsRedirection();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (Env.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
+                });
+            }
 
             app.UseAuthentication();
             app.UseMvc();
+            app.UseSpa(_ => { });
         }
     }
 }

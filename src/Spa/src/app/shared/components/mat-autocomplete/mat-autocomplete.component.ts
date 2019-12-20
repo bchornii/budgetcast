@@ -9,7 +9,8 @@ import {
   EventEmitter,
   Output,
   OnDestroy,
-  OnChanges
+  OnChanges,
+  Optional
 } from '@angular/core';
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
@@ -35,7 +36,7 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
   @Output('focus') onFocusChange = new EventEmitter<Event>();
 
   constructor(public elementRef: ElementRef,
-              @Self() public ngCrtl: NgControl) {
+              @Optional() @Self() public ngCrtl: NgControl) {
       super(ngCrtl);
   }
 

@@ -8,7 +8,8 @@ import {
   ViewChild,
   EventEmitter,
   Output,
-  OnDestroy
+  OnDestroy,
+  Optional
 } from '@angular/core';
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
@@ -40,7 +41,7 @@ export class MatChipsAutocompleteComponent extends MatFormElement implements OnI
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(public elementRef: ElementRef,
-              @Self() public ngCrtl: NgControl) {
+              @Optional() @Self() public ngCrtl: NgControl) {
     super(ngCrtl);
   }
 

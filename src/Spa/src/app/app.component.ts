@@ -29,15 +29,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private getNonHeaderRoutes() {
-    return ['login', 'register', 'forgot-password', 'reset-password', 'home'];
-  }
-
-  private getContainerCss() {
+  getContainerCss() {
     if (this.diplayNavBar) {
       return ['container'];
     }
 
     return [];
   }
+
+  private getNonHeaderRoutes() {
+    return ['login', 'register', 'forgot-password', 'reset-password', 'home'];
+  }  
 }

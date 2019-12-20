@@ -8,7 +8,8 @@ import {
   Self,
   OnDestroy,
   EventEmitter,
-  Output
+  Output,
+  Optional
 } from '@angular/core';
 import { InputType } from '../input/input.component';
 import { NgControl } from '@angular/forms';
@@ -41,7 +42,7 @@ export class MatInputComponent extends MatFormElement implements OnInit, OnDestr
   }
 
   constructor(public elementRef: ElementRef,
-              @Self() public ngCrtl: NgControl) {
+              @Optional() @Self() public ngCrtl: NgControl) {
     super(ngCrtl);
   }
 
