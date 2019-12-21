@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators';
   `
 })
 export class AppComponent implements OnInit {
-  diplayNavBar = true;
+  diplayNavBar = false;
 
   constructor(private router: Router) {}
 

@@ -31,18 +31,16 @@ namespace BudgetCast.Dashboard.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Env.IsDevelopment())
+            var uiRoot = Configuration["UiLinks:Root"];
+            services.AddCors(options =>
             {
-                services.AddCors(options =>
-                {
-                    options.AddPolicy("CorsPolicy", builder =>
-                        builder
-                            .WithOrigins("http://localhost:4200")
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowCredentials());
-                });
-            }            
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder
+                        .WithOrigins(uiRoot)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
 
             services.AddMvc()
                 .AddFluentValidation(options =>
@@ -91,6 +89,8 @@ namespace BudgetCast.Dashboard.Api
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Domain = Configuration["ParentDomain"];
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.SlidingExpiration = true;
@@ -140,16 +140,10 @@ namespace BudgetCast.Dashboard.Api
             if (Env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseCors("CorsPolicy");
             }
-            
-            if(!Env.IsDevelopment())
-            {
-                app.UseDefaultFiles();
-                app.UseStaticFiles();
-            }            
 
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
 
             if (Env.IsDevelopment())
             {
@@ -162,7 +156,6 @@ namespace BudgetCast.Dashboard.Api
 
             app.UseAuthentication();
             app.UseMvc();
-            app.UseSpa(_ => { });
         }
     }
 }

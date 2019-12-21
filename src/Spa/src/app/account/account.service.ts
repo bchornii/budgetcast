@@ -50,11 +50,11 @@ export class AccountService extends BaseService {
   }
 
   googleLogin(): void {
-    this.document.location.href = `https://www.budget-cast.com/${environment.api.accountApi.signInWithGoogle}`;
+    this.document.location.href = `${environment.api.accountApi.signInWithGoogle}`;
   }
 
   facebookLogin(): void {
-    this.document.location.href = `https://www.budget-cast.com/${environment.api.accountApi.signInWithFacebook}`;
+    this.document.location.href = `${environment.api.accountApi.signInWithFacebook}`;
   }
 
   logout() {

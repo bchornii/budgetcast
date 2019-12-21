@@ -1,5 +1,5 @@
 
-const apiUrl = '/api';
+const apiUrl = 'https://dashboard.api.budget-cast.com/api';
 
 const accountApi = {
   isAuthenticated: `${apiUrl}/account/isAuthenticated`,
