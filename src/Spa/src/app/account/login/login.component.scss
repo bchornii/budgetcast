@@ -1,14 +1,22 @@
 @import 'abstract/colors';
 
-.app-login-or-line {
-  margin: 0.8rem 0 0.8rem 0;
+.heading {
+  text-align: center;
+}
+
+.page {
+  width: 300px;
+}
+
+.or-line {
+  margin-top: 0.8rem;
   color: get-color(cool-neutrals, cool-grey-1);
   text-align: center;
   font-size: 0.9rem;
   font-weight: 400;
 }
 
-.app-login-link {
+.login-link {
   display: inline-block;
   width: 50%;
   margin-bottom: 0.6rem;

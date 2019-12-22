@@ -34,10 +34,10 @@ export class AppComponent implements OnInit {
       return ['container'];
     }
 
-    return [];
+    return ['container-fluid'];
   }
 
   private getNonHeaderRoutes() {
     return ['login', 'register', 'forgot-password', 'reset-password', 'home'];
-  }  
+  }
 }

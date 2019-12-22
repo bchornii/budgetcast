@@ -8,7 +8,20 @@ import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html'
+  templateUrl: './reset-password.component.html',
+  styles: [`
+  .heading {
+    text-align: center;
+  }
+
+  .page {
+    width: 300px;
+  }
+
+  .app-form-title-large {
+    margin-bottom: 0;
+  }
+`]
 })
 export class ResetPasswordComponent implements OnInit {
   resetPasswordFailed: boolean;
@@ -20,7 +33,7 @@ export class ResetPasswordComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private accountService: AccountService,
               private router: Router,
-              private toasrt: ToastrService) {    
+              private toasrt: ToastrService) {
   }
 
   ngOnInit() {
@@ -42,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
     ).subscribe(
       _ => {
         this.toasrt.success(
-          'Your password has been reset.' + 
+          'Your password has been reset.' +
           'You can now login into application.');
         this.router.navigate(['/account/login']);
       },

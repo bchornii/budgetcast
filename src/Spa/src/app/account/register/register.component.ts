@@ -8,7 +8,20 @@ import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styles: [`
+    .heading {
+      text-align: center;
+    }
+
+    .page {
+      width: 300px;
+    }
+
+    .app-form-title-large {
+      margin-bottom: 0;
+    }
+  `]
 })
 export class RegisterComponent {
   registrationFailed: boolean;

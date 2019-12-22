@@ -1,13 +1,14 @@
 .app-name-box {
-  position: absolute;
   cursor: pointer;
-  top: 25px;
-  left: 20px;
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  display: inline-block;
 
   h5 {
     border: none;
     outline: none;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-family: MontserratSemiBold;
     position: relative;
 

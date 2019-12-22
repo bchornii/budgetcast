@@ -17,3 +17,9 @@
 .app-form-group {
   margin-bottom: 1rem;
 }
+
+@media screen and (max-width: 540px) {
+  .app-form-title {
+    font-size: 1.5rem;
+  }
+}
