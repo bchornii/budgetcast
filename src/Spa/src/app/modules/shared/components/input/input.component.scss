@@ -1,0 +1,103 @@
+@import "abstract/colors";
+
+.search__icon {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    right: 5px;
+    top: 7px;
+    background: url(../../../../../assets/search-spyglass.png) center no-repeat;
+    border: 0;
+    padding: 10px;
+    top: 15.5px;
+  }
+
+.input-box {
+  position: relative;
+
+  .pass-preview {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    cursor: pointer;
+    width: 35px;
+    height: 20px;
+
+    &::after {
+      content: "";
+      background: url(../../../../../assets/eye.svg) no-repeat;
+      display: inline-block;
+      height: 17px;
+      width: 30px;
+    }
+  }
+
+  &__input {
+    padding: 16px 8px 5px 17px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.8rem;
+    background-color: get-color(cool-neutrals, cool-grey-6);
+    color: get-color(cool-neutrals, cool-grey-0);
+    border: 1px solid get-color(cool-neutrals, cool-grey-6);
+    border: none;
+    box-shadow: none;
+    width: 100%;
+
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+    transition: border 0.218s, border-color 0.218s, box-shadow 0.218s;
+
+    &:hover {
+      background-color: get-color(cool-neutrals, cool-grey-5);
+    }
+
+    &[type="password"] {
+      padding-right: 55px;
+    }
+
+    &[type="search"] {
+      padding-right: 30px;
+    }
+
+    &--has-value,
+    &:focus {
+      + .input-box__label {
+        transform: translateY(-10px) scale(0.7);
+      }
+    }
+
+    &:focus {
+      box-shadow: 6px 0 0 inset get-color(primary, azure-blue);
+    }
+
+    &:disabled {
+      border-color: get-color(cool-neutrals, cool-grey-3) !important;
+
+      + .input-box__label {
+        color: get-color(cool-neutrals, cool-grey-2) !important;
+      }
+    }
+  }
+
+  &__label {
+    position: absolute;
+    left: 17px;
+    top: 14px;
+    cursor: text;
+    color: get-color(cool-neutrals, cool-grey-1);
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, color 0.5s ease, font-size 0.2s ease;
+    transform-origin: 0 0;
+  }
+}
+
+:host {
+  &.ng-invalid.ng-dirty.ng-touched {
+    .input-box__input {
+      border: 1px solid get-color(alerts, error);
+      &:focus {
+        box-shadow: 6px 0 0 inset get-color(alerts, error);
+      }
+    }
+  }
+}

@@ -1,30 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
-import { checkIfUserIsAuthenticated } from './account/login/check-login-initializer';
-import { AccountService } from './account/account.service';
+import { checkIfUserIsAuthenticated } from './modules/welcome/pages/login/check-login-initializer';
+import { AccountService } from './modules/welcome/services/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HttpConfigInterceptor } from './shared/services/http-config.interceptor';
-import { NavComponent } from './nav/nav.component';
-import { appRoutes } from './app.routes';
-import { HomeComponent } from './home/home.component';
-import { SharedModule } from './shared/shared.module';
+import { HttpConfigInterceptor } from './interceptors/http-config.interceptor';
+import { AppRoutingModule } from './app.routes';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavComponent,
-    HomeComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule,
 
     BrowserAnimationsModule,
     SharedModule,

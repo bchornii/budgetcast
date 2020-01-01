@@ -1,29 +1,30 @@
-import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { AccountModule } from './account/account.module';
-import { RecipeManagementModule } from './receipt-management/receipt-management.module';
+import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 
 export const appRoutes: Routes = [
   {
-    path: 'home',
-    component: HomeComponent
+    path: 'welcome',
+    loadChildren: () => import('./modules/welcome/welcome.module').then(m => m.WelcomeModule)
   },
-  {
-    path: 'account',
-    loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
-  },
-  {
-    path: 'receipt',
-    loadChildren: () => import('./receipt-management/receipt-management.module').then(m => m.RecipeManagementModule)
-  },
+  //{
+  //  path: '',
+  //  loadChildren: () => import('./modules/root/root.module').then(m => m.RootModule)
+  //},
   {
     path: '',
-    redirectTo: 'receipt',
+    redirectTo: '/welcome',
     pathMatch: 'full'
   },
   {
     path: '**',
-    redirectTo: '/home',
+    redirectTo: '/welcome',
     pathMatch: 'full'
   }
 ];
+@NgModule({
+  imports: [
+    RouterModule.forRoot(appRoutes)
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
