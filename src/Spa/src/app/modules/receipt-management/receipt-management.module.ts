@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddReceiptComponent } from './add-receipt/add-receipt.component';
-import { RouterModule } from '@angular/router';
-import { RecipeManagementRoutes } from './receipt-management.routes';
+import { AddReceiptComponent } from './pages/add-receipt/add-receipt.component';
+import { ReceiptManagementRoutingModule } from './receipt-management-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
-import { ReceiptDashboardComponent } from './receipt-dashboard/receipt-dashboard.component';
+import { ReceiptDashboardComponent } from './pages/receipt-dashboard/receipt-dashboard.component';
+import { ReceiptManagementComponent } from './pages/receipt-management/receipt-management.component';
 
 @NgModule({
   declarations: [
     AddReceiptComponent,
-    ReceiptDashboardComponent
+    ReceiptDashboardComponent,
+    ReceiptManagementComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
 
-    RouterModule.forChild(RecipeManagementRoutes),
+    ReceiptManagementRoutingModule,
 
     SharedModule,
   ]

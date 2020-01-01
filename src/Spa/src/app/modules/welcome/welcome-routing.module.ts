@@ -1,8 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { CanActivateProfileGuard } from './pages/profile/can-activate-profile.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
@@ -21,11 +19,6 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent
-      },
-      {
-        path: 'profile',
-        component: ProfileComponent,
-        canActivate: [CanActivateProfileGuard]
       },
       {
         path: 'register',
@@ -50,4 +43,4 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class WelcomeRoutes {}
+export class WelcomeRoutingModule {}

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountService } from '../../services/account.service';
 import { ToastrService } from 'ngx-toastr';
-import { ResetPassword } from '../../models/reset-password';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
+import { ResetPassword } from 'src/app/models/reset-password';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-reset-password',

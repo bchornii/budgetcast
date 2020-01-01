@@ -3,14 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, catchError, flatMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { UserIdentity } from '../models/check-login.model';
 import { UserProfile } from '../models/user-profile';
-import { BaseService } from '../../../interceptors/base-data.service';
 import { UserLogin } from '../models/user-login';
 import { UserRegistration } from '../models/user-registration';
 import { ForgotPassword } from '../models/forgot-password';
 import { ResetPassword } from '../models/reset-password';
+import { BaseService } from './base-data.service';
 
 @Injectable({
   providedIn: 'root'

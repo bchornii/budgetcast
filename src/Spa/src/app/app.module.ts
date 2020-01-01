@@ -7,10 +7,10 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { checkIfUserIsAuthenticated } from './modules/welcome/pages/login/check-login-initializer';
-import { AccountService } from './modules/welcome/services/account.service';
+import { AccountService } from './services/account.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpConfigInterceptor } from './interceptors/http-config.interceptor';
-import { AppRoutingModule } from './app.routes';
+import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecipeService } from '../services/receipt.service';
+import { RecipeService } from '../../services/receipt.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({

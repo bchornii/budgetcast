@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from '@angular/common/http';
-import { AccountService } from '../modules/welcome/services/account.service';
+import { AccountService } from '../services/account.service';
 import { tap } from 'rxjs/operators';
 import { ResponseStatus } from 'src/app/util/constants/response-status';
 import { Router } from '@angular/router';

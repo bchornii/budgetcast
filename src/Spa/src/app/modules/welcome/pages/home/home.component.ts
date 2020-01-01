@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AccountService } from '../../services/account.service';
+import { AccountService } from '../../../../services/account.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getStarted() {
     this.isAuthenticated
-      ? this.router.navigate(['/receipt/receipt-dashboard'])
+      ? this.router.navigate(['/receipts/dashboard'])
       : this.router.navigate(['/welcome/login']);
   }
 

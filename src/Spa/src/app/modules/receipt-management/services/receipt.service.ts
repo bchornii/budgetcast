@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BaseService } from '../../../interceptors/base-data.service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
+import { BaseService } from 'src/app/services/base-data.service';
 
 @Injectable({
   providedIn: 'root'

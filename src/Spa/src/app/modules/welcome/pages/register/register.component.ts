@@ -1,10 +1,10 @@
 import { ToastrService } from 'ngx-toastr';
 import { Component, ViewChild } from '@angular/core';
-import { AccountService } from '../../services/account.service';
 import { Router } from '@angular/router';
-import { UserRegistration } from '../../models/user-registration';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
+import { UserRegistration } from 'src/app/models/user-registration';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-register',

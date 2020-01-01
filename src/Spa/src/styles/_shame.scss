@@ -12,7 +12,13 @@ html {
 input:focus,
 select:focus,
 textarea:focus,
-button:focus {
+button:focus,
+h1:focus,
+h2:focus,
+h3:focus,
+h4:focus,
+h5:focus,
+h6:focus {
     outline: none;
 }
 

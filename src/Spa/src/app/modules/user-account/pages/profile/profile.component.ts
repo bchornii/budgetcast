@@ -1,11 +1,11 @@
 import { ToastrService } from 'ngx-toastr';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { AccountService } from '../../services/account.service';
+import { Component, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserProfile } from '../../models/user-profile';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
+import { UserProfile } from 'src/app/models/user-profile';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,8 +20,8 @@ export class ProfileComponent {
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
   constructor(private accountService: AccountService,
-    private router: Router,
-    private toastr: ToastrService) {
+              private router: Router,
+              private toastr: ToastrService) {
     this.profileModel = ({ ...accountService.userIdentity });
   }
 

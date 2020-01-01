@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { AccountService } from '../../services/account.service';
+import { AccountService } from '../../../../services/account.service';
 import { Router } from '@angular/router';
-import { UserLogin } from '../../models/user-login';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
+import { UserLogin } from 'src/app/models/user-login';
 
 @Component({
   selector: 'app-login',
