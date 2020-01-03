@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { AccountService } from '../../../../services/account.service';
+import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
@@ -17,13 +17,13 @@ export class LoginComponent {
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
-  constructor(private accountService: AccountService,
+  constructor(private authService: AuthService,
               private router: Router) {
   }
 
   login(): void {
     this.spinner.show();
-    this.accountService.login(this.loginModel).pipe(
+    this.authService.login(this.loginModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(
         _ => this.router.navigate(['/home']),
@@ -31,10 +31,10 @@ export class LoginComponent {
   }
 
   googleLogin() {
-    this.accountService.googleLogin();
+    this.authService.googleLogin();
   }
 
   fbLogin() {
-    this.accountService.facebookLogin();
+    this.authService.facebookLogin();
   }
 }

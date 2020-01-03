@@ -1,11 +1,12 @@
+import { UserProfileService } from './../../services/user-profile.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { UserProfile } from 'src/app/models/user-profile';
-import { AccountService } from 'src/app/services/account.service';
+import { UserProfile } from 'src/app/modules/user-account/models/user-profile';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,15 +20,16 @@ export class ProfileComponent {
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
-  constructor(private accountService: AccountService,
+  constructor(private userProfileService: UserProfileService,
+              private authService: AuthService,
               private router: Router,
               private toastr: ToastrService) {
-    this.profileModel = ({ ...accountService.userIdentity });
+    this.profileModel = ({ ...authService.userIdentity });
   }
 
   updateProfile(): void {
     this.spinner.show();
-    this.accountService.updateProfile(this.profileModel).pipe(
+    this.userProfileService.updateProfile(this.profileModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
       this.toastr.success('Profile was updated.');

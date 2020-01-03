@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
 import { UserRegistration } from 'src/app/models/user-registration';
-import { AccountService } from 'src/app/services/account.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -30,14 +30,14 @@ export class RegisterComponent {
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
-  constructor(private accountService: AccountService,
+  constructor(private authService: AuthService,
     private router: Router,
     private toastr: ToastrService) {
   }
 
   register(): void {
     this.spinner.show();
-    this.accountService.register(this.registrationModel).pipe(
+    this.authService.register(this.registrationModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(
       _ => {

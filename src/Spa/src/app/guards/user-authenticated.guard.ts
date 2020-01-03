@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { AccountService } from 'src/app/services/account.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthenticatedGuard implements CanActivate {
-  constructor(private accountService: AccountService,
+  constructor(private authService: AuthService,
               private router: Router) { }
 
   canActivate(next: ActivatedRouteSnapshot): boolean {
-    const isAuthenticated = this.accountService
+    const isAuthenticated = this.authService
       .userIdentity.isAuthenticated;
 
     if (!isAuthenticated) {

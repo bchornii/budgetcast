@@ -5,7 +5,7 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserIdentity } from '../models/check-login.model';
-import { UserProfile } from '../models/user-profile';
+import { UserProfile } from '../modules/user-account/models/user-profile';
 import { UserLogin } from '../models/user-login';
 import { UserRegistration } from '../models/user-registration';
 import { ForgotPassword } from '../models/forgot-password';
@@ -15,7 +15,7 @@ import { BaseService } from './base-data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService extends BaseService {
+export class AuthService extends BaseService {
 
   private invalidUserIdentity = new UserIdentity();
   private userIdentitySubject = new BehaviorSubject<UserIdentity>(this.invalidUserIdentity);
@@ -81,14 +81,6 @@ export class AccountService extends BaseService {
   resetPassword(resetPassword: ResetPassword) {
     return this.httpClient.post(
       `${environment.api.accountApi.resetPassword}`, resetPassword).pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  updateProfile(userProfile: UserProfile): Observable<any> {
-    return this.httpClient.post(
-      `${environment.api.accountApi.updateProfile}`, userProfile).pipe(
-        flatMap(_ => this.checkUserAuthenticationStatus()),
         catchError(this.handleError)
       );
   }

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AccountService } from '../../../../services/account.service';
+import { AuthService } from '../../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
@@ -32,7 +32,7 @@ export class ForgotPasswordComponent {
   forgotPasswordError: boolean;
 
   constructor(
-    private accountService: AccountService,
+    private authService: AuthService,
     private router: Router,
     private toasrt: ToastrService) { }
 
@@ -40,7 +40,7 @@ export class ForgotPasswordComponent {
 
   forgotPassword(): void {
     this.spinner.show();
-    this.accountService.forgotPassword(this.forgotPasswordModel).pipe(
+    this.authService.forgotPassword(this.forgotPasswordModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(
         _ => {

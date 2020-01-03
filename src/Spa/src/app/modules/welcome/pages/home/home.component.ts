@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AccountService } from '../../../../services/account.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -14,11 +14,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private authSubscription: Subscription;
 
-  constructor(private accountService: AccountService,
+  constructor(private authService: AuthService,
               private router: Router) { }
 
   ngOnInit() {
-    this.authSubscription = this.accountService.userIdentity$
+    this.authSubscription = this.authService.userIdentity$
       .subscribe(r => this.isAuthenticated = r.isAuthenticated);
   }
 
@@ -33,6 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logOut() {
-    this.accountService.logout().subscribe();
+    this.authService.logout().subscribe();
   }
 }
