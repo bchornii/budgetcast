@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
@@ -12,12 +13,22 @@ export class RootComponent implements OnInit {
   private mediaMatcher: MediaQueryList =
     matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 
-  constructor() { }
+  get userIdentity$() {
+    return this.authService.userIdentity$;
+  }
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
 
   isScreenSmall(): boolean {
     return this.mediaMatcher.matches;
+  }
+
+  closeSideNav(snav: any) {
+    if (this.isScreenSmall()) {
+      snav.close();
+    }
   }
 }

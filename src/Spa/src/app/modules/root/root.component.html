@@ -1,24 +1,27 @@
 <div class="app-container">
-  <mat-toolbar color="primary" class="app-container__toolbar">
-    <button *ngIf="isScreenSmall()"
-            mat-icon-button (click)="snav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <h1 class="app-container__toolbar__title"
-        [routerLink]="['/welcome']">Budget cast</h1>
-  </mat-toolbar>
   <mat-sidenav-container class="app-container__sidenav__container">
     <mat-sidenav #snav
-                 class="app-container__sidenav__container_snav mat-elevation-z10"
+                 class="app-container__sidenav__container__snav mat-elevation-z10"
                  [opened]="!isScreenSmall()"
-                 [mode]="isScreenSmall() ? 'over' : 'side'">
-        <button mat-menu-item
-                [routerLink]="['/user-account/profile']">
-          Edit profile
-          <mat-icon>account_circle</mat-icon>
-        </button>
+                 [mode]="isScreenSmall() ? 'over' : 'side'"
+                 (click)="closeSideNav(snav)">
+        <mat-toolbar class="app-container__sidenav__container__snav__header"
+                    *ngIf="userIdentity$ | async as userIdentity" color="primary">
+          <span>Hi, {{userIdentity.givenName}}</span>
+          <img src="../../../assets/images/user-avatar.png" alt="Avatar"
+               class="app-container__sidenav__container__snav__header__avatar"
+               [routerLink]="['/user-account/profile']">
+        </mat-toolbar>
     </mat-sidenav>
     <mat-sidenav-content class="app-container__sidenav__container_content">
+      <mat-toolbar color="primary" class="app-container__toolbar">
+        <button [style.visibility]="isScreenSmall() ? 'visible' : 'hidden'"
+                mat-icon-button (click)="snav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1 class="app-container__toolbar__title"
+            [routerLink]="['/welcome']">Budget cast</h1>
+      </mat-toolbar>
       <div class="container">
         <router-outlet></router-outlet>
       </div>
