@@ -1,40 +1,40 @@
-<div>
-  <h5>Edit your profile</h5>
-  <hr>
-  <div class="app-q-container">
-    <form autocomplete="off" novalidate
-          appForm (appSubmit)="updateProfile()">
-
-      <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-mat-input
-            required
-            name="givenName"
-            label="GivenName"
-            errMsg="Please provide given name."
-            [(ngModel)] = "profileModel.givenName"
-          ></app-mat-input>
+<form autocomplete="off" novalidate
+      appForm (appSubmit)="updateProfile()">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <app-mat-input
+          required
+          name="givenName"
+          label="GivenName"
+          errMsg="Please provide given name."
+          [(ngModel)] = "profileModel.givenName"
+        ></app-mat-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <app-mat-input
+          required
+          name="surName"
+          label="SurName"
+          errMsg="Please provide sur name."
+          [(ngModel)] = "profileModel.surName"
+        ></app-mat-input>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-6 col-md-4 col-lg-2">
+          <button type="submit" class="app-button-control">
+              Update
+          </button>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <button type="button" class="app-button-control"
+                  (click)="cancel()">
+            Cancel
+          </button>
         </div>
       </div>
-
-      <div class="app-row">
-        <div class="app-cell app-form-group">
-          <app-mat-input
-            required
-            name="surName"
-            label="SurName"
-            errMsg="Please provide sur name."
-            [(ngModel)] = "profileModel.surName"
-          ></app-mat-input>
-        </div>
-      </div>
-
-      <div class="app-row">
-        <button type="submit" class="app-cell app-button-control">Update</button>
-        <button type="button" class="app-cell app-button-control" (click)="cancel()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
+</form>
 
 <app-spinner></app-spinner>

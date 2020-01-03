@@ -44,3 +44,9 @@ app-nav {
 .mat-menu-panel[role="menu"] {
   border-radius: 2px;
 }
+
+app-root {
+  .mat-drawer-side {
+    border-right: none;
+  }
+}
