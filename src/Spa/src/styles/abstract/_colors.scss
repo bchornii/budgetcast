@@ -6,7 +6,8 @@ $default-palette: (
         milky-white: #ededed,
         dark: #343a40,
         super-dark: #282936,
-        st-black: #111
+        st-black: #111,
+        menu-bg: #0061aa
     ),
     cool-neutrals: (
         cool-grey-0: #303538,
@@ -16,7 +17,7 @@ $default-palette: (
         cool-grey-4: #d4d9dd,
         cool-grey-5: #ddd,
         cool-grey-6: #eee,
-        cool-grey-7: rgb(255, 251, 251),
+        cool-grey-7: rgba(255, 251, 251, 0.582),
         cool-grey-8: white
     ),
     alerts: (
@@ -25,6 +26,20 @@ $default-palette: (
     navbar: (
         item-hover: rgba(67, 83, 255, 0.1),
         nav-shadow: rgba(0, 0, 0, 0.075)
+    ),
+    other: (
+        login-bg: #f3f5f6,
+        login-link: #2977d2,
+        white: #fff,
+        black: #000,
+        landing-delimiter: #979797,
+        ladning-links: #188ff9,
+        landing-grey: #e7eaec,
+        landing-text: #111,
+        landing-text-2: #233539,
+        modal-alert: #df000d,
+        grey-with-transparency: rgba(0, 0, 0, 0.08),
+        yellow: #ffff00
     )
 );
 

@@ -1,3 +1,4 @@
+@import "abstract/colors";
 
 app-nav {
   .mat-button {
@@ -48,5 +49,22 @@ app-nav {
 app-root {
   .mat-drawer-side {
     border-right: none;
+  }
+
+  .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: hidden;
+  }
+
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    flex: 0 0 64px;
+  }
+
+  @media (max-width: 599px) {
+    .mat-toolbar-row, .mat-toolbar-single-row {
+      flex: 0 0 56px;
+    }
   }
 }
