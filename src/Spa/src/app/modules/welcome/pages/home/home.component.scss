@@ -68,7 +68,7 @@
       padding: 0.3rem 2.5rem;
       border: none;
       border-radius: 40px;
-      color: get-color(cool-neutrals, cool-grey-7);
+      color: get-color(cool-neutrals, cool-grey-8);
       min-width: 160px;
       margin-left: 20px;
       transition: box-shadow 0.25s;
@@ -99,7 +99,7 @@
       font-family: MontserratBold;
       font-size: 2.5rem;
       line-height: 1.2;
-      color: get-color(cool-neutrals, cool-grey-7);
+      color: get-color(cool-neutrals, cool-grey-8);
     }
 
     &__description {
@@ -107,11 +107,10 @@
       font-family: HkGraphicLight;
       font-size: 0.9rem;
       line-height: 1.5;
-      color: get-color(cool-neutrals, cool-grey-7);
+      color: get-color(cool-neutrals, cool-grey-8);
     }
 
     > button {
-      width: 50%;
       max-width: 320px;
     }
   }
@@ -160,6 +159,12 @@
 
     &__item {
       margin-bottom: 1rem;
+    }
+  }
+
+  .home-content__caption {
+    > button {
+      max-width: 280px;
     }
   }
 }

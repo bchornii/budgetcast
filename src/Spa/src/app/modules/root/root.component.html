@@ -8,8 +8,7 @@
                     *ngIf="userIdentity$ | async as userIdentity" color="primary">
           <span>Hi, {{userIdentity.givenName}}</span>
           <img src="../../../assets/images/user-avatar.png" alt="Avatar"
-               class="app-container__sidenav__container__snav__header__avatar"
-               [routerLink]="['/user-account/profile']">
+               class="app-container__sidenav__container__snav__header__avatar">
         </mat-toolbar>
 
           <perfect-scrollbar>
@@ -60,6 +59,12 @@
                   </ul>
                 </li>
               </ul>
+              <div class="main-nav__item">
+                <span class="main-nav__link" (click)="logOut()">
+                  <span class="icon icon--logout"></span>
+                  <span>Log Out</span>
+                </span>
+              </div>
             </nav>
           </perfect-scrollbar>
     </mat-sidenav>

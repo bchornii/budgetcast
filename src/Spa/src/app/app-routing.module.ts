@@ -10,7 +10,7 @@ export const appRoutes: Routes = [
   {
     path: '',
     loadChildren: () => import('./modules/root/root.module').then(m => m.RootModule),
-
+    canActivate: [UserAuthenticatedGuard]
   },
   {
     path: '**',

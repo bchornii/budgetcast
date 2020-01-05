@@ -42,15 +42,8 @@
           width: 30px;
           height: 30px;
           border-radius: 50%;
-          box-shadow: 0 0 0 1px get-color(cool-neutrals, cool-grey-4);
-          background-color: get-color(cool-neutrals, cool-grey-4);
-          transition: box-shadow, background-color 0.2s ease-in-out;
-
-          &:hover {
-            cursor: pointer;
-            box-shadow: 0 0 0 1px get-color(cool-neutrals, cool-grey-8);
-            background-color: get-color(cool-neutrals, cool-grey-8);
-          }
+          box-shadow: 0 0 0 1px get-color(cool-neutrals, cool-grey-8);
+          background-color: get-color(cool-neutrals, cool-grey-8);
         }
       }
     }
@@ -169,6 +162,16 @@
       &--profile {
         &:after {
           background: url(../../../assets/images/icons/profile.svg) no-repeat;
+          height: 22px;
+          left: 15px;
+          top: 15px;
+          width: 22px;
+        }
+      }
+
+      &--logout {
+        &:after {
+          background: url(../../../assets/images/icons/logout.svg) no-repeat;
           height: 22px;
           left: 15px;
           top: 15px;

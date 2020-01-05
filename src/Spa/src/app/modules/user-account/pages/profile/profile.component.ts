@@ -33,11 +33,7 @@ export class ProfileComponent {
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
       this.toastr.success('Profile was updated.');
-      this.router.navigate(['/home']);
+      this.router.navigate(['/receipts/dashboard']);
     });
-  }
-
-  cancel(): void {
-    this.router.navigate(['/home']);
   }
 }
