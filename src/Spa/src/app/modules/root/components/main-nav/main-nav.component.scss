@@ -4,27 +4,6 @@
   margin-bottom: 15px;
   height: 100%;
 
-  &__link {
-    align-items: center;
-    display: flex;
-    font-size: 0.8rem;
-    font-weight: 600;
-    height: 50px;
-    padding-left: 50px;
-    position: relative;
-    cursor: pointer;
-    text-decoration: none;
-    color: get-color(cool-neutrals, cool-grey-0);
-  }
-
-  &__secondary-menu {
-    height: 0;
-    overflow: hidden;
-    top: 0;
-    left: 100%;
-    background: get-color(cool-neutrals, cool-grey-6);
-  }
-
   &__item {
     position: relative;
 
@@ -148,54 +127,24 @@
     }
   }
 
-  &__submenu {
+  &__link {
+    align-items: center;
+    display: flex;
+    font-size: 0.8rem;
+    font-weight: 600;
+    height: 50px;
+    padding-left: 50px;
     position: relative;
-
-    .submenu {
-      position: absolute;
-      display: none;
-      left: 100%;
-      top: 0;
-      //background: get-color(dashboard, menu-bg);
-      //font: get-font-size(side-menu, item) $Roboto-Bold;
-
-      a {
-        display: block;
-        padding: 7px 10px;
-        white-space: nowrap;
-        color: white;
-        text-decoration: none;
-      }
-    }
-
-    &:hover {
-      .submenu {
-        display: block;
-      }
-    }
+    cursor: pointer;
+    text-decoration: none;
+    color: get-color(cool-neutrals, cool-grey-0);
   }
 
-  .support-nav {
-    padding-left: 0;
-
-    &__more {
-      display: flex;
-    }
-
-    &__title {
-      align-items: center;
-      background: get-color(primary, azure-blue);
-      display: flex;
-      height: 40px;
-      padding-left: 10px;
-      margin-bottom: 0;
-    }
-
-    &__dropdown {
-      height: 0;
-      background: get-color(side-menu, logo-bg);
-      bottom: 0;
-      overflow: hidden;
-    }
+  &__secondary-menu {
+    height: 0;
+    overflow: hidden;
+    top: 0;
+    left: 100%;
+    background: get-color(cool-neutrals, cool-grey-6);
   }
 }
