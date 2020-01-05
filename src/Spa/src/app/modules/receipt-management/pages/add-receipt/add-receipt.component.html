@@ -14,17 +14,36 @@
   </div>
 </div> -->
 
-<div class="app-row">
-    <div class="app-cell">
-      <app-mat-chips-autocomplete
-        name="category"
-        label="Produt Category"
-        errMsg="Please specify product category."
-        [data]="tags"
-        [options]="categories"
-        [isLoading]="categoriesIsLoading"
-        ngModel
-        (ngModelChange)="onCategoryModelChange($event)">
-      </app-mat-chips-autocomplete>
-    </div>
+<div class="row">
+  <div class="col-6 col-md-4 col-lg-3">
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
   </div>
+</div>
+
+<div class="row">
+  <div class="col-6 col-md-4 col-lg-3">
+    <app-mat-chips-autocomplete
+      name="category"
+      label="Tags"
+      [data]="tags"
+      [options]="categories"
+      [isLoading]="categoriesIsLoading"
+      ngModel
+      (ngModelChange)="onCategoryModelChange($event)">
+    </app-mat-chips-autocomplete>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+    <button type="button" class="app-button-control">
+      Save
+    </button>
+  </div>
+</div>
