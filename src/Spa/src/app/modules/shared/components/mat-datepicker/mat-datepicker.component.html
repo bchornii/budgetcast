@@ -1,0 +1,17 @@
+<mat-form-field>
+  <mat-label>{{label}}</mat-label>
+  <input #input
+         matInput 
+         [id]="id"
+         [min]="minDt" 
+         [max]="maxDt"
+         [matDatepicker]="picker"
+         [formControl]="inputControl"
+         (blur)="onBlur($event)"
+         (focus)="onFocus($event)">
+  <mat-error>{{errMsg}}</mat-error>
+  <mat-datepicker-toggle matSuffix [for]="picker">
+    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+  </mat-datepicker-toggle>
+  <mat-datepicker [touchUi]="isScreenSmall()" #picker></mat-datepicker>
+</mat-form-field>

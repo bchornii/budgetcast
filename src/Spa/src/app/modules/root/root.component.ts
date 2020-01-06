@@ -4,8 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material';
 import { Subscription } from 'rxjs';
-
-const SMALL_WIDTH_BREAKPOINT = 720;
+import { SMALL_WIDTH_BREAKPOINT } from 'src/app/util/constants/response-status';
 
 @Component({
   selector: 'app-root',

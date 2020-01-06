@@ -6,3 +6,5 @@ export enum ResponseStatus {
 	FORBIDDEN = 403,
 	BAD_REQUEST = 400,
 }
+
+export const SMALL_WIDTH_BREAKPOINT = 720;

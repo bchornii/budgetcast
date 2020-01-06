@@ -85,7 +85,7 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    ScrollingModule,
+    ScrollingModule
   ],
   exports: [
     A11yModule,
