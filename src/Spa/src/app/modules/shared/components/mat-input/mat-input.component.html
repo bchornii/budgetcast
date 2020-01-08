@@ -1,14 +1,29 @@
 <mat-form-field appearance="standard" [hideRequiredMarker]="true">
   <mat-label>{{label}}</mat-label>
-  <input
-        #input
-        matInput
-        [id]="id"
-        [readonly]="readonly"
-        [type]="innerType"
-        [formControl]="inputControl"
-        (blur)="onBlur($event)"
-        (focus)="onFocus($event)">
+  <ng-container *ngIf="!isCurrency; else currency">
+    <input
+          #input
+          matInput
+          [id]="id"
+          [readonly]="readonly"
+          [type]="innerType"
+          [formControl]="inputControl"
+          (blur)="onBlur($event)"
+          (focus)="onFocus($event)">
+  </ng-container>
+  <ng-template #currency>
+    <input
+          #input
+          matInput
+          currencyMask
+          [options]="{prefix: '₴ '}"
+          [id]="id"
+          [readonly]="readonly"
+          [type]="innerType"
+          [formControl]="inputControl"
+          (blur)="onBlur($event)"
+          (focus)="onFocus($event)">
+  </ng-template>
   <mat-error>{{errMsg}}</mat-error>
   <button
         *ngIf="type === 'password'"

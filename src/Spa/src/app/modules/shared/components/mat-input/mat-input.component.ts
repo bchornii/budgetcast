@@ -27,8 +27,9 @@ export class MatInputComponent extends MatFormElement implements OnInit, OnDestr
   @Input() type: string = InputType.TEXT;
   @Input() isSearch = false;
   @Input() errMsg = 'Invalid input.';
+  @Input() isCurrency = false;
 
-  @ViewChild('input', { static: false }) input: ElementRef;  
+  @ViewChild('input', { static: false }) input: ElementRef;
   @ViewChild('input', { static: false, read: MatInput }) inputDir: MatInput;
 
   hide: boolean;
