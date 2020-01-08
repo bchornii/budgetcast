@@ -13,21 +13,39 @@
     </app-mat-autocomplete>
   </div>
 </div> -->
-
+<!-- 
 <div class="row">
   <div class="col-6 col-md-4 col-lg-3">
     <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+        <mat-label>Custom calendar header</mat-label>
+      <input matInput 
+             [min]="minDate" 
+             [max]="maxDate"
+             [matDatepicker]="picker"
+             [formControl]="inputControl">
+      <mat-error>Please select correct date.</mat-error>
       <mat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
       </mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker [touchUi]="false" #picker></mat-datepicker>
     </mat-form-field>
   </div>
+</div> -->
+
+<div class="row">
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2 mt-2">
+      <app-mat-datepicker
+        name="receiptdate"
+        label="Receipt Date"
+        minDate="01-06-2020"
+        maxDate="01-08-2020"
+        [(ngModel)]="receiptDate"
+      ></app-mat-datepicker>
+    </div>    
 </div>
 
 <div class="row">
-  <div class="col-6 col-md-4 col-lg-3">
+  <div class="col-6 col-md-4 col-lg-3 col-xl-2">
     <app-mat-chips-autocomplete
       name="category"
       label="Tags"

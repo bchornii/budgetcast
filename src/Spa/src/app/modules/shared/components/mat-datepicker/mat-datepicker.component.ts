@@ -9,11 +9,9 @@ import {
   ViewChild, 
   ElementRef, 
   Output, 
-  EventEmitter, 
-  OnChanges
-} from '@angular/core';
+  EventEmitter} from '@angular/core';
 import { MatFormElement } from '../mat-form-element';
-import { NgControl, FormControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
 
 import * as moment from 'moment';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -25,7 +23,6 @@ import { Moment } from 'moment';
 @Component({
   selector: 'app-mat-datepicker',
   templateUrl: './mat-datepicker.component.html',
-  styleUrls: ['./mat-datepicker.component.scss'],
   providers: [    
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
