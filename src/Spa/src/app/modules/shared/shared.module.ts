@@ -13,12 +13,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteComponent } from './components/mat-autocomplete/mat-autocomplete.component';
 import { MatChipsAutocompleteComponent } from './components/mat-chips-autocomplete/mat-chips-autocomplete.component';
 import { MatDatepickerComponent } from './components/mat-datepicker/mat-datepicker.component';
-
+import { NgxCurrencyModule } from "ngx-currency";
+import { MatSelectComponent } from './components/mat-select/mat-select.component';
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
+    NgxCurrencyModule,
 
     ReactiveFormsModule
   ],
@@ -36,6 +38,7 @@ import { MatDatepickerComponent } from './components/mat-datepicker/mat-datepick
     MatAutocompleteComponent,
     MatChipsAutocompleteComponent,
     MatDatepickerComponent,
+    MatSelectComponent,
   ],
   exports: [
     FormDirective,
@@ -51,6 +54,7 @@ import { MatDatepickerComponent } from './components/mat-datepicker/mat-datepick
     MatAutocompleteComponent,
     MatChipsAutocompleteComponent,
     MatDatepickerComponent,
+    MatSelectComponent,
 
     MaterialModule
   ]

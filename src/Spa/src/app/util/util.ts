@@ -16,3 +16,27 @@ export function validateAllFormFields(formGroup: FormGroup) {
     }
   });
 }
+
+export function isString (value) {
+  return typeof value === 'string' || value instanceof String;
+};
+
+export function isObject (value) {
+  return value && typeof value === 'object' && value.constructor === Object;
+};
+
+export function isArray (value) {
+  return Array.isArray(value);
+}
+
+export function isNull (value) {
+  return value === null;
+};
+  
+export function isUndefined (value) {
+  return typeof value === 'undefined';
+};
+
+export class KeyValuePair {    
+  constructor(public key: any, public value: any) {}
+}

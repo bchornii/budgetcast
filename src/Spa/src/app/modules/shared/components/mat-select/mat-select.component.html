@@ -1,0 +1,39 @@
+<mat-form-field appearance="standard" [hideRequiredMarker]="true">
+    <mat-label>{{label}}</mat-label>
+    <ng-container *ngIf="isMultiple; else single">
+        <mat-select #input
+                    multiple
+                    [disabled]="isDisabled"
+                    [formControl]="inputControl"
+                    (blur)="onBlur($event)"
+                    (focus)="onFocus($event)">
+            <mat-option 
+                *ngIf="hasDefault">
+                {{defaultOption}}
+            </mat-option>
+            <mat-option 
+                *ngFor="let option of innerOptions" 
+                [value]="asValue ? option.value : option.key">
+                {{option.value}}
+            </mat-option>
+        </mat-select>
+    </ng-container>
+    <ng-template #single>
+        <mat-select #input
+                    [disabled]="isDisabled"
+                    [formControl]="inputControl"
+                    (blur)="onBlur($event)"
+                    (focus)="onFocus($event)">
+            <mat-option 
+                *ngIf="hasDefault">
+                {{defaultOption}}
+            </mat-option>
+            <mat-option 
+                *ngFor="let option of innerOptions" 
+                [value]="asValue ? option.value : option.key">
+                {{option.value}}
+            </mat-option>
+        </mat-select>
+    </ng-template>
+    <mat-error>{{errMsg}}</mat-error>
+</mat-form-field>
