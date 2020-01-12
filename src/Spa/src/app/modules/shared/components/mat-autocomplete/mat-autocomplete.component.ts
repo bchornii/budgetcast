@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
-import { debounceTime, tap, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, tap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mat-autocomplete',
@@ -28,7 +28,6 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
   @Input() options: any[];
   @Input() debounceTime = 300;
   @Input() isLoading = false;
-  @Input() initialValue = '';
 
   @ViewChild('input', { static: false }) input: ElementRef;
 
@@ -42,7 +41,6 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
 
   ngOnInit() {
     this.setElementId();
-    this.inputControl.setValue(this.initialValue);
   }
 
   ngOnDestroy() {
@@ -59,6 +57,7 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
     this.valueChangesSubstription =
       this.inputControl.valueChanges.pipe(
         debounceTime(this.debounceTime),
+        map(emittedValue => emittedValue.trim()),
         distinctUntilChanged()
       ).subscribe(fn);
   }

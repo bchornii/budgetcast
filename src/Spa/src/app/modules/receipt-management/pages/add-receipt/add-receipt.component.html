@@ -1,67 +1,69 @@
-<!-- <div class="app-row">
-  <div class="app-cell">
-    <app-mat-autocomplete
-      required
-      name="category"
-      label="Produt Category"
-      errMsg="Please specify product category."
-      [initialValue]="initialCategoryName"
-      [options]="categories"
-      [isLoading]="categoriesIsLoading"
-      ngModel
-      (ngModelChange)="onCategoryModelChange($event)">
-    </app-mat-autocomplete>
-  </div>
-</div> -->
-<!-- 
 <div class="row">
-  <div class="col-6 col-md-4 col-lg-3">
-    <mat-form-field>
-        <mat-label>Custom calendar header</mat-label>
-      <input matInput 
-             [min]="minDate" 
-             [max]="maxDate"
-             [matDatepicker]="picker"
-             [formControl]="inputControl">
-      <mat-error>Please select correct date.</mat-error>
-      <mat-datepicker-toggle matSuffix [for]="picker">
-        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker [touchUi]="false" #picker></mat-datepicker>
-    </mat-form-field>
-  </div>
-</div> -->
+  <form autocomplete="off" novalidate
+        appForm (appSubmit)="addReceipt()"        
+        class="col-12">
 
-<div class="row">
-    <div class="col-6 col-md-4 col-lg-3 col-xl-2 mt-2">
-      <app-mat-datepicker
-        name="receiptdate"
-        label="Receipt Date"
-        minDate="01-06-2020"
-        maxDate="01-08-2020"
-        [(ngModel)]="receiptDate"
-      ></app-mat-datepicker>
-    </div>    
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg-3 col-xl-2 mt-2">
+          <app-mat-datepicker
+            required
+            name="receiptdate"
+            label="Receipt Date"            
+            [(ngModel)]="addBasicReceipt.date"
+          ></app-mat-datepicker>
+        </div>    
+      </div>
+      
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+          <app-mat-input
+            required
+            minValue="0.01"
+            name="totalAmount"
+            label="Total amount"
+            isCurrency="true"
+            [(ngModel)]="addBasicReceipt.totalAmount"
+          ></app-mat-input>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+          <app-mat-chips-autocomplete
+            name="tags"
+            label="Tags"
+            [data]="addBasicReceipt.tags"
+            [options]="tagOptions"
+            [isLoading]="tagsLoading"
+            ngModel
+            (ngModelChange)="onTagModelChange($event)">
+          </app-mat-chips-autocomplete>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xs-2">
+          <app-mat-autocomplete
+            required
+            name="campaign"
+            label="Budget campaign"
+            errMsg="Please specify campaign."
+            [options]="campaignOptions"
+            [isLoading]="campaignsLoading"
+            [(ngModel)]="addBasicReceipt.campaign"
+            (ngModelChange)="onCampaignModelChange($event)">
+          </app-mat-autocomplete>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+          <button type="submit" class="app-button-control">
+            Save
+          </button>
+      </div>
+    </div>
+  </form>
 </div>
 
-<div class="row">
-  <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-    <app-mat-chips-autocomplete
-      name="category"
-      label="Tags"
-      [data]="tags"
-      [options]="categories"
-      [isLoading]="categoriesIsLoading"
-      ngModel
-      (ngModelChange)="onCategoryModelChange($event)">
-    </app-mat-chips-autocomplete>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-    <button type="button" class="app-button-control">
-      Save
-    </button>
-  </div>
-</div>
+<app-spinner></app-spinner>

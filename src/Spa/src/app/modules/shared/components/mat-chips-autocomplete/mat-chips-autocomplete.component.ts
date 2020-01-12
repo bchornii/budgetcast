@@ -14,7 +14,7 @@ import {
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 
@@ -61,8 +61,9 @@ export class MatChipsAutocompleteComponent extends MatFormElement implements OnI
 
   registerOnChange(fn) {
     this.valueChangesSubstription =
-      this.inputControl.valueChanges.pipe(
+      this.inputControl.valueChanges.pipe(        
         debounceTime(this.debounceTime),
+        map(emittedValue => emittedValue.trim()),
         distinctUntilChanged()
       ).subscribe(fn);
   }

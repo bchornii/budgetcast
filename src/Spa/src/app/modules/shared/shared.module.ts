@@ -15,6 +15,7 @@ import { MatChipsAutocompleteComponent } from './components/mat-chips-autocomple
 import { MatDatepickerComponent } from './components/mat-datepicker/mat-datepicker.component';
 import { NgxCurrencyModule } from "ngx-currency";
 import { MatSelectComponent } from './components/mat-select/mat-select.component';
+import { MinValueDirective } from './directives/min-value.directive';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { MatSelectComponent } from './components/mat-select/mat-select.component
   declarations: [
     FormDirective,
     FieldsMatchValidatorDirective,
+    MinValueDirective,
 
     InputComponent,
     MatInputComponent,
@@ -43,6 +45,7 @@ import { MatSelectComponent } from './components/mat-select/mat-select.component
   exports: [
     FormDirective,
     FieldsMatchValidatorDirective,
+    MinValueDirective,
 
     InputComponent,
     MatInputComponent,

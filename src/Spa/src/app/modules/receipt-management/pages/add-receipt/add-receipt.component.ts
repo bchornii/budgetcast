@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { NgModel } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, delay } from 'rxjs/operators';
 
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import { AddBasicReceipt } from '../models/add-receipt';
+import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -11,32 +13,49 @@ import { Moment } from 'moment';
   templateUrl: './add-receipt.component.html'
 })
 export class AddReceiptComponent implements OnInit {
-  categories: string[];
-  initialCategoryName = 'Food';
-  categoriesIsLoading = false;
+  
+  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
+  @ViewChild('totalAmount', {static: true, read: NgModel}) totAmount: NgModel;
+  
+  tagsLoading = false;
+  tagOptions = [];
 
-  tags = ['Food', 'Healthy Food'];
-  receiptDate: Moment = moment(); 
+  campaignsLoading = false;
+  campaignOptions = [];
+
+  addBasicReceipt = new AddBasicReceipt();
 
   constructor(private recipeService: RecipeService) { }
 
   ngOnInit() { 
-    //this.inputControl.valueChanges
-    //  .subscribe((val: Moment) => console.log(val.format("MM-DD-YYYY")));
   }
 
-  onCategoryModelChange(data) {
-    console.log(this.tags);
-    if (!this.categoryExists(data)) {
-      this.categoriesIsLoading = true;
+  onTagModelChange(data) {
+    console.log(this.addBasicReceipt.tags);
+    if (!this.addBasicReceipt.tagExists(data)) {
+      this.tagsLoading = true;
       this.recipeService.getCategories(data).pipe(
-        finalize(() => this.categoriesIsLoading = false)
+        finalize(() => this.tagsLoading = false)
       )
-      .subscribe(r => this.categories = r);
+      .subscribe(r => this.tagOptions = r);
     }
   }
 
-  private categoryExists(name: string) {
-    return this.categories && this.categories.includes(name);
-  }  
+  onCampaignModelChange(data) {    
+    this.campaignsLoading = true;
+    this.recipeService.getCategories(data).pipe(
+      finalize(() => this.campaignsLoading = false)
+    )
+    .subscribe(r => this.campaignOptions = r);
+  }
+
+  addReceipt() {      
+    this.spinner.show();
+    of(null).pipe(
+      delay(1000),
+      finalize(() => this.spinner.hide())
+    ).subscribe(_ => {
+      console.log(JSON.stringify(this.addBasicReceipt));
+    });    
+  }
 }
