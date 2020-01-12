@@ -1,10 +1,10 @@
-﻿using BudgetCast.Dashboard.Api.AppSettings;
+﻿using System.Threading.Tasks;
+using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System.Threading.Tasks;
 
-namespace BudgetCast.Dashboard.Api.Services
+namespace BudgetCast.Dashboard.Api.Infrastructure.Services
 {
     public class EmailService
     {

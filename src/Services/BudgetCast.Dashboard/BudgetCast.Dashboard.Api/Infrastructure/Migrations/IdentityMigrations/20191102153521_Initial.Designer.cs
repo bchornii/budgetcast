@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BudgetCast.Dashboard.Api.Migrations
+namespace BudgetCast.Dashboard.Api.Infrastructure.Migrations.IdentityMigrations
 {
     [DbContext(typeof(IdentityDbContext))]
     [Migration("20191102153521_Initial")]

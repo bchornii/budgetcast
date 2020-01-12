@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Data.SqlClient;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
-using System;
-using System.Data.SqlClient;
 
-namespace BudgetCast.Dashboard.Api.Extensions
+namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
 {
     public static class IWebHostExtensions
     {

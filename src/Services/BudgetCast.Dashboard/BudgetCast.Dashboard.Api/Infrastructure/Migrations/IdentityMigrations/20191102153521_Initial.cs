@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BudgetCast.Dashboard.Api.Migrations
+namespace BudgetCast.Dashboard.Api.Infrastructure.Migrations.IdentityMigrations
 {
     public partial class Initial : Migration
     {

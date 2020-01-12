@@ -1,7 +1,4 @@
-﻿using BudgetCast.Dashboard.Api.AppSettings;
-using BudgetCast.Dashboard.Api.Extensions;
-using BudgetCast.Dashboard.Api.Services;
-using BudgetCast.Dashboard.Api.ViewModels;
+﻿using BudgetCast.Dashboard.Api.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +8,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
+using BudgetCast.Dashboard.Api.Infrastructure.Services;
+using BudgetCast.Dashboard.Api.ViewModels.Account;
 
 namespace BudgetCast.Dashboard.Api.Controllers
 {

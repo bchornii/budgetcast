@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Dashboard.Api.AppSettings
+﻿namespace BudgetCast.Dashboard.Api.Infrastructure.AppSettings
 {
     public class UiLinks
     {

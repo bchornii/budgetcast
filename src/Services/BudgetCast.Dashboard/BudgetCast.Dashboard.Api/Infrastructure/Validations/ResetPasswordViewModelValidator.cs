@@ -1,7 +1,8 @@
 ﻿using BudgetCast.Dashboard.Api.ViewModels;
+using BudgetCast.Dashboard.Api.ViewModels.Account;
 using FluentValidation;
 
-namespace BudgetCast.Dashboard.Api.Validations
+namespace BudgetCast.Dashboard.Api.Infrastructure.Validations
 {
     public class ResetPasswordViewModelValidator :
         AbstractValidator<ResetPasswordViewModel>

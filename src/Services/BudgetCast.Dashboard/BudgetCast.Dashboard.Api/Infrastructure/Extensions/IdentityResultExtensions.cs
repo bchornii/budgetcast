@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
-namespace BudgetCast.Dashboard.Api.Extensions
+namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
 {
     public static class IdentityResultExtensions
     {

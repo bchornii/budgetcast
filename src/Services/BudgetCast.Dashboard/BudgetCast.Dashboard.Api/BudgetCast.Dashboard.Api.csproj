@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
     <PackageReference Include="MailKit" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -15,10 +16,19 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="Polly" Version="7.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Infrastructure\Migrations\BudgetCastMigrations\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BudgetCast.Dashboard.Commands\BudgetCast.Dashboard.Commands.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.DataAccess.Impl\BudgetCast.Dashboard.DataAccess.Impl.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.DataAccess\BudgetCast.Dashboard.DataAccess.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Infrastructure\BudgetCast.Dashboard.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
