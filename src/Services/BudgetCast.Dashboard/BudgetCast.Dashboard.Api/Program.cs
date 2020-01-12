@@ -1,4 +1,4 @@
-﻿using BudgetCast.Dashboard.Api.Extensions;
+﻿using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

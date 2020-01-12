@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
-using BudgetCast.Dashboard.Api.ViewModels;
 using BudgetCast.Dashboard.Api.ViewModels.Receipt;
-using BudgetCast.Dashboard.Commands.Command;
 using MediatR;
 
 namespace BudgetCast.Dashboard.Api.Controllers
@@ -53,11 +50,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
         public async Task<IActionResult> AddBasicReceipt(
             [FromBody] AddBasicReceiptViewModel model)
         {
-            var cmd = _mapper.Map<CreateBasicReceiptCommand>(model);
-            cmd.UserId = User.Identity.Name;
-            var result = await _mediator.Send(cmd);
-
-            return result.ToHttpActionResult();
+            return Ok();
         }
     }
 }

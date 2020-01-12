@@ -1,6 +1,4 @@
-﻿using BudgetCast.Dashboard.Api.AppSettings;
-using BudgetCast.Dashboard.Api.Services;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +11,8 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
+using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using FluentValidation.AspNetCore;
 
 namespace BudgetCast.Dashboard.Api
