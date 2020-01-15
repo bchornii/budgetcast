@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BudgetCast.Dashboard.Data\BudgetCast.Dashboard.Data.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Domain\BudgetCast.Dashboard.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -28,7 +28,11 @@
     <ProjectReference Include="..\BudgetCast.Dashboard.Commands\BudgetCast.Dashboard.Commands.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.DataAccess.Impl\BudgetCast.Dashboard.DataAccess.Impl.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.DataAccess\BudgetCast.Dashboard.DataAccess.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Data\BudgetCast.Dashboard.Data.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Infrastructure\BudgetCast.Dashboard.Infrastructure.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Queries\BudgetCast.Dashboard.Queries.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Repository\BudgetCast.Dashboard.Repository.csproj" />
   </ItemGroup>
 
 </Project>

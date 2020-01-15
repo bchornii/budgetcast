@@ -11,9 +11,16 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
+using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
+using BudgetCast.Dashboard.Data;
+using BudgetCast.Dashboard.Data.EntityConfigurations;
 using FluentValidation.AspNetCore;
+using MediatR;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -29,7 +36,7 @@ namespace BudgetCast.Dashboard.Api
             Env = environment;
         }        
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var uiRoot = Configuration["UiLinks:Root"];
             services.AddCors(options =>
@@ -41,6 +48,8 @@ namespace BudgetCast.Dashboard.Api
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
+
+            services.AddAutoMapper();
 
             services.AddMvc()
                 .AddFluentValidation(options =>
@@ -68,6 +77,8 @@ namespace BudgetCast.Dashboard.Api
                             errorNumbersToAdd: null);
                     });
             });
+
+            services.AddBudgetCastContext(Configuration);
 
             services
                 .AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -133,6 +144,14 @@ namespace BudgetCast.Dashboard.Api
                         options.ClientId = Configuration["Social:Facebook:ClientId"];
                         options.ClientSecret = Configuration["Social:Facebook:ClientSecret"];
                     });
+
+            var container = new ContainerBuilder();
+            container.Populate(services);
+
+            container.RegisterModule(new ApplicationModule());
+            container.RegisterModule(new MediatorModule());
+
+            return new AutofacServiceProvider(container.Build());
         }
 
         public void Configure(IApplicationBuilder app)
@@ -156,6 +175,29 @@ namespace BudgetCast.Dashboard.Api
 
             app.UseAuthentication();
             app.UseMvc();
+        }
+    }
+
+    internal static class CustomExtensionsMethods
+    {
+        public static IServiceCollection AddBudgetCastContext(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            EntityTypeConfiguration.Configure();
+            AggregateRootTypeConfiguration.Configure();
+            EnumerationTypeConfiguration.Configure();
+            ReceiptEntityTypeConfiguration.Configure();
+            CampaignEntityTypeConfiguration.Configure();
+
+            services.AddScoped(serviceProvider =>
+            {
+                var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+                var userId = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                var connectionString = configuration["BudgetCast:ConnectionString"];
+                return new BudgetCastContext(connectionString, serviceProvider.GetService<IMediator>(), userId);
+            });
+
+            return services;
         }
     }
 }
