@@ -16,6 +16,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
+using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
 using BudgetCast.Dashboard.Data.EntityConfigurations;
@@ -192,7 +193,7 @@ namespace BudgetCast.Dashboard.Api
             services.AddScoped(serviceProvider =>
             {
                 var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-                var userId = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                var userId = httpContextAccessor?.HttpContext?.GetUserId();
                 var connectionString = configuration["BudgetCast:ConnectionString"];
                 return new BudgetCastContext(connectionString, serviceProvider.GetService<IMediator>(), userId);
             });

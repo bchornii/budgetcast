@@ -9,11 +9,12 @@ using BudgetCast.Dashboard.Commands.Commands;
 using BudgetCast.Dashboard.Commands.Results;
 using BudgetCast.Dashboard.Queries.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetCast.Dashboard.Api.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ReceiptController : ControllerBase
     {
