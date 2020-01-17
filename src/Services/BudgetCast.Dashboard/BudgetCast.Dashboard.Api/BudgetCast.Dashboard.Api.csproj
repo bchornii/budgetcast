@@ -33,6 +33,7 @@
     <ProjectReference Include="..\BudgetCast.Dashboard.Queries\BudgetCast.Dashboard.Queries.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Repository\BudgetCast.Dashboard.Repository.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.WriteAccessors\BudgetCast.Dashboard.WriteAccessors.csproj" />
   </ItemGroup>
 
 </Project>

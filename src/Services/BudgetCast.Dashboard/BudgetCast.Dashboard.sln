@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.Comman
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.Queries", "BudgetCast.Dashboard.Queries\BudgetCast.Dashboard.Queries.csproj", "{5EDAFCB1-F46C-4627-8D0C-9EE93FD8B481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Dashboard.ReadAccessors", "BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj", "{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.ReadAccessors", "BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj", "{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Dashboard.WriteAccessors", "BudgetCast.Dashboard.WriteAccessors\BudgetCast.Dashboard.WriteAccessors.csproj", "{10D27914-D968-46DE-B086-06AED982421D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D27914-D968-46DE-B086-06AED982421D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D27914-D968-46DE-B086-06AED982421D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D27914-D968-46DE-B086-06AED982421D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D27914-D968-46DE-B086-06AED982421D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

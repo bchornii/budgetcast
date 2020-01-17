@@ -15,7 +15,7 @@ export class RecipeService extends BaseService {
     super();
   }
 
-  getCategories(term?: string, amount: number = 10): Observable<string[]> {
+  getTags(term?: string, amount: number = 10): Observable<string[]> {
     let params = new HttpParams();
 
     if (amount) {
@@ -23,11 +23,28 @@ export class RecipeService extends BaseService {
     }
 
     if (term) {
-      params = params.set('name', term);
+      params = params.set('term', term);
     }
 
     return this.httpClient.get<string[]>(
-      `${environment.api.recipesApi.categories}`, { params }).pipe(
+      `${environment.api.recipesApi.tags}`, { params }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getCampaigns(term?: string, amount: number = 10): Observable<string[]> {
+    let params = new HttpParams();
+
+    if (amount) {
+      params = params.set('amount', amount.toString());
+    }
+
+    if (term) {
+      params = params.set('term', term);
+    }
+
+    return this.httpClient.get<string[]>(
+      `${environment.api.recipesApi.campaigns}`, { params }).pipe(
       catchError(this.handleError)
     );
   }

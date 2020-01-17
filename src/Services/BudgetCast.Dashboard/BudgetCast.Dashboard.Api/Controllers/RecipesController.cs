@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using BudgetCast.Dashboard.Api.ViewModels.Receipt;
 using BudgetCast.Dashboard.Commands.Commands;
@@ -19,43 +16,52 @@ namespace BudgetCast.Dashboard.Api.Controllers
     public class ReceiptController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
 
-        private static List<string> _catNames = new List<string>
-        {            
-            "Shoes & Close",
-            "Car",
-            "Food",
-            "Healthy food",
-            "Cafe & restaurants",
-            "Entertaiment"            
-        };
-
-        public ReceiptController(IMediator mediator, IMapper mapper)
+        public ReceiptController(IMediator mediator)
         {
             _mediator = mediator;
-            _mapper = mapper;
         }
 
-        [HttpGet("categories")]
-        public IActionResult GetCategories(
-            [FromQuery] string name, [FromQuery] int amount)
+        [HttpGet("tags")]
+        public async Task<IActionResult> GetTags(
+            [FromQuery] string term, 
+            [FromQuery] int amount)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return Ok(_catNames.Take(amount).ToArray());
-            }
-            return Ok(_catNames
-                .Where(n => n.Contains(name, System.StringComparison.OrdinalIgnoreCase))
-                .OrderBy(v => v)
-                .Take(amount)
-                .ToArray());
+            var result = await _mediator
+                .Send(new DefaultTagsQuery
+                {
+                    UserId = HttpContext.GetUserId(),
+                    Term = term,
+                    Amount = amount
+                });
+            return result.ToHttpActionResult();
+        }
+
+        [HttpGet("campaigns")]
+        public async Task<IActionResult> GetCampaigns(
+            [FromQuery] string term,
+            [FromQuery] int amount)
+        {
+            var result = await _mediator
+                .Send(new DefaultCampaignsQuery
+                {
+                    Term = term,
+                    Amount = amount
+                });
+            return result.ToHttpActionResult();
         }
 
         [HttpPost("addBasic")]
         public async Task<IActionResult> AddBasicReceipt(
             [FromBody] AddBasicReceiptViewModel model)
         {
+            await _mediator.Send(
+                new AddDefaultTagCommand
+            {
+                Tags = model.Tags,
+                UserId = HttpContext.GetUserId()
+            });
+
             var campaignResult = await _mediator
                 .Send(new CampaignIdByNameQuery
                 {

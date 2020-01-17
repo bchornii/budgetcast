@@ -2,6 +2,7 @@
 using System.Reflection;
 using BudgetCast.Dashboard.Domain.Aggregates.Campaigns;
 using BudgetCast.Dashboard.Domain.Aggregates.Receipting;
+using BudgetCast.Dashboard.Domain.AnemicModel;
 using BudgetCast.Dashboard.Domain.SeedWork;
 using MediatR;
 using MongoDB.Driver;
@@ -10,6 +11,8 @@ namespace BudgetCast.Dashboard.Data
 {
     public class BudgetCastContext
     {
+        public IMongoCollection<DefaultTag> DefaultTags { get; }
+
         public MongoDbSet<Receipt> Receipts { get; }
         public MongoDbSet<Campaign> Campaigns { get; }
 
@@ -23,6 +26,8 @@ namespace BudgetCast.Dashboard.Data
 
             Campaigns = new MongoDbSet<Campaign>(
                 database.GetCollection<Campaign>(nameof(Campaigns)), mediator, userId);
+
+            DefaultTags = database.GetCollection<DefaultTag>(nameof(DefaultTags));
         }
 
         public MongoDbSet<T> GetDbSet<T>() where T : AggregateRoot

@@ -18,8 +18,9 @@ const accountApi = {
 };
 
 const recipesApi = {
-  categories: `${apiUrl}/receipt/categories`,
-  addBasic: `${apiUrl}/receipt/addBasic`
+  tags: `${apiUrl}/receipt/tags`,
+  addBasic: `${apiUrl}/receipt/addBasic`,
+  campaigns: `${apiUrl}/receipt/campaigns`
 };
 
 const api = {

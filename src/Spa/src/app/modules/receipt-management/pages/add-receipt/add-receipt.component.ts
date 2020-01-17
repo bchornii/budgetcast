@@ -36,7 +36,7 @@ export class AddReceiptComponent implements OnInit {
   onTagModelChange(data) {
     if (!this.addBasicReceipt.tagExists(data)) {
       this.tagsLoading = true;
-      this.recipeService.getCategories(data).pipe(
+      this.recipeService.getTags(data).pipe(
         finalize(() => this.tagsLoading = false)
       )
         .subscribe(r => this.tagOptions = r);
@@ -45,7 +45,7 @@ export class AddReceiptComponent implements OnInit {
 
   onCampaignModelChange(data) {
     this.campaignsLoading = true;
-    this.recipeService.getCategories(data).pipe(
+    this.recipeService.getCampaigns(data).pipe(
       finalize(() => this.campaignsLoading = false)
     )
       .subscribe(r => this.campaignOptions = r);
