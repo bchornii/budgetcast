@@ -10,5 +10,6 @@ namespace BudgetCast.Dashboard.Commands.Commands
         public string[] Tags { get; set; }
         public string CampaignId { get; set; }
         public decimal TotalAmount { get; set; }
+        public string Description { get; set; }
     }
 }

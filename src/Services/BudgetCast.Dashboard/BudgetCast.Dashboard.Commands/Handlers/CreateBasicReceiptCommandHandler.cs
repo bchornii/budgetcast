@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Commands.Commands;
 using BudgetCast.Dashboard.Commands.Results;
@@ -21,7 +20,7 @@ namespace BudgetCast.Dashboard.Commands.Handlers
         public async Task<CommandResult> Handle(CreateBasicReceiptCommand request,
             CancellationToken cancellationToken)
         {
-            var receipt = new Receipt(request.Date, request.CampaignId);
+            var receipt = new Receipt(request.Date, request.CampaignId, request.Description);
             receipt.AddTags(request.Tags);
             receipt.AddItem(Receipt.DefaultItemTitle, request.TotalAmount);
             await _receiptRepository.Add(receipt);

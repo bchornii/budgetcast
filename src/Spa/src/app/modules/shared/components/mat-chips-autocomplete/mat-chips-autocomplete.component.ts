@@ -73,7 +73,8 @@ export class MatChipsAutocompleteComponent extends MatFormElement implements OnI
       const value = event.value;
       const input = event.input;
 
-      if ((value || '').trim()) {
+      if ((value || '').trim() && 
+          !this.data.includes(value)) {
         this.data.push(value.trim());
       }
 
@@ -94,7 +95,9 @@ export class MatChipsAutocompleteComponent extends MatFormElement implements OnI
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.data.push(event.option.viewValue);
+    if(!this.data.includes(event.option.viewValue)) {
+      this.data.push(event.option.viewValue);
+    }    
     this.input.nativeElement.value = '';
     this.inputControl.setValue(null, { emitEvent: false});
   }

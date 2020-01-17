@@ -6,11 +6,12 @@ export class AddBasicReceipt {
     totalAmount: number;
     tags: string[];
     campaign: string;
+    description: string;
 
     constructor() {
         this.date = moment();
         this.campaign = moment().format("MMMM YYYY");
-        this.tags = ["Food"];
+        this.tags = [];
     }
 
     tagExists(value: string): boolean {

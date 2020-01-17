@@ -105,7 +105,8 @@ namespace BudgetCast.Dashboard.Api.Controllers
                     CampaignId = campaignId,
                     Tags = model.Tags,
                     Date = model.Date,
-                    TotalAmount = model.TotalAmount
+                    TotalAmount = model.TotalAmount,
+                    Description = model.Description
                 });
         }
     }

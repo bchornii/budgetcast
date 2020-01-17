@@ -8,5 +8,6 @@ namespace BudgetCast.Dashboard.Api.ViewModels.Receipt
         public string[] Tags { get; set; }
         public string Campaign { get; set; }
         public decimal TotalAmount { get; set; }
+        public string Description { get; set; }
     }
 }
