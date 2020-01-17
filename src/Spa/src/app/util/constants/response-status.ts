@@ -5,6 +5,7 @@ export enum ResponseStatus {
 	UNAUTHORIZED = 401,
 	FORBIDDEN = 403,
 	BAD_REQUEST = 400,
+	ERROR = 500
 }
 
 export const SMALL_WIDTH_BREAKPOINT = 720;

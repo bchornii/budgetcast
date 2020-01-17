@@ -44,6 +44,9 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             this.router.navigate(['/account/login']);
             this.toastr.error('Please sign in.');
           }
+          if(err.status == ResponseStatus.ERROR) {
+            this.toastr.error('Something went wrong.');
+          }
         })
     );
   }
