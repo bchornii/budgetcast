@@ -20,6 +20,7 @@ using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
 using BudgetCast.Dashboard.Data.EntityConfigurations;
+using BudgetCast.Dashboard.Data.EntityConfigurations.ReadModelConfigurations;
 using FluentValidation.AspNetCore;
 using MediatR;
 
@@ -189,6 +190,10 @@ namespace BudgetCast.Dashboard.Api
             EnumerationTypeConfiguration.Configure();
             ReceiptEntityTypeConfiguration.Configure();
             CampaignEntityTypeConfiguration.Configure();
+
+            IdentifiableReadModelTypeConfiguration.Configure();
+            HistoricalReadModelTypeConfiguration.Configure();
+            ReceiptReadModelTypeConfiguration.Configure();
 
             services.AddScoped(serviceProvider =>
             {

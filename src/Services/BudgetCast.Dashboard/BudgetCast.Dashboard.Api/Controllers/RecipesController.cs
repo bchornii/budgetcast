@@ -51,6 +51,21 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return result.ToHttpActionResult();
         }
 
+        [HttpGet("basicReceipts")]
+        public async Task<IActionResult> GetBasicReceipts(
+            [FromQuery] string campaignName,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var result = await _mediator.Send(new BasicReceiptsQuery
+            {
+                CampaignName = campaignName,
+                Page = page,
+                PageSize = pageSize
+            });
+            return result.ToHttpActionResult();
+        }
+
         [HttpPost("addBasic")]
         public async Task<IActionResult> AddBasicReceipt(
             [FromBody] AddBasicReceiptViewModel model)

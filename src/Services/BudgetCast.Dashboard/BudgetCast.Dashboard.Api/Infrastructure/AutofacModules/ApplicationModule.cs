@@ -3,6 +3,7 @@ using BudgetCast.Dashboard.Domain.Aggregates.Campaigns;
 using BudgetCast.Dashboard.Domain.Aggregates.Receipting;
 using BudgetCast.Dashboard.Domain.AnemicModel;
 using BudgetCast.Dashboard.Domain.ReadModel.Campaign;
+using BudgetCast.Dashboard.Domain.ReadModel.Receipts;
 using BudgetCast.Dashboard.Domain.ReadModel.Tags;
 using BudgetCast.Dashboard.ReadAccessors;
 using BudgetCast.Dashboard.Repository;
@@ -34,6 +35,10 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.AutofacModules
 
             builder.RegisterType<DefaultTagReadAccessor>()
                 .As<IDefaultTagReadAccessor>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ReceiptReadAccessor>()
+                .As<IReceiptReadAccessor>()
                 .InstancePerLifetimeScope();
         }
 

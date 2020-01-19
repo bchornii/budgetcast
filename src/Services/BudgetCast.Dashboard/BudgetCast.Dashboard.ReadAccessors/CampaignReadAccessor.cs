@@ -22,7 +22,7 @@ namespace BudgetCast.Dashboard.ReadAccessors
         public async Task<string> GetIdByName(string name)
         {
             return await _context.Campaigns.Collection
-                .Find(new BsonDocument("Name", name))
+                .Find(new BsonDocument("Name", name?.Trim() ?? string.Empty))
                 .Project(c => c.Id).FirstOrDefaultAsync();
         }
 

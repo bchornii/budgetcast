@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Data;
@@ -6,6 +7,7 @@ using BudgetCast.Dashboard.Domain.AnemicModel;
 using BudgetCast.Dashboard.Domain.ReadModel.Tags;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace BudgetCast.Dashboard.ReadAccessors
 {
@@ -20,11 +22,11 @@ namespace BudgetCast.Dashboard.ReadAccessors
 
         public async Task<IReadOnlyList<string>> GetExistingTags(string[] tags)
         {
-            var filter = Builders<DefaultTag>.Filter
-                .In(t => t.Name, tags);
-
             return await _context.DefaultTags
-                .Find(filter).Project(t => t.Name).ToListAsync();
+                .AsQueryable()
+                .Where(t => tags.Contains(t.Name))
+                .Select(t => t.Name)
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<string>> GetTags(
