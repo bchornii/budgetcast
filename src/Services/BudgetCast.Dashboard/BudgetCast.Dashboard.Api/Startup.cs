@@ -19,8 +19,6 @@ using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
-using BudgetCast.Dashboard.Data.EntityConfigurations;
-using BudgetCast.Dashboard.Data.EntityConfigurations.ReadModelConfigurations;
 using FluentValidation.AspNetCore;
 using MediatR;
 
@@ -40,112 +38,16 @@ namespace BudgetCast.Dashboard.Api
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var uiRoot = Configuration["UiLinks:Root"];
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", builder =>
-                    builder
-                        .WithOrigins(uiRoot)
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            });
-
             services.AddAutoMapper();
 
-            services.AddMvc()
-                .AddFluentValidation(options =>
-                {
-                    options.RegisterValidatorsFromAssemblyContaining<Startup>();
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Budget Cast API", Version = "v1" });
-            });
-
-            services.AddDbContext<IdentityDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration["IdentityManagement:ConnectionString"],
-                    sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly(
-                            typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-
-                        sqlOptions.EnableRetryOnFailure(
-                            maxRetryCount: 15,
-                            maxRetryDelay: TimeSpan.FromSeconds(30),
-                            errorNumbersToAdd: null);
-                    });
-            });
-
-            services.AddBudgetCastContext(Configuration);
-
             services
-                .AddIdentity<IdentityUser, IdentityRole>(options =>
-                 {
-                     options.Password.RequiredLength = 8;
-                     options.Password.RequireNonAlphanumeric = false;
-                     options.Password.RequireLowercase = true;
-                     options.Password.RequireUppercase = false;
-                     options.Password.RequireDigit = true;
-
-                     options.User.RequireUniqueEmail = true;
-                 })
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<EmailParameters>(
-                Configuration.GetSection("EmailParameters"));
-            services.AddScoped<EmailService>();
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Domain = Configuration["ParentDomain"];
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.SlidingExpiration = true;
-
-                options.Events.OnRedirectToLogin = redirectContext =>
-                {
-                    redirectContext.HttpContext.Response.StatusCode = 401;
-                    return Task.CompletedTask;
-                };
-
-                options.Events.OnRedirectToAccessDenied = redirectContext =>
-                {
-                    redirectContext.HttpContext.Response.StatusCode = 403;
-                    return Task.CompletedTask;
-                };
-            });
-
-            services.Configure<UiLinks>(
-                Configuration.GetSection("UiLinks"));
-
-            services.Configure<ExternalIdentityProviders>(
-                Configuration.GetSection("ExternalIdentityProviders"));
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-                })
-                .AddGoogle(Configuration["ExternalIdentityProviders:Google:Name"],
-                    options =>
-                    {
-                        options.CallbackPath = new PathString("/g-callback");
-                        options.ClientId = Configuration["Social:Google:ClientId"];
-                        options.ClientSecret = Configuration["Social:Google:ClientSecret"];
-                    })
-                .AddFacebook(Configuration["ExternalIdentityProviders:Facebook:Name"],
-                    options =>
-                    {
-                        options.CallbackPath = new PathString("/fb-callback");
-                        options.ClientId = Configuration["Social:Facebook:ClientId"];
-                        options.ClientSecret = Configuration["Social:Facebook:ClientSecret"];
-                    });
+                .AddCustomConfigSections(Configuration)
+                .AddCustomServices(Configuration)
+                .AddCustomMvc(Configuration)
+                .AddSwagger(Configuration)
+                .AddAspNetIdentity(Configuration)
+                .AddAuthentication(Configuration)
+                .AddMongoContext(Configuration);
 
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -182,20 +84,151 @@ namespace BudgetCast.Dashboard.Api
 
     internal static class CustomExtensionsMethods
     {
-        public static IServiceCollection AddBudgetCastContext(this IServiceCollection services,
+        public static IServiceCollection AddCustomConfigSections(this IServiceCollection services,
             IConfiguration configuration)
         {
-            EntityTypeConfiguration.Configure();
-            AggregateRootTypeConfiguration.Configure();
-            EnumerationTypeConfiguration.Configure();
-            ReceiptEntityTypeConfiguration.Configure();
-            CampaignEntityTypeConfiguration.Configure();
+            services.Configure<EmailParameters>(
+                configuration.GetSection("EmailParameters"));
 
-            IdentifiableReadModelTypeConfiguration.Configure();
-            HistoricalReadModelTypeConfiguration.Configure();
-            ReceiptReadModelTypeConfiguration.Configure();
+            services.Configure<UiLinks>(
+                configuration.GetSection("UiLinks"));
 
-            services.AddScoped(serviceProvider =>
+            services.Configure<ExternalIdentityProviders>(
+                configuration.GetSection("ExternalIdentityProviders"));
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomServices(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddScoped<EmailService>();
+            return services;
+        }
+
+        public static IServiceCollection AddCustomMvc(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var uiRoot = configuration["UiLinks:Root"];
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder
+                        .WithOrigins(uiRoot)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+            services.AddMvc()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblyContaining<Startup>();
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            return services;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Budget Cast API", Version = "v1" });
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddAspNetIdentity(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddDbContext<IdentityDbContext>(options =>
+            {
+                options.UseSqlServer(configuration["IdentityManagement:ConnectionString"],
+                    sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(
+                            typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null);
+                    });
+            });
+
+            services
+                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireDigit = true;
+
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Domain = configuration["ParentDomain"];
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = true;
+
+                options.Events.OnRedirectToLogin = redirectContext =>
+                {
+                    redirectContext.HttpContext.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnRedirectToAccessDenied = redirectContext =>
+                {
+                    redirectContext.HttpContext.Response.StatusCode = 403;
+                    return Task.CompletedTask;
+                };
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddAuthentication(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+                })
+                .AddGoogle(configuration["ExternalIdentityProviders:Google:Name"],
+                    options =>
+                    {
+                        options.CallbackPath = new PathString("/g-callback");
+                        options.ClientId = configuration["Social:Google:ClientId"];
+                        options.ClientSecret = configuration["Social:Google:ClientSecret"];
+                    })
+                .AddFacebook(configuration["ExternalIdentityProviders:Facebook:Name"],
+                    options =>
+                    {
+                        options.CallbackPath = new PathString("/fb-callback");
+                        options.ClientId = configuration["Social:Facebook:ClientId"];
+                        options.ClientSecret = configuration["Social:Facebook:ClientSecret"];
+                    });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoContext(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .AddMongoMaps()
+                .AddScoped(serviceProvider =>
             {
                 var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
                 var userId = httpContextAccessor?.HttpContext?.GetUserId();
