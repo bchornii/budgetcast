@@ -6,34 +6,34 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace BudgetCast.Dashboard.Data.EntityConfigurations
 {
-    public class ReceiptEntityTypeConfiguration
+    public class ReceiptItemEntityTypeConfiguration : MongoDbClassMap<ReceiptItem>
     {
-        public static void Configure()
+        public override void Map(BsonClassMap<ReceiptItem> config)
         {
-            BsonClassMap.RegisterClassMap<Receipt>(config =>
-            {
-                config.AutoMap();
-                config.SetIgnoreExtraElements(true);
+            config.AutoMap();
+            config.SetIgnoreExtraElements(true);
 
-                config.MapField("_date").SetElementName("Date")
-                    .SetSerializer(new DateTimeSerializer(DateTimeKind.Local));
-                config.MapField("_description").SetElementName("Description");
-                config.MapField("_campaignId").SetElementName("CampaignId");
-                config.MapField("_receiptItems").SetElementName("ReceiptItems");
-                config.MapField("_tags").SetElementName("Tags");
-            });
+            config.MapField("_title").SetElementName("Title");
+            config.MapField("_description").SetElementName("Description");
+            config.MapField("_price").SetElementName("Price")
+                .SetSerializer(new DecimalSerializer(BsonType.Decimal128));
+            config.MapField("_quantity").SetElementName("Quantity");
+        }
+    }
 
-            BsonClassMap.RegisterClassMap<ReceiptItem>(config =>
-            {
-                config.AutoMap();
-                config.SetIgnoreExtraElements(true);
+    public class ReceiptEntityTypeConfiguration : MongoDbClassMap<Receipt>
+    {
+        public override void Map(BsonClassMap<Receipt> config)
+        {
+            config.AutoMap();
+            config.SetIgnoreExtraElements(true);
 
-                config.MapField("_title").SetElementName("Title");
-                config.MapField("_description").SetElementName("Description");
-                config.MapField("_price").SetElementName("Price")
-                    .SetSerializer(new DecimalSerializer(BsonType.Decimal128));
-                config.MapField("_quantity").SetElementName("Quantity");
-            });
+            config.MapField("_date").SetElementName("Date")
+                .SetSerializer(new DateTimeSerializer(DateTimeKind.Local));
+            config.MapField("_description").SetElementName("Description");
+            config.MapField("_campaignId").SetElementName("CampaignId");
+            config.MapField("_receiptItems").SetElementName("ReceiptItems");
+            config.MapField("_tags").SetElementName("Tags");
         }
     }
 }

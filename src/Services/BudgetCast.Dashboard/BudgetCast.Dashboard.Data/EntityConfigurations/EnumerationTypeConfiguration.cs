@@ -3,14 +3,11 @@ using MongoDB.Bson.Serialization;
 
 namespace BudgetCast.Dashboard.Data.EntityConfigurations
 {
-    public class EnumerationTypeConfiguration
+    public class EnumerationTypeConfiguration : MongoDbClassMap<Enumeration>
     {
-        public static void Configure()
+        public override void Map(BsonClassMap<Enumeration> config)
         {
-            BsonClassMap.RegisterClassMap<Enumeration>(config =>
-            {
-                config.AutoMap();
-            });
+            config.AutoMap();
         }
     }
 }

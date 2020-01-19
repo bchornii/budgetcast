@@ -6,19 +6,16 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace BudgetCast.Dashboard.Data.EntityConfigurations
 {
-    public class EntityTypeConfiguration
+    public class EntityTypeConfiguration : MongoDbClassMap<Entity>
     {
-        public static void Configure()
+        public override void Map(BsonClassMap<Entity> config)
         {
-            BsonClassMap.RegisterClassMap<Entity>(config =>
-            {
-                config.MapIdMember(m => m.Id)
-                    .SetIdGenerator(StringObjectIdGenerator.Instance);
-                config.IdMemberMap
-                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+            config.MapIdMember(m => m.Id)
+                .SetIdGenerator(StringObjectIdGenerator.Instance);
+            config.IdMemberMap
+                .SetSerializer(new StringSerializer(BsonType.ObjectId));
 
-                config.UnmapMember(e => e.DomainEvents);
-            });
+            config.UnmapMember(e => e.DomainEvents);
         }
     }
 }

@@ -6,17 +6,14 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace BudgetCast.Dashboard.Data.EntityConfigurations.ReadModelConfigurations
 {
-    public class IdentifiableReadModelTypeConfiguration
+    public class IdentifiableReadModelTypeConfiguration : MongoDbClassMap<IdentifiableReadModel>
     {
-        public static void Configure()
+        public override void Map(BsonClassMap<IdentifiableReadModel> config)
         {
-            BsonClassMap.RegisterClassMap<IdentifiableReadModel>(config =>
-            {
-                config.MapIdMember(m => m.Id)
-                    .SetIdGenerator(StringObjectIdGenerator.Instance);
-                config.IdMemberMap
-                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
-            });
+            config.MapIdMember(m => m.Id)
+                .SetIdGenerator(StringObjectIdGenerator.Instance);
+            config.IdMemberMap
+                .SetSerializer(new StringSerializer(BsonType.ObjectId));
         }
     }
 }
