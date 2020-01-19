@@ -29,7 +29,7 @@ namespace BudgetCast.Dashboard.ReadAccessors
                 .Where(r => r.CampaignId == campaignId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .OrderByDescending(r => r.Date)
+                .OrderByDescending(r => r.Id)
                 .Select(r => new BasicReceipt
                 {
                     Tags = r.Tags,
