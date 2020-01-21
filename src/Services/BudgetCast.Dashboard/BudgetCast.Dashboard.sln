@@ -17,7 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.Querie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.ReadAccessors", "BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj", "{77653D55-9C7F-44F6-9DDD-48D041EC3AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Dashboard.WriteAccessors", "BudgetCast.Dashboard.WriteAccessors\BudgetCast.Dashboard.WriteAccessors.csproj", "{10D27914-D968-46DE-B086-06AED982421D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Dashboard.WriteAccessors", "BudgetCast.Dashboard.WriteAccessors\BudgetCast.Dashboard.WriteAccessors.csproj", "{10D27914-D968-46DE-B086-06AED982421D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DomainLayer", "DomainLayer", "{AA5A7054-C39A-4F60-A29B-6C46F3978E00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationLayer", "ApplicationLayer", "{9BDB79FD-604F-4BF0-912F-7C2C0A2ADDBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A025E1AB-1615-447D-8616-43B0190F9890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +66,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63B5C32F-4F86-4B2D-A8EC-395A729EDEAB} = {A025E1AB-1615-447D-8616-43B0190F9890}
+		{E9196F78-E062-4398-B85F-647591B91FC0} = {AA5A7054-C39A-4F60-A29B-6C46F3978E00}
+		{C3603D93-7262-4515-8D03-8FC571ADB325} = {A025E1AB-1615-447D-8616-43B0190F9890}
+		{0E94F973-7D71-4109-8A43-05ADC2FDAE86} = {A025E1AB-1615-447D-8616-43B0190F9890}
+		{A0AF775D-6A33-4B19-A334-A90077C9B939} = {9BDB79FD-604F-4BF0-912F-7C2C0A2ADDBB}
+		{5EDAFCB1-F46C-4627-8D0C-9EE93FD8B481} = {9BDB79FD-604F-4BF0-912F-7C2C0A2ADDBB}
+		{77653D55-9C7F-44F6-9DDD-48D041EC3AF0} = {A025E1AB-1615-447D-8616-43B0190F9890}
+		{10D27914-D968-46DE-B086-06AED982421D} = {A025E1AB-1615-447D-8616-43B0190F9890}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0EB1ADA-3CE4-403E-8B11-814C506ABD4B}
