@@ -27,11 +27,12 @@ namespace BudgetCast.Dashboard.ReadAccessors
             var items = await _context.ReceiptsCollection
                 .AsQueryable()
                 .Where(r => r.CampaignId == campaignId)
+                .OrderByDescending(r => r.Date)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .OrderByDescending(r => r.Id)
                 .Select(r => new BasicReceipt
                 {
+                    Id = r.Id,
                     Tags = r.Tags,
                     TotalItems = r.ReceiptItems.Length,
                     TotalAmount = r.ReceiptItems.Sum(ri => ri.Price),

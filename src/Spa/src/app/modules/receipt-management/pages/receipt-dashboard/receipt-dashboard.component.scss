@@ -1,3 +1,41 @@
-mat-chip-list mat-chip {
-  cursor: pointer;
+.content-wrap {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.9rem; 
+
+  > * {
+    margin-top: 0.9rem;
+  }
+}
+
+@mixin colums($cols: 1, $baseSize: 320px) {
+  .receipts-grid {
+    grid-template-columns: repeat($cols, minmax($baseSize, auto));
+  }
+}
+
+.receipts-grid {
+  display: grid;  
+  @include colums(6);
+  grid-gap: 0.9rem 0.9rem;  
+}
+
+@media (max-width: 2240px) {
+  @include colums(5);  
+}
+
+@media (max-width: 1900px) {
+  @include colums(4);  
+}
+
+@media (max-width: 1560px) {
+  @include colums(3);
+}
+
+@media (max-width: 1220px) {
+  @include colums(2, 280px);  
+}
+
+@media (max-width: 599px) {
+  @include colums(1, 280px);  
 }

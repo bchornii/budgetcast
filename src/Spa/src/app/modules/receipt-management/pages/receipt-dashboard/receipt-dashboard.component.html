@@ -1,1 +1,20 @@
-<p>Dashboard works!</p>
+<div class="content-wrap">
+    <div class="receipts-grid">
+        <ng-container *ngFor="let item of items">        
+            <app-receipt-card                    
+                    [receipt]="item"
+                    (onMore)="onMore(item.id)"
+            ></app-receipt-card>
+        </ng-container>        
+    </div>
+    <mat-paginator 
+        [length]="total"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"    
+        [showFirstLastButtons]="true"
+        (page)="onPage($event)">
+    </mat-paginator>
+</div>
+
+
+<app-spinner></app-spinner>

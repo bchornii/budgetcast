@@ -8,4 +8,4 @@ export enum ResponseStatus {
 	ERROR = 500
 }
 
-export const SMALL_WIDTH_BREAKPOINT = 720;
+export const SMALL_WIDTH_BREAKPOINT = 820;

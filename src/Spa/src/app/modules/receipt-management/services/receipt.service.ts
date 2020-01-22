@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/services/base-data.service';
 import { AddBasicReceipt } from '../pages/models/add-receipt';
+import { PageResult } from 'src/app/models/page-result';
+import { BasicReceipt } from '../pages/models/basic-receipt';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +49,21 @@ export class RecipeService extends BaseService {
       `${environment.api.recipesApi.campaigns}`, { params }).pipe(
       catchError(this.handleError)
     );
+  }
+
+  getBasicReceipts(campaign: string, page = 1, pageSize = 10): Observable<PageResult<BasicReceipt>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    if(campaign) {
+      params = params.set('campaignName', campaign);
+    }    
+
+    return this.httpClient.get<PageResult<BasicReceipt>>(
+      `${environment.api.recipesApi.basicReceipts}`, {params}).pipe(
+        catchError(this.handleError)
+      );
   }
 
   addBasicReceipt(receipt: AddBasicReceipt): Observable<any> {

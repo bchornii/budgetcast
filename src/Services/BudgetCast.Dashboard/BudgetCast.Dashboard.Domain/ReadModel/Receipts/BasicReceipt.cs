@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BudgetCast.Dashboard.Domain.ReadModel.Receipts
 {
     public class BasicReceipt
     {
+        public string Id { get; set; }
         public string CreatedBy { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
