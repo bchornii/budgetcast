@@ -1,16 +1,25 @@
-.content-wrap {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.9rem; 
-
-  > * {
-    margin-top: 0.9rem;
-  }
-}
-
 @mixin colums($cols: 1, $baseSize: 320px) {
   .receipts-grid {
     grid-template-columns: repeat($cols, minmax($baseSize, auto));
+  }
+}
+
+.content-wrap {
+  display: flex;
+  flex-direction: column;
+  
+  > * {
+    margin-top: 0.9rem;
+    
+    &:last-child {
+      margin-bottom: 0.9rem;
+    }
+  }  
+}
+
+.receipts-header {
+  &__total {
+    font-weight: 600;    
   }
 }
 

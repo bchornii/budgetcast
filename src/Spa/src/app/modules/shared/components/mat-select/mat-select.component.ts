@@ -33,17 +33,42 @@ export class MatSelectComponent extends MatFormElement implements OnInit, OnDest
   @Input() label: string;
   @Input() errMsg = 'Invalid input.';
   @Input() isMultiple = false;
-  @Input() isDisabled = false;
-  @Input() options = [];
-  @Input() hasDefault = false;
-  @Input() defaultOption = 'None';
+  @Input() isDisabled = false;  
+  @Input() hasDefault = false;  
   @Input() asValue = false;
+  @Input() set defaultOption(value) {
+    if(!value) {
+      this.innerDefaultOption = new KeyValuePair(0, 'None');
+    } else {
+      this.innerDefaultOption = value;
+    }
+  };
+  @Input() set options(value) {
+    if (!isArray(value) || 
+        isNull(value) || 
+        isUndefined(value)) {
+      this.innerOptions = [];
+      return;
+    }
+
+    if (value.some(o => isString(o))) {
+      this.innerOptions = value.map(
+        (v: string, i: number) => new KeyValuePair(i, v));
+      return;
+    }
+
+    if (value.some(o => isObject(o))) {
+      this.innerOptions = value;
+    }
+  };
+  @Output() onSelection = new EventEmitter<any>();
 
   @ViewChild('input', { static: false }) input: ElementRef;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
   
+  innerDefaultOption: KeyValuePair;
   innerOptions: KeyValuePair[];
 
   constructor(public elementRef: ElementRef,
@@ -52,20 +77,6 @@ export class MatSelectComponent extends MatFormElement implements OnInit, OnDest
   }
 
   ngOnInit() {
-    if (!isArray(this.options) || 
-        isNull(this.options) || 
-        isUndefined(this.options)) {
-      this.innerOptions = [];
-    }
-
-    if (this.options.some(o => isString(o))) {
-      this.innerOptions = this.options.map(
-        (v: string, i: number) => new KeyValuePair(i, v));
-    }
-
-    if (this.options.some(o => isObject(o))) {
-      this.innerOptions = this.options;
-    }
   }
 
   ngOnDestroy() {
@@ -76,5 +87,9 @@ export class MatSelectComponent extends MatFormElement implements OnInit, OnDest
     this.elementRef.nativeElement.focus = () => {
       this.input.nativeElement.focus();
     };
+  }
+
+  onSelect($event) {
+    this.onSelection.emit($event.value);    
   }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BudgetCast.Dashboard.Domain.ReadModel.Campaign;
+using BudgetCast.Dashboard.Domain.ReadModel.Campaigns;
 using BudgetCast.Dashboard.Queries.Queries;
 using BudgetCast.Dashboard.Queries.Results;
 using MediatR;

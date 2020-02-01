@@ -8,6 +8,7 @@ namespace BudgetCast.Dashboard.Queries.Queries
     public class BasicReceiptsQuery : IRequest<
         QueryResult<PageResult<BasicReceipt>>>
     {
+        public string UserId { get; set; }
         public string CampaignName { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }

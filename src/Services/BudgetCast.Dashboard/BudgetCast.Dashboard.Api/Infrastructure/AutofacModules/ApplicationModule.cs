@@ -2,7 +2,7 @@
 using BudgetCast.Dashboard.Domain.Aggregates.Campaigns;
 using BudgetCast.Dashboard.Domain.Aggregates.Receipting;
 using BudgetCast.Dashboard.Domain.AnemicModel;
-using BudgetCast.Dashboard.Domain.ReadModel.Campaign;
+using BudgetCast.Dashboard.Domain.ReadModel.Campaigns;
 using BudgetCast.Dashboard.Domain.ReadModel.Receipts;
 using BudgetCast.Dashboard.Domain.ReadModel.Tags;
 using BudgetCast.Dashboard.ReadAccessors;

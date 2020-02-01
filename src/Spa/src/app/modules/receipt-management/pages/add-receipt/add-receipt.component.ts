@@ -1,3 +1,4 @@
+import { CampaignService } from './../../services/campaign.service';
 import { NgModel } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
@@ -27,6 +28,7 @@ export class AddReceiptComponent implements OnInit {
   addBasicReceipt = new AddBasicReceipt();
 
   constructor(private recipeService: RecipeService,
+              private campaignService: CampaignService,
               private router: Router,
               private toastr: ToastrService) { }
 
@@ -45,7 +47,7 @@ export class AddReceiptComponent implements OnInit {
 
   onCampaignModelChange(data) {
     this.campaignsLoading = true;
-    this.recipeService.getCampaigns(data).pipe(
+    this.campaignService.getCampaigns(data).pipe(
       finalize(() => this.campaignsLoading = false)
     )
       .subscribe(r => this.campaignOptions = r);

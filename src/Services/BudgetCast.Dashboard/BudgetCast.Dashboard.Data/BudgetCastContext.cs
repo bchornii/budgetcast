@@ -17,6 +17,7 @@ namespace BudgetCast.Dashboard.Data
 
         #region Read models
         public IMongoCollection<Domain.ReadModel.Receipts.Receipt> ReceiptsCollection { get; set; }
+        public IMongoCollection<Domain.ReadModel.Campaigns.Campaign> CampaignsCollection { get; set; }
         #endregion
 
         #region Entity models
@@ -38,6 +39,8 @@ namespace BudgetCast.Dashboard.Data
             DefaultTags = database.GetCollection<DefaultTag>(nameof(DefaultTags));
 
             ReceiptsCollection = database.GetCollection<Domain.ReadModel.Receipts.Receipt>(nameof(Receipts));
+
+            CampaignsCollection = database.GetCollection<Domain.ReadModel.Campaigns.Campaign>(nameof(Campaigns));
         }
 
         public MongoDbSet<T> GetDbSet<T>() where T : AggregateRoot

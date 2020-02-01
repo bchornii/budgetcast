@@ -7,6 +7,7 @@ import { BaseService } from 'src/app/services/base-data.service';
 import { AddBasicReceipt } from '../pages/models/add-receipt';
 import { PageResult } from 'src/app/models/page-result';
 import { BasicReceipt } from '../pages/models/basic-receipt';
+import { TotalsPerCampaign } from '../pages/models/totals-per-campaign';
 
 @Injectable({
   providedIn: 'root'
@@ -34,23 +35,6 @@ export class RecipeService extends BaseService {
     );
   }
 
-  getCampaigns(term?: string, amount: number = 10): Observable<string[]> {
-    let params = new HttpParams();
-
-    if (amount) {
-      params = params.set('amount', amount.toString());
-    }
-
-    if (term) {
-      params = params.set('term', term);
-    }
-
-    return this.httpClient.get<string[]>(
-      `${environment.api.recipesApi.campaigns}`, { params }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
   getBasicReceipts(campaign: string, page = 1, pageSize = 10): Observable<PageResult<BasicReceipt>> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -62,6 +46,13 @@ export class RecipeService extends BaseService {
 
     return this.httpClient.get<PageResult<BasicReceipt>>(
       `${environment.api.recipesApi.basicReceipts}`, {params}).pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getTotalsPerCampaign(campaign: string) : Observable<TotalsPerCampaign>{
+    return this.httpClient.get<TotalsPerCampaign>(
+      environment.api.recipesApi.totalPerCampaign.replace('{{campaignName}}', campaign)).pipe(
         catchError(this.handleError)
       );
   }

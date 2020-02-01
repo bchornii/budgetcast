@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Data;
-using BudgetCast.Dashboard.Domain.Aggregates.Campaigns;
-using BudgetCast.Dashboard.Domain.ReadModel.Campaign;
+using BudgetCast.Dashboard.Domain.ReadModel.Campaigns;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using Campaign = BudgetCast.Dashboard.Domain.Aggregates.Campaigns.Campaign;
 
 
 namespace BudgetCast.Dashboard.ReadAccessors
@@ -35,6 +37,17 @@ namespace BudgetCast.Dashboard.ReadAccessors
                 .Sort(new BsonDocument("Name", 1))
                 .Project<CampaignName>("{Name : 1, _id: 0}")
                 .ToListAsync()).Select(t => t.Name).ToArray();
+        }
+
+        public async Task<KeyValuePair<string, string>[]> GetCampaigns(string userId)
+        {
+            return (await _context.CampaignsCollection
+                .AsQueryable()
+                .Where(c => c.CreatedBy == userId)
+                .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new { c.Id, c.Name })
+                .ToListAsync()).Select(r => new 
+                    KeyValuePair<string, string>(r.Id, r.Name)).ToArray();
         }
 
         private FilterDefinition<Campaign> GetFilter(string term)

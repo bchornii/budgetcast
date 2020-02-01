@@ -19,13 +19,20 @@ const accountApi = {
 
 const recipesApi = {
   tags: `${apiUrl}/receipt/tags`,
-  addBasic: `${apiUrl}/receipt/addBasic`,
-  campaigns: `${apiUrl}/receipt/campaigns`
+  addBasic: `${apiUrl}/receipt/addBasic`,  
+  basicReceipts: `${apiUrl}/receipt/basicReceipts`,
+  totalPerCampaign: `${apiUrl}/receipt/total/{{campaignName}}`
+};
+
+const campaignsApi = {
+  all: `${apiUrl}/campaigns`,
+  search: `${apiUrl}/campaigns/search`
 };
 
 const api = {
   accountApi,
-  recipesApi
+  recipesApi,
+  campaignsApi
 };
 
 export const environment = {

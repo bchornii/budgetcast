@@ -23,10 +23,11 @@
                     [disabled]="isDisabled"
                     [formControl]="inputControl"
                     (blur)="onBlur($event)"
-                    (focus)="onFocus($event)">
+                    (focus)="onFocus($event)"
+                    (selectionChange)="onSelect($event)">
             <mat-option 
                 *ngIf="hasDefault">
-                {{defaultOption}}
+                {{innerDefaultOption.value}}
             </mat-option>
             <mat-option 
                 *ngFor="let option of innerOptions" 

@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Dashboard.Domain.ReadModel.Campaign
+﻿namespace BudgetCast.Dashboard.Domain.ReadModel.Campaigns
 {
     public class CampaignName
     {

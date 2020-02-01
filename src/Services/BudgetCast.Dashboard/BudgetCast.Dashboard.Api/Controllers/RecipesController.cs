@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace BudgetCast.Dashboard.Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ReceiptController : ControllerBase
     {
@@ -37,20 +37,6 @@ namespace BudgetCast.Dashboard.Api.Controllers
             return result.ToHttpActionResult();
         }
 
-        [HttpGet("campaigns")]
-        public async Task<IActionResult> GetCampaigns(
-            [FromQuery] string term,
-            [FromQuery] int amount)
-        {
-            var result = await _mediator
-                .Send(new DefaultCampaignsQuery
-                {
-                    Term = term,
-                    Amount = amount
-                });
-            return result.ToHttpActionResult();
-        }
-
         [HttpGet("basicReceipts")]
         public async Task<IActionResult> GetBasicReceipts(
             [FromQuery] string campaignName,
@@ -61,8 +47,21 @@ namespace BudgetCast.Dashboard.Api.Controllers
             {
                 CampaignName = campaignName,
                 Page = page,
-                PageSize = pageSize
+                PageSize = pageSize,
+                UserId = HttpContext.GetUserId()
             });
+            return result.ToHttpActionResult();
+        }
+
+        [HttpGet("total/{campaignName}")]
+        public async Task<IActionResult> GetTotalSpentAmount(string campaignName)
+        {
+            var result = await _mediator.Send(
+                new TotalSpentAmountPerCampaignQuery
+                {
+                    CampaignName = campaignName,
+                    UserId = HttpContext.GetUserId()
+                });
             return result.ToHttpActionResult();
         }
 

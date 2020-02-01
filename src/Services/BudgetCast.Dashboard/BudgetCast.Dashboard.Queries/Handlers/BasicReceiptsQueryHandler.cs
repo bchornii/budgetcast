@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using BudgetCast.Dashboard.Domain.ReadModel.Campaign;
+using BudgetCast.Dashboard.Domain.ReadModel.Campaigns;
 using BudgetCast.Dashboard.Domain.ReadModel.General;
 using BudgetCast.Dashboard.Domain.ReadModel.Receipts;
 using BudgetCast.Dashboard.Queries.Queries;
@@ -33,7 +33,7 @@ namespace BudgetCast.Dashboard.Queries.Handlers
             var campaignId = await _campaignReadAccessor
                 .GetIdByName(request.CampaignName);
             var result = await _receiptReadAccessor
-                .GetBasicReceipts(campaignId, request.Page, request.PageSize);
+                .GetBasicReceipts(campaignId, request.Page, request.PageSize, request.UserId);
             
             return GetSuccessResult(result);
         }
