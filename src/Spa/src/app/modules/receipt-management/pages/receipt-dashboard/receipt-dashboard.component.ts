@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
 import { BasicReceipt } from '../models/basic-receipt';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
-import { finalize, concatMap, tap, map } from 'rxjs/operators';
-import { PageEvent } from '@angular/material';
+import { finalize, concatMap, tap } from 'rxjs/operators';
+import { PageEvent, MatDialog } from '@angular/material';
 import { CampaignService } from '../../services/campaign.service';
 import { Subject, forkJoin } from 'rxjs';
 import { TotalsPerCampaign } from '../models/totals-per-campaign';
-import { KeyValuePair } from 'src/app/util/util';
+import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
 
 @Component({
   selector: 'app-receipt-dashboard',
@@ -28,7 +28,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   total: number;
   items: BasicReceipt[] = [];
-  totalsPerCampaign: TotalsPerCampaign;
+  totalsPerCampaign: TotalsPerCampaign;  
 
   pageSizeMediaMatchers: KeyValue<MediaQueryList, number>[] = [
     {
@@ -45,10 +45,11 @@ export class ReceiptDashboardComponent implements OnInit {
     }
   ];
 
-  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
+  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;  
 
   constructor(private receiptService: RecipeService,
-    private campaignService: CampaignService) { }
+              private campaignService: CampaignService,
+              private matDialog: MatDialog) { }
 
   ngOnInit() {
     const matcher = this.pageSizeMediaMatchers.find(m => m.key.matches);
@@ -70,8 +71,7 @@ export class ReceiptDashboardComponent implements OnInit {
       ])),
 
       finalize(() => this.spinner.hide())
-    )
-      .subscribe(([pageResult, totalsPerCampaign]) => {
+    ).subscribe(([pageResult, totalsPerCampaign]) => {
         this.total = pageResult.total;
         this.items = pageResult.items;
         this.totalsPerCampaign = totalsPerCampaign;
@@ -127,6 +127,12 @@ export class ReceiptDashboardComponent implements OnInit {
       this.total = pageResult.total;
       this.items = pageResult.items;
       this.totalsPerCampaign = totalsPerCampaign;
+    });
+  }
+
+  openTotals() {
+    this.matDialog.open(CampaignTotalsComponent, {
+      data: this.totalsPerCampaign.tagTotalPair
     });
   }
 }

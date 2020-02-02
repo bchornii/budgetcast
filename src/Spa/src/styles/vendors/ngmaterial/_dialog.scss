@@ -1,0 +1,20 @@
+
+app-campaign-totals {
+    .mat-dialog-content {
+        margin: 0;
+        padding: 0;
+    }
+
+    th.mat-header-cell:last-of-type {
+        padding-right: 0;
+    }
+
+    tr.mat-footer-row, tr.mat-row {
+        height: 36px;
+    }
+
+    .mat-header-cell {
+        font-size: 0.8rem;
+        color: black;
+    }
+}

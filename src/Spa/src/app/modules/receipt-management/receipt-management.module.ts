@@ -7,13 +7,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReceiptDashboardComponent } from './pages/receipt-dashboard/receipt-dashboard.component';
 import { ReceiptManagementComponent } from './pages/receipt-management/receipt-management.component';
 import { ReceiptCardComponent } from './components/receipt-card/receipt-card.component';
+import { CampaignTotalsComponent } from './components/campaign-totals/campaign-totals.component';
 
 @NgModule({
   declarations: [
     AddReceiptComponent,
     ReceiptDashboardComponent,
     ReceiptManagementComponent,
-    ReceiptCardComponent
+    ReceiptCardComponent,
+    CampaignTotalsComponent
+  ],
+  entryComponents: [
+    CampaignTotalsComponent
   ],
   imports: [
     CommonModule,
