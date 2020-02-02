@@ -22,21 +22,6 @@ namespace BudgetCast.Dashboard.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("tags")]
-        public async Task<IActionResult> GetTags(
-            [FromQuery] string term, 
-            [FromQuery] int amount)
-        {
-            var result = await _mediator
-                .Send(new DefaultTagsQuery
-                {
-                    UserId = HttpContext.GetUserId(),
-                    Term = term,
-                    Amount = amount
-                });
-            return result.ToHttpActionResult();
-        }
-
         [HttpGet("basicReceipts")]
         public async Task<IActionResult> GetBasicReceipts(
             [FromQuery] string campaignName,
