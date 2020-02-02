@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BudgetCast.Dashboard.Domain.ReadModel.General;
 
 namespace BudgetCast.Dashboard.Domain.ReadModel.Receipts
@@ -9,5 +10,7 @@ namespace BudgetCast.Dashboard.Domain.ReadModel.Receipts
             string campaignId, int page, int pageSize, string userId);
 
         Task<TotalsPerCampaign> GetTotals(string campaignId, string userId);
+
+        Task<Receipt> GetReceiptDetails(string id);
     }
 }

@@ -8,6 +8,7 @@ import { ReceiptDashboardComponent } from './pages/receipt-dashboard/receipt-das
 import { ReceiptManagementComponent } from './pages/receipt-management/receipt-management.component';
 import { ReceiptCardComponent } from './components/receipt-card/receipt-card.component';
 import { CampaignTotalsComponent } from './components/campaign-totals/campaign-totals.component';
+import { ReceiptDetailsComponent } from './pages/receipt-details/receipt-details.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CampaignTotalsComponent } from './components/campaign-totals/campaign-t
     ReceiptDashboardComponent,
     ReceiptManagementComponent,
     ReceiptCardComponent,
-    CampaignTotalsComponent
+    CampaignTotalsComponent,
+    ReceiptDetailsComponent
   ],
   entryComponents: [
     CampaignTotalsComponent

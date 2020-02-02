@@ -20,7 +20,8 @@ export const dashboard = {
     receipt: {
         addBasic: `${baseUrl}/receipt/addBasic`,  
         basicReceipts: `${baseUrl}/receipt/basicReceipts`,
-        totalPerCampaign: `${baseUrl}/receipt/total/{{campaignName}}`
+        totalPerCampaign: `${baseUrl}/receipt/total/{{campaignName}}`,
+        details: `${baseUrl}/receipt/{{id}}/details`
     },
     
 

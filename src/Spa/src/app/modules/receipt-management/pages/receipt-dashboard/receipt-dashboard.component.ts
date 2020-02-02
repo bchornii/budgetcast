@@ -8,6 +8,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { Subject, forkJoin } from 'rxjs';
 import { TotalsPerCampaign } from '../models/totals-per-campaign';
 import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-receipt-dashboard',
@@ -49,7 +50,8 @@ export class ReceiptDashboardComponent implements OnInit {
 
   constructor(private receiptService: RecipeService,
               private campaignService: CampaignService,
-              private matDialog: MatDialog) { }
+              private matDialog: MatDialog,
+              private router: Router) { }
 
   ngOnInit() {
     const matcher = this.pageSizeMediaMatchers.find(m => m.key.matches);
@@ -78,8 +80,10 @@ export class ReceiptDashboardComponent implements OnInit {
       });
   }
 
-  onMore(id: string) {
-    console.log(id);
+  onMore(receiptId: string) {
+    this.spinner.show();
+    this.router.navigate(['receipts/receipt-details', receiptId])
+      .finally(() => this.spinner.hide());
   }
 
   onPage($event: PageEvent) {

@@ -22,6 +22,16 @@ namespace BudgetCast.Dashboard.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> GetReceiptItems(string id)
+        {
+            var result = await _mediator.Send(new ReceiptDetailsQuery
+            {
+                ReceiptId = id
+            });
+            return result.ToHttpActionResult();
+        }
+
         [HttpGet("basicReceipts")]
         public async Task<IActionResult> GetBasicReceipts(
             [FromQuery] string campaignName,

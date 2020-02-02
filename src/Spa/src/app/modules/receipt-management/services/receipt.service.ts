@@ -8,6 +8,8 @@ import { PageResult } from 'src/app/models/page-result';
 import { BasicReceipt } from '../pages/models/basic-receipt';
 import { TotalsPerCampaign } from '../pages/models/totals-per-campaign';
 import { dashboard } from 'src/app/util/constants/api-endpoints';
+import { ReceiptItem } from '../pages/models/receipt-item';
+import { Receipt } from '../pages/models/receipt';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +40,13 @@ export class RecipeService extends BaseService {
       dashboard.receipt.totalPerCampaign.replace('{{campaignName}}', campaign)).pipe(
         catchError(this.handleError)
       );
+  }
+
+  getReceiptDetails(id: string) : Observable<Receipt> {
+    return this.httpClient.get<Receipt>(
+      dashboard.receipt.details.replace('{{id}}', id)).pipe(
+        catchError(this.handleError)
+    );
   }
 
   addBasicReceipt(receipt: AddBasicReceipt): Observable<any> {

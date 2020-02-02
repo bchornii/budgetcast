@@ -1,5 +1,6 @@
 
-app-campaign-totals {
+app-campaign-totals,
+app-receipt-details {
     .mat-dialog-content {
         margin: 0;
         padding: 0;
@@ -16,5 +17,13 @@ app-campaign-totals {
     .mat-header-cell {
         font-size: 0.8rem;
         color: black;
+    }
+}
+
+app-receipt-details {
+    .receipt-details-items {        
+        .mat-header-row {
+            height: 42px;
+        }
     }
 }

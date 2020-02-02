@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Data;
 using BudgetCast.Dashboard.Domain.ReadModel.General;
 using BudgetCast.Dashboard.Domain.ReadModel.Receipts;
 using MongoDB.Bson;
-using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -80,6 +78,14 @@ namespace BudgetCast.Dashboard.ReadAccessors
                 TagTotalPair = totalsPerTags.Select(r => new KeyValuePair<
                     string, decimal>(r.Tag, r.Total)).ToArray()
             };
+        }
+
+        public async Task<Receipt> GetReceiptDetails(string id)
+        {
+            return await _context.ReceiptsCollection
+                .AsQueryable()
+                .Where(r => r.Id == id)
+                .FirstOrDefaultAsync();
         }
     }
 }
