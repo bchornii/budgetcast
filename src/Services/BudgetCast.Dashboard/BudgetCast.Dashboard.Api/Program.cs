@@ -1,4 +1,5 @@
-﻿using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
+﻿using Autofac.Extensions.DependencyInjection;
+using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Microsoft.Extensions.Hosting;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -15,7 +17,7 @@ namespace BudgetCast.Dashboard.Api
         {
             try
             {
-                CreateWebHostBuilder(args).Build()
+                CreateHostBuilder(args).Build()
                     .MigrateDbContext<IdentityDbContext>((_, __) => { })
                     .Run();                
                 return 0;
@@ -26,24 +28,29 @@ namespace BudgetCast.Dashboard.Api
             }            
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, config) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    if (context.HostingEnvironment.IsProduction())
+                    webBuilder.ConfigureAppConfiguration((context, config) =>
                     {
-                        var builtConfig = config.Build();
+                        if (context.HostingEnvironment.IsProduction())
+                        {
+                            var builtConfig = config.Build();
 
-                        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                        var keyVaultClient = new KeyVaultClient(
-                            new KeyVaultClient.AuthenticationCallback(
-                                azureServiceTokenProvider.KeyVaultTokenCallback));
+                            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                            var keyVaultClient = new KeyVaultClient(
+                                new KeyVaultClient.AuthenticationCallback(
+                                    azureServiceTokenProvider.KeyVaultTokenCallback));
 
-                        config.AddAzureKeyVault(
-                            $"https://{builtConfig["KeyVaultName"]}.vault.azure.net/",
-                            keyVaultClient, new DefaultKeyVaultSecretManager());
-                    }
-                })
-                .UseStartup<Startup>();
+                            config.AddAzureKeyVault(
+                                $"https://{builtConfig["KeyVaultName"]}.vault.azure.net/",
+                                keyVaultClient, new DefaultKeyVaultSecretManager());
+                        }
+                    })
+                    .UseStartup<Startup>();
+
+                });
     }
 }
