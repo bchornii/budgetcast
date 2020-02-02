@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from 'src/app/services/base-data.service';
-import { catchError, map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { KeyValuePair } from 'src/app/util/util';
+import { dashboard } from 'src/app/util/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CampaignService extends BaseService {
 
   getAllCampaigns(): Observable<KeyValuePair[]> {
     return this.httpClient.get<KeyValuePair[]>(
-      `${environment.api.campaignsApi.all}`).pipe(      
+      `${dashboard.campaign.all}`).pipe(      
         catchError(this.handleError)
     );
   }
@@ -35,7 +35,7 @@ export class CampaignService extends BaseService {
     }
 
     return this.httpClient.get<string[]>(
-      `${environment.api.campaignsApi.search}`, { params }).pipe(
+      `${dashboard.campaign.search}`, { params }).pipe(
       catchError(this.handleError)
     );
   }

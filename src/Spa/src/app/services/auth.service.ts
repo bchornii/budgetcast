@@ -3,14 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, catchError, flatMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { UserIdentity } from '../models/check-login.model';
-import { UserProfile } from '../modules/user-account/models/user-profile';
 import { UserLogin } from '../models/user-login';
 import { UserRegistration } from '../models/user-registration';
 import { ForgotPassword } from '../models/forgot-password';
 import { ResetPassword } from '../models/reset-password';
 import { BaseService } from './base-data.service';
+import { dashboard } from '../util/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +32,7 @@ export class AuthService extends BaseService {
 
   checkUserAuthenticationStatus(): Observable<UserIdentity> {
     return this.httpClient.get<UserIdentity>(
-      `${environment.api.accountApi.isAuthenticated}`).pipe(tap(r => {
+      `${dashboard.account.isAuthenticated}`).pipe(tap(r => {
         this.userIdentitySubject.next(r);
       }));
   }
@@ -43,44 +42,44 @@ export class AuthService extends BaseService {
   }
 
   login(userLogin: UserLogin): Observable<any> {
-    return this.httpClient.post(`${environment.api.accountApi.login}`, userLogin).pipe(
+    return this.httpClient.post(`${dashboard.account.login}`, userLogin).pipe(
       flatMap(_ => this.checkUserAuthenticationStatus()),
       catchError(this.handleError)
     );
   }
 
   googleLogin(): void {
-    this.document.location.href = `${environment.api.accountApi.signInWithGoogle}`;
+    this.document.location.href = `${dashboard.account.signInWithGoogle}`;
   }
 
   facebookLogin(): void {
-    this.document.location.href = `${environment.api.accountApi.signInWithFacebook}`;
+    this.document.location.href = `${dashboard.account.signInWithFacebook}`;
   }
 
   logout() {
     return this.httpClient.post(
-      `${environment.api.accountApi.logout}`, {}).pipe(
+      `${dashboard.account.logout}`, {}).pipe(
         tap(_ => this.invalidateUserAuthentication())
       );
   }
 
   register(userRegistration: UserRegistration) : Observable<any> {
     return this.httpClient.post(
-      `${environment.api.accountApi.register}`, userRegistration).pipe(
+      `${dashboard.account.register}`, userRegistration).pipe(
       catchError(this.handleError)
     );
   }
 
   forgotPassword(forgotPassword: ForgotPassword) {
     return this.httpClient.post(
-      `${environment.api.accountApi.forgotPassword}`, forgotPassword).pipe(
+      `${dashboard.account.forgotPassword}`, forgotPassword).pipe(
         catchError(this.handleError)
       );
   }
 
   resetPassword(resetPassword: ResetPassword) {
     return this.httpClient.post(
-      `${environment.api.accountApi.resetPassword}`, resetPassword).pipe(
+      `${dashboard.account.resetPassword}`, resetPassword).pipe(
         catchError(this.handleError)
       );
   }
