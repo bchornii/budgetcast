@@ -21,22 +21,24 @@ using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace BudgetCast.Dashboard.Api
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Env { get; }
+        public IWebHostEnvironment Env { get; }
 
         public Startup(IConfiguration configuration,
-            IHostingEnvironment environment)
+            IWebHostEnvironment environment)
         {
             Configuration = configuration;
             Env = environment;
         }        
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper();
 
@@ -48,14 +50,12 @@ namespace BudgetCast.Dashboard.Api
                 .AddAspNetIdentity(Configuration)
                 .AddAuthentication(Configuration)
                 .AddMongoContext(Configuration);
+        }
 
-            var container = new ContainerBuilder();
-            container.Populate(services);
-
-            container.RegisterModule(new ApplicationModule());
-            container.RegisterModule(new MediatorModule());
-
-            return new AutofacServiceProvider(container.Build());
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new ApplicationModule());
+            builder.RegisterModule(new MediatorModule());
         }
 
         public void Configure(IApplicationBuilder app)
@@ -66,7 +66,6 @@ namespace BudgetCast.Dashboard.Api
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("CorsPolicy");
 
             if (Env.IsDevelopment())
             {
@@ -77,8 +76,17 @@ namespace BudgetCast.Dashboard.Api
                 });
             }
 
+            app.UseRouting();
+            app.UseCors("CorsPolicy");
+
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+
+            });
         }
     }
 
@@ -120,12 +128,14 @@ namespace BudgetCast.Dashboard.Api
                         .AllowCredentials());
             });
 
-            services.AddMvc()
+            services.AddControllers()
                 .AddFluentValidation(options =>
                 {
                     options.RegisterValidatorsFromAssemblyContaining<Startup>();
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver());
 
             return services;
         }

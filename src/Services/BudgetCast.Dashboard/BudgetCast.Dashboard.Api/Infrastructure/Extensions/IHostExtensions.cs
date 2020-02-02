@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Data.SqlClient;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
 {
-    public static class IWebHostExtensions
+    public static class IHostExtensions
     {
-        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, 
+        public static IHost MigrateDbContext<TContext>(this IHost webHost, 
             Action<TContext, IServiceProvider> seeder) where TContext : DbContext
         {
             using (var scope = webHost.Services.CreateScope())
