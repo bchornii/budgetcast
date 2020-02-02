@@ -2,12 +2,13 @@
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using BudgetCast.Dashboard.Queries.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetCast.Dashboard.Api.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class CampaignsController : ControllerBase
     {

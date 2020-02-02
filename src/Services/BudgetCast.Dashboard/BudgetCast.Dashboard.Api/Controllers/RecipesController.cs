@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace BudgetCast.Dashboard.Api.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ReceiptController : ControllerBase
     {
