@@ -3,12 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>9af32aa5-6875-4ea6-b5ea-6baa7208fea5</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/2828a3fe-c762-4a43-ab78-48986e4f1772/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/BudgetCast.Dashboard.Api</ApplicationInsightsResourceId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Connected Services\Application Insights\ConnectedService.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.1" />
     <PackageReference Include="MailKit" Version="2.4.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
 
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.0" />
@@ -41,6 +47,10 @@
     <ProjectReference Include="..\BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Repository\BudgetCast.Dashboard.Repository.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.WriteAccessors\BudgetCast.Dashboard.WriteAccessors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

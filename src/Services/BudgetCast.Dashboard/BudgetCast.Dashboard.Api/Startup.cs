@@ -49,7 +49,8 @@ namespace BudgetCast.Dashboard.Api
                 .AddSwagger(Configuration)
                 .AddAspNetIdentity(Configuration)
                 .AddAuthentication(Configuration)
-                .AddMongoContext(Configuration);
+                .AddMongoContext(Configuration)
+                .AddApplicationInsightsTelemetry();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
