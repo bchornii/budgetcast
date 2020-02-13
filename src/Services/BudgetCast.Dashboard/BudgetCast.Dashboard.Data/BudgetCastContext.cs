@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Security.Authentication;
 using BudgetCast.Dashboard.Domain.Aggregates.Campaigns;
 using BudgetCast.Dashboard.Domain.Aggregates.Receipting;
 using BudgetCast.Dashboard.Domain.AnemicModel;
@@ -27,8 +28,13 @@ namespace BudgetCast.Dashboard.Data
 
         public BudgetCastContext(string connectionString, IMediator mediator, string userId)
         {
-            var client = new MongoClient(connectionString);
-            var database = client.GetDatabase("BudgetCastDashboard");
+            var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+            settings.SslSettings = new SslSettings
+            {
+                EnabledSslProtocols = SslProtocols.Tls12
+            };
+            var mongoClient = new MongoClient(settings);
+            var database = mongoClient.GetDatabase("BudgetCastDashboard");
 
             Receipts = new MongoDbSet<Receipt>(
                 database.GetCollection<Receipt>(nameof(Receipts)), mediator, userId);

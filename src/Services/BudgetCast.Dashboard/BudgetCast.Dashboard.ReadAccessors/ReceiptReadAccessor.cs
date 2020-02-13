@@ -48,29 +48,29 @@ namespace BudgetCast.Dashboard.ReadAccessors
 
         public async Task<TotalsPerCampaign> GetTotals(string campaignId, string userId)
         {
-            var totalAmount = await _context.ReceiptsCollection
+            var totalAmount = (await _context.ReceiptsCollection
                 .AsQueryable()
                 .Where(r => r.CampaignId == campaignId && r.CreatedBy == userId)
-                .SelectMany(r => r.ReceiptItems)
-                .SumAsync(ri => ri.Quantity * ri.Price);
+                .SelectMany(r => r.ReceiptItems).ToListAsync())
+                .Sum(ri => ri.Price * ri.Quantity);
 
-            var totalsPerTags = await _context.ReceiptsCollection
+            var totalsPerTags = (await _context.ReceiptsCollection
                 .AsQueryable()
                 .Where(r => r.CampaignId == campaignId && r.CreatedBy == userId)
                 .SelectMany(
                     r => r.Tags, (r, tag) => new
                     {
                         Tag = tag, 
-                        RecipeTotal = r.ReceiptItems
-                            .Select(ri => ri.Price * ri.Quantity).Sum()
+                        RecipeItems = r.ReceiptItems
                     })
+                .ToListAsync())
                 .GroupBy(x => x.Tag)
                 .Select(g => new
                 {
                     Tag = g.Key,
-                    Total = g.Sum(i => i.RecipeTotal)
-                })
-                .ToListAsync();
+                    Total = g.SelectMany(x => x.RecipeItems)
+                        .Sum(i => i.Quantity * i.Price)
+                });
 
             return new TotalsPerCampaign
             {
