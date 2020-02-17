@@ -2,3 +2,5 @@
 db.Campaigns.createIndex({"CreatedAt": -1});
 
 db.Receipts.createIndex({"Date": -1});
+
+db.Tags.createIndex({"Name": 1});
