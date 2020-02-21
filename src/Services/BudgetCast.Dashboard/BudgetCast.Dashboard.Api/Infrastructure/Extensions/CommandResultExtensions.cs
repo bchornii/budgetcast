@@ -36,7 +36,7 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
             switch (commandResult.Status)
             {
                 case Success:
-                    return new OkObjectResult(commandResult.Value);
+                    return new OkObjectResult(commandResult.Result);
                 case Failed:
                     return new BadRequestObjectResult(commandResult.Errors);
                 case ValidationViolation:

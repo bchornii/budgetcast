@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using BudgetCast.Dashboard.Api.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BudgetCast.Dashboard.Api.ViewModels.Account
@@ -11,9 +12,9 @@ namespace BudgetCast.Dashboard.Api.ViewModels.Account
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
 
-        public IdentityUser GetUser()
+        public AppIdentityUser GetUser()
         {
-            return new IdentityUser
+            return new AppIdentityUser
             {
                 UserName = Email,
                 Email = Email

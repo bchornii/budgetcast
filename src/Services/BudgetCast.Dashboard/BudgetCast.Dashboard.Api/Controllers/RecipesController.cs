@@ -95,7 +95,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 if (campaignCreateResult.IsSuccess())
                 {
                     var receiptResult = await CreateBasicReceipt(
-                        model, campaignCreateResult.Value);
+                        model, campaignCreateResult.Result);
                     return receiptResult.ToHttpActionResult();
                 }
 

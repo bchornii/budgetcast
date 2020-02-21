@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,12 +10,14 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
+using BudgetCast.Dashboard.Api.Infrastructure.Filters;
+using BudgetCast.Dashboard.Api.Infrastructure.Migrations;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
+using BudgetCast.Dashboard.Api.Models;
 using BudgetCast.Dashboard.Data;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -55,7 +55,10 @@ namespace BudgetCast.Dashboard.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new ApplicationModule());
+            builder.RegisterModule(new ApplicationModule(
+                Configuration.GetSection("AzBlobStorageContainers").Get<AzBlobStorageContainersSettings>(),
+                Configuration.GetSection("AzBlobStorage").Get<AzBlobStorageSettings>(),
+                Configuration.GetSection("UploadProfileImage").Get<UploadFileSettings>()));
             builder.RegisterModule(new MediatorModule());
         }
 
@@ -138,6 +141,8 @@ namespace BudgetCast.Dashboard.Api
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
 
+            services.AddScoped<CompensationFilter>();
+
             return services;
         }
 
@@ -155,7 +160,7 @@ namespace BudgetCast.Dashboard.Api
         public static IServiceCollection AddAspNetIdentity(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<IdentityDbContext>(options =>
+            services.AddDbContext<AppIdentityContext>(options =>
             {
                 options.UseSqlServer(configuration["IdentityManagement:ConnectionString"],
                     sqlOptions =>
@@ -171,7 +176,7 @@ namespace BudgetCast.Dashboard.Api
             });
 
             services
-                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                .AddIdentity<AppIdentityUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 8;
                     options.Password.RequireNonAlphanumeric = false;
@@ -181,7 +186,7 @@ namespace BudgetCast.Dashboard.Api
 
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<AppIdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>

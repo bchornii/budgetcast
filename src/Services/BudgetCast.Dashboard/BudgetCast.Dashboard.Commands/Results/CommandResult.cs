@@ -11,7 +11,7 @@ namespace BudgetCast.Dashboard.Commands.Results
 
     public class CommandResult<T> : CommandResult
     {
-        public T Value { get; set; }
+        public T Result { get; set; }
     }
 
     public class CommandResult
@@ -44,7 +44,7 @@ namespace BudgetCast.Dashboard.Commands.Results
             new CommandResult<T>
             {
                 Status = ResultStatus.Success,
-                Value = value
+                Result = value
             };
 
         public static CommandResult GetFailedResult(string msg) =>

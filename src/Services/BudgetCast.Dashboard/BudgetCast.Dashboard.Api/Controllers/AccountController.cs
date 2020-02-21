@@ -1,5 +1,4 @@
-﻿using BudgetCast.Dashboard.Api.ViewModels;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
+using BudgetCast.Dashboard.Api.Models;
 using BudgetCast.Dashboard.Api.ViewModels.Account;
 
 namespace BudgetCast.Dashboard.Api.Controllers
@@ -18,15 +18,15 @@ namespace BudgetCast.Dashboard.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<AppIdentityUser> _signInManager;
+        private readonly UserManager<AppIdentityUser> _userManager;
         private readonly EmailService _emailService;
         private readonly ExternalIdentityProviders _externalIdentityProviders;
         private readonly UiLinks _uiLinks;
 
         public AccountController(
-            SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userManager,
+            SignInManager<AppIdentityUser> signInManager, 
+            UserManager<AppIdentityUser> userManager,
             EmailService emailService,
             IOptions<ExternalIdentityProviders> externalIdentityProvidersOptions,
             IOptions<UiLinks> uiLinksOptions)
@@ -73,7 +73,7 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
                 if (user == null)
                 {
-                    user = new IdentityUser
+                    user = new AppIdentityUser
                     {
                         UserName = email,
                         Email = email,
@@ -119,32 +119,6 @@ namespace BudgetCast.Dashboard.Api.Controllers
             }
 
             return BadRequest("User creation failed.");
-        }
-
-        [Authorize]
-        [HttpPost("updateProfile")]
-        public async Task<IActionResult> UpdateProfile(
-            [FromBody] UpdateProfileViewModel model)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
-
-            await RemoveClaimsAsync(user,
-                ClaimTypes.GivenName, ClaimTypes.Surname);
-
-            await _userManager.AddClaimsAsync(user, new[]
-            {
-                new Claim(ClaimTypes.GivenName, model.GivenName),
-                new Claim(ClaimTypes.Surname, model.SurName)
-            });
-
-            await _signInManager.RefreshSignInAsync(user);
-
-            return Ok();
         }
 
         [AllowAnonymous]
@@ -252,13 +226,6 @@ namespace BudgetCast.Dashboard.Api.Controllers
                 GivenName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
                 SurName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value
             });
-        }        
-
-        private async Task RemoveClaimsAsync(IdentityUser user, params string[] claimType)
-        {
-            var claims = await _userManager.GetClaimsAsync(user);
-            var claimsToRemove = claims.Where(c => claimType.Contains(c.Type));
-            await _userManager.RemoveClaimsAsync(user, claimsToRemove);
         }
     }
 }

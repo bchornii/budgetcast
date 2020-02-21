@@ -1,8 +1,7 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
-using Microsoft.AspNetCore;
+using BudgetCast.Dashboard.Api.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +17,8 @@ namespace BudgetCast.Dashboard.Api
             try
             {
                 CreateHostBuilder(args).Build()
-                    .MigrateDbContext<IdentityDbContext>((_, __) => { })
+                    .CreateBlobContainers()
+                    .MigrateDbContext<AppIdentityContext>((_, __) => { })
                     .Run();                
                 return 0;
             }

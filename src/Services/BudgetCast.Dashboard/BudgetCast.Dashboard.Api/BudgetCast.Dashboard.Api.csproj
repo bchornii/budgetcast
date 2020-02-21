@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\Migrations\BudgetCastMigrations\**" />
+    <Content Remove="Infrastructure\Migrations\BudgetCastMigrations\**" />
+    <EmbeddedResource Remove="Infrastructure\Migrations\BudgetCastMigrations\**" />
+    <None Remove="Infrastructure\Migrations\BudgetCastMigrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="Connected Services\Application Insights\ConnectedService.json" />
   </ItemGroup>
 
@@ -28,7 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
 
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
 
     <PackageReference Include="Polly" Version="7.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
@@ -36,12 +43,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Migrations\BudgetCastMigrations\" />
+    <Folder Include="Compensations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BudgetCast.Dashboard.Blobs\BudgetCast.Dashboard.Blobs.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Commands\BudgetCast.Dashboard.Commands.csproj" />
+    <ProjectReference Include="..\BudgetCast.Dashboard.Compensations\BudgetCast.Dashboard.Compensations.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Data\BudgetCast.Dashboard.Data.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.Queries\BudgetCast.Dashboard.Queries.csproj" />
     <ProjectReference Include="..\BudgetCast.Dashboard.ReadAccessors\BudgetCast.Dashboard.ReadAccessors.csproj" />
