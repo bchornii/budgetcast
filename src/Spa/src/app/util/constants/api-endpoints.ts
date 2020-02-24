@@ -10,11 +10,15 @@ export const dashboard = {
         signInWithFacebook: `${baseUrl}/account/signInWithFacebook`,
         login: `${baseUrl}/account/login`,
         logout: `${baseUrl}/account/logout`,
-        check: `${baseUrl}/account/check`,
-        updateProfile: `${baseUrl}/account/updateProfile`,
+        check: `${baseUrl}/account/check`,        
         register: `${baseUrl}/account/register`,
         forgotPassword: `${baseUrl}/account/forgotPassword`,
         resetPassword: `${baseUrl}/account/resetPassword`
+    },
+
+    profile: {
+        update: `${baseUrl}/profile/update`,
+        uploadImg: `${baseUrl}/profile/uploadImg`
     },
 
     receipt: {

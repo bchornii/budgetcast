@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BudgetCast.Dashboard.Domain.Blobs;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
@@ -31,7 +32,7 @@ namespace BudgetCast.Dashboard.Blobs
                 await blob.UploadFromByteArrayAsync(content, 0, content.Length);
             }
 
-            return blob.Uri?.PathAndQuery;
+            return GetFileLocation(blob.Uri?.PathAndQuery);
         }
 
         public async Task Delete(string name)
@@ -44,6 +45,13 @@ namespace BudgetCast.Dashboard.Blobs
         {
             await _cloudBlobContainer
                 .GetBlockBlobReference(name).UndeleteAsync();
+        }
+
+        private string GetFileLocation(string pathAndQuery)
+        {
+            var containerName = _cloudBlobContainer.Name;
+            return pathAndQuery?.Substring(pathAndQuery.IndexOf(containerName, 
+                StringComparison.OrdinalIgnoreCase) + containerName.Length + 1);
         }
     }
 }

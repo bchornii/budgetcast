@@ -19,7 +19,7 @@ export class UserProfileService extends BaseService {
 
   updateProfile(userProfile: UserProfile): Observable<any> {
     return this.httpClient.post(
-      `${dashboard.account.updateProfile}`, userProfile).pipe(
+      `${dashboard.profile.update}`, userProfile).pipe(
         flatMap(_ => this.authService.checkUserAuthenticationStatus()),
         catchError(this.handleError)
       );

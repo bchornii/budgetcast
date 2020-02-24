@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BudgetCast.Dashboard.Api.Infrastructure.Files;
@@ -11,6 +12,7 @@ using BudgetCast.Dashboard.Domain.Blobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static BudgetCast.Dashboard.Compensations.ExecSteps.ProfileImage.Delete;
 using static BudgetCast.Dashboard.Compensations.ExecSteps.ProfileImage.Upload;
 
 namespace BudgetCast.Dashboard.Api.Controllers
@@ -66,15 +68,26 @@ namespace BudgetCast.Dashboard.Api.Controllers
 
                 if (!string.IsNullOrWhiteSpace(location))
                 {
-                    _historyStore.Add(BlobUploaded, readResult.FileName);
+                    _historyStore.Add(BlobUploaded, location);
 
+                    var previousImageLink = user.ProfileImageLink;
                     user.ProfileImageLink = location;
                     var result = await _userManager.UpdateAsync(user);
 
                     if (result.Succeeded)
                     {
-                        return Ok();
+                        _historyStore.Add(DbRecordAdded);
+                        if (!string.IsNullOrWhiteSpace(previousImageLink))
+                        {
+                            await _profileBlobDataService.Delete(previousImageLink);
+                        }
                     }
+                    else
+                    {
+                        await _profileBlobDataService.Delete(location);
+                    }
+
+                    return Ok();
                 }
             }
 

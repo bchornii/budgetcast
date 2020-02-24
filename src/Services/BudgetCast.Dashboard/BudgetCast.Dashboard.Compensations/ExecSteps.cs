@@ -14,6 +14,7 @@
             {
                 public const string BlobDeleted = nameof(BlobDeleted);
                 public const string DbRecordDeleted = nameof(DbRecordDeleted);
+                public const string OldBlobDeleted = nameof(OldBlobDeleted);
             }
         }
     }

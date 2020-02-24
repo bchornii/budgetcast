@@ -49,6 +49,10 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.AutofacModules
                 .As<ICompensationActionsFactory>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<UploadProfileImageCompensation>()
+                .As<ICompensationAction>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<ExecutionHistoryStore>()
                 .As<IExecutionHistoryStore>()
                 .InstancePerLifetimeScope();

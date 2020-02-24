@@ -43,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Compensations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

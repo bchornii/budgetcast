@@ -12,7 +12,7 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.ExecutionHistoryStores
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public void Add(string key, object value)
+        public void Add(string key, object value = null)
         {
             _httpContextAccessor.HttpContext.Items.Add(key, value);
         }
@@ -22,5 +22,8 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.ExecutionHistoryStores
             return _httpContextAccessor.HttpContext
                 .Items.TryGetValue(key, out var r) ? r as T : default(T);
         }
+
+        public bool Exists(string key) => _httpContextAccessor
+            .HttpContext.Items.ContainsKey(key);
     }
 }
