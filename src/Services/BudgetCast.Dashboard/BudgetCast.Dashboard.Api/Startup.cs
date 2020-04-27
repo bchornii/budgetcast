@@ -43,10 +43,10 @@ namespace BudgetCast.Dashboard.Api
             services.AddAutoMapper();
 
             services
+                .AddSwagger()
                 .AddCustomConfigSections(Configuration)
                 .AddCustomServices(Configuration)
-                .AddCustomMvc(Configuration)
-                .AddSwagger(Configuration)
+                .AddCustomMvc(Configuration)                
                 .AddAspNetIdentity(Configuration)
                 .AddAuthentication(Configuration)
                 .AddMongoContext(Configuration)
@@ -141,8 +141,7 @@ namespace BudgetCast.Dashboard.Api
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
