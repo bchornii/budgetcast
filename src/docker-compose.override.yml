@@ -20,9 +20,7 @@ services:
     dashboard-api:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Development
-            - ASPNETCORE_URLS=http://+:80
-            - IdentityManagement__ConnectionString=${IDM_CONNECTION_STR:-Server=identity-db,1433;Database=IdentityDb;User Id=sa;Password=Install_new!}
-            - BudgetCast__ConnectionString=${BUDGETCAST_DB:-mongodb://budgetcast-db:27017}
+            - ASPNETCORE_URLS=http://+:80            
             - Social__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
             - Social__Google__ClientId=${GOOGLE_CLIENT_ID}
             - Social__Facebook__ClientSecret=${FACEBOOK_CLIENT_SECRET}
