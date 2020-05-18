@@ -1,0 +1,41 @@
+version: "3.7"
+
+services: 
+
+    identity-db:
+        environment: 
+            ACCEPT_EULA: Y
+            SA_PASSWORD: ${SA_PASSWORD:-Install_new!}
+        ports: 
+            - "5433:1433"
+        volumes: 
+            - identity-db-data:/var/opt/mssql
+
+    budgetcast-db:
+        ports: 
+            - "27017:27017"
+        volumes: 
+            - budgetcast-db-data:/data/db
+
+    dashboard-api:
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - IdentityManagement__ConnectionString=${IDM_CONNECTION_STR:-Server=identity-db,1433;Database=IdentityDb;User Id=sa;Password=Install_new!}
+            - BudgetCast__ConnectionString=${BUDGETCAST_DB:-mongodb://budgetcast-db:27017}
+            - Social__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
+            - Social__Google__ClientId=${GOOGLE_CLIENT_ID}
+            - Social__Facebook__ClientSecret=${FACEBOOK_CLIENT_SECRET}
+            - Social__Facebook__ClientId=${FACEBOOK_CLIENT_ID}
+            - EmailParameters__Host=${EMAIL_SMTP_HOST:-smtp.gmail.com}
+            - EmailParameters__Port=${EMAIL_SMTP_PORT:-587}
+            - EmailParameters__From=${EMAIL_FROM}
+            - EmailParameters__Password=${EMAIL_PASSWORD}                 
+        ports: 
+            - "5100:80"
+
+volumes: 
+    identity-db-data:
+        external: false
+    budgetcast-db-data:
+        external: false

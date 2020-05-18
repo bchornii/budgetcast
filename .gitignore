@@ -286,3 +286,4 @@ src/**/inf.yaml
 
 #Ignore e2e 
 **/e2e
+/src/.env

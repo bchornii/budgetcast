@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+
+  identity-db:
+    image: mcr.microsoft.com/mssql/server:2017-latest 
+
+  budgetcast-db:
+    image: mongo
+
+  dashboard-api:
+    image: ${REGISTRY:-budgetcast}/dashboard.api:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: ./Services/BudgetCast.Dashboard
+      dockerfile: BudgetCast.Dashboard.Api/Dockerfile        
+    depends_on: 
+      - identity-db
+      - budgetcast-db
