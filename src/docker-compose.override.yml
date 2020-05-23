@@ -7,13 +7,17 @@ services:
             ACCEPT_EULA: Y
             SA_PASSWORD: ${SA_PASSWORD:-Install_new!}
         ports: 
-            - "5433:1433"
+            - target: 1433
+              published: ${IDENTITY_DB_PORT}
+
         volumes: 
             - identity-db-data:/var/opt/mssql
 
     budgetcast-db:
         ports: 
-            - "27017:27017"
+            - target: 27017
+              published: ${BUDGETCAST_DB_PORT}
+
         volumes: 
             - budgetcast-db-data:/data/db
 
@@ -29,20 +33,22 @@ services:
             - EmailParameters__Port=${EMAIL_SMTP_PORT:-587}
             - EmailParameters__From=${EMAIL_FROM}
             - EmailParameters__Password=${EMAIL_PASSWORD}     
-            - ExternalIdentityProviders__UiRedirectUrl=http://localhost:5200            
-            - UiLinks__Root=http://localhost:5200
-            - UiLinks__ResetPassword=http://localhost:5200/account/reset-password            
-            - UiLinks__Login=http://localhost:4200/account/login
+            - ExternalIdentityProviders__UiRedirectUrl=http://${HOST_BASE_ADDR}:${UI_PORT}            
+            - UiLinks__Root=http://${HOST_BASE_ADDR}:${UI_PORT}
+            - UiLinks__ResetPassword=http://${HOST_BASE_ADDR}:${UI_PORT}/account/reset-password            
+            - UiLinks__Login=http://${HOST_BASE_ADDR}:${UI_PORT}/account/login
         ports: 
-            - "5100:80"
+            - target: 80
+              published: ${DASHBOARD_API_PORT}
     
     web-spa:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://+:80
-            - Endpoints__Dashboard=http://localhost:5100/api
+            - Endpoints__Dashboard=http://${HOST_BASE_ADDR}:${DASHBOARD_API_PORT}/api
         ports: 
-            - "5200:80"
+            - target: 80
+              published: ${UI_PORT}
 
 volumes: 
     identity-db-data:
