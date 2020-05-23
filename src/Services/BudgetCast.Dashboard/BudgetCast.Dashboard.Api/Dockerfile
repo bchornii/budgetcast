@@ -31,4 +31,10 @@ RUN dotnet publish -c release -o /app --no-restore
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 ENTRYPOINT ["dotnet", "BudgetCast.Dashboard.Api.dll"]

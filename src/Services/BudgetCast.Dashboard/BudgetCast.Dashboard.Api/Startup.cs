@@ -66,16 +66,11 @@ namespace BudgetCast.Dashboard.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            if (Env.IsDevelopment())
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
-                });
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
+            });
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
