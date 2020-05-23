@@ -1,0 +1,25 @@
+.app-name-box {
+  cursor: pointer;
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  display: inline-block;
+
+  h5 {
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    font-family: MontserratSemiBold;
+    position: relative;
+
+    &::before {
+      content: "";
+      @include skew-border(95%, 3px, -10px, 100%, 50%, 100%);
+    }
+
+    &::after {
+      content: "";
+      @include skew-border(95%, 3px, 120%, -10px, 50%, 100%);
+    }
+  }
+}

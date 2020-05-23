@@ -1,0 +1,38 @@
+@import 'abstract/colors';
+
+.heading {
+  text-align: center;
+}
+
+.page {
+  width: 300px;
+}
+
+.or-line {
+  margin-top: 0.8rem;
+  color: get-color(cool-neutrals, cool-grey-1);
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.login-link {
+  display: inline-block;
+  width: 50%;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: HkGraphicLight;
+
+  a {
+    color: get-color(cool-neutrals, cool-grey-1);
+    text-decoration: none;
+    border-bottom: 1px solid get-color(cool-neutrals, cool-grey-1);
+    font-family: inherit;
+  }
+
+  &:last-of-type {
+    text-align: right;
+  }
+}

@@ -1,0 +1,22 @@
+<mat-form-field appearance="standard" [hideRequiredMarker]="true">
+  <mat-label>{{label}}</mat-label>
+  <input
+        #input
+        matInput
+        type="text"
+        [id]="id"
+        [readonly]="readonly"
+        [formControl]="inputControl"
+        [matAutocomplete]="auto"
+        (blur)="onBlur($event)"
+        (focus)="onFocus($event)">
+  <mat-error>{{errMsg}}</mat-error>
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngIf="isLoading" class="is-loading">
+      <mat-spinner diameter="25"></mat-spinner>
+    </mat-option>
+    <mat-option *ngFor="let option of options" [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

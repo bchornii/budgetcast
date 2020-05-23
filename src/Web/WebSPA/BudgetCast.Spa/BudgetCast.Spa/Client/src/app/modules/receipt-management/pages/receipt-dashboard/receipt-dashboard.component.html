@@ -1,0 +1,35 @@
+<div class="content-wrap">
+    <div class="row align-items-center justify-content-between receipts-header">
+        <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+            <app-mat-select
+                label="Campaign"                
+                [options]="campaignOptions"
+                asValue="false"
+                [(ngModel)]="campaign"
+                (ngModelChange)="onCampaignValueChange()"
+            ></app-mat-select>
+        </div>        
+        <div class="col-6 col-sm-4 col-lg-3 col-xl-2 receipts-header__total">
+            <span>Total amount: {{totalsPerCampaign?.totalAmount}}</span>
+            <button mat-button (click)="openTotals()">...</button>
+        </div>
+    </div>
+    <div class="receipts-grid">
+        <ng-container *ngFor="let item of items">        
+            <app-receipt-card                    
+                    [receipt]="item"
+                    (onMore)="onMore(item.id)"
+            ></app-receipt-card>
+        </ng-container>        
+    </div>
+    <mat-paginator 
+        *ngIf="items?.length > 0 && total > pageSize"
+        [length]="total"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"    
+        [showFirstLastButtons]="true"
+        (page)="onPage($event)">
+    </mat-paginator>
+</div>
+
+<app-spinner></app-spinner>

@@ -1,0 +1,62 @@
+<nav class="main-nav">
+  <ul class="main-nav__list">
+    <li class="main-nav__item">
+      <a class="main-nav__link"
+         [routerLink]="['/welcome']"
+         routerLinkActive="main-nav__item--active">
+          <span class="icon icon--home"></span>
+          <span>Home</span>
+      </a>
+    </li>
+    <li class="main-nav__item"
+        [class.open]="openedSubmenu === 'receipt'">
+      <span class="main-nav__link" (click)="openSubMenu('receipt')" >
+        <span class="icon icon--receipt"></span>
+        <span>Receipt</span>
+        <span class="icon icon--expand-menu"></span>
+      </span>
+      <ul class="main-nav__secondary-menu">
+        <li class="main-nav__item">
+          <a class="main-nav__link"
+             [routerLink]="['/receipts/dashboard']"
+             routerLinkActive="main-nav__item--active">
+            <span class="icon icon--receipt-dashboard"></span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="main-nav__item">
+            <a class="main-nav__link"
+               [routerLink]="['/receipts/add-receipt']"
+               routerLinkActive="main-nav__item--active">
+              <span class="icon icon--receipt-add"></span>
+              <span>Add Receipt</span>
+            </a>
+          </li>
+      </ul>
+    </li>
+    <li class="main-nav__item"
+        [class.open]="openedSubmenu === 'account'">
+      <span class="main-nav__link" (click)="openSubMenu('account')" >
+        <span class="icon icon--account"></span>
+        <span>User Account</span>
+        <span class="icon icon--expand-menu"></span>
+      </span>
+      <ul class="main-nav__secondary-menu">
+        <li class="main-nav__item">
+          <a class="main-nav__link"
+             [routerLink]="['/user-account/profile']"
+             routerLinkActive="main-nav__item--active">
+            <span class="icon icon--profile"></span>
+            <span>Profile Edit</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div class="main-nav__item">
+    <span class="main-nav__link" (click)="logOut()">
+      <span class="icon icon--logout"></span>
+      <span>Log Out</span>
+    </span>
+  </div>
+</nav>

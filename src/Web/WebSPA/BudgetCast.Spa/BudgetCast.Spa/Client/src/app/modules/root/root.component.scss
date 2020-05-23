@@ -1,0 +1,67 @@
+@import "abstract/mixins";
+@import "abstract/colors";
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 3;
+
+    &__title {
+      font-size: 1.5rem;
+      font-family: MontserratSemiBold;
+      cursor: pointer;
+    }
+  }
+
+  &__sidenav__container {
+    flex: 1;
+
+    &__snav {
+      width: 200px;
+
+      &__header {
+        display: flex;
+        justify-content: space-between;
+
+        span {
+          font-weight: 600;
+        }
+
+        &__avatar {
+          vertical-align: middle;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          box-shadow: 0 0 0 1px get-color(cool-neutrals, cool-grey-8);
+          background-color: get-color(cool-neutrals, cool-grey-8);
+        }
+      }
+    }
+
+    &__content {
+      margin-top: 5px;
+    }
+  }
+}
+
+.container {
+  margin-top: 10px;
+}
+
+perfect-scrollbar {
+  & > .ps.ps--scrolling-y {
+    & > .ps__rail-y {
+      background-color: transparent;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<div class="app-container">
+  <mat-sidenav-container class="app-container__sidenav__container">
+    <mat-sidenav #snav
+                 class="app-container__sidenav__container__snav mat-elevation-z10"
+                 [opened]="!isScreenSmall()"
+                 [mode]="isScreenSmall() ? 'over' : 'side'">
+        <mat-toolbar class="app-container__sidenav__container__snav__header"
+                    *ngIf="userIdentity$ | async as userIdentity" color="primary">
+          <span>Hi, {{userIdentity.givenName}}</span>
+          <img src="../../../assets/images/user-avatar.png" alt="Avatar"
+               class="app-container__sidenav__container__snav__header__avatar">
+        </mat-toolbar>
+
+        <perfect-scrollbar>
+          <app-main-nav></app-main-nav>
+        </perfect-scrollbar>
+    </mat-sidenav>
+    <mat-sidenav-content class="app-container__sidenav__container_content">
+      <mat-toolbar color="primary" class="app-container__toolbar">
+        <button [style.visibility]="isScreenSmall() ? 'visible' : 'hidden'"
+                mat-icon-button (click)="snav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1 class="app-container__toolbar__title"
+            [routerLink]="['/welcome']">Budget cast</h1>
+      </mat-toolbar>
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

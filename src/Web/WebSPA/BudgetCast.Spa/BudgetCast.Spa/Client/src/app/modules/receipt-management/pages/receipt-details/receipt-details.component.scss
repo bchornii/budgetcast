@@ -1,0 +1,29 @@
+@import 'abstract/colors';
+
+.receipt-details-header {
+    margin-top: 10px;
+    font-size: 0.9rem;
+
+    &__title {
+        display: flex;        
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__item {
+        > span {
+            font-weight: 600;                        
+        }
+    }
+}
+
+.receipt-details-items {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    
+    > table {
+        margin-top: 10px;
+        width: 100%;
+        box-shadow: 0 0 1px get-color(cool-neutrals, cool-grey-2);        
+    }
+}
