@@ -28,9 +28,21 @@ services:
             - EmailParameters__Host=${EMAIL_SMTP_HOST:-smtp.gmail.com}
             - EmailParameters__Port=${EMAIL_SMTP_PORT:-587}
             - EmailParameters__From=${EMAIL_FROM}
-            - EmailParameters__Password=${EMAIL_PASSWORD}                 
+            - EmailParameters__Password=${EMAIL_PASSWORD}     
+            - ExternalIdentityProviders__UiRedirectUrl=http://localhost:5200            
+            - UiLinks__Root=http://localhost:5200
+            - UiLinks__ResetPassword=http://localhost:5200/account/reset-password            
+            - UiLinks__Login=http://localhost:4200/account/login
         ports: 
             - "5100:80"
+    
+    web-spa:
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - Endpoints__Dashboard=http://localhost:5100/api
+        ports: 
+            - "5200:80"
 
 volumes: 
     identity-db-data:
