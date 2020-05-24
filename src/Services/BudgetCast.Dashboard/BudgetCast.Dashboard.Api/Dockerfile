@@ -16,7 +16,8 @@ COPY ["BudgetCast.Dashboard.WriteAccessors/BudgetCast.Dashboard.WriteAccessors.c
 COPY ["BudgetCast.Dashboard.Repository/BudgetCast.Dashboard.Repository.csproj", "BudgetCast.Dashboard.Repository/"]
 COPY ["BudgetCast.Dashboard.Queries/BudgetCast.Dashboard.Queries.csproj", "BudgetCast.Dashboard.Queries/"]
 
-# restore
+# restore (without arguments it uses .sln file by default - feature of .net core v3+)
+# note: only runs if there's a !!!single!!! project or solution file in the folder
 RUN dotnet restore
 
 # copy everything else
