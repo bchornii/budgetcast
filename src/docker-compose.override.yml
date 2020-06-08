@@ -28,6 +28,9 @@ services:
         environment:
             - ACCEPT_EULA=Y
 
+        volumes: 
+            - seq-data:/data
+
     dashboard-api:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Prod
@@ -62,4 +65,6 @@ volumes:
     identity-db-data:
         external: false
     budgetcast-db-data:
+        external: false
+    seq-data:
         external: false
