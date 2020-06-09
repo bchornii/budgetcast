@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,17 +11,18 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
+using BudgetCast.Dashboard.Api.Infrastructure.ExternalUtils;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -71,6 +71,9 @@ namespace BudgetCast.Dashboard.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
             });
+
+            app.UseSerilogRequestLogging(opts
+                => opts.EnrichDiagnosticContext = LogEnricher.EnrichFromRequest);
 
             app.UseRouting();
             app.UseCors("CorsPolicy");

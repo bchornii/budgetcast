@@ -21,10 +21,21 @@ services:
         volumes: 
             - budgetcast-db-data:/data/db
 
+    seq:
+        ports:
+            - target: 80
+              published: ${SEQ_PORT}                
+        environment:
+            - ACCEPT_EULA=Y
+
+        volumes: 
+            - seq-data:/data
+
     dashboard-api:
         environment: 
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=Prod
             - ASPNETCORE_URLS=http://+:80            
+            - Serilog__WriteTo__0__Args__serverUrl=http://seq
             - Social__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
             - Social__Google__ClientId=${GOOGLE_CLIENT_ID}
             - Social__Facebook__ClientSecret=${FACEBOOK_CLIENT_SECRET}
@@ -43,7 +54,7 @@ services:
     
     web-spa:
         environment: 
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=Prod
             - ASPNETCORE_URLS=http://+:80
             - Endpoints__Dashboard=http://${HOST_BASE_ADDR}:${DASHBOARD_API_PORT}/api
         ports: 
@@ -54,4 +65,6 @@ volumes:
     identity-db-data:
         external: false
     budgetcast-db-data:
+        external: false
+    seq-data:
         external: false
