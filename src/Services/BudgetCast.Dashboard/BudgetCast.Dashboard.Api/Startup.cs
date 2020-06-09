@@ -15,6 +15,7 @@ using AutoMapper;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
+using BudgetCast.Dashboard.Api.Infrastructure.ExternalUtils;
 using BudgetCast.Dashboard.Api.Infrastructure.Services;
 using BudgetCast.Dashboard.Data;
 using FluentValidation.AspNetCore;
@@ -71,7 +72,8 @@ namespace BudgetCast.Dashboard.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
             });
 
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(opts
+                => opts.EnrichDiagnosticContext = LogEnricher.EnrichFromRequest);
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
