@@ -92,11 +92,13 @@ namespace BudgetCast.Dashboard.Api
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                    AllowCachingResponses = false
                 });
                 endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
                 {
-                    Predicate = r => r.Name.Contains("self")
+                    Predicate = r => r.Name.Contains("self"),
+                    AllowCachingResponses = false
                 });
             });
         }
