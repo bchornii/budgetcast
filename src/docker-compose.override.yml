@@ -61,6 +61,18 @@ services:
             - target: 80
               published: ${UI_PORT}
 
+    webstatus:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - HealthChecksUI__HealthChecks__0__Name=Dashboard API
+            - HealthChecksUI__HealthChecks__0__Uri=http://dashboard-api/hc
+            - HealthChecksUI__HealthChecks__1__Name=WebSPA UI
+            - HealthChecksUI__HealthChecks__1__Uri=http://web-spa/hc                 
+        ports:
+            - target: 80
+              published: ${HEALTHCHECKS_UI_PORT}
+
 volumes: 
     identity-db-data:
         external: false
