@@ -68,7 +68,8 @@ services:
             - HealthChecksUI__HealthChecks__0__Name=Dashboard API
             - HealthChecksUI__HealthChecks__0__Uri=http://dashboard-api/hc
             - HealthChecksUI__HealthChecks__1__Name=WebSPA UI
-            - HealthChecksUI__HealthChecks__1__Uri=http://web-spa/hc                 
+            - HealthChecksUI__HealthChecks__1__Uri=http://web-spa/hc           
+            - HealthChecksUI__EvaluationTimeInSeconds=60      
         ports:
             - target: 80
               published: ${HEALTHCHECKS_UI_PORT}
