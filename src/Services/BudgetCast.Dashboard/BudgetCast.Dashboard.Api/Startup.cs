@@ -23,6 +23,9 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -50,7 +53,8 @@ namespace BudgetCast.Dashboard.Api
                 .AddAspNetIdentity(Configuration)
                 .AddAuthentication(Configuration)
                 .AddMongoContext(Configuration)
-                .AddApplicationInsightsTelemetry();
+                .AddApplicationInsightsTelemetry()
+                .AddCustomHealthCheck(Configuration);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -85,6 +89,17 @@ namespace BudgetCast.Dashboard.Api
             {
                 endpoints.MapControllers();
 
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                    AllowCachingResponses = false
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self"),
+                    AllowCachingResponses = false
+                });
             });
         }
     }
@@ -243,6 +258,27 @@ namespace BudgetCast.Dashboard.Api
                 var connectionString = configuration["BudgetCast:ConnectionString"];
                 return new BudgetCastContext(connectionString, serviceProvider.GetService<IMediator>(), userId);
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
+        {            
+            var hcBuilder = services.AddHealthChecks();
+
+            hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
+            
+            hcBuilder
+                .AddMongoDb(                    
+                    configuration["BudgetCast:ConnectionString"],
+                    name: "BudgetCast-MongoDb-Check",
+                    tags: new string[] { "mongodb" });
+
+            hcBuilder                
+                .AddSqlServer(
+                    configuration["IdentityManagement:ConnectionString"],
+                    name: "IdentityManagement-SqlDb-Check",
+                    tags: new string[] { "catalogdb" });
 
             return services;
         }
