@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
+using BudgetCast.Dashboard.Api.HostedServices;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using BudgetCast.Dashboard.Api.Infrastructure.AutofacModules;
 using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
@@ -54,7 +55,8 @@ namespace BudgetCast.Dashboard.Api
                 .AddAuthentication(Configuration)
                 .AddMongoContext(Configuration)
                 .AddApplicationInsightsTelemetry()
-                .AddCustomHealthCheck(Configuration);
+                .AddCustomHealthCheck(Configuration)
+                .AddCustomHostedServices();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -279,6 +281,14 @@ namespace BudgetCast.Dashboard.Api
                     configuration["IdentityManagement:ConnectionString"],
                     name: "IdentityManagement-SqlDb-Check",
                     tags: new string[] { "catalogdb" });
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomHostedServices(this IServiceCollection services)
+        {
+            services
+                .AddHostedService<IdentityDbMigrationHostedService>();
 
             return services;
         }

@@ -10,6 +10,7 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
 {
     public static class IHostExtensions
     {
+        [Obsolete("IdentityDbMigrationHostedService hosted service is being used for migration.")]
         public static IHost MigrateDbContext<TContext>(this IHost webHost, 
             Action<TContext, IServiceProvider> seeder) where TContext : DbContext
         {

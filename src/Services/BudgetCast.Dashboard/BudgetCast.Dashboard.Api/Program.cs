@@ -1,7 +1,5 @@
 ﻿using Autofac.Extensions.DependencyInjection;
-using BudgetCast.Dashboard.Api.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +22,6 @@ namespace BudgetCast.Dashboard.Api
             {
                 Log.Information("Configuring web host");
                 var host = CreateHostBuilder(args).Build();
-
-                Log.Information("Applying migrations to IdentityDbContext");
-                host.MigrateDbContext<IdentityDbContext>((_, __) => { });
 
                 Log.Information("Starting web host");
                 host.Run();              
