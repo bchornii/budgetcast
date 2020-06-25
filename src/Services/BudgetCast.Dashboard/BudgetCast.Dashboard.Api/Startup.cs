@@ -111,13 +111,15 @@ namespace BudgetCast.Dashboard.Api
         public static IServiceCollection AddCustomConfigSections(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.Configure<EmailParameters>(
+            services.UseConfigurationValidation();
+
+            services.ConfigureValidatableSetting<EmailParameters>(
                 configuration.GetSection("EmailParameters"));
 
-            services.Configure<UiLinks>(
+            services.ConfigureValidatableSetting<UiLinks>(
                 configuration.GetSection("UiLinks"));
 
-            services.Configure<ExternalIdentityProviders>(
+            services.ConfigureValidatableSetting<ExternalIdentityProviders>(
                 configuration.GetSection("ExternalIdentityProviders"));
 
             return services;

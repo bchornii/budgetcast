@@ -1,9 +1,7 @@
-﻿using BudgetCast.Dashboard.Api.ViewModels;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -28,14 +26,14 @@ namespace BudgetCast.Dashboard.Api.Controllers
             SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
             EmailService emailService,
-            IOptions<ExternalIdentityProviders> externalIdentityProvidersOptions,
-            IOptions<UiLinks> uiLinksOptions)
+            ExternalIdentityProviders externalIdentityProviders,
+            UiLinks uiLinks)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
-            _externalIdentityProviders = externalIdentityProvidersOptions.Value;
-            _uiLinks = uiLinksOptions.Value;
+            _externalIdentityProviders = externalIdentityProviders;
+            _uiLinks = uiLinks;
         }
 
         [AllowAnonymous]

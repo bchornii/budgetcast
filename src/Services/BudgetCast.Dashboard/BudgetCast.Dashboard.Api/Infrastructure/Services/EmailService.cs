@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BudgetCast.Dashboard.Api.Infrastructure.AppSettings;
 using MailKit.Net.Smtp;
-using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace BudgetCast.Dashboard.Api.Infrastructure.Services
@@ -10,9 +9,9 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.Services
     {
         private readonly EmailParameters _emailParameters;
 
-        public EmailService(IOptions<EmailParameters> options)
+        public EmailService(EmailParameters emailParameters)
         {
-            _emailParameters = options.Value;
+            _emailParameters = emailParameters;
         }
 
         public Task ResetPassword(string email, string callback)
