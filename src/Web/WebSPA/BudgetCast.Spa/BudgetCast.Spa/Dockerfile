@@ -3,6 +3,7 @@ ARG NODE_IMAGE=node:10.13
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
 FROM ${NODE_IMAGE} as node-build
 WORKDIR /web

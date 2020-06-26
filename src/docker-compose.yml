@@ -34,3 +34,6 @@ services:
     build:
       context: ./Web/WebStatus
       dockerfile: WebStatus/Dockerfile
+    depends_on: 
+      - dashboard-api
+      - web-spa

@@ -56,6 +56,7 @@ namespace BudgetCast.Spa
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.Use(async (context, next) =>
             {
                 await next();

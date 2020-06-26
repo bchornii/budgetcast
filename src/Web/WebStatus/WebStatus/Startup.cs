@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Net.Http;
 
 namespace WebStatus
 {
@@ -32,6 +33,13 @@ namespace WebStatus
                 .AddHealthChecksUI(setup =>
                 {
                     setup.MaximumHistoryEntriesPerEndpoint(maximumHistoryEntriesPerEndpoint);
+                    setup.UseApiEndpointHttpMessageHandler(_ =>
+                    {
+                        return new HttpClientHandler
+                        {
+                            ServerCertificateCustomValidationCallback = (__, ___, ____, _____) => true
+                        };
+                    });
                 })
                 .AddInMemoryStorage();
         }
@@ -48,6 +56,7 @@ namespace WebStatus
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
