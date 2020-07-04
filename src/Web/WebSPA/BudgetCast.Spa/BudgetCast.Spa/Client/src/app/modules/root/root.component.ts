@@ -19,7 +19,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   userIdentity$ = this.authService.userIdentity$;
 
-  @ViewChild('snav', { static: false }) snav: MatSidenav;
+  @ViewChild('snav') snav: MatSidenav;
 
   constructor(private authService: AuthService,
               private router: Router) {

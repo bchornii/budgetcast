@@ -63,7 +63,7 @@ export class MatSelectComponent extends MatFormElement implements OnInit, OnDest
   };
   @Output() onSelection = new EventEmitter<any>();
 
-  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('input') input: ElementRef;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();

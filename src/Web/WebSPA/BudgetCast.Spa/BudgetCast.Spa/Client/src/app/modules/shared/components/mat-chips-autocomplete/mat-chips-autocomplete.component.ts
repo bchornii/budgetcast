@@ -32,8 +32,8 @@ export class MatChipsAutocompleteComponent extends MatFormElement implements OnI
   @Input() options: any[];
   @Input() data: any[];
 
-  @ViewChild('input', { static: false }) input: ElementRef;
-  @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
+  @ViewChild('input') input: ElementRef;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();

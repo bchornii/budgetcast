@@ -29,7 +29,7 @@ export class MatAutocompleteComponent extends MatFormElement implements OnInit, 
   @Input() debounceTime = 300;
   @Input() isLoading = false;
 
-  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('input') input: ElementRef;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();

@@ -40,7 +40,7 @@ export class MatDatepickerComponent extends MatFormElement implements OnInit, On
   @Input() minDate = "01-01-2000";
   @Input() maxDate = "01-01-2030";
 
-  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('input') input: ElementRef;
 
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
