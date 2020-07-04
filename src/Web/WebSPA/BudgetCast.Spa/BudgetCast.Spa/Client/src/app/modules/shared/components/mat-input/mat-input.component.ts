@@ -14,7 +14,7 @@ import {
 import { InputType } from '../input/input.component';
 import { NgControl } from '@angular/forms';
 import { MatFormElement } from '../mat-form-element';
-import { MatInput } from '@angular/material';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-mat-input',

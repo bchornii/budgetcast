@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ReceiptItem } from '../models/receipt-item';
 import { Receipt } from '../models/receipt';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-receipt-details',
