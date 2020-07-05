@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { KeyValuePair } from 'src/app/util/util';
-import { MAT_DIALOG_DATA, MatSort, MatTableDataSource } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-campaign-totals',

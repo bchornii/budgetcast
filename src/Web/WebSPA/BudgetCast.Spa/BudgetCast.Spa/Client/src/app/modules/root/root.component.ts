@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { SMALL_WIDTH_BREAKPOINT } from 'src/app/util/constants/response-status';
 
@@ -19,7 +19,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   userIdentity$ = this.authService.userIdentity$;
 
-  @ViewChild('snav', { static: false }) snav: MatSidenav;
+  @ViewChild('snav') snav: MatSidenav;
 
   constructor(private authService: AuthService,
               private router: Router) {

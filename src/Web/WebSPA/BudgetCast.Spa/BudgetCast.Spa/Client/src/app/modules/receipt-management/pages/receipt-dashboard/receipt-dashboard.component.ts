@@ -3,12 +3,18 @@ import { RecipeService } from '../../services/receipt.service';
 import { BasicReceipt } from '../models/basic-receipt';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize, concatMap, tap } from 'rxjs/operators';
-import { PageEvent, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { CampaignService } from '../../services/campaign.service';
 import { Subject, forkJoin } from 'rxjs';
 import { TotalsPerCampaign } from '../models/totals-per-campaign';
 import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
 import { Router } from '@angular/router';
+
+interface KeyValue<TKey, TValue> {
+  key: TKey;
+  value: TValue;
+}
 
 @Component({
   selector: 'app-receipt-dashboard',
@@ -29,7 +35,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   total: number;
   items: BasicReceipt[] = [];
-  totalsPerCampaign: TotalsPerCampaign;  
+  totalsPerCampaign: TotalsPerCampaign;
 
   pageSizeMediaMatchers: KeyValue<MediaQueryList, number>[] = [
     {
@@ -46,7 +52,7 @@ export class ReceiptDashboardComponent implements OnInit {
     }
   ];
 
-  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;  
+  @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
   constructor(private receiptService: RecipeService,
               private campaignService: CampaignService,
@@ -115,7 +121,7 @@ export class ReceiptDashboardComponent implements OnInit {
     )
     .subscribe(pageResult => {
       this.total = pageResult.total;
-      this.items = pageResult.items;      
+      this.items = pageResult.items;
     });
   }
 

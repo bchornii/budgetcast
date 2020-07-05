@@ -29,7 +29,7 @@ export class InputComponent extends FormElement implements OnInit, AfterViewInit
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
 
-  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('input') input: ElementRef;
 
   defaultValue = '';
   innerType: string = InputType.TEXT;
