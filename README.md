@@ -40,6 +40,7 @@
     
  - **UI**
     - Asp.Net Core 3.1 (as prod hosting web server)
+    - Serilog
     - Angular 10
     - Angular Material 10
     - Bootstrap 4
