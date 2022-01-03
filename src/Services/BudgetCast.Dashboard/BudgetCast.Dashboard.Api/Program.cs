@@ -92,4 +92,5 @@ namespace BudgetCast.Dashboard.Api
             return builder.Build();
         }
     }
+
 }
