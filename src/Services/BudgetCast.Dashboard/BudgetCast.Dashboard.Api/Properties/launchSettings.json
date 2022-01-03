@@ -20,7 +20,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:44305;http://localhost:5000"
+      "applicationUrl": "https://localhost:44305;http://localhost:5100"
     },
     "Docker": {
       "commandName": "Docker",

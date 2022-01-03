@@ -52,7 +52,7 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
             var uiRoot = configuration["UiLinks:Root"];
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy", builder =>
+                options.AddDefaultPolicy(builder =>
                     builder
                         .WithOrigins(uiRoot)
                         .AllowAnyMethod()

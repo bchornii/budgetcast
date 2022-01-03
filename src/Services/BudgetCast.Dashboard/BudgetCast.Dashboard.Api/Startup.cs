@@ -65,7 +65,7 @@ namespace BudgetCast.Dashboard.Api
                 => opts.EnrichDiagnosticContext = LogEnricher.EnrichFromRequest);
 
             app.UseRouting();
-            app.UseCors("CorsPolicy");
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
