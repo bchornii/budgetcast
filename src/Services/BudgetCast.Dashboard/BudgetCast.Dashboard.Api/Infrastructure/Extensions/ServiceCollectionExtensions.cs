@@ -209,9 +209,9 @@ namespace BudgetCast.Dashboard.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+        public static IServiceCollection AddCustomAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             return services;
         }
     }

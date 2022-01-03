@@ -28,7 +28,7 @@ namespace BudgetCast.Dashboard.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddAutoMapper()
+                .AddCustomAutoMapper()
                 .AddSwagger()
                 .AddCustomConfigSections(Configuration)
                 .AddCustomServices(Configuration)
