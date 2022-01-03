@@ -1,11 +1,10 @@
 # to leverage FastMode debug in VS
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-# copy .csproj to leverage layer caching
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["*.sln", "."]
 COPY ["BudgetCast.Dashboard.Api/BudgetCast.Dashboard.Api.csproj", "BudgetCast.Dashboard.Api/"]
