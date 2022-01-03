@@ -29,7 +29,8 @@
             ],
             "styles": [
               {
-                "input": "src/styles/themes/t-main.scss"
+                "input": "src/styles/themes/t-main.scss",
+                "inject": true
               },
               "node_modules/ngx-toastr/toastr.css",
               "src/styles/main.scss"
@@ -52,7 +53,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
