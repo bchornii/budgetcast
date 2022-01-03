@@ -287,3 +287,4 @@ src/**/inf.yaml
 #Ignore e2e 
 **/e2e
 /src/.env
+/src/Web/WebSPA/BudgetCast.Spa/BudgetCast.Spa/Client/.angular/cache

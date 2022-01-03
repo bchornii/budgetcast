@@ -11,24 +11,20 @@ import { CampaignTotalsComponent } from './components/campaign-totals/campaign-t
 import { ReceiptDetailsComponent } from './pages/receipt-details/receipt-details.component';
 
 @NgModule({
-  declarations: [
-    AddReceiptComponent,
-    ReceiptDashboardComponent,
-    ReceiptManagementComponent,
-    ReceiptCardComponent,
-    CampaignTotalsComponent,
-    ReceiptDetailsComponent
-  ],
-  entryComponents: [
-    CampaignTotalsComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ReceiptManagementRoutingModule,
-
-    SharedModule,
-  ]
+    declarations: [
+        AddReceiptComponent,
+        ReceiptDashboardComponent,
+        ReceiptManagementComponent,
+        ReceiptCardComponent,
+        CampaignTotalsComponent,
+        ReceiptDetailsComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ReceiptManagementRoutingModule,
+        SharedModule,
+    ]
 })
 export class RecipeManagementModule { }
