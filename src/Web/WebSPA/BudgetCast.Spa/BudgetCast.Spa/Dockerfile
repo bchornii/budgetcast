@@ -1,6 +1,6 @@
 ARG NODE_IMAGE=node:12.18
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -16,7 +16,7 @@ RUN npm install
 COPY ["BudgetCast.Spa/Client", "."]
 RUN npm run build:prod
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
 WORKDIR /src
 COPY ["*.sln", "."]
 COPY ["BudgetCast.Spa/BudgetCast.Spa.csproj", "BudgetCast.Spa/"]
