@@ -1,4 +1,6 @@
-ARG NODE_IMAGE=node:12.18
+
+# Node.js version - may be passed as an argument to docker build command
+ARG NODE_IMAGE=node:12.20.0
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
