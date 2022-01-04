@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 using System;
-using System.IO;
 
 namespace BudgetCast.Dashboard.Api
 {
@@ -15,8 +15,7 @@ namespace BudgetCast.Dashboard.Api
     {
         public static int Main(string[] args)
         {
-            var configuration = GetConfiguration();
-            Log.Logger = CreateSerilogLogger(configuration);
+            Log.Logger = CreateSerilogLogger();
 
             try
             {
@@ -30,7 +29,7 @@ namespace BudgetCast.Dashboard.Api
             }
             catch(Exception ex)
             {
-                Log.Fatal(ex, "Program terminated unexpectedly");
+                Log.Fatal(ex, "Host terminated unexpectedly");
                 return 1;                
             }
             finally
@@ -41,7 +40,8 @@ namespace BudgetCast.Dashboard.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
+                .UseSerilog((ctx, services, configuration) => 
+                    configuration.ReadFrom.Configuration(ctx.Configuration))
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -65,31 +65,13 @@ namespace BudgetCast.Dashboard.Api
 
                 });
 
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        private static ILogger CreateSerilogLogger()
         {
             return new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-        }
-
-        private static IConfiguration GetConfiguration()
-        {
-            var env = Environment.GetEnvironmentVariable(
-                "ASPNETCORE_ENVIRONMENT");
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(
-                    path: "appsettings.json",
-                    optional: false,
-                    reloadOnChange: true)
-                .AddJsonFile(
-                    path: $"appsettings.{env}.json",
-                    optional: false,
-                    reloadOnChange: true)                
-                .AddEnvironmentVariables();
-
-            return builder.Build();
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateBootstrapLogger();
         }
     }
 
