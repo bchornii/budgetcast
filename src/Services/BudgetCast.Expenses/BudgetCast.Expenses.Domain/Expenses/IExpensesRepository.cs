@@ -2,7 +2,7 @@
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
-    public interface IExpensesRepository : IRepository<Expense>
+    public interface IExpensesRepository : IRepository<Expense, ulong>
     {
     }
 }

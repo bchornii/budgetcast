@@ -4,15 +4,18 @@ namespace BudgetCast.Expenses.Domain.Expenses
 {
     public class ExpenseItem : Entity
     {
-        private string _title;
-        private string _note;
-        private decimal _price;
-        private int _quantity;
+        public string Title { get; private set; }
+
+        public string Note { get; private set; }
+
+        public decimal Price { get; private set; }
+
+        public int Quantity { get; private set; }
 
         protected ExpenseItem() 
         {
-            _title = default!;
-            _note = default!;
+            Title = default!;
+            Note = default!;
         }
 
         public ExpenseItem(string title, decimal price, int quantity = 1) : this()
@@ -32,25 +35,25 @@ namespace BudgetCast.Expenses.Domain.Expenses
                 throw new Exception("Expense item should have title set.");
             }
 
-            _price = price;
-            _quantity = quantity;
-            _title = title;
+            Price = price;
+            Quantity = quantity;
+            Title = title;
         }
 
         public ExpenseItem(string title, decimal price,
             int quantity, string note) : this(title, price, quantity)
         {
-            _note = note;
+            Note = note;
         }
 
-        public string GetTitle() => _title;
+        public string GetTitle() => Title;
 
-        public string GetNote() => _note;
+        public string GetNote() => Note;
 
-        public decimal GetPrice() => _price;
+        public decimal GetPrice() => Price;
 
-        public int GetQuantity() => _quantity;
+        public int GetQuantity() => Quantity;
 
-        public decimal GetTotalPrice() => GetPrice() * _quantity;
+        public decimal GetTotalPrice() => GetPrice() * Quantity;
     }
 }

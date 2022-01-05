@@ -1,25 +1,49 @@
-using BudgetCast.Common.Web.Extensions;
+using BudgetCast.Expenses.Api;
+using Serilog;
+using Serilog.Events;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-
-builder.Services.AddApplicationServices();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseExceptionHandler("/Error");
+    public static int Main(string[] args)
+    {
+        Log.Logger = CreateSerilogLogger();
+
+        try
+        {
+            Log.Information("Configuring web host");
+            var host = CreateHostBuilder(args).Build();
+
+            Log.Information("Starting web host");
+            host.Run();
+
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Host terminated unexpectedly");
+            return 1;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .UseSerilog((ctx, services, configuration) =>
+                configuration.ReadFrom.Configuration(ctx.Configuration))
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
+
+    private static Serilog.ILogger CreateSerilogLogger()
+    {
+        return new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+    }
 }
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapRazorPages();
-
-app.Run();

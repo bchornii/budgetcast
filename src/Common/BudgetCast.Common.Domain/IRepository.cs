@@ -1,9 +1,9 @@
 ﻿namespace BudgetCast.Common.Domain
 {
-    public interface IRepository<T> where T : AggregateRoot
+    public interface IRepository<TEntity, TKey> where TEntity : AggregateRoot
     {
-        Task<T> Add(T campaign);
-        Task Update(T campaign);
-        Task<T> GetAsync(string id);
+        Task<TEntity> Add(TEntity campaign);
+        Task Update(TEntity campaign);
+        Task<TEntity> GetAsync(TKey id);
     }
 }

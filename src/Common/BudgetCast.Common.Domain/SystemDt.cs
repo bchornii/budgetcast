@@ -1,12 +1,7 @@
 ﻿namespace BudgetCast.Common.Domain
 {
-    public interface ISystemDt
+    public class SystemDt
     {
-        DateTime Current { get; }
-    }
-
-    public class SystemDt : ISystemDt
-    {
-        public DateTime Current => DateTime.UtcNow;
+        public static DateTime Current => DateTime.UtcNow;
     }
 }

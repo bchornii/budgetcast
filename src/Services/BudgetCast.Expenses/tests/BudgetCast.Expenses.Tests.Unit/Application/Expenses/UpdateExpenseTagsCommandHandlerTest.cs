@@ -29,7 +29,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             var expensesMock = new Mock<Expense>();
 
             Mock.Get(_fixture.ExpensesRepository)
-                .Setup(s => s.GetAsync(It.IsAny<string>()))
+                .Setup(s => s.GetAsync(It.IsAny<ulong>()))
                 .ReturnsAsync(expensesMock.Object);
 
             // Act
@@ -51,7 +51,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             var expensesMock = new Mock<Expense>();
 
             Mock.Get(_fixture.ExpensesRepository)
-                .Setup(s => s.GetAsync(It.IsAny<string>()))
+                .Setup(s => s.GetAsync(It.IsAny<ulong>()))
                 .ReturnsAsync(expensesMock.Object);
 
             // Act

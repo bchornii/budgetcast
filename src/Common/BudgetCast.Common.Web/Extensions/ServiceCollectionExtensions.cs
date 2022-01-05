@@ -1,22 +1,23 @@
 ﻿using BudgetCast.Common.Application.Behavior.Idempotency;
 using BudgetCast.Common.Application.Behavior.Logging;
 using BudgetCast.Common.Application.Behavior.Validation;
+using BudgetCast.Common.Authentication;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Reflection;
+using System.Security.Claims;
 
 namespace BudgetCast.Common.Web.Extensions
 {
-    public record LoggingOptions(bool IncludeRequestBody, bool IncludePayload);
-
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services, 
-            params Type[] handlerAssemblyMarkerTypes)
+            Assembly assembly)
         {
-            services.AddMediatR(handlerAssemblyMarkerTypes);
+            services.AddMediatR(assembly);
 
             // Register MediatR pipelines for logging, validation and idempotency
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
@@ -31,8 +32,30 @@ namespace BudgetCast.Common.Web.Extensions
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotentBehavior<,>));
 
+            services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();
+
             // Register Fluent Validators from the same assembly where Commands/Queries
-            services.AddValidatorsFromAssemblyContaining(handlerAssemblyMarkerTypes[0]);
+            services.AddValidatorsFromAssembly(assembly);
+
+            return services;
+        }
+
+        public static IServiceCollection AddFakeIdentityContext(
+            this IServiceCollection services)
+        {
+            services.AddScoped<IIdentityContext>(factory =>
+            {
+                return new IdentityContext
+                {
+                    UserIdentity = new ClaimsPrincipal(new ClaimsIdentity[]
+                    {
+                        new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, "bchornii")
+                        })
+                    })
+                };
+            });
 
             return services;
         }

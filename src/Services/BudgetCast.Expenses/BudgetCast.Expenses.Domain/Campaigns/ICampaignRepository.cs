@@ -2,7 +2,7 @@
 
 namespace BudgetCast.Expenses.Domain.Campaigns
 {
-    public interface ICampaignRepository : IRepository<Campaign>
+    public interface ICampaignRepository : IRepository<Campaign, ulong>
     {
     }
 }

@@ -8,7 +8,7 @@ namespace BudgetCast.Expenses.Domain.Campaigns
 
         public DateTime StartsAt { get; private set; }
 
-        public DateTime CompletesAt { get; private set; }
+        public DateTime? CompletesAt { get; private set; }
 
         protected Campaign() 
         {
@@ -27,7 +27,7 @@ namespace BudgetCast.Expenses.Domain.Campaigns
             (StartsAt, CompletesAt) = GetFirstAndLastDaysOfTheMonth();
         }
 
-        public Campaign(string title, DateTime startsAt, DateTime completesAt) : this(title)
+        public Campaign(string title, DateTime startsAt, DateTime? completesAt) : this(title)
         {
             if (startsAt > completesAt)
             {

@@ -7,11 +7,11 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
     public class TagTests
     {
         [Theory]
-        [InlineData("Name1", "ExpenseID4")]
-        [InlineData("Name2", "ExpenseID3")]
-        [InlineData("Name3", "ExpenseID2")]
-        [InlineData("Name4", "ExpenseID1")]
-        public void TagCtor_DoesNot_Change_Values_During_Init(string name, string expenseId)
+        [InlineData("Name1", 1)]
+        [InlineData("Name2", 2)]
+        [InlineData("Name3", 3)]
+        [InlineData("Name4", 4)]
+        public void TagCtor_DoesNot_Change_Values_During_Init(string name, ulong expenseId)
         {
             // Arrange
             var tag = new Tag(name, expenseId);

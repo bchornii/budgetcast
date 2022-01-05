@@ -4,11 +4,11 @@ namespace BudgetCast.Expenses.Domain.Expenses
 {
     public class Expense : AggregateRoot
     {
-        private DateTime _date;
-        private string _description;
+        public DateTime AddedAt { get; private set; }
 
-        private string _campaignId;
-        public string CampaignId => _campaignId;
+        public string Description { get; private set; }
+
+        public string CampaignId { get; private set; }
 
         private readonly List<ExpenseItem> _expenseItems;
         public IReadOnlyCollection<ExpenseItem> ExpenseItems => _expenseItems;
@@ -18,8 +18,8 @@ namespace BudgetCast.Expenses.Domain.Expenses
 
         protected Expense()
         {
-            _description = default!;
-            _campaignId = default!;
+            Description = default!;
+            CampaignId = default!;
             _expenseItems = new List<ExpenseItem>();
             _tags = new List<Tag>();
         }
@@ -28,9 +28,9 @@ namespace BudgetCast.Expenses.Domain.Expenses
             string campaignId,
             string description = "no description") : this()
         {
-            _date = date;
-            _campaignId = campaignId;
-            _description = description;
+            AddedAt = date;
+            CampaignId = campaignId;
+            Description = description;
         }
         public virtual void AddItem(ExpenseItem expenseItem)
         {
@@ -56,7 +56,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
 
         public virtual void SetCampaignId(string campaignId)
         {
-            _campaignId = campaignId;
+            CampaignId = campaignId;
         }
 
         public virtual decimal TotalAmount() => _expenseItems.Sum(item => item.GetTotalPrice());

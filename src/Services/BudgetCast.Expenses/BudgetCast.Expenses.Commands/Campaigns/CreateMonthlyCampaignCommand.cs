@@ -5,7 +5,7 @@ using BudgetCast.Expenses.Domain.Campaigns;
 
 namespace BudgetCast.Expenses.Commands.Campaigns
 {
-    public record CreateMonthlyCampaignCommand : ICommand<Result<string>>
+    public record CreateMonthlyCampaignCommand : ICommand<Result<ulong>>
     {
         public string Name { get; set; }
 
@@ -16,7 +16,7 @@ namespace BudgetCast.Expenses.Commands.Campaigns
     }
 
     public class CreateMonthlyCampaignCommandHandler :
-        ICommandHandler<CreateMonthlyCampaignCommand, Result<string>>
+        ICommandHandler<CreateMonthlyCampaignCommand, Result<ulong>>
     {
         private readonly ICampaignRepository _campaignRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -29,14 +29,14 @@ namespace BudgetCast.Expenses.Commands.Campaigns
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<string>> Handle(
+        public async Task<Result<ulong>> Handle(
             CreateMonthlyCampaignCommand request, 
             CancellationToken cancellationToken)
         {
             var campaign = new Campaign(request.Name);
             await _campaignRepository.Add(campaign);
             await _unitOfWork.Commit();
-            return new Success<string>(campaign.Id);
+            return new Success<ulong>(campaign.Id);
         }
     }
 }

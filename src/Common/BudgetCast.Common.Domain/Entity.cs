@@ -7,12 +7,12 @@ namespace BudgetCast.Common.Domain
         private int? _requestedHashCode;
         private List<INotification> _domainEvents;
 
-        public string Id { get; set; }
+        public ulong Id { get; set; }
+
         public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
 
         protected Entity()
         {
-            Id = UniqueIdFactory.GetId();
             _domainEvents = default!;
         }
 

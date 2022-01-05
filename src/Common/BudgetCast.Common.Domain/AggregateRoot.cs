@@ -2,15 +2,30 @@
 {
     public class AggregateRoot : Entity
     {
-        private string _createdBy;
-        private DateTime _createdAt;
-        private string _updatedBy;
-        private DateTime _updatedAt;
+        public string CreatedBy { get; private set; }
+
+        public DateTime CreatedAt { get; private set; }
+
+        public string? UpdatedBy { get; private set; }
+
+        public DateTime? UpdatedAt { get; private set; }
 
         public AggregateRoot()
         {
-            _createdBy = default!;
-            _updatedBy = default!;
+            CreatedBy = default!;
+            UpdatedBy = default!;
+        }
+
+        public void SetCreationDetails(string createdBy, DateTime createdAt)
+        {
+            CreatedBy = createdBy;
+            CreatedAt = createdAt;
+        }
+
+        public void SetUpdateDetails(string updatedBy, DateTime updatedAt)
+        {
+            UpdatedBy = updatedBy;
+            UpdatedAt = updatedAt;
         }
     }
 }
