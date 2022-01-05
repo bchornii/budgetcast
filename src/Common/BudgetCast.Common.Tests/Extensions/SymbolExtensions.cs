@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace BudgetCast.Expenses.Tests.Unit.Extensions
+namespace BudgetCast.Common.Tests.Extensions
 {
     public static class SymbolExtensions
     {

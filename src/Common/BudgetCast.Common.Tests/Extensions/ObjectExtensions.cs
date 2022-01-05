@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 
-namespace BudgetCast.Expenses.Tests.Unit.Extensions
+namespace BudgetCast.Common.Tests.Extensions
 {
     public static class ObjectExtensions
     {

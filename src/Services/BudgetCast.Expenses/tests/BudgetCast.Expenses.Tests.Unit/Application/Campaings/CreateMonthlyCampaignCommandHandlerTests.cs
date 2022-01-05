@@ -1,11 +1,10 @@
 ﻿using AutoFixture;
 using BudgetCast.Common.Domain;
+using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Commands.Campaigns;
 using BudgetCast.Expenses.Domain.Campaigns;
-using BudgetCast.Expenses.Tests.Unit.Extensions;
 using FluentAssertions;
 using Moq;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;

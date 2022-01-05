@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Tests\BudgetCast.Common.Tests.csproj" />
     <ProjectReference Include="..\..\BudgetCast.Expenses.Commands\BudgetCast.Expenses.Commands.csproj" />
     <ProjectReference Include="..\..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
   </ItemGroup>

@@ -1,9 +1,7 @@
 ﻿using Moq;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace BudgetCast.Expenses.Tests.Unit.Extensions
+namespace BudgetCast.Common.Tests.Extensions
 {
     public static class MockExtensions
     {

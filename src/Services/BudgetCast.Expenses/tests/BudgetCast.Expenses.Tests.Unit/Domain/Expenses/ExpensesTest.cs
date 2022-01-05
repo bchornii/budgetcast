@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
+using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Domain.Expenses;
-using BudgetCast.Expenses.Tests.Unit.Extensions;
 using FluentAssertions;
 using System;
 using System.Linq;
