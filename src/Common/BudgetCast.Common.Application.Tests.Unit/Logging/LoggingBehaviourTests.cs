@@ -7,9 +7,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -36,7 +33,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
         #region Verify command handler result returned as expected
 
         [Theory]
-        [MemberData(nameof(CommonHelpers.GetResultTypes), MemberType = typeof(CommonHelpers)]
+        [MemberData(nameof(CommonHelpers.GetResultTypes), MemberType = typeof(CommonHelpers))]
         public async Task Handle_NonGenericResultQueryBehavior_Should_Execute_Handler_And_Return_It_Result(Result commandResult)
         {
             // Arrange
@@ -67,8 +64,8 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             result.Should().Be(commandResult);
         }
 
-        [DynamicData(nameof(CommonHelpers.GetResultTypes), typeof(CommonHelpers), DynamicDataSourceType.Method)]
-        [TestMethod]
+        [Theory]
+        [MemberData(nameof(CommonHelpers.GetResultTypes), MemberType = typeof(CommonHelpers))]
         public async Task Handle_NonGenericResultCommandBehavior_Should_Execute_Handler_And_Return_It_Result(Result commandResult)
         {
             // Arrange
@@ -83,8 +80,8 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             result.Should().Be(commandResult);
         }
 
-        [DynamicData(nameof(CommonHelpers.GetGenericResultTypes), typeof(CommonHelpers), DynamicDataSourceType.Method)]
-        [TestMethod]
+        [Theory]
+        [MemberData(nameof(CommonHelpers.GetGenericResultTypes), MemberType = typeof(CommonHelpers))]
         public async Task Handle_GenericResultCommandBehavior_Should_Execute_Handler_And_Return_It_Result(Result<FakeData> commandResult)
         {
             // Arrange
@@ -103,64 +100,64 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
 
         #region Verify that behavior does not swallow exceptions throwed by command handler
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public async Task Handle_NonGenericResultQueryBehavior_CommandHandler_Throws_Should_Propagate_Exception()
         {
             // Arrange
             var successHandler = _nonGenericResultQueryBehavior.ExceptionHandlerDelegate();
 
             // Act
-            await _nonGenericResultQueryBehavior
+            var result = _nonGenericResultQueryBehavior
                 .Behavior
                 .Handle(new FakeQuery(), CancellationToken.None, successHandler);
 
             // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public async Task Handle_GenericResultQueryBehavior_CommandHandler_Throws_Should_Propagate_Exception()
         {
             // Arrange
             var successHandler = _genericResultQueryBehavior.ExceptionHandlerDelegate();
 
             // Act
-            await _genericResultQueryBehavior
+            var result = _genericResultQueryBehavior
                 .Behavior
                 .Handle(new FakeGenericQuery(), CancellationToken.None, successHandler);
 
             // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public async Task Handle_NonGenericResultCommandBehavior_CommandHandler_Throws_Should_Propagate_Exception()
         {
             // Arrange
             var successHandler = _nonGenericResultCommandBehavior.ExceptionHandlerDelegate();
 
             // Act
-            await _nonGenericResultCommandBehavior
+            var result = _nonGenericResultCommandBehavior
                 .Behavior
                 .Handle(new FakeCommand(), CancellationToken.None, successHandler);
 
             // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public async Task Handle_GenericResultCommandBehavior_CommandHandler_Throws_Should_Propagate_Exception()
         {
             // Arrange
             var successHandler = _genericResultCommandBehavior.ExceptionHandlerDelegate();
 
             // Act
-            await _genericResultCommandBehavior
+            var result = _genericResultCommandBehavior
                 .Behavior
                 .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
 
             // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
 
         #endregion
