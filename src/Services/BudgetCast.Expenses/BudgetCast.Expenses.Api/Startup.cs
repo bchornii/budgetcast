@@ -24,7 +24,7 @@ namespace BudgetCast.Expenses.Api
                 .Services
                 .AddCustomSwagger()
                 .AddDomain()
-                .AddFakeIdentityContext()
+                .AddIdentityContext()
                 .AddApplicationServices(typeof(CommandsAssemblyMarkerType).Assembly)
                 .AddCustomDbContext(Configuration, Env)
                 .AddCustomHealthCheck(Configuration);

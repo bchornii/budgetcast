@@ -40,11 +40,12 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddFakeIdentityContext(
+        public static IServiceCollection AddIdentityContext(
             this IServiceCollection services)
         {
             services.AddScoped<IIdentityContext>(factory =>
             {
+                // TODO: remove this fake
                 return new IdentityContext
                 {
                     UserIdentity = new ClaimsPrincipal(new ClaimsIdentity[]
