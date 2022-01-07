@@ -2,10 +2,8 @@
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
-    public class Tag
+    public record Tag : ValueObject
     {
-        public string Name { get; set; }
-
-        public ulong ExpenseId { get; set; }
+        public string Name { get; init; }
     }
 }

@@ -10,7 +10,7 @@ namespace BudgetCast.Expenses.Data.Expenses
 
         public void Configure(EntityTypeBuilder<ExpenseItem> builder)
         {
-            builder.ToTable(ExpensesDbContext.DbSchema, "ExpenseItem");
+            builder.ToTable("ExpenseItems", ExpensesDbContext.DbSchema);
 
             builder.HasKey(x => x.Id);
 

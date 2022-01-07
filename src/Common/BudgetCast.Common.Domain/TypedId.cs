@@ -1,5 +1,6 @@
 ﻿namespace BudgetCast.Common.Domain
 {
+    // https://andrewlock.net/using-strongly-typed-entity-ids-to-avoid-primitive-obsession-part-3/#custom-value-converters-result-in-client-side-evaluation
     public class TypedId : IEquatable<TypedId>
     {
         public ulong Value { get; }

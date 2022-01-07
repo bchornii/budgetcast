@@ -6,7 +6,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
     {
         public string Title { get; private set; }
 
-        public string Note { get; private set; }
+        public string? Note { get; private set; }
 
         public decimal Price { get; private set; }
 
@@ -46,9 +46,18 @@ namespace BudgetCast.Expenses.Domain.Expenses
             Note = note;
         }
 
+        public void UpdateNote(string note)
+        {
+            if(string.IsNullOrWhiteSpace(note))
+            {
+                throw new Exception("Note should contain some text.");
+            }
+            Note = note;
+        }
+
         public string GetTitle() => Title;
 
-        public string GetNote() => Note;
+        public string? GetNote() => Note;
 
         public decimal GetPrice() => Price;
 

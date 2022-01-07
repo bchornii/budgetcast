@@ -2,18 +2,28 @@
 
 namespace BudgetCast.Common.Domain
 {
-    public abstract class Entity
+    public abstract class Entity : IAuditableEntity
     {
         private int? _requestedHashCode;
         private List<INotification> _domainEvents;
 
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
+
+        public string CreatedBy { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public string LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedOn { get; set; }
 
         protected Entity()
         {
             _domainEvents = default!;
+            CreatedBy = default!;
+            LastModifiedBy = default!;
         }
 
         public override bool Equals(object obj)
@@ -86,6 +96,5 @@ namespace BudgetCast.Common.Domain
         }
 
         private bool IsTransient() => Id == default;
-
     }
 }

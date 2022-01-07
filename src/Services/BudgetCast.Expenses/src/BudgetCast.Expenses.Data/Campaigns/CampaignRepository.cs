@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Expenses.Domain.Campaigns;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data.Campaigns
 {
@@ -17,8 +18,11 @@ namespace BudgetCast.Expenses.Data.Campaigns
             return entityEntry.Entity;
         }
 
-        public async Task<Campaign> GetAsync(ulong id) 
+        public async Task<Campaign> GetAsync(long id) 
             => await _dbContext.Campaigns.FindAsync(id);
+
+        public Task<Campaign?> GetByNameAsync(string name) 
+            => _dbContext.Campaigns.FirstOrDefaultAsync(c => c.Name == name);
 
         public Task Update(Campaign campaign)
         {

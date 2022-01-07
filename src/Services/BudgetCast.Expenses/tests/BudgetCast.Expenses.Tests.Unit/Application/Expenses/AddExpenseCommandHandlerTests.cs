@@ -2,6 +2,7 @@
 using BudgetCast.Common.Domain;
 using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Commands.Expenses;
+using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using FluentAssertions;
 using Moq;
@@ -60,6 +61,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
 
             public IExpensesRepository ExpensesRepository { get; }
 
+            public ICampaignRepository CampaignRepository { get; }
+
             public IUnitOfWork UnitOfWork { get; }
 
             public AddExpenseCommandHandler Handler { get; }
@@ -68,8 +71,9 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             {
                 Fixture = new Fixture();
                 ExpensesRepository = Mock.Of<IExpensesRepository>();
+                CampaignRepository = Mock.Of<ICampaignRepository>();
                 UnitOfWork = Mock.Of<IUnitOfWork>();
-                Handler = new AddExpenseCommandHandler(ExpensesRepository, UnitOfWork);
+                Handler = new AddExpenseCommandHandler(ExpensesRepository, CampaignRepository, UnitOfWork);
             }
         }
     }

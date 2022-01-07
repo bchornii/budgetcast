@@ -6,9 +6,6 @@ namespace BudgetCast.Expenses.Commands.Tags
     {
         public TagDtoValidator()
         {
-            RuleFor(x => x.ExpenseId)
-                .NotEmpty();
-
             RuleFor(x => x.Name)
                 .NotEmpty();
         }

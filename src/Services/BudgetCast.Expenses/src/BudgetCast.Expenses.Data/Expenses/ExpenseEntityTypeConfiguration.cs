@@ -13,7 +13,7 @@ namespace BudgetCast.Expenses.Data.Expenses
         {
             builder.ToTable("Expenses", ExpensesDbContext.DbSchema);
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => new { x.TenantId, x.Id });
 
             builder.Property(x => x.Id)
                 .UseHiLo(ExpenseIdSeq, ExpensesDbContext.DbSchema);
@@ -23,22 +23,22 @@ namespace BudgetCast.Expenses.Data.Expenses
             var expenseItemsNav = builder.Metadata.FindNavigation(nameof(Expense.ExpenseItems));
             expenseItemsNav.SetPropertyAccessMode(PropertyAccessMode.Field);
 
+            builder.HasMany(nameof(Expense.ExpenseItems))
+                .WithOne()
+                .HasForeignKey("ExpenseTenantId", "ExpenseId");
+
             var tagsNav = builder.Metadata.FindNavigation(nameof(Expense.Tags));
             tagsNav.SetPropertyAccessMode(PropertyAccessMode.Field);
 
             builder.OwnsMany<Tag>(nameof(Expense.Tags), x =>
             {
                 x.ToTable("Tags", ExpensesDbContext.DbSchema);
-                x.WithOwner().HasForeignKey("ExpenseId");
-                x.Property<int>("Id");
+                x.WithOwner().HasForeignKey("ExpenseTenantId", "ExpenseId");
+                x.Property<long>("Id");
                 x.HasKey("Id");
 
                 x.Property(x => x.Name)
                     .HasMaxLength(100);
-
-                x.Property(x => x.ExpenseId)
-                    .IsRequired();
-                    
             });
 
             builder.Property(x => x.AddedAt)
@@ -48,9 +48,20 @@ namespace BudgetCast.Expenses.Data.Expenses
                 .HasMaxLength(150)
                 .HasAnnotation(nameof(Expense.Description), "Expense description");
 
+            builder.Property(x => x.TotalPrice)
+                .HasAnnotation(nameof(Expense.TotalPrice), "Expense total");
+
+            builder.Property<long>("_campaignId")
+                .HasColumnName("CampaignId")
+                .IsRequired();
+
+            builder.Property<long>("_campaignTenantId")
+                .HasColumnName("CampaignTenantId")
+                .IsRequired();
+
             builder.HasOne<Campaign>()
                 .WithMany()
-                .HasForeignKey("_campaignId");
+                .HasForeignKey("_campaignTenantId", "_campaignId");
         }
     }
 }

@@ -31,7 +31,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             var expectedResult = expenseItems.Sum(ei => ei.GetTotalPrice());
 
             // Act
-            var totalPrice = expense.TotalAmount();
+            var totalPrice = expense.GetTotalAmount();
 
             // Assert
             totalPrice.Should().Be(expectedResult);
@@ -89,7 +89,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
         {
             // Arrange
             var expense = _fixture.CreateFakeExpense();
-            var campaignId = _fixture.Fixture.Create<string>();
+            var campaignId = _fixture.Fixture.Create<ulong>();
 
             // Act
             expense.SetCampaignId(campaignId);
@@ -149,7 +149,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             }
 
             public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<string>(), Fixture.Create<string>());
+                => new(Fixture.Create<DateTime>(), Fixture.Create<ulong>(), Fixture.Create<string>());
 
             public ExpenseItem[] CreateFakeExpenseItems(int totalItems = 5)
             {
@@ -169,7 +169,11 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
                 var result = new Tag[totalItems];
                 for (int i = 0; i < result.Length; i++)
                 {
-                    result[i] = new Tag(Fixture.Create<string>(), Fixture.Create<ulong>());
+                    result[i] = new Tag
+                    {
+                        Name = Fixture.Create<string>(),
+                        ExpenseId = Fixture.Create<ulong>()
+                    };
                 }
                 return result;
             }

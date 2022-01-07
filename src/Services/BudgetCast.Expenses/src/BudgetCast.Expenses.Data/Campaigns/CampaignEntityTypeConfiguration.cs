@@ -12,7 +12,7 @@ namespace BudgetCast.Expenses.Data.Campaigns
         {
             builder.ToTable("Campaigns", ExpensesDbContext.DbSchema);
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => new { x.TenantId, x.Id });
 
             builder.Property(x => x.Id)
                 .UseHiLo(CampaignIdSeq, ExpensesDbContext.DbSchema);

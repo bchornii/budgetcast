@@ -10,7 +10,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             RuleFor(x => x.AddedAt)
                 .NotEmpty();
 
-            RuleFor(x => x.CampaignId)
+            RuleFor(x => x.CampaignName)
                 .NotEmpty();
 
             When(x => x.Tags.Any(), () =>

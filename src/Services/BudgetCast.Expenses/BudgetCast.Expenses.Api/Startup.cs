@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Api.Infrastructure.Extensions;
 using BudgetCast.Expenses.Commands;
+using BudgetCast.Expenses.Queries;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -22,11 +23,14 @@ namespace BudgetCast.Expenses.Api
             services
                 .AddControllers()
                 .Services
+                .AddHttpContextAccessor()
                 .AddCustomSwagger()
                 .AddDomain()
                 .AddIdentityContext()
-                .AddApplicationServices(typeof(CommandsAssemblyMarkerType).Assembly)
-                .AddCustomDbContext(Configuration, Env)
+                .AddApplicationServices(
+                    typeof(CommandsAssemblyMarkerType).Assembly,
+                    typeof(QueriesAssemblyMarkerType).Assembly)
+                .AddData(Configuration, Env)
                 .AddCustomHealthCheck(Configuration);
         }
 

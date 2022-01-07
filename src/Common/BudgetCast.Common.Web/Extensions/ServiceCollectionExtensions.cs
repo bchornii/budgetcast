@@ -15,9 +15,9 @@ namespace BudgetCast.Common.Web.Extensions
     {
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services, 
-            Assembly assembly)
+            params Assembly[] assemblies)
         {
-            services.AddMediatR(assembly);
+            services.AddMediatR(assemblies);
 
             // Register MediatR pipelines for logging, validation and idempotency
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
@@ -35,7 +35,10 @@ namespace BudgetCast.Common.Web.Extensions
             services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();
 
             // Register Fluent Validators from the same assembly where Commands/Queries
-            services.AddValidatorsFromAssembly(assembly);
+            foreach (var assembly in assemblies)
+            {
+                services.AddValidatorsFromAssembly(assembly);
+            }
 
             return services;
         }

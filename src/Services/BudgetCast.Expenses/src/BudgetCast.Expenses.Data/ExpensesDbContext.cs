@@ -3,6 +3,7 @@ using BudgetCast.Common.Domain;
 using BudgetCast.Expenses.Data.Extensions;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data
@@ -18,9 +19,13 @@ namespace BudgetCast.Expenses.Data
 
         public DbSet<Campaign> Campaigns { get; set; }
 
-        public ExpensesDbContext(DbContextOptions<ExpensesDbContext> options, IIdentityContext identityContext)
+        public long Tenant { get; set; }
+
+        public ExpensesDbContext(DbContextOptions<ExpensesDbContext> options, IIdentityContext identityContext, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
+            Tenant = long.Parse(httpContextAccessor.HttpContext?.Request.Headers["my-tenant"]);
+
             _identityContext = identityContext;
             Expenses = Set<Expense>();
             ExpenseItems = Set<Expense>();
@@ -32,28 +37,57 @@ namespace BudgetCast.Expenses.Data
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ExpensesDbContext).Assembly)
                 .MarkDateTimeColumnsAsDateTimeInDb();
+
+            modelBuilder
+                .AppendGlobalQueryFilter<IMustHaveTenant>(b => b.TenantId == Tenant)
+                .AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
         }
 
         public async Task<bool> Commit()
         {
-            ChangeTracker.DetectChanges();
-            foreach (var entity in ChangeTracker.Entries())
+            var currentUserId = _identityContext.UserId;
+            var now = SystemDt.Current;
+            foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
             {
-                if(entity.Entity is AggregateRoot aggregate)
+                switch (entry.State)
                 {
-                    if (entity.State == EntityState.Added)
-                    {
-                        aggregate.SetCreationDetails(_identityContext.UserId, SystemDt.Current);
-                    }
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = currentUserId;
+                        entry.Entity.LastModifiedBy = currentUserId;
+                        entry.Entity.CreatedOn = now;
+                        break;
 
-                    if(entity.State == EntityState.Modified)
-                    {
-                        // TODO: this won't work for included entities, because we're checking only aggregate root here
-                        // TODO: need to come up with a fix
-                        aggregate.SetUpdateDetails(_identityContext.UserId, SystemDt.Current);
-                    }
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedOn = now;
+                        entry.Entity.LastModifiedBy = currentUserId;
+                        break;
+
+                    case EntityState.Deleted:
+                        if (entry.Entity is ISoftDelete softDelete)
+                        {
+                            softDelete.DeletedBy = currentUserId;
+                            softDelete.DeletedOn = now;
+                            entry.State = EntityState.Modified;
+                        }
+                        break;
                 }
             }
+
+            foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                        if (entry.Entity.TenantId == default)
+                        {
+                            entry.Entity.TenantId = Tenant;
+                        }
+
+                        break;
+                }
+            }
+
             var result = await base.SaveChangesAsync();
             return result > 0;
         }

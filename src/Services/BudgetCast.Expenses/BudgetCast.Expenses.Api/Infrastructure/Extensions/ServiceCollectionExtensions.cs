@@ -4,6 +4,7 @@ using BudgetCast.Expenses.Data.Campaigns;
 using BudgetCast.Expenses.Data.Expenses;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
+using BudgetCast.Expenses.Queries.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -46,7 +47,7 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services,
+        public static IServiceCollection AddData(this IServiceCollection services,
             IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddDbContext<ExpensesDbContext>(options =>
@@ -69,6 +70,9 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
 
             services.AddScoped<IUnitOfWork>(services =>
                     services.GetRequiredService<ExpensesDbContext>());
+
+            services.AddScoped<ISqlConnectionFactory>(services => 
+                new SqlConnectionFactory(configuration["ExpensesDb:ConnectionString"]));
 
             return services;
         }

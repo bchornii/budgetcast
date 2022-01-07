@@ -1,14 +1,18 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Expenses.Domain.Campaigns;
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
     public class Expense : AggregateRoot
     {
+        private long _campaignId;
+        private long _campaignTenantId;
+
         public DateTime AddedAt { get; private set; }
 
         public string Description { get; private set; }
 
-        public string CampaignId { get; private set; }
+        public decimal TotalPrice { get; private set; }
 
         private readonly List<ExpenseItem> _expenseItems;
         public IReadOnlyCollection<ExpenseItem> ExpenseItems => _expenseItems;
@@ -19,19 +23,22 @@ namespace BudgetCast.Expenses.Domain.Expenses
         protected Expense()
         {
             Description = default!;
-            CampaignId = default!;
             _expenseItems = new List<ExpenseItem>();
             _tags = new List<Tag>();
         }
 
-        public Expense(DateTime date, 
-            string campaignId,
+        public Expense(
+            DateTime addedAt,
+            Campaign campaign, 
             string description = "no description") : this()
         {
-            AddedAt = date;
-            CampaignId = campaignId;
+            AddedAt = addedAt;
             Description = description;
+
+            _campaignId = campaign.Id;
+            _campaignTenantId = campaign.TenantId;
         }
+
         public virtual void AddItem(ExpenseItem expenseItem)
         {
             if (_expenseItems.Count >= 100)
@@ -40,6 +47,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
             }
 
             _expenseItems.Add(expenseItem);
+            RecalculateTotalPrice();
         }
 
         public virtual void AddTags(Tag[] tags)
@@ -54,11 +62,17 @@ namespace BudgetCast.Expenses.Domain.Expenses
             _tags.AddRange(nonExistingTags);
         }
 
-        public virtual void SetCampaignId(string campaignId)
+        public virtual void SetCampaignId(long campaignId)
         {
-            CampaignId = campaignId;
+            _campaignId = campaignId;
         }
 
-        public virtual decimal TotalAmount() => _expenseItems.Sum(item => item.GetTotalPrice());
+        public virtual decimal GetTotalAmount() 
+            => _expenseItems.Sum(item => item.GetTotalPrice());
+
+        private void RecalculateTotalPrice()
+        {
+            TotalPrice = GetTotalAmount();
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace BudgetCast.Expenses.Commands.Tags
 {
     public record UpdateExpenseTagsCommand : ICommand<Result>
     {
-        public ulong ExpenseId { get; init; }
+        public long ExpenseId { get; init; }
 
         public TagDto[] Tags { get; init; }
 

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
@@ -15,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common\BudgetCast.Common.csproj" />
     <ProjectReference Include="..\..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj" />
   </ItemGroup>
 
 </Project>

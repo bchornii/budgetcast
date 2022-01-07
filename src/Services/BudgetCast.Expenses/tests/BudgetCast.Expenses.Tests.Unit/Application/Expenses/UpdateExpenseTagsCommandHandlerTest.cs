@@ -80,7 +80,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             }
 
             public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<string>(), Fixture.Create<string>());
+                => new(Fixture.Create<DateTime>(), Fixture.Create<ulong>(), Fixture.Create<string>());
         }
     }
 }
