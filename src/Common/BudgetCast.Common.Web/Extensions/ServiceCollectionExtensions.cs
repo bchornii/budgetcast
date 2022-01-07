@@ -2,6 +2,7 @@
 using BudgetCast.Common.Application.Behavior.Logging;
 using BudgetCast.Common.Application.Behavior.Validation;
 using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Web.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,6 +62,13 @@ namespace BudgetCast.Common.Web.Extensions
                 };
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddCurrentTenant(this IServiceCollection services)
+        {
+            services.AddScoped<CurrentTenantMiddleware>();
+            services.AddScoped<ITenantService, TenantService>();
             return services;
         }
     }

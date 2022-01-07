@@ -31,7 +31,8 @@ namespace BudgetCast.Expenses.Api
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
                 .AddData(Configuration, Env)
-                .AddCustomHealthCheck(Configuration);
+                .AddCustomHealthCheck(Configuration)
+                .AddCurrentTenant();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -51,6 +52,7 @@ namespace BudgetCast.Expenses.Api
             app.UseCors();
 
             app.UseAuthentication();
+            app.UseCurrentTenant();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,9 +1,9 @@
 ﻿using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Domain;
+using BudgetCast.Common.Web.Middleware;
 using BudgetCast.Expenses.Data.Extensions;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data
@@ -21,10 +21,13 @@ namespace BudgetCast.Expenses.Data
 
         public long Tenant { get; set; }
 
-        public ExpensesDbContext(DbContextOptions<ExpensesDbContext> options, IIdentityContext identityContext, IHttpContextAccessor httpContextAccessor)
+        public ExpensesDbContext(
+            DbContextOptions<ExpensesDbContext> options, 
+            IIdentityContext identityContext, 
+            ITenantService tenantService)
             : base(options)
         {
-            Tenant = long.Parse(httpContextAccessor.HttpContext?.Request.Headers["my-tenant"]);
+            Tenant = tenantService.TenantId;
 
             _identityContext = identityContext;
             Expenses = Set<Expense>();
