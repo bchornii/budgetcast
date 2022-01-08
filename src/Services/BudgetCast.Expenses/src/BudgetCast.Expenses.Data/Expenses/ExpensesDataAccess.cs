@@ -1,6 +1,8 @@
 ﻿using BudgetCast.Common.Models;
+using BudgetCast.Common.Web.Middleware;
 using BudgetCast.Expenses.Queries.Expenses;
 using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data.Expenses
@@ -9,9 +11,12 @@ namespace BudgetCast.Expenses.Data.Expenses
     {
         private readonly ExpensesDbContext _context;
 
-        public ExpensesDataAccess(ExpensesDbContext context)
+        public long TenantId { get; }
+
+        public ExpensesDataAccess(ExpensesDbContext context, ITenantService tenantService)
         {
             _context = context;
+            TenantId = tenantService.TenantId;
         }
 
         public async Task<PageResult<ExpenseVm>> GetAsync(
@@ -51,6 +56,22 @@ namespace BudgetCast.Expenses.Data.Expenses
                 .ToListAsync(cancellationToken: cancellationToken);
 
             return new PageResult<ExpenseVm>(items, pageSize, pageNumber, count);
+        }
+
+        public async Task<IReadOnlyList<string>> SearchForTagsAsync(string tagTerm, int amount)
+        {
+            var connection = _context.Database.GetDbConnection();
+            var result = await connection.QueryAsync<string>(
+                $"SELECT TOP {amount} Name " +
+                "FROM dbo.Tags " +
+                "WHERE Name LIKE @tagTerm AND ExpenseTenantId = @tenantId",
+                param: new
+                {
+                    tagTerm = $"{tagTerm}%",
+                    tenantId = TenantId,
+                });
+
+            return result.Distinct().OrderBy(x => x).ToArray();
         }
     }
 }

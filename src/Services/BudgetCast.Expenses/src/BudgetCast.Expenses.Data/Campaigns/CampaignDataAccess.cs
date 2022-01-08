@@ -26,7 +26,7 @@ namespace BudgetCast.Expenses.Data.Campaigns
         {
             var query = _context.Campaigns
                 .AsNoTracking()
-                .Where(x => EF.Functions.Like(x.Name, $"%{campaignName}%"));
+                .Where(x => EF.Functions.Like(x.Name, $"{campaignName}%"));
 
             if(amount == 1)
             {
