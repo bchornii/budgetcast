@@ -40,7 +40,7 @@ namespace BudgetCast.Expenses.Commands.Tags
             var tags = ExpensesTagsCommandMapper.MapFrom(request.Tags);
             expense.AddTags(tags);
             await _unitOfWork.Commit();
-            return new Success();
+            return Success.Empty;
         }
     }
 }

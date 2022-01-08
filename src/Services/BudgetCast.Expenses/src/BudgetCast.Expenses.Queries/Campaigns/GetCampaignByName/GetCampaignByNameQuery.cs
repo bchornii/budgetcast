@@ -26,8 +26,7 @@ namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName
             GetCampaignByNameQuery request, 
             CancellationToken cancellationToken)
         {
-            var result = await _campaignDataAccess.GetAsync(request.Name, cancellationToken);
-            return new Success<CampaignVm>(result);
+            return await _campaignDataAccess.GetAsync(request.Name, cancellationToken);
         }
     }
 }

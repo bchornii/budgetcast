@@ -67,7 +67,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             await _expensesRepository.Add(expense);
             await _unitOfWork.Commit();
 
-            return new Success<long>(expense.Id);
+            return expense.Id;
         }
     }
 }

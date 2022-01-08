@@ -40,10 +40,8 @@ namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
         {
             var campaignVm = await _campaignDataAccess.GetAsync(request.CampaignName, cancellationToken);
 
-            var result = await _expensesDataAccess
+            return await _expensesDataAccess
                 .GetAsync(campaignVm.Id, request.Page, request.PageSize, cancellationToken);
-
-            return new Success<PageResult<ExpenseVm>>(result);
         }
     }
 }

@@ -4,7 +4,11 @@
 
     public record Result;
 
-    public record Result<T> : Result;
+    public record Result<T> : Result
+    {
+        public static implicit operator Result<T>(T value)
+            => value == null ? new NotFound<T>() : new Success<T>(value);
+    }
 
     #endregion
 

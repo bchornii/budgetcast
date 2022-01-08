@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Commands.Expenses;
 using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
+using BudgetCast.Expenses.Queries.Expenses.GetExpenseById;
 using BudgetCast.Expenses.Queries.Expenses.SearchForExistingTagsByName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,14 @@ namespace BudgetCast.Expenses.Api.Controllers
             [FromQuery] GetCampaingExpensesQuery query)
         {
             var result = await _mediator.Send(query);
+            return result.ToActionResult();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(
+            [FromRoute] long id)
+        {
+            var result = await _mediator.Send(new GetExpenseByIdQuery(id));
             return result.ToActionResult();
         }
 

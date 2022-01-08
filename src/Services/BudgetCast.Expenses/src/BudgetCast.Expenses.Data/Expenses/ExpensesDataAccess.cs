@@ -2,6 +2,7 @@
 using BudgetCast.Common.Web.Middleware;
 using BudgetCast.Expenses.Queries.Expenses;
 using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
+using BudgetCast.Expenses.Queries.Expenses.GetExpenseById;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,6 +73,28 @@ namespace BudgetCast.Expenses.Data.Expenses
                 });
 
             return result.Distinct().OrderBy(x => x).ToArray();
+        }
+
+        public async Task<ExpenseDetailsVm> GetAsync(long expenseId, CancellationToken cancellationToken)
+        {
+            return await _context.Expenses
+                .Include(e => e.ExpenseItems)
+                .Where(e => e.Id == expenseId)
+                .Select(e => new ExpenseDetailsVm
+                {
+                    CampaignId = EF.Property<long>(e, "_campaignId"),
+                    AddedAt = e.AddedAt,
+                    Description = e.Description,
+                    Tags = e.Tags.Select(t => t.Name).ToArray(),
+                    ExpenseItems = e.ExpenseItems.Select(ei => new ExpenseItemDetailsVm
+                    {
+                        Note = ei.Note ?? string.Empty,
+                        Price = ei.Price,
+                        Quantity = ei.Quantity,
+                        Title = ei.Title
+                    }).ToArray(),
+                })
+                .FirstAsync(cancellationToken: cancellationToken);
         }
     }
 }

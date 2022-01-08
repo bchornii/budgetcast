@@ -36,7 +36,8 @@ namespace BudgetCast.Expenses.Commands.Campaigns
             var campaign = new Campaign(request.Name);
             await _campaignRepository.Add(campaign);
             await _unitOfWork.Commit();
-            return new Success<long>(campaign.Id);
+
+            return campaign.Id;
         }
     }
 }
