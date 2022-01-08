@@ -1,11 +1,9 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Queries;
-using BudgetCast.Expenses.Queries.Data;
-using Dapper;
 
 namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName
 {
-    public record GetCampaignByNameQuery : IQuery<Result<CampaignViewModel>>
+    public record GetCampaignByNameQuery : IQuery<Result<CampaignVm>>
     {
         public string Name { get; init; }
 
@@ -15,30 +13,21 @@ namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName
         }
     }
 
-    public class GetCampaignByNameQueryHandler : IQueryHandler<GetCampaignByNameQuery, Result<CampaignViewModel>>
+    public class GetCampaignByNameQueryHandler : IQueryHandler<GetCampaignByNameQuery, Result<CampaignVm>>
     {
-        private readonly ISqlConnectionFactory _connectionFactory;
+        private readonly ICampaignDataAccess _campaignDataAccess;
 
-        public GetCampaignByNameQueryHandler(ISqlConnectionFactory connectionFactory)
+        public GetCampaignByNameQueryHandler(ICampaignDataAccess campaignDataAccess)
         {
-            _connectionFactory = connectionFactory;
+            _campaignDataAccess = campaignDataAccess;
         }
 
-        public async Task<Result<CampaignViewModel>> Handle(
+        public async Task<Result<CampaignVm>> Handle(
             GetCampaignByNameQuery request, 
             CancellationToken cancellationToken)
         {
-            using var connection = await _connectionFactory
-                .GetOpenConnection(cancellationToken);
-
-            var result = await connection
-                .QuerySingleAsync<CampaignViewModel>(
-                    "SELECT c.Id, c.Name " +
-                    "FROM dbo.Campaigns as c " +
-                    "WHERE c.Name = @Name", 
-                    new { request.Name });
-
-            return new Success<CampaignViewModel>(result);
+            var result = await _campaignDataAccess.GetAsync(request.Name, cancellationToken);
+            return new Success<CampaignVm>(result);
         }
     }
 }

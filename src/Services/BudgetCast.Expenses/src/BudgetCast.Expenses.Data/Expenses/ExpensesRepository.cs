@@ -35,38 +35,6 @@ namespace BudgetCast.Expenses.Data.Expenses
             return expense;
         }
 
-        public async Task TestMeOut()
-        {
-            var e = await _dbContext.Expenses
-                .Include(e => e.ExpenseItems)
-                .OrderByDescending(e => e.Id)
-                .Skip(0)
-                .Take(10)
-                .ToArrayAsync();
-        }
-
-        public async Task<PageResult<ExpenseViewModel>> GetAsync(int page, int pageSize)
-        {
-            var result = await _dbContext.Expenses
-                .Include(e => e.ExpenseItems)
-                .OrderByDescending(e => e.Id)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(x => new ExpenseViewModel
-                {
-                    Id = x.Id,
-                    AddedAt = x.AddedAt,
-                    CreatedBy = x.CreatedBy,
-                    Description = x.Description,
-                    Tags = x.Tags.Select(x => x.Name).ToArray(),
-                    TotalAmount = x.TotalPrice,
-                    TotalItems = x.ExpenseItems.Count
-                })
-                .ToArrayAsync();
-
-            return new PageResult<ExpenseViewModel>(result, 0);
-        }
-
         public Task Update(Expense campaign)
         {
             _dbContext.Expenses.Update(campaign);

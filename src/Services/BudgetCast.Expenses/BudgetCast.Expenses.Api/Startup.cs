@@ -31,6 +31,7 @@ namespace BudgetCast.Expenses.Api
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
                 .AddData(Configuration, Env)
+                .AddDataAccess()
                 .AddCustomHealthCheck(Configuration)
                 .AddCurrentTenant();
         }

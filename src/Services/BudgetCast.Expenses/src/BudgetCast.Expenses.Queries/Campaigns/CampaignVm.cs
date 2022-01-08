@@ -1,12 +1,12 @@
 ﻿namespace BudgetCast.Expenses.Queries.Campaigns
 {
-    public class CampaignViewModel
+    public class CampaignVm
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 
-        public CampaignViewModel()
+        public CampaignVm()
         {
             Name = default!;
         }

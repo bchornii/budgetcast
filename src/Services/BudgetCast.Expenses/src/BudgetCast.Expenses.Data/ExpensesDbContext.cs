@@ -4,6 +4,7 @@ using BudgetCast.Common.Web.Middleware;
 using BudgetCast.Expenses.Data.Extensions;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
+using BudgetCast.Expenses.Queries.Campaigns;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data
@@ -19,6 +20,8 @@ namespace BudgetCast.Expenses.Data
 
         public DbSet<Campaign> Campaigns { get; set; }
 
+        public DbSet<CampaignVm> CampaignsView { get; set; }
+
         public long Tenant { get; set; }
 
         public ExpensesDbContext(
@@ -33,6 +36,7 @@ namespace BudgetCast.Expenses.Data
             Expenses = Set<Expense>();
             ExpenseItems = Set<Expense>();
             Campaigns = Set<Campaign>();
+            CampaignsView = Set<CampaignVm>();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

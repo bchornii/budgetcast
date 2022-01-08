@@ -1,6 +1,6 @@
 ﻿namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
 {
-    public class ExpenseViewModel
+    public class ExpenseVm
     {
         public long Id { get; set; }
 
@@ -16,7 +16,7 @@
 
         public string[] Tags { get; set; }
 
-        public ExpenseViewModel()
+        public ExpenseVm()
         {
             Description = default!;
             Tags = default!;

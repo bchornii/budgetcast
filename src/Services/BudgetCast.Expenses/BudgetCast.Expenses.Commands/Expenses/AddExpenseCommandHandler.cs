@@ -47,8 +47,6 @@ namespace BudgetCast.Expenses.Commands.Expenses
             AddExpenseCommand request, 
             CancellationToken cancellationToken)
         {
-            await _expensesRepository.TestMeOut();
-
             var campaign = await _campaignRepository
                 .GetByNameAsync(request.CampaignName);
 

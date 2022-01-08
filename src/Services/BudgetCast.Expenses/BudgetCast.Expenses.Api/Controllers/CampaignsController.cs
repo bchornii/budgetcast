@@ -17,14 +17,14 @@ namespace BudgetCast.Expenses.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("name/{name}")]
+        [HttpGet("name")]
         public async Task<IActionResult> GetByNameAsync(
-            [FromRoute] string name)
+            [FromQuery] string value)
         {
             var result = await _mediator
                 .Send(new GetCampaignByNameQuery
                 {
-                    Name = name
+                    Name = value
                 });
             return result.ToActionResult();
         }

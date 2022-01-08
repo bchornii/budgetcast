@@ -1,10 +1,12 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Queries;
+using BudgetCast.Common.Models;
+using BudgetCast.Expenses.Queries.Campaigns;
 
 namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
 {
     public record GetCampaingExpensesQuery : 
-        IQuery<Result<ExpenseViewModel>>
+        IQuery<Result<PageResult<ExpenseVm>>>
     {
         public string CampaignName { get; set; }
 
@@ -19,13 +21,29 @@ namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
     }
 
     public class GetCampaingExpensesQueryHandler : 
-        IQueryHandler<GetCampaingExpensesQuery, Result<ExpenseViewModel>>
+        IQueryHandler<GetCampaingExpensesQuery, Result<PageResult<ExpenseVm>>>
     {
-        public Task<Result<ExpenseViewModel>> Handle(
+        private readonly IExpensesDataAccess _expensesDataAccess;
+        private readonly ICampaignDataAccess _campaignDataAccess;
+
+        public GetCampaingExpensesQueryHandler(
+            IExpensesDataAccess expensesDataAccess, 
+            ICampaignDataAccess campaignDataAccess)
+        {
+            _expensesDataAccess = expensesDataAccess;
+            _campaignDataAccess = campaignDataAccess;
+        }
+
+        public async Task<Result<PageResult<ExpenseVm>>> Handle(
             GetCampaingExpensesQuery request, 
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var campaignVm = await _campaignDataAccess.GetAsync(request.CampaignName, cancellationToken);
+
+            var result = await _expensesDataAccess
+                .GetAsync(campaignVm.Id, request.Page, request.PageSize, cancellationToken);
+
+            return new Success<PageResult<ExpenseVm>>(result);
         }
     }
 }

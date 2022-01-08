@@ -4,7 +4,8 @@ using BudgetCast.Expenses.Data.Campaigns;
 using BudgetCast.Expenses.Data.Expenses;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
-using BudgetCast.Expenses.Queries.Data;
+using BudgetCast.Expenses.Queries.Campaigns;
+using BudgetCast.Expenses.Queries.Expenses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -71,9 +72,13 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             services.AddScoped<IUnitOfWork>(services =>
                     services.GetRequiredService<ExpensesDbContext>());
 
-            services.AddScoped<ISqlConnectionFactory>(services => 
-                new SqlConnectionFactory(configuration["ExpensesDb:ConnectionString"]));
+            return services;
+        }
 
+        public static IServiceCollection AddDataAccess(this IServiceCollection services)
+        {
+            services.AddScoped<ICampaignDataAccess, CampaignDataAccess>();
+            services.AddScoped<IExpensesDataAccess, ExpensesDataAccess>();
             return services;
         }
 

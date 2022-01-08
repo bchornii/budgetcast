@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Domain", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Expenses.Data", "src\BudgetCast.Expenses.Data\BudgetCast.Expenses.Data.csproj", "{6BF9D147-D6A5-4102-87F8-E8D404E2CE12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Expenses.Queries", "src\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj", "{4035BDC9-2DED-479E-9C41-58CEC80A7427}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Expenses.Queries", "src\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj", "{4035BDC9-2DED-479E-9C41-58CEC80A7427}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
