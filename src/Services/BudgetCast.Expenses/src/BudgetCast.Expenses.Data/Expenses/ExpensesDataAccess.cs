@@ -1,8 +1,9 @@
 ﻿using BudgetCast.Common.Models;
 using BudgetCast.Common.Web.Middleware;
+using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;
 using BudgetCast.Expenses.Queries.Expenses;
-using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
 using BudgetCast.Expenses.Queries.Expenses.GetExpenseById;
+using BudgetCast.Expenses.Queries.Expenses.GetExpensesForCampaign;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -95,6 +96,55 @@ namespace BudgetCast.Expenses.Data.Expenses
                     }).ToArray(),
                 })
                 .FirstAsync(cancellationToken: cancellationToken);
+        }
+
+        public async Task<TotalsPerCampaignVm> GetTotalsAsync(string campaignName, CancellationToken cancellationToken)
+        {
+            var tagsWithExpenses = await   
+                        (
+                            from e in _context.Expenses
+                            join c in _context.Campaigns
+                                on new
+                                {
+                                    CampaignTenantId = EF.Property<long>(e, "_campaignTenantId"),
+                                    CampaignId = EF.Property<long>(e, "_campaignId")
+                                }
+                                equals new
+                                {
+                                    CampaignTenantId = c.TenantId,
+                                    CampaignId = c.Id
+                                }
+                            where c.Name == campaignName
+                            select e
+                        )
+                        .SelectMany(e => e.Tags, (e, tag) => new
+                        {
+                            ExpensePrice = new
+                            {
+                                e.Id,
+                                Value = e.TotalPrice,
+                            },
+                            tag.Name,
+                        })
+                .ToArrayAsync(cancellationToken: cancellationToken);
+
+            var total = tagsWithExpenses
+                .GroupBy(x => x.ExpensePrice.Id)
+                .Select(g => g.First().ExpensePrice.Value)
+                .Sum();
+
+            var totalsPerTags = tagsWithExpenses
+                .GroupBy(t => t.Name)
+                .Select(g => new KeyValuePair<string, decimal>(
+                    key: g.Key,
+                    value: g.Sum(x => x.ExpensePrice.Value)))
+                .ToArray();
+
+            return new TotalsPerCampaignVm
+            {
+                TotalAmount = total,
+                TagTotalPair = totalsPerTags,
+            };
         }
     }
 }

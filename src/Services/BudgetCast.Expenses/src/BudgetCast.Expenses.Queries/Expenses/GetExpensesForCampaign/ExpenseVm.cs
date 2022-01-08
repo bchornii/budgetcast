@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
+﻿namespace BudgetCast.Expenses.Queries.Expenses.GetExpensesForCampaign
 {
     public class ExpenseVm
     {

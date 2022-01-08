@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Commands.Campaigns;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName;
+using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;
 using BudgetCast.Expenses.Queries.Campaigns.SearchForExistingCampaignsByName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,14 @@ namespace BudgetCast.Expenses.Api.Controllers
         {
             var result = await _mediator.Send(
                 new SearchForExistingCampaignsByNameQuery(amount, nameTerm));
+            return result.ToActionResult();
+        }
+
+        [HttpGet("{name}/totals")]
+        public async Task<IActionResult> GetCampaignTotalsAsync(
+            [FromRoute] string name)
+        {
+            var result = await _mediator.Send(new GetCampaignTotalsQuery(name));
             return result.ToActionResult();
         }
 

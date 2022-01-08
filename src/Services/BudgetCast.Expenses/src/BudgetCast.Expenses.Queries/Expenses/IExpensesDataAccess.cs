@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Models;
-using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
+using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;
 using BudgetCast.Expenses.Queries.Expenses.GetExpenseById;
+using BudgetCast.Expenses.Queries.Expenses.GetExpensesForCampaign;
 
 namespace BudgetCast.Expenses.Queries.Expenses
 {
@@ -11,5 +12,7 @@ namespace BudgetCast.Expenses.Queries.Expenses
         Task<IReadOnlyList<string>> SearchForTagsAsync(string tagTerm, int amount);
 
         Task<ExpenseDetailsVm> GetAsync(long expenseId, CancellationToken cancellationToken);
+
+        Task<TotalsPerCampaignVm> GetTotalsAsync(string campaignName, CancellationToken cancellationToken);
     }
 }

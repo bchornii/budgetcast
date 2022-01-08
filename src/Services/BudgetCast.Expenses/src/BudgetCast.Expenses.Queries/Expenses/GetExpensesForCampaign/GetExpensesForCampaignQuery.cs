@@ -3,9 +3,9 @@ using BudgetCast.Common.Application.Queries;
 using BudgetCast.Common.Models;
 using BudgetCast.Expenses.Queries.Campaigns;
 
-namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
+namespace BudgetCast.Expenses.Queries.Expenses.GetExpensesForCampaign
 {
-    public record GetCampaingExpensesQuery : 
+    public record GetExpensesForCampaignQuery :
         IQuery<Result<PageResult<ExpenseVm>>>
     {
         public string CampaignName { get; set; }
@@ -14,20 +14,20 @@ namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
 
         public int PageSize { get; set; }
 
-        public GetCampaingExpensesQuery()
+        public GetExpensesForCampaignQuery()
         {
             CampaignName = default!;
         }
     }
 
-    public class GetCampaingExpensesQueryHandler : 
-        IQueryHandler<GetCampaingExpensesQuery, Result<PageResult<ExpenseVm>>>
+    public class GetExpensesForCampaignQueryHandler :
+        IQueryHandler<GetExpensesForCampaignQuery, Result<PageResult<ExpenseVm>>>
     {
         private readonly IExpensesDataAccess _expensesDataAccess;
         private readonly ICampaignDataAccess _campaignDataAccess;
 
-        public GetCampaingExpensesQueryHandler(
-            IExpensesDataAccess expensesDataAccess, 
+        public GetExpensesForCampaignQueryHandler(
+            IExpensesDataAccess expensesDataAccess,
             ICampaignDataAccess campaignDataAccess)
         {
             _expensesDataAccess = expensesDataAccess;
@@ -35,7 +35,7 @@ namespace BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses
         }
 
         public async Task<Result<PageResult<ExpenseVm>>> Handle(
-            GetCampaingExpensesQuery request, 
+            GetExpensesForCampaignQuery request,
             CancellationToken cancellationToken)
         {
             var campaignVm = await _campaignDataAccess.GetAsync(request.CampaignName, cancellationToken);
