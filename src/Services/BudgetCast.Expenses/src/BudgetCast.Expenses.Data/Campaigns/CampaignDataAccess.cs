@@ -12,17 +12,55 @@ namespace BudgetCast.Expenses.Data.Campaigns
             _context = context;
         }
 
-        public async Task<CampaignVm> GetAsync(string campaignName, CancellationToken cancellationToken)
+        /// <summary>
+        /// Retrieves campaigns by matching them via name in SQL-like way.
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="campaignName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<CampaignVm>> GetAsync(
+            int amount, 
+            string campaignName, 
+            CancellationToken cancellationToken)
         {
-            var result = await _context.Campaigns
+            var query = _context.Campaigns
                 .AsNoTracking()
-                .FirstAsync(x => x.Name == campaignName, cancellationToken: cancellationToken);
+                .Where(x => EF.Functions.Like(x.Name, $"%{campaignName}%"));
 
-            return new CampaignVm
+            if(amount == 1)
             {
-                Id = result.Id,
-                Name = result.Name,
-            };
+                var result = await query
+                    .FirstAsync(cancellationToken: cancellationToken);
+
+                return new[]
+                {
+                    new CampaignVm
+                    {
+                        Id = result.Id,
+                        Name = result.Name,
+                    }
+                };
+            }
+            else
+            {
+                return await query
+                    .Select(x => new CampaignVm
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                    })
+                    .ToListAsync();
+            }
         }
+
+        /// <summary>
+        /// Retrieves first campaign that matches passed name in a SQL-like way.
+        /// </summary>
+        /// <param name="campaignName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<CampaignVm> GetAsync(string campaignName, CancellationToken cancellationToken)
+            => (await GetAsync(amount: 1, campaignName, cancellationToken))[0];
     }
 }
