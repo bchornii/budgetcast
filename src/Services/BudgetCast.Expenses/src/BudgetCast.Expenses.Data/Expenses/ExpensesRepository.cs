@@ -1,6 +1,4 @@
-﻿using BudgetCast.Common.Models;
-using BudgetCast.Expenses.Domain.Expenses;
-using BudgetCast.Expenses.Queries.Expenses.GetCampaingExpenses;
+﻿using BudgetCast.Expenses.Domain.Expenses;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data.Expenses
@@ -14,17 +12,17 @@ namespace BudgetCast.Expenses.Data.Expenses
             _dbContext = dbContext;
         }
 
-        public async Task<Expense> Add(Expense expense)
+        public async Task<Expense> Add(Expense expense, CancellationToken cancellationToken)
         {
-            var entityEntry = await _dbContext.Expenses.AddAsync(expense);
+            var entityEntry = await _dbContext.Expenses.AddAsync(expense, cancellationToken);
             return entityEntry.Entity;
         }
 
-        public async Task<Expense> GetAsync(long id)
+        public async Task<Expense> GetAsync(long id, CancellationToken cancellationToken)
         {
             var expense = await _dbContext.Expenses
                 .Include(e => e.ExpenseItems)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken);
 
             if(expense is null)
             {
@@ -35,7 +33,7 @@ namespace BudgetCast.Expenses.Data.Expenses
             return expense;
         }
 
-        public Task Update(Expense campaign)
+        public Task Update(Expense campaign, CancellationToken cancellationToken)
         {
             _dbContext.Expenses.Update(campaign);
             return Task.CompletedTask;

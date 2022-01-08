@@ -4,6 +4,8 @@ namespace BudgetCast.Expenses.Domain.Campaigns
 {
     public interface ICampaignRepository : IRepository<Campaign, long>
     {
-        public Task<Campaign?> GetByNameAsync(string name);
+        Task<Campaign?> GetByNameAsync(string name, CancellationToken cancellationToken);
+
+        Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
     }
 }

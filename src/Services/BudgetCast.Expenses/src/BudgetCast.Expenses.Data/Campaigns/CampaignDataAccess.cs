@@ -31,7 +31,12 @@ namespace BudgetCast.Expenses.Data.Campaigns
             if(amount == 1)
             {
                 var result = await query
-                    .FirstAsync(cancellationToken: cancellationToken);
+                    .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+                if(result is null)
+                {
+                    return Array.Empty<CampaignVm>();
+                }
 
                 return new[]
                 {
@@ -62,5 +67,22 @@ namespace BudgetCast.Expenses.Data.Campaigns
         /// <returns></returns>
         public async Task<CampaignVm> GetAsync(string campaignName, CancellationToken cancellationToken)
             => (await GetAsync(amount: 1, campaignName, cancellationToken))[0];
+
+        /// <summary>
+        /// Returns all tenant's campaigns
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<CampaignVm>> GetAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Campaigns
+                .AsNoTracking()
+                .Select(c => new CampaignVm
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToArrayAsync(cancellationToken: cancellationToken);
+        }
     }
 }

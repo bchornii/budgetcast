@@ -64,16 +64,17 @@ namespace BudgetCast.Expenses.Data.Expenses
         {
             var connection = _context.Database.GetDbConnection();
             var result = await connection.QueryAsync<string>(
-                $"SELECT TOP {amount} Name " +
-                "FROM dbo.Tags " +
-                "WHERE Name LIKE @tagTerm AND ExpenseTenantId = @tenantId",
+                @"SELECT Name
+                  FROM dbo.Tags
+                  WHERE Name LIKE @tagTerm 
+                    AND ExpenseTenantId = @tenantId",
                 param: new
                 {
                     tagTerm = $"{tagTerm}%",
                     tenantId = TenantId,
                 });
 
-            return result.Distinct().OrderBy(x => x).ToArray();
+            return result.Distinct().OrderBy(x => x).Take(amount).ToArray();
         }
 
         public async Task<ExpenseDetailsVm> GetAsync(long expenseId, CancellationToken cancellationToken)

@@ -36,7 +36,8 @@ namespace BudgetCast.Expenses.Commands.Tags
             UpdateExpenseTagsCommand request, 
             CancellationToken cancellationToken)
         {
-            var expense = await _expensesRepository.GetAsync(request.ExpenseId);
+            var expense = await _expensesRepository
+                .GetAsync(request.ExpenseId, cancellationToken);
             var tags = ExpensesTagsCommandMapper.MapFrom(request.Tags);
             expense.AddTags(tags);
             await _unitOfWork.Commit();

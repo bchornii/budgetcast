@@ -48,12 +48,12 @@ namespace BudgetCast.Expenses.Commands.Expenses
             CancellationToken cancellationToken)
         {
             var campaign = await _campaignRepository
-                .GetByNameAsync(request.CampaignName);
+                .GetByNameAsync(request.CampaignName, cancellationToken);
 
             if(campaign is null)
             {
                 var newCampaign = new Campaign(request.CampaignName);
-                campaign = await _campaignRepository.Add(newCampaign);
+                campaign = await _campaignRepository.Add(newCampaign, cancellationToken);
             }
 
             var expense = new Expense(request.AddedAt, campaign, request.Description);
@@ -64,7 +64,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             var expenseItem = new ExpenseItem("Default item", request.TotalAmount);
             expense.AddItem(expenseItem);
 
-            await _expensesRepository.Add(expense);
+            expense = await _expensesRepository.Add(expense, cancellationToken);
             await _unitOfWork.Commit();
 
             return expense.Id;
