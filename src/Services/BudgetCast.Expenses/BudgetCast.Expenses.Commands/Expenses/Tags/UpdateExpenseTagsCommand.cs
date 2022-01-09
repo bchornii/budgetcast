@@ -1,22 +1,13 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Domain;
+using BudgetCast.Expenses.Commands.Expenses;
 using BudgetCast.Expenses.Domain.Expenses;
 
 namespace BudgetCast.Expenses.Commands.Tags
 {
-    public record UpdateExpenseTagsCommand : ICommand<Result>
-    {
-        public long ExpenseId { get; init; }
-
-        public TagDto[] Tags { get; init; }
-
-        public UpdateExpenseTagsCommand()
-        {
-            Tags = default!;
-            ExpenseId = default!;
-        }
-    }
+    public record UpdateExpenseTagsCommand(long ExpenseId, TagDto[] Tags) : 
+        ICommand<Result>;
 
     public class UpdateExpenseTagsCommandHandler 
         : ICommandHandler<UpdateExpenseTagsCommand, Result>
@@ -38,7 +29,7 @@ namespace BudgetCast.Expenses.Commands.Tags
         {
             var expense = await _expensesRepository
                 .GetAsync(request.ExpenseId, cancellationToken);
-            var tags = ExpensesTagsCommandMapper.MapFrom(request.Tags);
+            var tags = Mapper.MapFrom(request.Tags);
             expense.AddTags(tags);
             await _unitOfWork.Commit();
             return Success.Empty;

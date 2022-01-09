@@ -5,15 +5,7 @@ using BudgetCast.Expenses.Domain.Campaigns;
 
 namespace BudgetCast.Expenses.Commands.Campaigns
 {
-    public record CreateMonthlyCampaignCommand : ICommand<Result<long>>
-    {
-        public string Name { get; set; }
-
-        public CreateMonthlyCampaignCommand()
-        {
-            Name = default!;
-        }
-    }
+    public record CreateMonthlyCampaignCommand(string Name) : ICommand<Result<long>>;
 
     public class CreateMonthlyCampaignCommandHandler :
         ICommandHandler<CreateMonthlyCampaignCommand, Result<long>>

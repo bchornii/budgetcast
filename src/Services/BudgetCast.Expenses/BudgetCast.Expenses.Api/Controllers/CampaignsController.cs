@@ -32,10 +32,7 @@ namespace BudgetCast.Expenses.Api.Controllers
             [FromRoute] string name)
         {
             var result = await _mediator
-                .Send(new GetCampaignByNameQuery
-                {
-                    Name = name
-                });
+                .Send(new GetCampaignByNameQuery(name));
             return result.ToActionResult();
         }
 

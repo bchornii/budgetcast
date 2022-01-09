@@ -3,15 +3,7 @@ using BudgetCast.Common.Application.Queries;
 
 namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName
 {
-    public record GetCampaignByNameQuery : IQuery<Result<CampaignVm>>
-    {
-        public string Name { get; init; }
-
-        public GetCampaignByNameQuery()
-        {
-            Name = default!;
-        }
-    }
+    public record GetCampaignByNameQuery(string Name) : IQuery<Result<CampaignVm>>;
 
     public class GetCampaignByNameQueryHandler : IQueryHandler<GetCampaignByNameQuery, Result<CampaignVm>>
     {

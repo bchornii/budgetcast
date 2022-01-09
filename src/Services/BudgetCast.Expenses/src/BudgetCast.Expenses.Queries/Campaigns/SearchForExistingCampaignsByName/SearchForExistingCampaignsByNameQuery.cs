@@ -3,7 +3,7 @@ using BudgetCast.Common.Application.Queries;
 
 namespace BudgetCast.Expenses.Queries.Campaigns.SearchForExistingCampaignsByName
 {
-    public record SearchForExistingCampaignsByNameQuery(int Amount, string NameTerm) : 
+    public record SearchForExistingCampaignsByNameQuery(int Amount, string Term) : 
         IQuery<Result<IReadOnlyList<string>>>;
 
     public class SearchForExistingCampaignsByNameQueryHandler :
@@ -21,7 +21,7 @@ namespace BudgetCast.Expenses.Queries.Campaigns.SearchForExistingCampaignsByName
             CancellationToken cancellationToken)
         {
             var result = await _campaignDataAccess
-                .GetAsync(request.Amount, request.NameTerm, cancellationToken);
+                .GetAsync(request.Amount, request.Term, cancellationToken);
             return new Success<IReadOnlyList<string>>(result.Select(r => r.Name).ToArray());
         }
     }

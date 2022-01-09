@@ -27,7 +27,8 @@ namespace BudgetCast.Expenses.Commands.Expenses
         }
     }
 
-    public class AddExpenseCommandHandler : ICommandHandler<AddExpenseCommand, Result<long>>
+    public class AddExpenseCommandHandler : 
+        ICommandHandler<AddExpenseCommand, Result<long>>
     {
         private readonly IExpensesRepository _expensesRepository;
         private readonly ICampaignRepository _campaignRepository;
@@ -58,7 +59,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
 
             var expense = new Expense(request.AddedAt, campaign, request.Description);
 
-            var tags = ExpensesTagsCommandMapper.MapFrom(request.Tags);
+            var tags = Mapper.MapFrom(request.Tags);
             expense.AddTags(tags);
 
             var expenseItem = new ExpenseItem("Default item", request.TotalAmount);

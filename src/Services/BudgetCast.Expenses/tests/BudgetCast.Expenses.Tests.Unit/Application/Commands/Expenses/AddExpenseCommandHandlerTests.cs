@@ -113,7 +113,10 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 ExpensesRepository = Mock.Of<IExpensesRepository>();
                 CampaignRepository = Mock.Of<ICampaignRepository>();
                 UnitOfWork = Mock.Of<IUnitOfWork>();
-                Handler = new AddExpenseCommandHandler(ExpensesRepository, CampaignRepository, UnitOfWork);
+                Handler = new AddExpenseCommandHandler(
+                    ExpensesRepository, 
+                    CampaignRepository, 
+                    UnitOfWork);
             }
 
             public AddExpenseCommandHandlerFixture InitDefaultStubs()

@@ -4,7 +4,7 @@ using BudgetCast.Expenses.Queries.Expenses;
 
 namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals
 {
-    public record GetCampaignTotalsQuery(string CampaignName) :
+    public record GetCampaignTotalsQuery(string Name) :
         IQuery<Result<TotalsPerCampaignVm>>;
 
     public class GetCampaignTotalsQueryHandler :
@@ -21,7 +21,7 @@ namespace BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals
             GetCampaignTotalsQuery request,
             CancellationToken cancellationToken)
         {
-            return await _expensesDataAccess.GetTotalsAsync(request.CampaignName, cancellationToken);
+            return await _expensesDataAccess.GetTotalsAsync(request.Name, cancellationToken);
         }
     }
 }

@@ -27,10 +27,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
 
             // Act
             var result = _fixture.Validator.TestValidate(
-                new CreateMonthlyCampaignCommand
-                {
-                    Name = name
-                });
+                new CreateMonthlyCampaignCommand(name));
 
             // Assert            
             result.ShouldHaveValidationErrorFor(x => x.Name);
@@ -46,10 +43,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
 
             // Act
             var result = await _fixture.Validator.TestValidateAsync(
-                new CreateMonthlyCampaignCommand
-                {
-                    Name = "some name"
-                });
+                new CreateMonthlyCampaignCommand("Name"));
 
             // Assert            
             result.ShouldHaveValidationErrorFor(x => x.Name);
@@ -65,10 +59,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
 
             // Act
             var result = await _fixture.Validator.TestValidateAsync(
-                new CreateMonthlyCampaignCommand
-                {
-                    Name = "some name"
-                });
+                new CreateMonthlyCampaignCommand("Name"));
 
             // Assert            
             result.ShouldNotHaveValidationErrorFor(x => x.Name);

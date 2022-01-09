@@ -3,7 +3,7 @@ using BudgetCast.Common.Application.Queries;
 
 namespace BudgetCast.Expenses.Queries.Expenses.SearchForExistingTagsByName
 {
-    public record SearchForExistingTagsByNameQuery(int Amount, string TagTerm) : 
+    public record SearchForExistingTagsByNameQuery(int Amount, string Term) : 
         IQuery<Result<IReadOnlyList<string>>>;
 
     public class SearchForExistingTagsByNameQueryHandler : 
@@ -21,7 +21,7 @@ namespace BudgetCast.Expenses.Queries.Expenses.SearchForExistingTagsByName
             CancellationToken cancellationToken)
         {
             var results = await _expensesDataAccess
-                .SearchForTagsAsync(request.TagTerm, request.Amount);
+                .SearchForTagsAsync(request.Term, request.Amount);
             return new Success<IReadOnlyList<string>>(results);
         }
     }
