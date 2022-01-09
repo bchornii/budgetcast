@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+	<PackageReference Include="Dapper" Version="2.0.123" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common\BudgetCast.Common.csproj" />
+    <ProjectReference Include="..\..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj" />
+  </ItemGroup>
+
+</Project>
