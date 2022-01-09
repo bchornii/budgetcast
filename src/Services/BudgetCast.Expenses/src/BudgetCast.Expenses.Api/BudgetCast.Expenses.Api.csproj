@@ -23,9 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
     <ProjectReference Include="..\BudgetCast.Expenses.Commands\BudgetCast.Expenses.Commands.csproj" />
-    <ProjectReference Include="..\src\BudgetCast.Expenses.Data\BudgetCast.Expenses.Data.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Data\BudgetCast.Expenses.Data.csproj" />
   </ItemGroup>
 
 </Project>

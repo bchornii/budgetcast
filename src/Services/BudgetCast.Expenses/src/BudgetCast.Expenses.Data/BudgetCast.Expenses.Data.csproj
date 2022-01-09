@@ -17,7 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common\BudgetCast.Common.csproj" />
-    <ProjectReference Include="..\..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
     <ProjectReference Include="..\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj" />
   </ItemGroup>
 

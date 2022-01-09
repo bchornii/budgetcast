@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Common\BudgetCast.Common.Domain\BudgetCast.Common.Domain.csproj" />
+	  <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Domain\BudgetCast.Common.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
