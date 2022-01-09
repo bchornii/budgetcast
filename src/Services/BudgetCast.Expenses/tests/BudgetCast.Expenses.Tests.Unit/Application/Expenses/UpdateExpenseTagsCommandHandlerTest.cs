@@ -2,6 +2,7 @@
 using BudgetCast.Common.Domain;
 using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Commands.Tags;
+using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using FluentAssertions;
 using Moq;
@@ -29,7 +30,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             var expensesMock = new Mock<Expense>();
 
             Mock.Get(_fixture.ExpensesRepository)
-                .Setup(s => s.GetAsync(It.IsAny<ulong>()))
+                .Setup(s => s.GetAsync(It.IsAny<long>(), CancellationToken.None))
                 .ReturnsAsync(expensesMock.Object);
 
             // Act
@@ -51,7 +52,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             var expensesMock = new Mock<Expense>();
 
             Mock.Get(_fixture.ExpensesRepository)
-                .Setup(s => s.GetAsync(It.IsAny<ulong>()))
+                .Setup(s => s.GetAsync(It.IsAny<long>(), CancellationToken.None))
                 .ReturnsAsync(expensesMock.Object);
 
             // Act
@@ -80,7 +81,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             }
 
             public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<ulong>(), Fixture.Create<string>());
+                => new(Fixture.Create<DateTime>(), Fixture.Create<Campaign>(), Fixture.Create<string>());
         }
     }
 }

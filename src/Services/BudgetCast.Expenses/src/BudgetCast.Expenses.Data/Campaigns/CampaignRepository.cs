@@ -12,7 +12,7 @@ namespace BudgetCast.Expenses.Data.Campaigns
             _dbContext = dbContext;
         }
 
-        public async Task<Campaign> Add(Campaign campaign, CancellationToken cancellationToken)
+        public async Task<Campaign> AddAsync(Campaign campaign, CancellationToken cancellationToken)
         {
             var entityEntry = await _dbContext.Campaigns.AddAsync(campaign, cancellationToken);
             return entityEntry.Entity;
@@ -40,7 +40,7 @@ namespace BudgetCast.Expenses.Data.Campaigns
         public Task<Campaign?> GetByNameAsync(string name, CancellationToken cancellationToken) 
             => _dbContext.Campaigns.FirstOrDefaultAsync(c => c.Name == name, cancellationToken: cancellationToken);
 
-        public Task Update(Campaign campaign, CancellationToken cancellationToken)
+        public Task UpdateAsync(Campaign campaign, CancellationToken cancellationToken)
         {
             _dbContext.Campaigns.Update(campaign);
             return Task.CompletedTask;

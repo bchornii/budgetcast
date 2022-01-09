@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using BudgetCast.Common.Tests.Extensions;
+using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using FluentAssertions;
 using System;
@@ -89,13 +90,13 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
         {
             // Arrange
             var expense = _fixture.CreateFakeExpense();
-            var campaignId = _fixture.Fixture.Create<ulong>();
+            var campaignId = _fixture.Fixture.Create<long>();
 
             // Act
             expense.SetCampaignId(campaignId);
 
             // Assert
-            expense.CampaignId.Should().Be(campaignId);
+            expense.GetCampaignId().Should().Be(campaignId);
         }
 
         [Fact]
@@ -149,7 +150,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             }
 
             public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<ulong>(), Fixture.Create<string>());
+                => new(Fixture.Create<DateTime>(), Fixture.Create<Campaign>(), Fixture.Create<string>());
 
             public ExpenseItem[] CreateFakeExpenseItems(int totalItems = 5)
             {
@@ -171,8 +172,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
                 {
                     result[i] = new Tag
                     {
-                        Name = Fixture.Create<string>(),
-                        ExpenseId = Fixture.Create<ulong>()
+                        Name = Fixture.Create<string>()
                     };
                 }
                 return result;

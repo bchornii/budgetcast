@@ -34,7 +34,7 @@ namespace BudgetCast.Expenses.Commands.Campaigns
             CancellationToken cancellationToken)
         {
             var campaign = new Campaign(request.Name);
-            await _campaignRepository.Add(campaign, cancellationToken);
+            await _campaignRepository.AddAsync(campaign, cancellationToken);
             await _unitOfWork.Commit();
 
             return campaign.Id;

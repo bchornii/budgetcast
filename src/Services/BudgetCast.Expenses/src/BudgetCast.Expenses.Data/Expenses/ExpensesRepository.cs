@@ -12,7 +12,7 @@ namespace BudgetCast.Expenses.Data.Expenses
             _dbContext = dbContext;
         }
 
-        public async Task<Expense> Add(Expense expense, CancellationToken cancellationToken)
+        public async Task<Expense> AddAsync(Expense expense, CancellationToken cancellationToken)
         {
             var entityEntry = await _dbContext.Expenses.AddAsync(expense, cancellationToken);
             return entityEntry.Entity;
@@ -33,7 +33,7 @@ namespace BudgetCast.Expenses.Data.Expenses
             return expense;
         }
 
-        public Task Update(Expense campaign, CancellationToken cancellationToken)
+        public Task UpdateAsync(Expense campaign, CancellationToken cancellationToken)
         {
             _dbContext.Expenses.Update(campaign);
             return Task.CompletedTask;

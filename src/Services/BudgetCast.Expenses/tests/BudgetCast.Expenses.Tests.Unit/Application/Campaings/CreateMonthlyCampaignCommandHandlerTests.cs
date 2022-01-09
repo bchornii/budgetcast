@@ -31,7 +31,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
 
             // Assert
             var savedCampaign = Mock.Get(_fixture.CampaignRepository)
-                .GetExecutionArgumentsOf(nameof(ICampaignRepository.Add))
+                .GetExecutionArgumentsOf(nameof(ICampaignRepository.AddAsync))
                 .FirstArgumentOf<Campaign>();
 
             savedCampaign.Name.Should().Be(command.Name);

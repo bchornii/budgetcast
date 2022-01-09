@@ -17,13 +17,11 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             var tag = new Tag
             {
                 Name = name,
-                ExpenseId = expenseId
             };
 
             // Act
 
             // Assert
-            tag.ExpenseId.Should().Be(expenseId);
             tag.Name.Should().Be(name);
         }
     }

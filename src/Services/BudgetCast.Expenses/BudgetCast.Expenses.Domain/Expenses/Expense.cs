@@ -67,6 +67,8 @@ namespace BudgetCast.Expenses.Domain.Expenses
             _campaignId = campaignId;
         }
 
+        public long GetCampaignId() => _campaignId;
+
         public virtual decimal GetTotalAmount() 
             => _expenseItems.Sum(item => item.GetTotalPrice());
 

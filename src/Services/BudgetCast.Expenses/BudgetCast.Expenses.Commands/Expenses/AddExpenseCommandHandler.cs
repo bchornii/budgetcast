@@ -53,7 +53,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             if(campaign is null)
             {
                 var newCampaign = new Campaign(request.CampaignName);
-                campaign = await _campaignRepository.Add(newCampaign, cancellationToken);
+                campaign = await _campaignRepository.AddAsync(newCampaign, cancellationToken);
             }
 
             var expense = new Expense(request.AddedAt, campaign, request.Description);
@@ -64,7 +64,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             var expenseItem = new ExpenseItem("Default item", request.TotalAmount);
             expense.AddItem(expenseItem);
 
-            expense = await _expensesRepository.Add(expense, cancellationToken);
+            await _expensesRepository.AddAsync(expense, cancellationToken);
             await _unitOfWork.Commit();
 
             return expense.Id;
