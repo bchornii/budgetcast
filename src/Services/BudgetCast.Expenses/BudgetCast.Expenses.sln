@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Expenses.Data", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Expenses.Queries", "src\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj", "{4035BDC9-2DED-479E-9C41-58CEC80A7427}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BudgetCast.Expenses.Db", "src\BudgetCast.Expenses.Db\BudgetCast.Expenses.Db.sqlproj", "{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,12 @@ Global
 		{4035BDC9-2DED-479E-9C41-58CEC80A7427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4035BDC9-2DED-479E-9C41-58CEC80A7427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4035BDC9-2DED-479E-9C41-58CEC80A7427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +116,7 @@ Global
 		{F4ABAB6A-74AE-4675-BC46-C42FE46CFFF1} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 		{6BF9D147-D6A5-4102-87F8-E8D404E2CE12} = {DD359374-055E-4809-9ADF-FFB8768388D6}
 		{4035BDC9-2DED-479E-9C41-58CEC80A7427} = {1FEAB7D2-9455-42E1-AB93-5C70E11ADBE7}
+		{9A1EBF0E-BC5B-4BD0-A6C5-5810D89A555E} = {DD359374-055E-4809-9ADF-FFB8768388D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5045AC5-A2C9-480C-9373-33E83F4DB204}
