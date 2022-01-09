@@ -6,6 +6,7 @@ using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using BudgetCast.Expenses.Queries.Campaigns;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BudgetCast.Expenses.Data
 {
@@ -25,8 +26,8 @@ namespace BudgetCast.Expenses.Data
         public long Tenant { get; set; }
 
         public ExpensesDbContext(
-            DbContextOptions<ExpensesDbContext> options, 
-            IIdentityContext identityContext, 
+            DbContextOptions<ExpensesDbContext> options,
+            IIdentityContext identityContext,
             ITenantService tenantService)
             : base(options)
         {
@@ -54,46 +55,14 @@ namespace BudgetCast.Expenses.Data
         {
             var currentUserId = _identityContext.UserId;
             var now = SystemDt.Current;
-            foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.CreatedBy = currentUserId;
-                        entry.Entity.LastModifiedBy = currentUserId;
-                        entry.Entity.CreatedOn = now;
-                        break;
 
-                    case EntityState.Modified:
-                        entry.Entity.LastModifiedOn = now;
-                        entry.Entity.LastModifiedBy = currentUserId;
-                        break;
+            ChangeTracker
+                .Entries<IAuditableEntity>()
+                .UpdateEntityAuditableValues(now, currentUserId);
 
-                    case EntityState.Deleted:
-                        if (entry.Entity is ISoftDelete softDelete)
-                        {
-                            softDelete.DeletedBy = currentUserId;
-                            softDelete.DeletedOn = now;
-                            entry.State = EntityState.Modified;
-                        }
-                        break;
-                }
-            }
-
-            foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                    case EntityState.Modified:
-                        if (entry.Entity.TenantId == default)
-                        {
-                            entry.Entity.TenantId = Tenant;
-                        }
-
-                        break;
-                }
-            }
+            ChangeTracker
+                .Entries<IMustHaveTenant>()
+                .UpdateTenantValues(Tenant);
 
             var result = await base.SaveChangesAsync();
             return result > 0;

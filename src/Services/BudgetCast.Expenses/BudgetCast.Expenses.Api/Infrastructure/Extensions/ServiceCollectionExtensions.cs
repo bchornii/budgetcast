@@ -48,7 +48,7 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddData(this IServiceCollection services,
+        public static IServiceCollection AddCustomDbContext(this IServiceCollection services,
             IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddDbContext<ExpensesDbContext>(options =>
@@ -75,14 +75,14 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddDataAccess(this IServiceCollection services)
+        public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
             services.AddScoped<ICampaignDataAccess, CampaignDataAccess>();
             services.AddScoped<IExpensesDataAccess, ExpensesDataAccess>();
             return services;
         }
 
-        public static IServiceCollection AddDomain(this IServiceCollection services)
+        public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
             services.AddScoped<ICampaignRepository, CampaignRepository>();
             services.AddScoped<IExpensesRepository, ExpensesRepository>();

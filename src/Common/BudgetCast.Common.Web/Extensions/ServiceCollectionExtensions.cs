@@ -5,6 +5,7 @@ using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Web.Middleware;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -44,7 +45,7 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddIdentityContext(
+        public static IServiceCollection AddFakeIdentityContext(
             this IServiceCollection services)
         {
             services.AddScoped<IIdentityContext>(factory =>
@@ -65,11 +66,37 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
+        public static IServiceCollection AddIdentityContext(this IServiceCollection services)
+        {
+            services.AddScoped<IIdentityContext, IdentityContext>(provider =>
+            {
+                var http = provider.GetRequiredService<IHttpContextAccessor>();
+                var claimsPrincipal = http.HttpContext.User;
+
+                if (!claimsPrincipal.IsAnyIdentityAuthenticated())
+                {
+                    return IdentityContext.NonAuthenticated;
+                }
+
+                var identityContext = new IdentityContext
+                {
+                    UserIdentity = http.HttpContext.User,
+                };
+
+                return identityContext;
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddCurrentTenant(this IServiceCollection services)
         {
             services.AddScoped<CurrentTenantMiddleware>();
             services.AddScoped<ITenantService, TenantService>();
             return services;
         }
+
+        private static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
+            => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
     }
 }

@@ -21,17 +21,15 @@ namespace BudgetCast.Expenses.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddControllers()
-                .Services
-                .AddHttpContextAccessor()
+                .AddControllers().Services
                 .AddCustomSwagger()
-                .AddDomain()
                 .AddIdentityContext()
+                .AddDomainServices()
+                .AddDataAccessServices()
                 .AddApplicationServices(
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
-                .AddData(Configuration, Env)
-                .AddDataAccess()
+                .AddCustomDbContext(Configuration, Env)
                 .AddCustomHealthCheck(Configuration)
                 .AddCurrentTenant();
         }
