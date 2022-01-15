@@ -1,4 +1,6 @@
 
+# docker build . -t budgetcast/expensesapi --rm --build-arg USERNAME=appuser --no-cache --file .\Services\BudgetCast.Expenses\src\BudgetCast.Expenses.Api\Dockerfile
+
 # Global configuration
 ARG CONFIGURATION=Release
 
@@ -10,6 +12,11 @@ ARG USER_GID=$USER_UID
 ARG PORT=80
 WORKDIR /app
 EXPOSE $PORT
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
 
 ######################################### build stage #########################################
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -78,11 +85,6 @@ RUN dotnet publish "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/Bud
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
-RUN apk add --no-cache icu-libs
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
 
 # for Alpine linux
 RUN apk add --no-cache shadow
