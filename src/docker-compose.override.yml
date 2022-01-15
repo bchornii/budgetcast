@@ -59,7 +59,16 @@ services:
 
         volumes: 
             - ./https:/https:ro
-    
+
+    expenses-api:
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production            
+            - ASPNETCORE_URLS=http://+:80
+            - Serilog__WriteTo__0__Args__serverUrl=http://seq            
+        ports: 
+            - target: 80
+              published: ${EXPENSES_API_PORT}
+        
     web-spa:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Prod

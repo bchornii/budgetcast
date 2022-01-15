@@ -21,6 +21,16 @@ services:
       - budgetcast-db
       - seq
 
+  expenses-api:
+    image: ${REGISTRY:-budgetcast}/expenses.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ./Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/Dockerfile
+      args:
+        - USERNAME=appuser
+    depends_on:
+      - seq
+
   web-spa:
     image: ${REGISTRY:-budgetcast}/spa:${PLATFORM:-linux}-${TAG:-latest}
     build: 
