@@ -21,7 +21,7 @@ namespace BudgetCast.Expenses.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddControllers().Services
+                .AddCustomMvc(Configuration)
                 .AddHttpContextAccessor()
                 .AddCustomSwagger()
                 .AddIdentityContext()

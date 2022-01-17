@@ -15,6 +15,25 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddCustomMvc(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var uiRoot = configuration["UiLinks:Root"];
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    builder
+                        .WithOrigins(uiRoot)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+            services.AddControllers();
+
+            return services;
+        }
+
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
