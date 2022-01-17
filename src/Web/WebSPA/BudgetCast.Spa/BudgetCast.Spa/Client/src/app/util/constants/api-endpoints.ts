@@ -28,6 +28,9 @@ export interface Endpoints {
     campaign: {
       all: string,
       search: string
+    },
+    expenses: {
+      searchTags: string
     }
   };
 }

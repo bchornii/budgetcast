@@ -74,7 +74,10 @@ export class ConfigurationService {
         campaign: {
           all: `${baseUrl}/campaigns`,
           search: `${baseUrl}/campaigns/search`
-        }
+        },
+        expenses: {
+          searchTags: `${baseUrl}/expenses/tags/search`
+        }     
       };
     }
 }

@@ -1,34 +1,34 @@
-import { Injectable } from '@angular/core';
-import { BaseService } from 'src/app/services/base-data.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { BaseService } from 'src/app/services/base-data.service';
 import { ConfigurationService } from 'src/app/services/configuration-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TagsService extends BaseService {
+export class ExpensesService extends BaseService {
 
   constructor(private httpClient: HttpClient,
-              private configService: ConfigurationService) {
+              private configService: ConfigurationService) { 
     super();
   }
 
-  search(term?: string, amount: number = 10): Observable<string[]> {
+  searchTags(term?: string, amount: number = 10): Observable<string[]> {
     let params = new HttpParams();
 
-    if (amount) {
+    if(amount) {
       params = params.set('amount', amount.toString());
     }
 
-    if (term) {
+    if(term) {
       params = params.set('term', term);
     }
 
     return this.httpClient.get<string[]>(
-      `${this.configService.endpoints.dashboard.tags.search}`, { params }).pipe(
-      catchError(this.handleError)
-    );
+      `${this.configService.endpoints.expenses.expenses.searchTags}`, { params }).pipe(
+        catchError(this.handleError)
+      );
   }
 }

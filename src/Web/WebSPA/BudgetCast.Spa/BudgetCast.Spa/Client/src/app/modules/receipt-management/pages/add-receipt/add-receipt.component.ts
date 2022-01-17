@@ -8,7 +8,7 @@ import { AddBasicReceipt } from '../models/add-receipt';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { TagsService } from '../../services/tags.service';
+import { ExpensesService } from '../../services/expenses.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class AddReceiptComponent implements OnInit {
 
   constructor(private recipeService: RecipeService,
               private campaignService: CampaignService,
-              private tagsService: TagsService,
+              private expensesService: ExpensesService,
               private router: Router,
               private toastr: ToastrService) { }
 
@@ -40,7 +40,7 @@ export class AddReceiptComponent implements OnInit {
   onTagModelChange(data) {
     if (!this.addBasicReceipt.tagExists(data)) {
       this.tagsLoading = true;
-      this.tagsService.search(data).pipe(
+      this.expensesService.searchTags(data).pipe(
         finalize(() => this.tagsLoading = false)
       )
         .subscribe(r => this.tagOptions = r);
