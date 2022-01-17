@@ -27,16 +27,17 @@ export class ConfigurationService {
             console.log('server settings loaded');
             console.log(response);
         
-            const config = (response as IConfiguration).endpoints;
-            this.endpoints = this.getEndpoints(config.dashboard);
+            const endpointsConfig = (response as IConfiguration);
+            this.endpoints = this.getEndpoints(endpointsConfig);
             this.isReady = true;
             this.settingsLoadedSource.next();
         }));
     }
 
-    private getEndpoints(dashboardUrl: string): Endpoints {
+    private getEndpoints(endpointsConfig: IConfiguration): Endpoints {
       return {
-        dashboard: this.getDashBoardEndpoints(dashboardUrl)
+        dashboard: this.getDashBoardEndpoints(endpointsConfig.endpoints.dashboard),
+        expenses: this.getExpensesEndpoints(endpointsConfig.endpoints.expenses)
       };
     }
 
@@ -62,13 +63,17 @@ export class ConfigurationService {
             details: `${baseUrl}/receipt/{{id}}/details`
         },
 
-        campaign: {
-            all: `${baseUrl}/campaigns`,
-            search: `${baseUrl}/campaigns/search`
-        },
-        
         tags: {
             search: `${baseUrl}/tags/search`
+        }
+      };
+    }
+
+    private getExpensesEndpoints(baseUrl) {
+      return {
+        campaign: {
+          all: `${baseUrl}/campaigns`,
+          search: `${baseUrl}/campaigns/search`
         }
       };
     }
