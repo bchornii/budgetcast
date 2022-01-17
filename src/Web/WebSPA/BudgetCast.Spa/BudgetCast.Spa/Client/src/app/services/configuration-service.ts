@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { IConfiguration } from 'src/app/models/configuration';
 import { tap } from 'rxjs/operators';
 import { Endpoints } from '../util/constants/api-endpoints';
@@ -20,17 +20,13 @@ export class ConfigurationService {
 
     constructor(private http: HttpClient) { }
 
-    load(): Observable<IConfiguration> {
+    load(url: string): Observable<IConfiguration> {
 
-        const baseURI = environment.production
-          ? this.getBaseUri()
-          : environment.devBaseUrl;
-
-        return this.http.get<IConfiguration>(baseURI).pipe(tap(response => {
-
+        return this.http.get<IConfiguration>(url).pipe(tap(response => {
+        
             console.log('server settings loaded');
             console.log(response);
-
+        
             const config = (response as IConfiguration).endpoints;
             this.endpoints = this.getEndpoints(config.dashboard);
             this.isReady = true;
@@ -66,21 +62,14 @@ export class ConfigurationService {
             details: `${baseUrl}/receipt/{{id}}/details`
         },
 
-
         campaign: {
             all: `${baseUrl}/campaigns`,
             search: `${baseUrl}/campaigns/search`
         },
-
+        
         tags: {
             search: `${baseUrl}/tags/search`
         }
       };
-    }
-
-    private getBaseUri() {
-      const baseURI = document.baseURI.endsWith('/')
-        ? document.baseURI : `${document.baseURI}/`;
-      return `${baseURI}api/Configs/endpoints`;
     }
 }

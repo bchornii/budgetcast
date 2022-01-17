@@ -6,5 +6,6 @@ const devBaseUrl = 'http://localhost:5000/api/Configs/endpoints';
 
 export const environment = {
   production: false,
-  devBaseUrl
+  devBaseUrl,
+  name: 'dev'
 };

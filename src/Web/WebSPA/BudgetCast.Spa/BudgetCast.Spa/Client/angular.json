@@ -48,6 +48,14 @@
             "namedChunks": true
           },
           "configurations": {
+            "nohost": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.nohost.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -84,6 +92,9 @@
             "browserTarget": "budgetcast:build"
           },
           "configurations": {
+            "nohost": {
+              "browserTarget": "budgetcast:build:nohost"
+            },
             "production": {
               "browserTarget": "budgetcast:build:production"
             }
@@ -119,6 +130,9 @@
             "devServerTarget": "budgetcast:serve"
           },
           "configurations": {
+            "nohost": {
+              "devServerTarget": "budgetcast:serve:nohost"
+            },
             "production": {
               "devServerTarget": "budgetcast:serve:production"
             }
