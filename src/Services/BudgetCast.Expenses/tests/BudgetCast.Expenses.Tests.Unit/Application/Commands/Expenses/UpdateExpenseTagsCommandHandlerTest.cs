@@ -7,6 +7,7 @@ using BudgetCast.Expenses.Domain.Expenses;
 using FluentAssertions;
 using Moq;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -41,7 +42,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 .GetExecutionArgumentsOf(nameof(Expense.AddTags))
                 .FirstArgumentOf<Tag[]>();
 
-            tags.Should().BeEquivalentTo(command.Tags);
+            tags.Select(x => x.Name).Should().BeEquivalentTo(command.Tags);
         }
 
         [Fact]

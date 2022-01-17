@@ -3,11 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/services/base-data.service';
-import { AddBasicReceipt } from '../pages/models/add-receipt';
 import { PageResult } from 'src/app/models/page-result';
 import { BasicReceipt } from '../pages/models/basic-receipt';
 import { TotalsPerCampaign } from '../pages/models/totals-per-campaign';
-import { ReceiptItem } from '../pages/models/receipt-item';
 import { Receipt } from '../pages/models/receipt';
 import { ConfigurationService } from 'src/app/services/configuration-service';
 
@@ -48,12 +46,5 @@ export class RecipeService extends BaseService {
       this.configService.endpoints.dashboard.receipt.details.replace('{{id}}', id)).pipe(
         catchError(this.handleError)
     );
-  }
-
-  addBasicReceipt(receipt: AddBasicReceipt): Observable<any> {
-    return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.receipt.addBasic}`, receipt).pipe(
-        catchError(this.handleError)
-      );
   }
 }

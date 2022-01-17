@@ -11,7 +11,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
     {
         public DateTime AddedAt { get; init; }
 
-        public TagDto[] Tags { get; init; }
+        public string[] Tags { get; init; }
 
         public string CampaignName { get; init; }
 

@@ -30,6 +30,7 @@ export interface Endpoints {
       search: string
     },
     expenses: {
+      add: string;
       searchTags: string
     }
   };

@@ -1,15 +1,15 @@
 <div class="row">
   <form autocomplete="off" novalidate
-        appForm (appSubmit)="addReceipt()"        
+        appForm (appSubmit)="addExpense()"        
         class="col-12">
 
     <div class="row">
       <div class="col-12 col-md-4 col-lg-3 col-xl-2 mt-2">
           <app-mat-datepicker
             required
-            name="receiptdate"
-            label="Receipt Date"            
-            [(ngModel)]="addBasicReceipt.date"
+            name="expensedate"
+            label="Expense Date"            
+            [(ngModel)]="expenseDto.addedAt"
           ></app-mat-datepicker>
         </div>    
       </div>
@@ -22,7 +22,7 @@
             name="totalAmount"
             label="Total amount"
             isCurrency="true"
-            [(ngModel)]="addBasicReceipt.totalAmount"
+            [(ngModel)]="expenseDto.totalAmount"
           ></app-mat-input>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <app-mat-chips-autocomplete
             name="tags"
             label="Tags"
-            [data]="addBasicReceipt.tags"
+            [data]="expenseDto.tags"
             [options]="tagOptions"
             [isLoading]="tagsLoading"
             ngModel
@@ -50,7 +50,7 @@
             errMsg="Please specify campaign."
             [options]="campaignOptions"
             [isLoading]="campaignsLoading"
-            [(ngModel)]="addBasicReceipt.campaign"
+            [(ngModel)]="expenseDto.campaignName"
             (ngModelChange)="onCampaignModelChange($event)">
           </app-mat-autocomplete>
         </div>
@@ -62,7 +62,7 @@
             name="description"
             label="Description"
             isTextArea="true"
-            [(ngModel)]="addBasicReceipt.description"
+            [(ngModel)]="expenseDto.description"
           ></app-mat-input>
         </div>
       </div>

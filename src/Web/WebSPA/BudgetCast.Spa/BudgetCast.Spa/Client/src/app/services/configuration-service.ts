@@ -76,6 +76,7 @@ export class ConfigurationService {
           search: `${baseUrl}/campaigns/search`
         },
         expenses: {
+          add: `${baseUrl}/expenses`,
           searchTags: `${baseUrl}/expenses/tags/search`
         }     
       };

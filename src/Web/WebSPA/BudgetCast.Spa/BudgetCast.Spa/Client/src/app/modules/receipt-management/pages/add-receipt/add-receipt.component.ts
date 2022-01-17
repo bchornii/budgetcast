@@ -4,11 +4,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
 import { finalize } from 'rxjs/operators';
 
-import { AddBasicReceipt } from '../models/add-receipt';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ExpensesService } from '../../services/expenses.service';
+import { AddExpenseDto } from '../models/add-expense-dto';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class AddReceiptComponent implements OnInit {
   campaignsLoading = false;
   campaignOptions = [];
 
-  addBasicReceipt = new AddBasicReceipt();
+  expenseDto = new AddExpenseDto();
 
   constructor(private recipeService: RecipeService,
               private campaignService: CampaignService,
@@ -38,7 +38,7 @@ export class AddReceiptComponent implements OnInit {
   }
 
   onTagModelChange(data) {
-    if (!this.addBasicReceipt.tagExists(data)) {
+    if (!this.expenseDto.tagExists(data)) {
       this.tagsLoading = true;
       this.expensesService.searchTags(data).pipe(
         finalize(() => this.tagsLoading = false)
@@ -55,12 +55,12 @@ export class AddReceiptComponent implements OnInit {
       .subscribe(r => this.campaignOptions = r);
   }
 
-  addReceipt() {
+  addExpense() {
     this.spinner.show();
-    this.recipeService.addBasicReceipt(this.addBasicReceipt).pipe(
+    this.expensesService.addExpense(this.expenseDto).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
-      this.toastr.success('Receipt added.');
+      this.toastr.success('Expense added.');
       this.router.navigate(['/receipts/dashboard']);
     });
   }

@@ -6,7 +6,7 @@ using BudgetCast.Expenses.Domain.Expenses;
 
 namespace BudgetCast.Expenses.Commands.Tags
 {
-    public record UpdateExpenseTagsCommand(long ExpenseId, TagDto[] Tags) : 
+    public record UpdateExpenseTagsCommand(long ExpenseId, string[] Tags) : 
         ICommand<Result>;
 
     public class UpdateExpenseTagsCommandHandler 

@@ -1,17 +1,17 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
-export class AddBasicReceipt {
-    date: Moment;
+export class AddExpenseDto {
+    addedAt: Moment;
     totalAmount: number;
     tags: string[];
-    campaign: string;
+    campaignName: string;
     description: string;
 
     constructor() {
-        this.date = moment();
-        this.campaign = moment().format("MMMM YYYY");
-        this.tags = [];
+        this.addedAt = moment();
+        this.campaignName = moment().format("MMMM YYYY");
+        this.tags = [] as string[];
     }
 
     tagExists(value: string): boolean {

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/services/base-data.service';
 import { ConfigurationService } from 'src/app/services/configuration-service';
+import { AddExpenseDto } from '../pages/models/add-expense-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,13 @@ export class ExpensesService extends BaseService {
 
     return this.httpClient.get<string[]>(
       `${this.configService.endpoints.expenses.expenses.searchTags}`, { params }).pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  addExpense(expense: AddExpenseDto): Observable<any> {
+    return this.httpClient.post(
+      `${this.configService.endpoints.expenses.expenses.add}`, expense).pipe(
         catchError(this.handleError)
       );
   }

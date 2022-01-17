@@ -84,7 +84,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var defaultCommand = _fixture.GetPopulated();
-            var command = defaultCommand with { Tags = Array.Empty<TagDto>() };
+            var command = defaultCommand with { Tags = Array.Empty<string>() };
 
             // Act
             var result = _fixture.Validator.TestValidate(command);

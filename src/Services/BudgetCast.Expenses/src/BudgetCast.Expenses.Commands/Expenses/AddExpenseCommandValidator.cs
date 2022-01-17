@@ -16,7 +16,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             When(x => x.Tags.Any(), () =>
             {
                 RuleForEach(x => x.Tags)
-                    .SetValidator(new TagDtoValidator());
+                    .NotEmpty();
             });
         }
     }

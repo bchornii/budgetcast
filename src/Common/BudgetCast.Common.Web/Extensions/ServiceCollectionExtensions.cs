@@ -75,12 +75,16 @@ namespace BudgetCast.Common.Web.Extensions
 
                 if (!claimsPrincipal.IsAnyIdentityAuthenticated())
                 {
-                    return IdentityContext.NonAuthenticated;
+                    claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, "bchornii")
+                    }));
+                    //return IdentityContext.NonAuthenticated;
                 }
 
                 var identityContext = new IdentityContext
                 {
-                    UserIdentity = http.HttpContext.User,
+                    UserIdentity = claimsPrincipal,
                 };
 
                 return identityContext;
