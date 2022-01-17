@@ -68,7 +68,7 @@ export class ReceiptDashboardComponent implements OnInit {
     this.campaignService.getAllCampaigns().pipe(
       tap(campaigns => {
         this.campaignOptions = campaigns ?
-          campaigns.map(c => c.value) : campaigns;
+          campaigns.map(c => c.name) : [];
         this.campaign = this.campaignOptions[0];
       }),
 

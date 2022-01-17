@@ -19,11 +19,14 @@ export interface Endpoints {
       totalPerCampaign: string,
       details: string
     },
+    tags: {
+      search: string
+    }
+  };
+
+  expenses: {
     campaign: {
       all: string,
-      search: string
-    },
-    tags: {
       search: string
     }
   };

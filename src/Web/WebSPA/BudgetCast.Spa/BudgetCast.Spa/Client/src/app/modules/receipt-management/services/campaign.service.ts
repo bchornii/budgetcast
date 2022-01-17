@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { KeyValuePair } from 'src/app/util/util';
 import { ConfigurationService } from 'src/app/services/configuration-service';
+import { CampaignVm } from '../pages/models/campaign-vm';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,9 @@ export class CampaignService extends BaseService {
     super();
    }
 
-  getAllCampaigns(): Observable<KeyValuePair[]> {
-    return this.httpClient.get<KeyValuePair[]>(
-      `${this.configService.endpoints.dashboard.campaign.all}`).pipe(
+  getAllCampaigns(): Observable<CampaignVm[]> {
+    return this.httpClient.get<CampaignVm[]>(
+      `${this.configService.endpoints.expenses.campaign.all}`).pipe(
         catchError(this.handleError)
     );
   }
@@ -36,7 +37,7 @@ export class CampaignService extends BaseService {
     }
 
     return this.httpClient.get<string[]>(
-      `${this.configService.endpoints.dashboard.campaign.search}`, { params }).pipe(
+      `${this.configService.endpoints.expenses.campaign.search}`, { params }).pipe(
       catchError(this.handleError)
     );
   }
