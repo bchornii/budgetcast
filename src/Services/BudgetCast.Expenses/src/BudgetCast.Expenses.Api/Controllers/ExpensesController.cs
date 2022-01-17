@@ -35,12 +35,12 @@ namespace BudgetCast.Expenses.Api.Controllers
             return result.ToActionResult();
         }
 
-        [HttpGet("tags/{tagTerm}/existing")]
+        [HttpGet("tags/search")]
         public async Task<IActionResult> SearchForTagsAsync(
-            [FromRoute] string tagTerm,
+            [FromQuery] string term,
             [FromQuery] int amount = 10)
         {
-            var result = await _mediator.Send(new SearchForExistingTagsByNameQuery(amount, tagTerm));
+            var result = await _mediator.Send(new SearchForExistingTagsByNameQuery(amount, term));
             return result.ToActionResult();
         }
 
