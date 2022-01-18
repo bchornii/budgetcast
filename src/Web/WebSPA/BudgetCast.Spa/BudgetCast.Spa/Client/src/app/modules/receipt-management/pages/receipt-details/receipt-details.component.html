@@ -1,29 +1,29 @@
 <div class="receipt-details-header">
     <div class="receipt-details-header__title">
         <div class="receipt-details-header__item">
-            <span>Receipt No. </span> '{{receipt?.id}}'
+            <span>Receipt No. </span> '{{expense?.id}}'
         </div>
         <button mat-stroked-button (click)="goBack()">Back</button>
     </div>
     <hr>
     <div class="receipt-details-header__summary">
         <div class="receipt-details-header__item">
-            <span>Date: </span>{{receipt?.date | date}}
+            <span>Date: </span>{{expense?.addedAt | date}}
         </div>
         <div class="receipt-details-header__item">
-            <span>Created At: </span>{{receipt?.createdAt | date}}
+            <span>Created At: </span>{{expense?.createdOn | date}}
         </div>
         <div class="receipt-details-header__item">
-            <span>Tags: </span> {{receipt?.tags}}
+            <span>Tags: </span> {{expense?.tags}}
         </div>
         <div class="receipt-details-header__item">
-            <span>Description:</span> {{receipt?.description || '-'}}
+            <span>Description:</span> {{expense?.description || '-'}}
         </div>
     </div>
 </div>
 <div class="receipt-details-items">
     <div class="receipt-details-header__item">
-        <span>Receipt items:</span>
+        <span>Expense items:</span>
     </div>
     <table mat-table [dataSource]="dataSource" 
            matSort 
@@ -55,10 +55,10 @@
             <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
         </ng-container>
 
-        <!-- Description Column -->
-        <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-            <td mat-cell *matCellDef="let element"> {{element.description || '-'}} </td>
+        <!-- Note Column -->
+        <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Note </th>
+            <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
         </ng-container>        
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

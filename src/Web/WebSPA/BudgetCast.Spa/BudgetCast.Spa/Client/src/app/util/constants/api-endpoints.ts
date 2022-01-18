@@ -12,9 +12,6 @@ export interface Endpoints {
       register: string,
       forgotPassword: string,
       resetPassword: string
-    },
-    receipt: {
-      details: string
     }
   };
 
@@ -27,7 +24,8 @@ export interface Endpoints {
     expenses: {
       get: string,
       add: string;
-      searchTags: string
+      searchTags: string,
+      details: string
     }
   };
 }

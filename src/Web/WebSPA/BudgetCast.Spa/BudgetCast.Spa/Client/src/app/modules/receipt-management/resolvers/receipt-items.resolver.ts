@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RecipeService } from '../services/receipt.service';
-import { Receipt } from '../pages/models/receipt';
+import { ExpensesService } from '../services/expenses.service';
+import { ExpenseDetailsVm } from '../pages/models/expense-details-vm';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ReceiptDetailsResolver implements Resolve<Observable<Receipt>> {
+export class ReceiptDetailsResolver implements Resolve<Observable<ExpenseDetailsVm>> {
 
-    constructor(private receiptService: RecipeService) {}
+    constructor(private expenseService: ExpensesService) {}
 
-    resolve(route: ActivatedRouteSnapshot) : Observable<Receipt> {
-        return this.receiptService.getReceiptDetails(route.params['id']);
+    resolve(route: ActivatedRouteSnapshot) : Observable<ExpenseDetailsVm> {
+        return this.expenseService.getExpenseDetails(route.params['id']);
     }
 }

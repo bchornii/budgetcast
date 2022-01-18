@@ -6,6 +6,7 @@ import { PageResult } from 'src/app/models/page-result';
 import { BaseService } from 'src/app/services/base-data.service';
 import { ConfigurationService } from 'src/app/services/configuration-service';
 import { AddExpenseDto } from '../pages/models/add-expense-dto';
+import { ExpenseDetailsVm } from '../pages/models/expense-details-vm';
 import { ExpenseVm } from '../pages/models/expense-vm';
 
 @Injectable({
@@ -55,5 +56,12 @@ export class ExpensesService extends BaseService {
       `${this.configService.endpoints.expenses.expenses.get}`, {params}).pipe(
         catchError(this.handleError)
       );
+  }
+
+  getExpenseDetails(id: number) : Observable<ExpenseDetailsVm> {
+    return this.httpClient.get<ExpenseDetailsVm>(
+      this.configService.endpoints.expenses.expenses.details.replace('{{id}}', id.toString())).pipe(
+        catchError(this.handleError)
+    );
   }
 }

@@ -54,10 +54,6 @@ export class ConfigurationService {
             register: `${baseUrl}/account/register`,
             forgotPassword: `${baseUrl}/account/forgotPassword`,
             resetPassword: `${baseUrl}/account/resetPassword`
-        },
-
-        receipt: {
-            details: `${baseUrl}/receipt/{{id}}/details`
         }
       };
     }
@@ -72,7 +68,8 @@ export class ConfigurationService {
         expenses: {
           get: `${baseUrl}/expenses`,
           add: `${baseUrl}/expenses`,
-          searchTags: `${baseUrl}/expenses/tags/search`
+          searchTags: `${baseUrl}/expenses/tags/search`,
+          details: `${baseUrl}/expenses/{{id}}`
         }     
       };
     }

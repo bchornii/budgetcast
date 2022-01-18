@@ -2,7 +2,13 @@
 {
     public class ExpenseDetailsVm
     {
+        public long Id { get; set; }
+
+        public string AddedBy { get; set; }
+
         public DateTime AddedAt { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public string Description { get; set; }
 
@@ -14,6 +20,7 @@
 
         public ExpenseDetailsVm()
         {
+            AddedBy = default!;
             Description = default!;
             Tags = default!;
             ExpenseItems = default!;

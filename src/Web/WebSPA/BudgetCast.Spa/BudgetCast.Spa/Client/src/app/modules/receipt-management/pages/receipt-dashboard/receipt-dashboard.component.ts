@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { RecipeService } from '../../services/receipt.service';
-import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
+import { Component, OnInit, ViewChild } from '@angular/core';import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize, concatMap, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
@@ -55,8 +53,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
-  constructor(private receiptService: RecipeService,
-              private campaignService: CampaignService,
+  constructor(private campaignService: CampaignService,
               private expensesService: ExpensesService,
               private matDialog: MatDialog,
               private router: Router) { }

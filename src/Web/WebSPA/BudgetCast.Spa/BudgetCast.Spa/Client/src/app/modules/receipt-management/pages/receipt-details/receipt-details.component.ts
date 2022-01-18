@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ReceiptItem } from '../models/receipt-item';
-import { Receipt } from '../models/receipt';
 import { MatTableDataSource } from '@angular/material/table';
+import { ExpenseDetailsVm } from '../models/expense-details-vm';
 
 @Component({
   selector: 'app-receipt-details',
@@ -12,9 +11,9 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ReceiptDetailsComponent implements OnInit {
   
-  receipt: Receipt;
+  expense: ExpenseDetailsVm;
 
-  displayedColumns = ['id', 'title', 'price', 'quantity', 'description'];
+  displayedColumns = ['id', 'title', 'price', 'quantity', 'note'];
   dataSource = new MatTableDataSource();
 
   constructor(private route: ActivatedRoute,              
@@ -22,8 +21,8 @@ export class ReceiptDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.receipt = this.route.snapshot.data.receipt;      
-    this.dataSource.data = this.receipt.receiptItems;      
+    this.expense = this.route.snapshot.data.expense;      
+    this.dataSource.data = this.expense.expenseItems;      
   }
 
   goBack() {

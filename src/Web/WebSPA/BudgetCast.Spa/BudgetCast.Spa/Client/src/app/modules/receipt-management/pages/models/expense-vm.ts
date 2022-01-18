@@ -1,5 +1,5 @@
 export interface ExpenseVm {
-    id: string;
+    id: number;
     createdBy: string;
     addedAt: Date;
     description: string;

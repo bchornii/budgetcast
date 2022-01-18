@@ -84,12 +84,16 @@ namespace BudgetCast.Expenses.Data.Expenses
                 .Where(e => e.Id == expenseId)
                 .Select(e => new ExpenseDetailsVm
                 {
+                    Id = e.Id,
                     CampaignId = EF.Property<long>(e, "_campaignId"),
+                    AddedBy = e.CreatedBy,
+                    CreatedOn = e.CreatedOn,
                     AddedAt = e.AddedAt,
                     Description = e.Description,
                     Tags = e.Tags.Select(t => t.Name).ToArray(),
                     ExpenseItems = e.ExpenseItems.Select(ei => new ExpenseItemDetailsVm
                     {
+                        Id = ei.Id,
                         Note = ei.Note ?? string.Empty,
                         Price = ei.Price,
                         Quantity = ei.Quantity,

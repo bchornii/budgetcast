@@ -23,7 +23,7 @@ export const routes: Routes = [
         path: 'receipt-details/:id',
         component: ReceiptDetailsComponent,
         resolve: {
-          receipt: ReceiptDetailsResolver
+          expense: ReceiptDetailsResolver
         }
       },
       {
