@@ -3,12 +3,12 @@
 .NET Core application, based on a simplified microservices architecture and Docker containers.
 
 ## Goals
- - Personal budget tracking
- - Cost spendings predictions
+ - Expenses tracking
+ - Expense predictions
  - Organizing campaings for savings
- - View/Sharing history of spending
+ - View/Sharing history of expenses
 
-## Code details (Dashboard.Api)
+## Code details
  #### CQRS
  Commands and queries are clearly separated in the application layer.
  
@@ -21,12 +21,12 @@
 
 ## Tech stack
  - **Back-End**
-    - Asp.Net Core 3.1
-      - Asp.Net Identity 3.1
+    - Asp.Net 6
+      - Asp.Net Identity 6
           - Individual User Accounts 
           - External providers (Google, Facebook)
       - MediatR
-      - Entity Framework Core 3.1
+      - Entity Framework Core 6
       - Autofac
       - Automapper
       - FluentValidation
@@ -39,10 +39,10 @@
     - Seq
     
  - **UI**
-    - Asp.Net Core 3.1 (as prod hosting web server)
+    - Asp.Net 6 (as prod hosting web server)
     - Serilog
-    - Angular 10
-    - Angular Material 10
+    - Angular 13
+    - Angular Material 13
     - Bootstrap 4
     - moment
     
