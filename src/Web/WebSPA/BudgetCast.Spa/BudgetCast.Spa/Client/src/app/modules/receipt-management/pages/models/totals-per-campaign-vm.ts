@@ -1,6 +1,6 @@
 import { KeyValuePair } from 'src/app/util/util';
 
-export interface TotalsPerCampaign {
+export interface TotalsPerCampaignVm {
     totalAmount: number;
     tagTotalPair: KeyValuePair[];
 }

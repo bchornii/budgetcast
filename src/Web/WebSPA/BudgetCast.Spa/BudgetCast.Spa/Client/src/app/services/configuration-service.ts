@@ -57,7 +57,6 @@ export class ConfigurationService {
         },
 
         receipt: {
-            totalPerCampaign: `${baseUrl}/receipt/total/{{campaignName}}`,
             details: `${baseUrl}/receipt/{{id}}/details`
         }
       };
@@ -67,7 +66,8 @@ export class ConfigurationService {
       return {
         campaign: {
           all: `${baseUrl}/campaigns`,
-          search: `${baseUrl}/campaigns/search`
+          search: `${baseUrl}/campaigns/search`,
+          totals: `${baseUrl}/campaigns/{{name}}/totals`
         },
         expenses: {
           get: `${baseUrl}/expenses`,

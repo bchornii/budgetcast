@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { KeyValuePair } from 'src/app/util/util';
 import { ConfigurationService } from 'src/app/services/configuration-service';
 import { CampaignVm } from '../pages/models/campaign-vm';
+import { TotalsPerCampaignVm } from '../pages/models/totals-per-campaign-vm';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,12 @@ export class CampaignService extends BaseService {
       `${this.configService.endpoints.expenses.campaign.search}`, { params }).pipe(
       catchError(this.handleError)
     );
+  }
+
+  getTotals(campaign: string) : Observable<TotalsPerCampaignVm>{
+    return this.httpClient.get<TotalsPerCampaignVm>(
+      this.configService.endpoints.expenses.campaign.totals.replace('{{name}}', campaign)).pipe(
+        catchError(this.handleError)
+      );
   }
 }

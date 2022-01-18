@@ -14,7 +14,6 @@ export interface Endpoints {
       resetPassword: string
     },
     receipt: {
-      totalPerCampaign: string,
       details: string
     }
   };
@@ -22,7 +21,8 @@ export interface Endpoints {
   expenses: {
     campaign: {
       all: string,
-      search: string
+      search: string,
+      totals: string
     },
     expenses: {
       get: string,

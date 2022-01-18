@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { CampaignService } from '../../services/campaign.service';
 import { Subject, forkJoin } from 'rxjs';
-import { TotalsPerCampaign } from '../models/totals-per-campaign';
+import { TotalsPerCampaignVm } from '../models/totals-per-campaign-vm';
 import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
 import { Router } from '@angular/router';
 import { ExpenseVm } from '../models/expense-vm';
@@ -36,7 +36,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   total: number;
   items: ExpenseVm[] = [];
-  totalsPerCampaign: TotalsPerCampaign;
+  totalsPerCampaign: TotalsPerCampaignVm;
 
   pageSizeMediaMatchers: KeyValue<MediaQueryList, number>[] = [
     {
@@ -77,7 +77,7 @@ export class ReceiptDashboardComponent implements OnInit {
       concatMap(() => forkJoin([
         this.expensesService.getExpenses(
           this.campaign, this.page, this.pageSize),
-        this.receiptService.getTotalsPerCampaign(this.campaign)
+        this.campaignService.getTotals(this.campaign)
       ])),
 
       finalize(() => this.spinner.hide())
@@ -132,7 +132,7 @@ export class ReceiptDashboardComponent implements OnInit {
     forkJoin([
       this.expensesService.getExpenses(
         this.campaign, this.page, this.pageSize),
-      this.receiptService.getTotalsPerCampaign(this.campaign)
+      this.campaignService.getTotals(this.campaign)
     ]).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(([pageResult, totalsPerCampaign]) => {
