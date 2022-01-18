@@ -1,9 +1,9 @@
-export interface BasicReceipt {
+export interface ExpenseVm {
     id: string;
     createdBy: string;
-    date: Date;
+    addedAt: Date;
     description: string;
     totalItems?: number;
-    totalAmount: number;
+    totalAmount?: number;
     tags: string[];
 }

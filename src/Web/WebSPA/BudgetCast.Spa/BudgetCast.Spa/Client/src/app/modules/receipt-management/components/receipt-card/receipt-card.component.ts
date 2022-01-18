@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { BasicReceipt } from '../../pages/models/basic-receipt';
+import { ExpenseVm } from '../../pages/models/expense-vm';
 
 @Component({
   selector: 'app-receipt-card',
@@ -8,7 +8,7 @@ import { BasicReceipt } from '../../pages/models/basic-receipt';
 })
 export class ReceiptCardComponent implements OnInit {
 
-  @Input() receipt: BasicReceipt;
+  @Input() expense: ExpenseVm;
   @Output() onMore = new EventEmitter<void>();
 
   constructor() { }

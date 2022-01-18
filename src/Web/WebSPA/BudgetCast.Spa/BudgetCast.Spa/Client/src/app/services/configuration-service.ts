@@ -57,14 +57,8 @@ export class ConfigurationService {
         },
 
         receipt: {
-            addBasic: `${baseUrl}/receipt/addBasic`,
-            basicReceipts: `${baseUrl}/receipt/basicReceipts`,
             totalPerCampaign: `${baseUrl}/receipt/total/{{campaignName}}`,
             details: `${baseUrl}/receipt/{{id}}/details`
-        },
-
-        tags: {
-            search: `${baseUrl}/tags/search`
         }
       };
     }
@@ -76,6 +70,7 @@ export class ConfigurationService {
           search: `${baseUrl}/campaigns/search`
         },
         expenses: {
+          get: `${baseUrl}/expenses`,
           add: `${baseUrl}/expenses`,
           searchTags: `${baseUrl}/expenses/tags/search`
         }     

@@ -14,13 +14,8 @@ export interface Endpoints {
       resetPassword: string
     },
     receipt: {
-      addBasic: string,
-      basicReceipts: string,
       totalPerCampaign: string,
       details: string
-    },
-    tags: {
-      search: string
     }
   };
 
@@ -30,6 +25,7 @@ export interface Endpoints {
       search: string
     },
     expenses: {
+      get: string,
       add: string;
       searchTags: string
     }

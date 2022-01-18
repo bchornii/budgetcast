@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/services/base-data.service';
 import { PageResult } from 'src/app/models/page-result';
-import { BasicReceipt } from '../pages/models/basic-receipt';
 import { TotalsPerCampaign } from '../pages/models/totals-per-campaign';
 import { Receipt } from '../pages/models/receipt';
 import { ConfigurationService } from 'src/app/services/configuration-service';
@@ -17,21 +16,6 @@ export class RecipeService extends BaseService {
   constructor(private httpClient: HttpClient,
               private configService: ConfigurationService) {
     super();
-  }
-
-  getBasicReceipts(campaign: string, page = 1, pageSize = 10): Observable<PageResult<BasicReceipt>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString());
-
-    if(campaign) {
-      params = params.set('campaignName', campaign);
-    }
-
-    return this.httpClient.get<PageResult<BasicReceipt>>(
-      `${this.configService.endpoints.dashboard.receipt.basicReceipts}`, {params}).pipe(
-        catchError(this.handleError)
-      );
   }
 
   getTotalsPerCampaign(campaign: string) : Observable<TotalsPerCampaign>{

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
-import { BasicReceipt } from '../models/basic-receipt';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize, concatMap, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +9,8 @@ import { Subject, forkJoin } from 'rxjs';
 import { TotalsPerCampaign } from '../models/totals-per-campaign';
 import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
 import { Router } from '@angular/router';
+import { ExpenseVm } from '../models/expense-vm';
+import { ExpensesService } from '../../services/expenses.service';
 
 interface KeyValue<TKey, TValue> {
   key: TKey;
@@ -34,7 +35,7 @@ export class ReceiptDashboardComponent implements OnInit {
   campaignOptions: string[];
 
   total: number;
-  items: BasicReceipt[] = [];
+  items: ExpenseVm[] = [];
   totalsPerCampaign: TotalsPerCampaign;
 
   pageSizeMediaMatchers: KeyValue<MediaQueryList, number>[] = [
@@ -56,6 +57,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   constructor(private receiptService: RecipeService,
               private campaignService: CampaignService,
+              private expensesService: ExpensesService,
               private matDialog: MatDialog,
               private router: Router) { }
 
@@ -73,14 +75,14 @@ export class ReceiptDashboardComponent implements OnInit {
       }),
 
       concatMap(() => forkJoin([
-        this.receiptService.getBasicReceipts(
+        this.expensesService.getExpenses(
           this.campaign, this.page, this.pageSize),
         this.receiptService.getTotalsPerCampaign(this.campaign)
       ])),
 
       finalize(() => this.spinner.hide())
     ).subscribe(([pageResult, totalsPerCampaign]) => {
-        this.total = pageResult.total;
+        this.total = pageResult.totalCount;
         this.items = pageResult.items;
         this.totalsPerCampaign = totalsPerCampaign;
       });
@@ -115,12 +117,12 @@ export class ReceiptDashboardComponent implements OnInit {
 
   initGrid() {
     this.spinner.show();
-    this.receiptService.getBasicReceipts(
+    this.expensesService.getExpenses(
       this.campaign, this.page, this.pageSize).pipe(
       finalize(() => this.spinner.hide())
     )
     .subscribe(pageResult => {
-      this.total = pageResult.total;
+      this.total = pageResult.totalCount;
       this.items = pageResult.items;
     });
   }
@@ -128,13 +130,13 @@ export class ReceiptDashboardComponent implements OnInit {
   initPage() {
     this.spinner.show();
     forkJoin([
-      this.receiptService.getBasicReceipts(
+      this.expensesService.getExpenses(
         this.campaign, this.page, this.pageSize),
       this.receiptService.getTotalsPerCampaign(this.campaign)
     ]).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(([pageResult, totalsPerCampaign]) => {
-      this.total = pageResult.total;
+      this.total = pageResult.totalCount;
       this.items = pageResult.items;
       this.totalsPerCampaign = totalsPerCampaign;
     });

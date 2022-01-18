@@ -3,7 +3,6 @@ import { NgModel } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeService } from '../../services/receipt.service';
 import { finalize } from 'rxjs/operators';
-
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';

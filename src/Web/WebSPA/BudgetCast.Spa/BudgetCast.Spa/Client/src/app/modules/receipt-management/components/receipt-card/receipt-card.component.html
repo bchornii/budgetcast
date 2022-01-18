@@ -1,22 +1,22 @@
 <mat-card>
     <div class="header">
-        <div class="header__total">{{receipt?.totalAmount | currency : '₴ ' }}</div>
-        <div class="header__date">{{receipt?.date | date}}</div>
+        <div class="header__total">{{expense?.totalAmount | currency : '₴ ' }}</div>
+        <div class="header__date">{{expense?.addedAt | date}}</div>
     </div>
     <hr>
     <div class="content">
         <div class="content__item">
             <div class="content__item__title">Total items:</div>
-            <div class="content__item__value">{{receipt?.totalItems}}</div>
+            <div class="content__item__value">{{expense?.totalItems}}</div>
         </div>
         <div class="content__item">
             <div class="content__item__title">Tags:</div>
-            <div class="content__item__value">{{receipt?.tags}}</div>                
+            <div class="content__item__value">{{expense?.tags}}</div>                
         </div>
         <div class="content__item">
             <div class="content__item__title">Description:</div>
             <div class="content__item__value cut-text">
-                {{receipt?.description || '-'}} 
+                {{expense?.description || '-'}} 
             </div>                
         </div>
     </div>

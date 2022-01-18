@@ -1,4 +1,9 @@
 export interface PageResult<T> {
-    total: number;
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    pageSize: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
     items: T[];
 }
