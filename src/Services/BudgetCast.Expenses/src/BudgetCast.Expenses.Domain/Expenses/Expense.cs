@@ -30,10 +30,10 @@ namespace BudgetCast.Expenses.Domain.Expenses
         public Expense(
             DateTime addedAt,
             Campaign campaign, 
-            string description = "no description") : this()
+            string description) : this()
         {
             AddedAt = addedAt;
-            Description = description;
+            Description = description ?? "no description";
 
             _campaignId = campaign.Id;
             _campaignTenantId = campaign.TenantId;

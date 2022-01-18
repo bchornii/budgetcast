@@ -15,7 +15,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
 
         public string CampaignName { get; init; }
 
-        public string Description { get; init; }
+        public string? Description { get; init; }
 
         public decimal TotalAmount { get; set; }
 
