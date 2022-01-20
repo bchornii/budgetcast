@@ -10,7 +10,7 @@ Get-Content .\.env | ForEach-Object($_) {
 $currentLocation = Get-Location
 
 # Navigate to API
-Set-Location -Path .\Services\BudgetCast.Dashboard\BudgetCast.Dashboard.Api
+Set-Location -Path .\Services\BudgetCast.Identity\src\BudgetCast.Identity.Api
 
 # Set up Google secrets
 dotnet user-secrets set "Social:Google:ClientId" (Get-ChildItem Env:GOOGLE_CLIENT_ID).value
