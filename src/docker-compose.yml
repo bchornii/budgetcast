@@ -38,6 +38,7 @@ services:
       dockerfile: BudgetCast.Spa/Dockerfile
     depends_on: 
       - dashboard-api  
+      - expenses-api
   
   webstatus:
     image: ${REGISTRY:-budgetcast}/webstatus:${PLATFORM:-linux}-${TAG:-latest}

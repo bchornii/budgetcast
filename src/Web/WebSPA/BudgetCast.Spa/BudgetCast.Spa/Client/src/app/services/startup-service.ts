@@ -19,7 +19,7 @@ export function appStartInitializer(configService: ConfigurationService, authSer
     }
 
     const baseURI = environment.production
-          ? this.getBaseUri()
+          ? getBaseUri()
           : environment.devBaseUrl;
 
     return configService.load(baseURI).pipe(

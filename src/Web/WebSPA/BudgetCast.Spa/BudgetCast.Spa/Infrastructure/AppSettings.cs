@@ -8,5 +8,7 @@
     public class Endpoints
     {
         public string Dashboard { get; set; }
+
+        public string Expenses { get; set; }
     }
 }

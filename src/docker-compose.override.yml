@@ -51,6 +51,8 @@ services:
             - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
             - UiLinks__ResetPassword=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}/account/reset-password            
             - UiLinks__Login=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}/account/login
+            - IdentityManagement__ConnectionString=Server=identity-db,1433;Database=IdentityDb;User Id=sa;Password=Install_new!
+            - BudgetCast__ConnectionString=mongodb://budgetcast-db:27017
         ports: 
             - target: 80
               published: ${DASHBOARD_API_PORT}
@@ -64,7 +66,9 @@ services:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Production            
             - ASPNETCORE_URLS=http://+:80
-            - Serilog__WriteTo__0__Args__serverUrl=http://seq            
+            - Serilog__WriteTo__0__Args__serverUrl=http://seq
+            - ExpensesDb__ConnectionString=Server=host.docker.internal,1433;Database=ExpensesDb;User Id=sa;Password=Install_new!
+            - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
         ports: 
             - target: 80
               published: ${EXPENSES_API_PORT}
@@ -77,6 +81,7 @@ services:
             - ASPNETCORE_Kestrel__Certificates__Default__Password=Install_new!
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
             - Endpoints__Dashboard=https://${HOST_BASE_ADDR}:${DASHBOARD_API_HTTPS_PORT}/api
+            - Endpoints__Expenses=http://${HOST_BASE_ADDR}:${EXPENSES_API_PORT}/api
         ports: 
             - target: 80
               published: ${UI_PORT}
