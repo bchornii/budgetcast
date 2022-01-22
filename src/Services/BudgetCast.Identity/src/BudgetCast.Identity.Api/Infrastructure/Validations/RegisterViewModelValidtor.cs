@@ -11,7 +11,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Validations
             RuleFor(m => m.Email)
                 .NotEmpty();
 
-            RuleFor(m => m.FirstName)
+            RuleFor(m => m.GivenName)
                 .NotEmpty();
 
             RuleFor(m => m.SurName)

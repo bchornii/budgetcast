@@ -5,7 +5,7 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
 {
     public class RegisterVm
     {
-        public string FirstName { get; set; }
+        public string GivenName { get; set; }
 
         public string SurName { get; set; }
 
@@ -17,7 +17,7 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
 
         public RegisterVm()
         {
-            FirstName = default!;
+            GivenName = default!;
             SurName = default!;
             Email = default!;
             Password = default!;
@@ -30,7 +30,7 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
             {
                 UserName = Email,
                 Email = Email,
-                FirstName = FirstName,
+                FirstName = GivenName,
                 LastName = SurName,
                 IsActive = false,
             };
@@ -40,7 +40,7 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
         {
             return new[]
             {
-                new Claim(ClaimTypes.GivenName, FirstName),
+                new Claim(ClaimTypes.GivenName, GivenName),
                 new Claim(ClaimTypes.Surname, SurName)
             };
         }

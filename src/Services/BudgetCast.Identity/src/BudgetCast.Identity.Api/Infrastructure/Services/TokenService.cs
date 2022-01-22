@@ -180,6 +180,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimConstants.Fullname, $"{user.FirstName} {user.LastName}"),
                 new(ClaimTypes.Name, user.FirstName ?? string.Empty),
+                new(ClaimTypes.GivenName, user.FirstName ?? string.Empty),
                 new(ClaimTypes.Surname, user.LastName ?? string.Empty),
                 new(ClaimConstants.IpAddress, ipAddress),
                 new(ClaimConstants.Tenant, "7064"),

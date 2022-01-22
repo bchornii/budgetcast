@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError, flatMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,10 @@ import { ForgotPassword } from '../models/forgot-password';
 import { ResetPassword } from '../models/reset-password';
 import { BaseService } from './base-data.service';
 import { ConfigurationService } from './configuration-service';
+import { CookieService } from 'ngx-cookie-service';
+import { LocalStorageService } from './local-storage.service';
+import { AccessTokenItem, XToken } from '../util/constants/auth-constants';
+import { UserLoginVm } from '../models/user-login-vm';
 
 @Injectable({
   providedIn: 'root'
@@ -27,60 +31,86 @@ export class AuthService extends BaseService {
   constructor(@Inject(DOCUMENT)
               private document: Document,
               private httpClient: HttpClient,
-              private configService: ConfigurationService) {
+              private configService: ConfigurationService,
+              private cookieService: CookieService,
+              private localStorage: LocalStorageService) {
     super();
   }
 
-  checkUserAuthenticationStatus(): Observable<UserIdentity> {
+  verifyIfTokenPassedAfterRedirect() : Observable<string> {
+    var token = this.cookieService.get(XToken);
+    if (token) {
+      this.cookieService.delete(XToken);
+      this.localStorage.setItem(AccessTokenItem, token);
+    }
+    return of(token);
+  }
+
+  checkUserAuthenticationStatus(userLoginVm: UserLoginVm = null): Observable<UserIdentity> {
+
+    // Check for token passed from successful external login
+    var accessToken = this.cookieService.get(XToken);
+    if (accessToken) {
+      this.cookieService.delete(XToken);
+      this.localStorage.setItem(AccessTokenItem, accessToken);
+    }
+
+    // Check for token passed as a result of successful individual login
+    if (userLoginVm){
+      this.cookieService.delete(XToken);
+      this.localStorage.setItem(AccessTokenItem, userLoginVm.accessToken);
+    }
+
     return this.httpClient.get<UserIdentity>(
-      `${this.configService.endpoints.dashboard.account.isAuthenticated}`).pipe(tap(r => {
+      `${this.configService.endpoints.identity.account.isAuthenticated}`).pipe(tap(r => {
         this.userIdentitySubject.next(r);
       }));
   }
 
   invalidateUserAuthentication(): void {
+    this.localStorage.removeItem(AccessTokenItem);
     this.userIdentitySubject.next(this.invalidUserIdentity);
   }
 
   login(userLogin: UserLogin): Observable<any> {
-    return this.httpClient.post(`${this.configService.endpoints.dashboard.account.login}`, userLogin).pipe(
-      flatMap(_ => this.checkUserAuthenticationStatus()),
+    return this.httpClient.post<UserLoginVm>(`${this.configService.endpoints.identity.signIn.individual}`, userLogin).pipe(
+      flatMap(userLoginVm => this.checkUserAuthenticationStatus(userLoginVm)),
       catchError(this.handleError)
     );
   }
 
   googleLogin(): void {
-    this.document.location.href = `${this.configService.endpoints.dashboard.account.signInWithGoogle}`;
+    this.document.location.href = `${this.configService.endpoints.identity.signIn.google}`;
   }
 
   facebookLogin(): void {
-    this.document.location.href = `${this.configService.endpoints.dashboard.account.signInWithFacebook}`;
+    this.document.location.href = `${this.configService.endpoints.identity.signIn.facebook}`;
   }
 
   logout() {
     return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.account.logout}`, {}).pipe(
+      `${this.configService.endpoints.identity.signOut.all}`, {}).pipe(
         tap(_ => this.invalidateUserAuthentication())
       );
   }
 
   register(userRegistration: UserRegistration) : Observable<any> {
     return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.account.register}`, userRegistration).pipe(
+      `${this.configService.endpoints.identity.account.register}`, userRegistration).pipe(
       catchError(this.handleError)
     );
   }
 
   forgotPassword(forgotPassword: ForgotPassword) {
     return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.account.forgotPassword}`, forgotPassword).pipe(
+      `${this.configService.endpoints.identity.account.passwordForgot}`, forgotPassword).pipe(
         catchError(this.handleError)
       );
   }
 
   resetPassword(resetPassword: ResetPassword) {
     return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.account.resetPassword}`, resetPassword).pipe(
+      `${this.configService.endpoints.identity.account.passwordReset}`, resetPassword).pipe(
         catchError(this.handleError)
       );
   }

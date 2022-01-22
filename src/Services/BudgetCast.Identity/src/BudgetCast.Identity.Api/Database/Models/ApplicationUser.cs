@@ -17,5 +17,11 @@ namespace BudgetCast.Identity.Api.Database.Models
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         public long? Tenant { get; set; }
+
+        public void ClearRefreshTokenInformation()
+        {
+            RefreshToken = default!;
+            RefreshTokenExpiryTime = DateTime.MinValue;
+        }
     }
 }

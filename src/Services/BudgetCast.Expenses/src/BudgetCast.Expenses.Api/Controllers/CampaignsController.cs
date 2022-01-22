@@ -5,10 +5,12 @@ using BudgetCast.Expenses.Queries.Campaigns.GetCampaigns;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;
 using BudgetCast.Expenses.Queries.Campaigns.SearchForExistingCampaignsByName;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetCast.Expenses.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignsController : ControllerBase
