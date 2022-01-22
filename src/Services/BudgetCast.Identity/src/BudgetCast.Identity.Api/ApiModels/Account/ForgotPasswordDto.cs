@@ -1,10 +1,10 @@
 ﻿namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class ForgotPasswordVm
+    public class ForgotPasswordDto
     {
         public string Email { get; set; }
 
-        public ForgotPasswordVm()
+        public ForgotPasswordDto()
         {
             Email = default!;
         }

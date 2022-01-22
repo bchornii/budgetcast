@@ -4,6 +4,7 @@ using BudgetCast.Identity.Api.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetCast.Identity.Api.Database.Migrations
 {
     [DbContext(typeof(AppIdentityContext))]
-    partial class AppIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20220122140707_Rename_User_FirstName_To_GivenName")]
+    partial class Rename_User_FirstName_To_GivenName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

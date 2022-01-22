@@ -1,4 +1,4 @@
-﻿using BudgetCast.Identity.Api.ApiModels.Account;
+﻿using BudgetCast.Identity.Api.ApiModels.SignIn;
 using BudgetCast.Identity.Api.Database.Models;
 using BudgetCast.Identity.Api.Infrastructure.AppSettings;
 using BudgetCast.Identity.Api.Infrastructure.Extensions;
@@ -59,7 +59,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("individual")]
         public async Task<IActionResult> Login(
-            [FromBody] LoginVm model)
+            [FromBody] LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -78,19 +78,18 @@ namespace BudgetCast.Identity.Api.Controllers
                 return Unauthorized(_localizer["User is inactive."]);
             }
 
-
             var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordValid)
             {
                 return Unauthorized(_localizer["Invalid credentials."]);
             }
 
-            var tokenResponse = _tokenService.GetToken(user, GenerateIpAddress());
+            var tokenResponse = _tokenService.GetToken(user, HttpContext.GenerateIpAddress());
             user.RefreshToken = tokenResponse.RefreshToken;
             user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
             await _userManager.UpdateAsync(user);
 
-            return Ok(new
+            return Ok(new LoginVm
             {
                 AccessToken = tokenResponse.Token,
             });
@@ -123,11 +122,12 @@ namespace BudgetCast.Identity.Api.Controllers
 
                 await _userManager.AddLoginAsync(user, info);
 
-                var userClaims = info.Principal
-                    .Claims.Append(new Claim(ClaimConstants.UserId, user.Id));
-                await _userManager.AddClaimsAsync(user, userClaims);
+                var additionalUserClaims = info.Principal
+                    .NonIdClaims()
+                    .Append(new Claim(ClaimConstants.UserId, user.Id));
+                await _userManager.AddClaimsAsync(user, additionalUserClaims);
 
-                var tokenResponse = _tokenService.GetToken(user, GenerateIpAddress());
+                var tokenResponse = _tokenService.GetToken(user, HttpContext.GenerateIpAddress());
                 user.RefreshToken = tokenResponse.RefreshToken;
                 user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
                 await _userManager.UpdateAsync(user);
@@ -151,7 +151,7 @@ namespace BudgetCast.Identity.Api.Controllers
                     return Unauthorized(_localizer["External authentication failed."]);
                 }
 
-                var tokenResponse = _tokenService.GetToken(user, GenerateIpAddress());
+                var tokenResponse = _tokenService.GetToken(user, HttpContext.GenerateIpAddress());
                 user.RefreshToken = tokenResponse.RefreshToken;
                 user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
                 await _userManager.UpdateAsync(user);
@@ -161,18 +161,6 @@ namespace BudgetCast.Identity.Api.Controllers
             }
 
             return Redirect(_externalIdentityProviders.UiRedirectUrl);
-        }
-
-        private string GenerateIpAddress()
-        {
-            if (Request.Headers.ContainsKey("X-Forwarded-For"))
-            {
-                return Request.Headers["X-Forwarded-For"];
-            }
-            else
-            {
-                return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "N/A";
-            }
         }
     }
 }

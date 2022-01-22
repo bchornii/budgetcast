@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Identity.Api.ApiModels.Account;
 using BudgetCast.Identity.Api.Database.Models;
 using BudgetCast.Identity.Api.Infrastructure.AppSettings;
+using BudgetCast.Identity.Api.Infrastructure.Extensions;
 using BudgetCast.Identity.Api.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,38 +15,36 @@ namespace BudgetCast.Identity.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailService;
+        private readonly ITokenService _tokenService;
         private readonly UiLinks _uiLinks;
         private readonly IStringLocalizer<TokenService> _localizer;
 
-        public AccountController(
-            SignInManager<ApplicationUser> signInManager,
+        public AccountController(     
             UserManager<ApplicationUser> userManager,
             IEmailService emailService,
-            UiLinks uiLinks, 
-            IStringLocalizer<TokenService> localizer)
+            UiLinks uiLinks,
+            IStringLocalizer<TokenService> localizer, 
+            ITokenService tokenService)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
             _uiLinks = uiLinks;
             _localizer = localizer;
+            _tokenService = tokenService;
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(
-            [FromBody] RegisterVm model)
+            [FromBody] RegisterDto model)
         {
             var user = model.GetUser();
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
-            {
-                await _userManager.AddClaimsAsync(user, model.GetClaims());
-
+            {                
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = Url.Action("confirmEmail", "Account",
                     new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
@@ -60,27 +59,26 @@ namespace BudgetCast.Identity.Api.Controllers
         [Authorize]
         [HttpPost("update")]
         public async Task<IActionResult> UpdateProfile(
-            [FromBody] UpdateProfileVm model)
+            [FromBody] UpdateProfileDto model)
         {
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
             {
                 return NotFound(_localizer["User not found."]);
-            }
+            }            
 
-            await RemoveClaimsAsync(user,
-                ClaimTypes.GivenName, ClaimTypes.Surname);
+            user.GivenName = model.GivenName;
+            user.LastName = model.SurName;
+            await _userManager.UpdateAsync(user);
 
-            await _userManager.AddClaimsAsync(user, new[]
+            var accessToken = _tokenService
+                .GenerateAccessToken(user, HttpContext.GenerateIpAddress());
+
+            return Ok(new UpdateProfileVm
             {
-                new Claim(ClaimTypes.GivenName, model.GivenName),
-                new Claim(ClaimTypes.Surname, model.SurName)
+                AccessToken = accessToken,
             });
-
-            await _signInManager.RefreshSignInAsync(user);
-
-            return Ok();
         }
 
         [AllowAnonymous]
@@ -103,6 +101,8 @@ namespace BudgetCast.Identity.Api.Controllers
             if (result.Succeeded)
             {
                 user.IsActive = true;
+                await _userManager.UpdateAsync(user);
+
                 return Redirect(_uiLinks.Login);
             }
 
@@ -112,13 +112,13 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("password/forgot")]
         public async Task<IActionResult> ForgotPassword(
-            [FromBody] ForgotPasswordVm model)
+            [FromBody] ForgotPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            if (user == null || !user.EmailConfirmed)
             {
-                return NotFound("User not found.");
+                return NotFound(_localizer["User not found."]);
             }
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -131,7 +131,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("password/reset")]
         public async Task<IActionResult> ResetPassword(
-            [FromBody] ResetPasswordVm model)
+            [FromBody] ResetPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -154,19 +154,11 @@ namespace BudgetCast.Identity.Api.Controllers
             return Ok(new
             {
                 User.Identity!.IsAuthenticated,
-                UserName = User.Claims.LastOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
                 GivenName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
                 SurName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
                 FullName = User.Claims.FirstOrDefault(c => c.Type == ClaimConstants.Fullname)?.Value,
                 ImageUrl = User.Claims.FirstOrDefault(c => c.Type == ClaimConstants.ImageUrl)?.Value,
             });
-        }
-
-        private async Task RemoveClaimsAsync(ApplicationUser user, params string[] claimType)
-        {
-            var claims = await _userManager.GetClaimsAsync(user);
-            var claimsToRemove = claims.Where(c => claimType.Contains(c.Type));
-            await _userManager.RemoveClaimsAsync(user, claimsToRemove);
         }
     }
 }

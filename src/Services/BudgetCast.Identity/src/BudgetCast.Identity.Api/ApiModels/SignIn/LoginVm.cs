@@ -1,10 +1,10 @@
-﻿namespace BudgetCast.Identity.Api.ApiModels.Account
+﻿namespace BudgetCast.Identity.Api.ApiModels.SignIn
 {
-    public class UpdateProfileVm
+    public class LoginVm
     {
         public string AccessToken { get; set; }
 
-        public UpdateProfileVm()
+        public LoginVm()
         {
             AccessToken = default!;
         }

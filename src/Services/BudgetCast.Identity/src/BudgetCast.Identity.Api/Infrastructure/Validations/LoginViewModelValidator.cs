@@ -1,10 +1,10 @@
-﻿using BudgetCast.Identity.Api.ApiModels.Account;
+﻿using BudgetCast.Identity.Api.ApiModels.SignIn;
 using FluentValidation;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class LoginViewModelValidator :
-        AbstractValidator<LoginVm>
+        AbstractValidator<LoginDto>
     {
         public LoginViewModelValidator()
         {

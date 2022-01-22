@@ -4,7 +4,7 @@ using FluentValidation;
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class ForgotPasswordViewModelValidator :
-        AbstractValidator<ForgotPasswordVm>
+        AbstractValidator<ForgotPasswordDto>
     {
         public ForgotPasswordViewModelValidator()
         {

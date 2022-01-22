@@ -29,11 +29,16 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
             _jwtSettings = jwtSettings;
         }
 
+        public string GenerateAccessToken(ApplicationUser user, string ipAddress)
+        {
+            return GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
+        }
+
         public TokenResponseVm GetToken(ApplicationUser user, string ipAddress)
         {
             var refreshToken = GenerateRefreshToken();
             var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
-            var token = GenerateJwt(user, ipAddress);
+            var token = GenerateAccessToken(user, ipAddress);
             var response = new TokenResponseVm(token, refreshToken, refreshTokenExpiryTime);
             return response;
         }
@@ -65,7 +70,8 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
             user.RefreshToken = GenerateRefreshToken();
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
             await _userManager.UpdateAsync(user);
-            string token = GenerateJwt(user, ipAddress);
+
+            var token = GenerateAccessToken(user, ipAddress);
             var response = new TokenResponseVm(token, user.RefreshToken, user.RefreshTokenExpiryTime);
             return response;
         }
@@ -154,12 +160,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                 signingCredentials: signingCredentials);
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
-        }
-
-        private string GenerateJwt(ApplicationUser user, string ipAddress)
-        {
-            return GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
-        }
+        }        
 
         private SigningCredentials GetSigningCredentials()
         {
@@ -178,9 +179,9 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Email, user.Email),
-                new(ClaimConstants.Fullname, $"{user.FirstName} {user.LastName}"),
-                new(ClaimTypes.Name, user.FirstName ?? string.Empty),
-                new(ClaimTypes.GivenName, user.FirstName ?? string.Empty),
+                new(ClaimConstants.Fullname, $"{user.GivenName} {user.LastName}"),
+                new(ClaimTypes.Name, user.GivenName ?? string.Empty),
+                new(ClaimTypes.GivenName, user.GivenName ?? string.Empty),
                 new(ClaimTypes.Surname, user.LastName ?? string.Empty),
                 new(ClaimConstants.IpAddress, ipAddress),
                 new(ClaimConstants.Tenant, "7064"),

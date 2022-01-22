@@ -4,7 +4,7 @@ using FluentValidation;
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class ResetPasswordViewModelValidator :
-        AbstractValidator<ResetPasswordVm>
+        AbstractValidator<ResetPasswordDto>
     {
         public ResetPasswordViewModelValidator()
         {

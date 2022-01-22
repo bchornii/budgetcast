@@ -4,7 +4,7 @@ using FluentValidation;
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class RegisterViewModelValidtor :
-        AbstractValidator<RegisterVm>
+        AbstractValidator<RegisterDto>
     {
         public RegisterViewModelValidtor()
         {

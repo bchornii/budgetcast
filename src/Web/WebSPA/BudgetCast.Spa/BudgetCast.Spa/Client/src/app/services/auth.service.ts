@@ -46,19 +46,19 @@ export class AuthService extends BaseService {
     return of(token);
   }
 
-  checkUserAuthenticationStatus(userLoginVm: UserLoginVm = null): Observable<UserIdentity> {
+  checkUserAuthenticationStatus(accessToken?: string): Observable<UserIdentity> {
 
     // Check for token passed from successful external login
-    var accessToken = this.cookieService.get(XToken);
-    if (accessToken) {
+    var xToken = this.cookieService.get(XToken);
+    if (xToken) {
       this.cookieService.delete(XToken);
-      this.localStorage.setItem(AccessTokenItem, accessToken);
+      this.localStorage.setItem(AccessTokenItem, xToken);
     }
 
     // Check for token passed as a result of successful individual login
-    if (userLoginVm){
+    if (accessToken){
       this.cookieService.delete(XToken);
-      this.localStorage.setItem(AccessTokenItem, userLoginVm.accessToken);
+      this.localStorage.setItem(AccessTokenItem, accessToken);
     }
 
     return this.httpClient.get<UserIdentity>(
@@ -74,7 +74,7 @@ export class AuthService extends BaseService {
 
   login(userLogin: UserLogin): Observable<any> {
     return this.httpClient.post<UserLoginVm>(`${this.configService.endpoints.identity.signIn.individual}`, userLogin).pipe(
-      flatMap(userLoginVm => this.checkUserAuthenticationStatus(userLoginVm)),
+      flatMap(userLoginVm => this.checkUserAuthenticationStatus(userLoginVm.accessToken)),
       catchError(this.handleError)
     );
   }

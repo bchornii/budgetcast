@@ -3,7 +3,7 @@ using BudgetCast.Identity.Api.Database.Models;
 
 namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class RegisterVm
+    public class RegisterDto
     {
         public string GivenName { get; set; }
 
@@ -15,7 +15,7 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
 
         public string PasswordConfirm { get; set; }
 
-        public RegisterVm()
+        public RegisterDto()
         {
             GivenName = default!;
             SurName = default!;
@@ -30,18 +30,9 @@ namespace BudgetCast.Identity.Api.ApiModels.Account
             {
                 UserName = Email,
                 Email = Email,
-                FirstName = GivenName,
+                GivenName = GivenName,
                 LastName = SurName,
                 IsActive = false,
-            };
-        }
-
-        public Claim[] GetClaims()
-        {
-            return new[]
-            {
-                new Claim(ClaimTypes.GivenName, GivenName),
-                new Claim(ClaimTypes.Surname, SurName)
             };
         }
     }

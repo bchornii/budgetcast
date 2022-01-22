@@ -4,7 +4,7 @@ using FluentValidation;
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class UpdateProfileViewModelValidator :
-        AbstractValidator<UpdateProfileVm>
+        AbstractValidator<UpdateProfileDto>
     {
         public UpdateProfileViewModelValidator()
         {
