@@ -1,13 +1,19 @@
-﻿using BudgetCast.Identity.Api.HostedServices;
+﻿using BudgetCast.Identity.Api.Database;
+using BudgetCast.Identity.Api.Database.Models;
+using BudgetCast.Identity.Api.HostedServices;
 using BudgetCast.Identity.Api.Infrastructure.AppSettings;
 using BudgetCast.Identity.Api.Infrastructure.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Extensions
 {
@@ -32,7 +38,8 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
 
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
-            services.AddScoped<EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ITokenService, TokenService>();
             return services;
         }
 
@@ -69,10 +76,10 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddAspNetIdentity(this IServiceCollection services,
+        public static IServiceCollection AddIdentity(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<IdentityDbContext>(options =>
+            services.AddDbContext<AppIdentityContext>(options =>
             {
                 options.UseSqlServer(configuration["IdentityManagement:ConnectionString"],
                     sqlOptions =>
@@ -88,7 +95,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
             });
 
             services
-                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                .AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {
                     options.Password.RequiredLength = 8;
                     options.Password.RequireNonAlphanumeric = false;
@@ -98,8 +105,34 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
 
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<AppIdentityContext>()
+                .AddDefaultTokenProviders();            
+
+            return services;
+        }
+
+        public static IServiceCollection AddCookieAuthentication(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+                })
+                .AddGoogle(configuration["ExternalIdentityProviders:Google:Name"],
+                    options =>
+                    {
+                        options.CallbackPath = new PathString("/g-callback");
+                        options.ClientId = configuration["Social:Google:ClientId"];
+                        options.ClientSecret = configuration["Social:Google:ClientSecret"];
+                    })
+                .AddFacebook(configuration["ExternalIdentityProviders:Facebook:Name"],
+                    options =>
+                    {
+                        options.CallbackPath = new PathString("/fb-callback");
+                        options.ClientId = configuration["Social:Facebook:ClientId"];
+                        options.ClientSecret = configuration["Social:Facebook:ClientSecret"];
+                    });
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -125,13 +158,44 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddAuthentication(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            var jwtSettings = configuration.GetSection($"SecuritySettings:{nameof(JwtSettings)}").Get<JwtSettings>();
+            services.AddSingleton(jwtSettings);
+
+            if (string.IsNullOrEmpty(jwtSettings.Key))
+            {
+                throw new InvalidOperationException("No Key defined in JwtSettings config.");
+            }
+
             services
-                .AddAuthentication(options =>
+                .AddAuthentication(authentication =>
                 {
-                    options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(bearer =>
+                {
+                    bearer.RequireHttpsMetadata = true;
+                    bearer.SaveToken = true;
+                    bearer.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Key)),
+
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtSettings.Issuer,
+
+                        ValidateAudience = true,
+                        ValidAudience = jwtSettings.Audience,
+
+                        ValidateLifetime = true,
+
+                        RoleClaimType = ClaimTypes.Role,
+                        NameClaimType = ClaimTypes.Name,
+
+                        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date                        
+                    };
                 })
                 .AddGoogle(configuration["ExternalIdentityProviders:Google:Name"],
                     options =>
@@ -172,6 +236,6 @@ namespace BudgetCast.Identity.Api.Infrastructure.Extensions
                 .AddHostedService<IdentityDbMigrationHostedService>();
 
             return services;
-        }
+        }        
     }
 }

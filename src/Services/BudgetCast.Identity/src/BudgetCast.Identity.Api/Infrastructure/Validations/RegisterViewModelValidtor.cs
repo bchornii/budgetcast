@@ -1,17 +1,17 @@
-﻿using BudgetCast.Identity.Api.ViewModels.Account;
+﻿using BudgetCast.Identity.Api.ApiModels.Account;
 using FluentValidation;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class RegisterViewModelValidtor :
-        AbstractValidator<RegisterViewModel>
+        AbstractValidator<RegisterVm>
     {
         public RegisterViewModelValidtor()
         {
             RuleFor(m => m.Email)
                 .NotEmpty();
 
-            RuleFor(m => m.GivenName)
+            RuleFor(m => m.FirstName)
                 .NotEmpty();
 
             RuleFor(m => m.SurName)

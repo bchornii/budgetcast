@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BudgetCast.Identity.Api.Database;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Polly;
@@ -18,12 +19,12 @@ namespace BudgetCast.Identity.Api.HostedServices
         {
             using var scope = _serviceProvider.CreateScope();
             var services = scope.ServiceProvider;
-            var logger = services.GetRequiredService<ILogger<IdentityDbContext>>();
-            var context = services.GetService<IdentityDbContext>()!;
+            var logger = services.GetRequiredService<ILogger<AppIdentityContext>>();
+            var context = services.GetService<AppIdentityContext>()!;
 
             try
             {
-                logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(IdentityDbContext).Name);
+                logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(AppIdentityContext).Name);
 
                 var retries = 10;
                 var retry = Policy.Handle<SqlException>()
@@ -32,7 +33,7 @@ namespace BudgetCast.Identity.Api.HostedServices
                         sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         onRetry: (exception, timeSpan, retryNumber, ctx) =>
                         {
-                            logger.LogWarning(exception, "[{prefix}] Exception {ExceptionType} with message {Message} detected on attempt {retry} of {retries}", nameof(IdentityDbContext),
+                            logger.LogWarning(exception, "[{prefix}] Exception {ExceptionType} with message {Message} detected on attempt {retry} of {retries}", nameof(AppIdentityContext),
                                 exception.GetType().Name, exception.Message, retryNumber, retries);
                         });
 
@@ -42,11 +43,11 @@ namespace BudgetCast.Identity.Api.HostedServices
                 // Note that this is NOT applied when running some orchestrators (let the orchestrator to recreate the failing service)
                 await retry.ExecuteAsync(() => context.Database.MigrateAsync(cancellationToken));
 
-                logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(IdentityDbContext).Name);
+                logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(AppIdentityContext).Name);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(IdentityDbContext).Name);
+                logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(AppIdentityContext).Name);
             }
 
             await context.Database.MigrateAsync(cancellationToken: cancellationToken);

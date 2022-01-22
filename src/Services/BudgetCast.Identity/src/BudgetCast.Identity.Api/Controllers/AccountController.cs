@@ -1,6 +1,8 @@
-﻿using BudgetCast.Identity.Api.Infrastructure.AppSettings;
+﻿using BudgetCast.Identity.Api.ApiModels.Account;
+using BudgetCast.Identity.Api.ApiModels.Token;
+using BudgetCast.Identity.Api.Database.Models;
+using BudgetCast.Identity.Api.Infrastructure.AppSettings;
 using BudgetCast.Identity.Api.Infrastructure.Services;
-using BudgetCast.Identity.Api.ViewModels.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,24 +15,27 @@ namespace BudgetCast.Identity.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly EmailService _emailService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
         private readonly ExternalIdentityProviders _externalIdentityProviders;
         private readonly UiLinks _uiLinks;
+        private readonly ITokenService _tokenService;
 
         public AccountController(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            EmailService emailService,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IEmailService emailService,
             ExternalIdentityProviders externalIdentityProviders,
-            UiLinks uiLinks)
+            UiLinks uiLinks, 
+            ITokenService tokenService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
             _externalIdentityProviders = externalIdentityProviders;
             _uiLinks = uiLinks;
+            _tokenService = tokenService;
         }
 
         [AllowAnonymous]
@@ -64,15 +69,20 @@ namespace BudgetCast.Identity.Api.Controllers
             if (!result.Succeeded)
             {
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+                var surName = info.Principal.FindFirstValue(ClaimTypes.Surname);
                 var user = await _userManager.FindByEmailAsync(email);
 
                 if (user == null)
                 {
-                    user = new IdentityUser
+                    user = new ApplicationUser
                     {
                         UserName = email,
                         Email = email,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        FirstName = givenName,
+                        LastName = surName,
+                        IsActive = true,
                     };
                     var createResult = await _userManager.CreateAsync(user);
                     if (!createResult.Succeeded)
@@ -85,9 +95,44 @@ namespace BudgetCast.Identity.Api.Controllers
                 await _userManager.AddLoginAsync(user, info);
 
                 var newUserClaims = info.Principal.Claims.Append(new Claim("userId", user.Id));
-                await _userManager.AddClaimsAsync(user, newUserClaims);
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                await _userManager.AddClaimsAsync(user, newUserClaims);                
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+                var tokenResponse = _tokenService.GetToken(user, GenerateIpAddress());
+                user.RefreshToken = tokenResponse.RefreshToken;
+                user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
+                await _userManager.UpdateAsync(user);
+
+                HttpContext.Response.Cookies.Append("X-TOKEN", tokenResponse.Token, new CookieOptions
+                {
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.None,
+                    Secure = true,
+                    Expires = DateTimeOffset.MaxValue,
+                });
+            }
+            else
+            {
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user is null)
+                {
+                    return Unauthorized();
+                }
+
+                var tokenResponse = _tokenService.GetToken(user, GenerateIpAddress());
+                user.RefreshToken = tokenResponse.RefreshToken;
+                user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
+                // await _userManager.UpdateAsync(user);
+
+                await _signInManager.SignOutAsync();
+                HttpContext.Response.Cookies.Append("X-TOKEN", tokenResponse.Token, new CookieOptions
+                {
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true,
+                    Expires = DateTimeOffset.Now.AddMinutes(5),
+                });
             }
 
             return Redirect(_externalIdentityProviders.UiRedirectUrl);
@@ -96,7 +141,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(
-            [FromBody] RegisterViewModel model)
+            [FromBody] RegisterVm model)
         {
             var user = model.GetUser();
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -119,7 +164,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [Authorize]
         [HttpPost("updateProfile")]
         public async Task<IActionResult> UpdateProfile(
-            [FromBody] UpdateProfileViewModel model)
+            [FromBody] UpdateProfileVm model)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -165,7 +210,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(
-            [FromBody] LoginViewModel model)
+            [FromBody] LoginVm model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -201,7 +246,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(
-            [FromBody] ForgotPasswordViewModel model)
+            [FromBody] ForgotPasswordVm model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -220,7 +265,7 @@ namespace BudgetCast.Identity.Api.Controllers
         [AllowAnonymous]
         [HttpPost("resetPassword")]
         public async Task<IActionResult> ResetPassword(
-            [FromBody] ResetPasswordViewModel model)
+            [FromBody] ResetPasswordVm model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -249,11 +294,31 @@ namespace BudgetCast.Identity.Api.Controllers
             });
         }
 
-        private async Task RemoveClaimsAsync(IdentityUser user, params string[] claimType)
+        [AllowAnonymous]
+        [HttpGet("token")]
+        public async Task<IActionResult> GetTokenAsync([FromBody] TokenRequestDto dto)
+        {
+            var token = await _tokenService.GetTokenAsync(dto, GenerateIpAddress());
+            return Ok(token);
+        }
+
+        private async Task RemoveClaimsAsync(ApplicationUser user, params string[] claimType)
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var claimsToRemove = claims.Where(c => claimType.Contains(c.Type));
             await _userManager.RemoveClaimsAsync(user, claimsToRemove);
+        }
+
+        private string GenerateIpAddress()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                return Request.Headers["X-Forwarded-For"];
+            }
+            else
+            {
+                return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "N/A";
+            }
         }
     }
 }

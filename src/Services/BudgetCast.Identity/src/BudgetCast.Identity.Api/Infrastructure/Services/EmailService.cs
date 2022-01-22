@@ -4,7 +4,7 @@ using MimeKit;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Services
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private readonly EmailParameters _emailParameters;
 

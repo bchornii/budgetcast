@@ -1,12 +1,12 @@
-﻿namespace BudgetCast.Identity.Api.ViewModels.Account
+﻿namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class UpdateProfileViewModel
+    public class UpdateProfileVm
     {
         public string GivenName { get; set; }
 
         public string SurName { get; set; }
 
-        public UpdateProfileViewModel()
+        public UpdateProfileVm()
         {
             GivenName = default!;
             SurName = default!;

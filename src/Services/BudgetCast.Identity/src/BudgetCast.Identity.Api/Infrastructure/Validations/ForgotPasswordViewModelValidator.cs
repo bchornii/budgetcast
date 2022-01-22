@@ -1,10 +1,10 @@
-﻿using BudgetCast.Identity.Api.ViewModels.Account;
+﻿using BudgetCast.Identity.Api.ApiModels.Account;
 using FluentValidation;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class ForgotPasswordViewModelValidator :
-        AbstractValidator<ForgotPasswordViewModel>
+        AbstractValidator<ForgotPasswordVm>
     {
         public ForgotPasswordViewModelValidator()
         {

@@ -1,10 +1,10 @@
-﻿using BudgetCast.Identity.Api.ViewModels.Account;
+﻿using BudgetCast.Identity.Api.ApiModels.Account;
 using FluentValidation;
 
 namespace BudgetCast.Identity.Api.Infrastructure.Validations
 {
     public class UpdateProfileViewModelValidator :
-        AbstractValidator<UpdateProfileViewModel>
+        AbstractValidator<UpdateProfileVm>
     {
         public UpdateProfileViewModelValidator()
         {

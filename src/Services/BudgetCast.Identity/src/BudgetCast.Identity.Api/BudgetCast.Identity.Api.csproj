@@ -13,6 +13,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
 	<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="MailKit" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	<PackageReference Include="Polly" Version="7.2.2" />
 
@@ -38,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="Database\Migrations\" />
+    <Folder Include="Dto\" />
   </ItemGroup>
 
 </Project>

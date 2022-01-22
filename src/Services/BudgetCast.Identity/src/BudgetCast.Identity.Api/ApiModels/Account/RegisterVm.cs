@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+using BudgetCast.Identity.Api.Database.Models;
 
-namespace BudgetCast.Identity.Api.ViewModels.Account
+namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class RegisterViewModel
+    public class RegisterVm
     {
-        public string GivenName { get; set; }
+        public string FirstName { get; set; }
 
         public string SurName { get; set; }
 
@@ -15,21 +15,24 @@ namespace BudgetCast.Identity.Api.ViewModels.Account
 
         public string PasswordConfirm { get; set; }
 
-        public RegisterViewModel()
+        public RegisterVm()
         {
-            GivenName = default!;
+            FirstName = default!;
             SurName = default!;
             Email = default!;
             Password = default!;
             PasswordConfirm = default!;
         }
 
-        public IdentityUser GetUser()
+        public ApplicationUser GetUser()
         {
-            return new IdentityUser
+            return new ApplicationUser
             {
                 UserName = Email,
-                Email = Email
+                Email = Email,
+                FirstName = FirstName,
+                LastName = SurName,
+                IsActive = false,
             };
         }
 
@@ -37,7 +40,7 @@ namespace BudgetCast.Identity.Api.ViewModels.Account
         {
             return new[]
             {
-                new Claim(ClaimTypes.GivenName, GivenName),
+                new Claim(ClaimTypes.GivenName, FirstName),
                 new Claim(ClaimTypes.Surname, SurName)
             };
         }

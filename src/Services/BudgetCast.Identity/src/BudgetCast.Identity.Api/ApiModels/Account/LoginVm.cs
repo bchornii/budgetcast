@@ -1,12 +1,12 @@
-﻿namespace BudgetCast.Identity.Api.ViewModels.Account
+﻿namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class LoginViewModel
+    public class LoginVm
     {
         public string Email { get; set; }
 
         public string Password { get; set; }
 
-        public LoginViewModel()
+        public LoginVm()
         {
             Email = default!;
             Password = default!;

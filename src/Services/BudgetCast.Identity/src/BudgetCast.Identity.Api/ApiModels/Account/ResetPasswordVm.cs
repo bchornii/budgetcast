@@ -1,6 +1,6 @@
-﻿namespace BudgetCast.Identity.Api.ViewModels.Account
+﻿namespace BudgetCast.Identity.Api.ApiModels.Account
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordVm
     {
         public string Email { get; set; }
 
@@ -10,7 +10,7 @@
 
         public string Code { get; set; }
 
-        public ResetPasswordViewModel()
+        public ResetPasswordVm()
         {
             Email = default!;
             Password = default!;

@@ -26,8 +26,10 @@ namespace BudgetCast.Identity.Api
                 .AddCustomConfigSections(Configuration)
                 .AddCustomServices()
                 .AddCustomMvc(Configuration)
-                .AddAspNetIdentity(Configuration)
-                .AddAuthentication(Configuration)
+                .AddIdentity(Configuration)
+                .AddLocalization()
+                .AddAuthorization()
+                .AddJwtAuthentication(Configuration)
                 .AddCustomHealthCheck(Configuration)
                 .AddCustomHostedServices();
         }
