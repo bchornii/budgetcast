@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Expenses.Api.Infrastructure.AppSettings;
 using BudgetCast.Expenses.Data;
 using BudgetCast.Expenses.Data.Campaigns;
 using BudgetCast.Expenses.Data.Expenses;
@@ -6,10 +7,14 @@ using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using BudgetCast.Expenses.Queries.Campaigns;
 using BudgetCast.Expenses.Queries.Expenses;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using System.Text;
 
 namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
 {
@@ -39,6 +44,30 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Budget Cast Expenses API", Version = "v1" });
+
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             return services;
@@ -105,6 +134,48 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
         {
             services.AddScoped<ICampaignRepository, CampaignRepository>();
             services.AddScoped<IExpensesRepository, ExpensesRepository>();
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection($"SecuritySettings:{nameof(JwtSettings)}").Get<JwtSettings>();
+
+            if (string.IsNullOrEmpty(jwtSettings.Key))
+            {
+                throw new InvalidOperationException("No Key defined in JwtSettings config.");
+            }
+
+            services
+                .AddAuthentication(authentication =>
+                {
+                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(bearer =>
+                {
+                    bearer.RequireHttpsMetadata = false;
+                    bearer.SaveToken = true;
+                    bearer.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Key)),
+
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtSettings.Issuer,
+
+                        ValidateAudience = true,
+                        ValidAudience = jwtSettings.Audience,
+
+                        ValidateLifetime = true,
+
+                        RoleClaimType = ClaimTypes.Role,
+                        NameClaimType = ClaimTypes.Name,
+
+                        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date                        
+                    };
+                });
+
             return services;
         }
     }

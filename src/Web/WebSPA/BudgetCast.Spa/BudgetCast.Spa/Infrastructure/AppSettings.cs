@@ -7,7 +7,7 @@
     
     public class Endpoints
     {
-        public string Dashboard { get; set; }
+        public string Identity { get; set; }
 
         public string Expenses { get; set; }
     }

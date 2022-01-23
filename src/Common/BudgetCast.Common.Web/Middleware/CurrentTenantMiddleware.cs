@@ -34,7 +34,8 @@ namespace BudgetCast.Common.Web.Middleware
             var listExclude = new List<string>()
             {
                 "/swagger",
-                "/jobs"
+                "/jobs",
+                "/hc"
             };
 
             foreach (string item in listExclude)

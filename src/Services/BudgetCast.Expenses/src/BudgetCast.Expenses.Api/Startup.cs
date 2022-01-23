@@ -22,6 +22,7 @@ namespace BudgetCast.Expenses.Api
         {
             services
                 .AddCustomMvc(Configuration)
+                .AddJwtAuthentication(Configuration)
                 .AddHttpContextAccessor()
                 .AddCustomSwagger()
                 .AddIdentityContext()
