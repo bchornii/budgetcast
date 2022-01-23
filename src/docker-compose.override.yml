@@ -13,14 +13,6 @@ services:
         volumes: 
             - identity-db-data:/var/opt/mssql
 
-    budgetcast-db:
-        ports: 
-            - target: 27017
-              published: ${BUDGETCAST_DB_PORT}
-
-        volumes: 
-            - budgetcast-db-data:/data/db
-
     seq:
         ports:
             - target: 80
@@ -31,11 +23,11 @@ services:
         volumes: 
             - seq-data:/data
 
-    dashboard-api:
+    identity-api:
         environment: 
-            - ASPNETCORE_ENVIRONMENT=Prod            
+            - ASPNETCORE_ENVIRONMENT=Production         
             - ASPNETCORE_URLS=https://+:443;http://+:80
-            - ASPNETCORE_HTTPS_PORT=${DASHBOARD_API_HTTPS_PORT}
+            - ASPNETCORE_HTTPS_PORT=${IDENTITY_API_HTTPS_PORT}
             - ASPNETCORE_Kestrel__Certificates__Default__Password=Install_new!
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
             - Serilog__WriteTo__0__Args__serverUrl=http://seq
@@ -51,13 +43,12 @@ services:
             - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
             - UiLinks__ResetPassword=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}/account/reset-password            
             - UiLinks__Login=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}/account/login
-            - IdentityManagement__ConnectionString=Server=identity-db,1433;Database=IdentityDb;User Id=sa;Password=Install_new!
-            - BudgetCast__ConnectionString=mongodb://budgetcast-db:27017
+            - IdentityManagement__ConnectionString=Server=host.docker.internal,1433;Database=IdentityDb;User Id=sa;Password=Install_new!
         ports: 
             - target: 80
-              published: ${DASHBOARD_API_PORT}
+              published: ${IDENTITY_API_PORT}
             - target: 443
-              published: ${DASHBOARD_API_HTTPS_PORT}
+              published: ${IDENTITY_API_HTTPS_PORT}
 
         volumes: 
             - ./https:/https:ro
@@ -80,7 +71,7 @@ services:
             - ASPNETCORE_HTTPS_PORT=${UI_HTTPS_PORT}
             - ASPNETCORE_Kestrel__Certificates__Default__Password=Install_new!
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
-            - Endpoints__Dashboard=https://${HOST_BASE_ADDR}:${DASHBOARD_API_HTTPS_PORT}/api
+            - Endpoints__Identity=https://${HOST_BASE_ADDR}:${IDENTITY_API_HTTPS_PORT}/api
             - Endpoints__Expenses=http://${HOST_BASE_ADDR}:${EXPENSES_API_PORT}/api
         ports: 
             - target: 80
@@ -98,11 +89,13 @@ services:
             - ASPNETCORE_HTTPS_PORT=${HEALTHCHECKS_UI_HTTPS_PORT}
             - ASPNETCORE_Kestrel__Certificates__Default__Password=Install_new!
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
-            - HealthChecksUI__HealthChecks__0__Name=Dashboard API
-            - HealthChecksUI__HealthChecks__0__Uri=https://dashboard-api/hc
+            - HealthChecksUI__HealthChecks__0__Name=Identity API
+            - HealthChecksUI__HealthChecks__0__Uri=https://identity-api/hc
             - HealthChecksUI__HealthChecks__1__Name=WebSPA UI
-            - HealthChecksUI__HealthChecks__1__Uri=https://web-spa/hc           
-            - HealthChecksUI__EvaluationTimeInSeconds=60      
+            - HealthChecksUI__HealthChecks__1__Uri=https://web-spa/hc
+            - HealthChecksUI__HealthChecks__2__Name=Expenses API
+            - HealthChecksUI__HealthChecks__2__Uri=http://expenses-api/hc           
+            - HealthChecksUI__EvaluationTimeInSeconds=30      
         ports:
             - target: 80
               published: ${HEALTHCHECKS_UI_PORT}

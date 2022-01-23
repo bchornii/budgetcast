@@ -5,7 +5,6 @@ import { Subject, Observable, of } from 'rxjs';
 import { IConfiguration } from 'src/app/models/configuration';
 import { tap } from 'rxjs/operators';
 import { Endpoints } from '../util/constants/api-endpoints';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -36,25 +35,8 @@ export class ConfigurationService {
 
     private getEndpoints(endpointsConfig: IConfiguration): Endpoints {
       return {
-        dashboard: this.getDashBoardEndpoints(endpointsConfig.endpoints.dashboard),
+        identity: this.getIdentityEndpoints(endpointsConfig.endpoints.identity),
         expenses: this.getExpensesEndpoints(endpointsConfig.endpoints.expenses)
-      };
-    }
-
-    private getDashBoardEndpoints(baseUrl: string) {
-      return {
-        account: {
-            isAuthenticated: `${baseUrl}/account/isAuthenticated`,
-            signInWithGoogle: `${baseUrl}/account/signInWithGoogle`,
-            signInWithFacebook: `${baseUrl}/account/signInWithFacebook`,
-            login: `${baseUrl}/account/login`,
-            logout: `${baseUrl}/account/logout`,
-            check: `${baseUrl}/account/check`,
-            updateProfile: `${baseUrl}/account/updateProfile`,
-            register: `${baseUrl}/account/register`,
-            forgotPassword: `${baseUrl}/account/forgotPassword`,
-            resetPassword: `${baseUrl}/account/resetPassword`
-        }
       };
     }
 
@@ -71,6 +53,29 @@ export class ConfigurationService {
           searchTags: `${baseUrl}/expenses/tags/search`,
           details: `${baseUrl}/expenses/{{id}}`
         }     
+      };
+    }
+
+    private getIdentityEndpoints(baseUrl) {
+      return {
+        account: {
+          register: `${baseUrl}/account/register`,
+          update: `${baseUrl}/account/update`,
+          emailConfirmation: `${baseUrl}/account/email/confirm`,
+          passwordForgot: `${baseUrl}/account/password/forgot`,
+          passwordReset: `${baseUrl}/account/password/reset`,
+          isAuthenticated: `${baseUrl}/account/isAuthenticated`
+        },
+    
+        signIn: {
+          google: `${baseUrl}/signin/google`,
+          facebook: `${baseUrl}/signin/facebook`,
+          individual: `${baseUrl}/signin/individual`
+        },
+    
+        signOut: {
+          all: `${baseUrl}/signout`
+        }
       };
     }
 }

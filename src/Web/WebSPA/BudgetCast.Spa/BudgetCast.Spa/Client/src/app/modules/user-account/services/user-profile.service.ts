@@ -6,6 +6,7 @@ import { flatMap, catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base-data.service';
 import { ConfigurationService } from 'src/app/services/configuration-service';
+import { UserProfileVm } from '../models/user-profile-vm';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,9 @@ export class UserProfileService extends BaseService {
   }
 
   updateProfile(userProfile: UserProfile): Observable<any> {
-    return this.httpClient.post(
-      `${this.configService.endpoints.dashboard.account.updateProfile}`, userProfile).pipe(
-        flatMap(_ => this.authService.checkUserAuthenticationStatus()),
+    return this.httpClient.post<UserProfileVm>(
+      `${this.configService.endpoints.identity.account.update}`, userProfile).pipe(
+        flatMap(userProfileVm => this.authService.checkUserAuthenticationStatus(userProfileVm.accessToken)),
         catchError(this.handleError)
       );
   }

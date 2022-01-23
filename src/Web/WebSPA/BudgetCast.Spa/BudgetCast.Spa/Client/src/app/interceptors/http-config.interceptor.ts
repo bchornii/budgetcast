@@ -5,17 +5,22 @@ import { tap } from 'rxjs/operators';
 import { ResponseStatus } from 'src/app/util/constants/response-status';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LocalStorageService } from '../services/local-storage.service';
+import { AccessTokenItem } from '../util/constants/auth-constants';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HttpConfigInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService,
+              private localStorage: LocalStorageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
-    const token: string = localStorage.getItem('token');
+    const token: string = this.localStorage.getItem(AccessTokenItem);
     if (token) {
       req = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)

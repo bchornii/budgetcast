@@ -1,19 +1,25 @@
 
 export interface Endpoints {
-  dashboard: {
+  identity: {
     account: {
-      isAuthenticated: string,
-      signInWithGoogle: string,
-      signInWithFacebook: string,
-      login: string,
-      logout: string,
-      check: string,
-      updateProfile: string,
       register: string,
-      forgotPassword: string,
-      resetPassword: string
+      update: string,
+      emailConfirmation: string,
+      passwordForgot: string,
+      passwordReset: string,
+      isAuthenticated: string
+    },
+
+    signIn: {
+      google: string,
+      facebook: string,
+      individual: string,      
+    },
+
+    signOut: {
+      all: string
     }
-  };
+  }
 
   expenses: {
     campaign: {

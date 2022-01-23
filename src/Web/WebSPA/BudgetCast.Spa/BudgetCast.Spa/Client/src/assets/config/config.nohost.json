@@ -1,6 +1,6 @@
 {
     "endpoints": {        
-        "dashboard": "https://localhost:44305/api",
-        "expenses": "http://localhost:5234/api"
+        "expenses": "http://localhost:5234/api",
+        "identity": "https://localhost:44305/api"
     }
 }

@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { appStartInitializer } from './services/startup-service';
 import { ConfigurationService } from './services/configuration-service';
+import { LocalStorageService } from './services/local-storage.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { ConfigurationService } from './services/configuration-service';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,
       multi: true,
-      deps: [AuthService, Router, ToastrService]
+      deps: [AuthService, Router, ToastrService, LocalStorageService]
     }
     ,
     {
