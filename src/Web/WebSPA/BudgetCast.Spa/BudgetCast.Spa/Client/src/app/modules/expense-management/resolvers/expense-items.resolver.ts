@@ -7,7 +7,7 @@ import { ExpenseDetailsVm } from '../pages/models/expense-details-vm';
 @Injectable({
     providedIn: 'root'
 })
-export class ReceiptDetailsResolver implements Resolve<Observable<ExpenseDetailsVm>> {
+export class ExpenseDetailsResolver implements Resolve<Observable<ExpenseDetailsVm>> {
 
     constructor(private expenseService: ExpensesService) {}
 

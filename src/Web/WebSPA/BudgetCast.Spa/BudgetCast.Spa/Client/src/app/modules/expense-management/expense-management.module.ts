@@ -1,30 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddReceiptComponent } from './pages/add-expense/add-receipt.component';
-import { ReceiptManagementRoutingModule } from './expense-management-routing.module';
+import { AddExpenseComponent } from './pages/add-expense/add-expense.component';
+import { ExpenseManagementRoutingModule } from './expense-management-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ReceiptDashboardComponent } from './pages/expenses-dashboard/receipt-dashboard.component';
-import { ReceiptManagementComponent } from './pages/expense-management/receipt-management.component';
-import { ReceiptCardComponent } from './components/expense-card/receipt-card.component';
+import { ExpenseDashboardComponent } from './pages/expenses-dashboard/expense-dashboard.component';
+import { ExpenseManagementComponent } from './pages/expense-management/expense-management.component';
+import { ExpenseCardComponent } from './components/expense-card/expense-card.component';
 import { CampaignTotalsComponent } from './components/campaign-totals/campaign-totals.component';
-import { ReceiptDetailsComponent } from './pages/expense-details/receipt-details.component';
+import { ExpenseDetailsComponent } from './pages/expense-details/expense-details.component';
 
 @NgModule({
     declarations: [
-        AddReceiptComponent,
-        ReceiptDashboardComponent,
-        ReceiptManagementComponent,
-        ReceiptCardComponent,
+        AddExpenseComponent,
+        ExpenseDashboardComponent,
+        ExpenseManagementComponent,
+        ExpenseCardComponent,
         CampaignTotalsComponent,
-        ReceiptDetailsComponent
+        ExpenseDetailsComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ReceiptManagementRoutingModule,
+        ExpenseManagementRoutingModule,
         SharedModule,
     ]
 })
-export class RecipeManagementModule { }
+export class ExpenseManagementModule { }

@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getStarted() {
     this.isAuthenticated
-      ? this.router.navigate(['/receipts/dashboard'])
+      ? this.router.navigate(['/expenses/dashboard'])
       : this.router.navigate(['/welcome/login']);
   }
 

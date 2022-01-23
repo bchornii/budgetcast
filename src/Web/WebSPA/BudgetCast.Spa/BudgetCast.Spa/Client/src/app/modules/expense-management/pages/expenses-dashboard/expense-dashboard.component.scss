@@ -1,5 +1,5 @@
 @mixin colums($cols: 1, $baseSize: 320px) {
-  .receipts-grid {
+  .expenses-grid {
     grid-template-columns: repeat($cols, minmax($baseSize, auto));
   }
 }
@@ -17,13 +17,13 @@
   }  
 }
 
-.receipts-header {
+.expenses-header {
   &__total {
     font-weight: 600;    
   }
 }
 
-.receipts-grid {
+.expenses-grid {
   display: grid;  
   @include colums(6);
   grid-gap: 0.9rem 0.9rem;  

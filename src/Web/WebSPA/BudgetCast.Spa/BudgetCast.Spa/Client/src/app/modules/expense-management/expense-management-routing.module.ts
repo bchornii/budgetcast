@@ -1,29 +1,29 @@
 import { Routes, RouterModule } from '@angular/router';
-import { AddReceiptComponent } from './pages/add-expense/add-receipt.component';
-import { ReceiptDashboardComponent } from './pages/expenses-dashboard/receipt-dashboard.component';
+import { AddExpenseComponent } from './pages/add-expense/add-expense.component';
+import { ExpenseDashboardComponent } from './pages/expenses-dashboard/expense-dashboard.component';
 import { NgModule } from '@angular/core';
-import { ReceiptManagementComponent } from './pages/expense-management/receipt-management.component';
-import { ReceiptDetailsComponent } from './pages/expense-details/receipt-details.component';
-import { ReceiptDetailsResolver } from './resolvers/expense-items.resolver';
+import { ExpenseManagementComponent } from './pages/expense-management/expense-management.component';
+import { ExpenseDetailsComponent } from './pages/expense-details/expense-details.component';
+import { ExpenseDetailsResolver } from './resolvers/expense-items.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ReceiptManagementComponent,
+    component: ExpenseManagementComponent,
     children: [
       {
         path: 'dashboard',
-        component: ReceiptDashboardComponent
+        component: ExpenseDashboardComponent
       },
       {
-        path: 'add-receipt',
-        component: AddReceiptComponent
+        path: 'add-expense',
+        component: AddExpenseComponent
       },
       {
-        path: 'receipt-details/:id',
-        component: ReceiptDetailsComponent,
+        path: 'expense-details/:id',
+        component: ExpenseDetailsComponent,
         resolve: {
-          expense: ReceiptDetailsResolver
+          expense: ExpenseDetailsResolver
         }
       },
       {
@@ -42,4 +42,4 @@ export const routes: Routes = [
     RouterModule
   ]
 })
-export class ReceiptManagementRoutingModule {}
+export class ExpenseManagementRoutingModule {}

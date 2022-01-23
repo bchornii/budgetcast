@@ -5,11 +5,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ExpenseDetailsVm } from '../models/expense-details-vm';
 
 @Component({
-  selector: 'app-receipt-details',
-  templateUrl: './receipt-details.component.html',
-  styleUrls: ['./receipt-details.component.scss']
+  selector: 'app-expense-details',
+  templateUrl: './expense-details.component.html',
+  styleUrls: ['./expense-details.component.scss']
 })
-export class ReceiptDetailsComponent implements OnInit {
+export class ExpenseDetailsComponent implements OnInit {
   
   expense: ExpenseDetailsVm;
 

@@ -8,8 +8,8 @@ export const routes: Routes = [
     component: RootComponent,
     children: [
       {
-        path: 'receipts',
-        loadChildren: () => import('../expense-management/expense-management.module').then(m => m.RecipeManagementModule)
+        path: 'expenses',
+        loadChildren: () => import('../expense-management/expense-management.module').then(m => m.ExpenseManagementModule)
       },
       {
         path: 'user-account',
@@ -17,7 +17,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'receipts',
+        redirectTo: 'expenses',
         pathMatch: 'full'
       }
     ]
