@@ -1,4 +1,4 @@
-export class ResetPassword {
+export class ResetPasswordDto {
   email: string;
   password: string;
   passwordConfirm: string;

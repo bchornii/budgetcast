@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Subject, Observable, of } from 'rxjs';
-import { IConfiguration } from 'src/app/models/configuration';
+import { IConfiguration } from 'src/app/models/configuration-vm';
 import { tap } from 'rxjs/operators';
 import { Endpoints } from '../util/constants/api-endpoints';
 

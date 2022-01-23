@@ -1,4 +1,4 @@
-export class UserProfile {
+export class UserProfileDto {
   givenName: string;
   surName: string;
 }

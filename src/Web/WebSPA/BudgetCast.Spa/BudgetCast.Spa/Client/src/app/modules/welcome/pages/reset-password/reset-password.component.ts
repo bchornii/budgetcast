@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { ResetPassword } from 'src/app/models/reset-password';
+import { ResetPasswordDto } from 'src/app/models/reset-password-dto';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -26,7 +26,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ResetPasswordComponent implements OnInit {
   resetPasswordFailed: boolean;
   resetPasswordParams: {code: string, userId: string};
-  resetPasswordModel = new ResetPassword();
+  resetPasswordModel = new ResetPasswordDto();
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 

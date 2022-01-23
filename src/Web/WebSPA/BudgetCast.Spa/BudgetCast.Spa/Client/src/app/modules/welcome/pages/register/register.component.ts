@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { UserRegistration } from 'src/app/models/user-registration';
+import { UserRegistrationDto } from 'src/app/models/user-registration-dto';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -26,7 +26,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent {
   registrationFailed: boolean;
   registrationMessage: string;
-  registrationModel = new UserRegistration();
+  registrationModel = new UserRegistrationDto();
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
