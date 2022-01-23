@@ -4,21 +4,19 @@ services:
 
   identity-db:
     image: mcr.microsoft.com/mssql/server:2017-latest 
-
-  budgetcast-db:
-    image: mongo
-
+    
   seq:
     image: datalust/seq:latest  
 
-  dashboard-api:
-    image: ${REGISTRY:-budgetcast}/dashboard.api:${PLATFORM:-linux}-${TAG:-latest}
+  identity-api:
+    image: ${REGISTRY:-budgetcast}/identity.api:${PLATFORM:-linux}-${TAG:-latest}
     build: 
-      context: ./Services/BudgetCast.Dashboard
-      dockerfile: BudgetCast.Dashboard.Api/Dockerfile        
+      context: .
+      dockerfile: ./Services/BudgetCast.Identity/src/BudgetCast.Identity.Api/Dockerfile        
+      args:
+        - USERNAME=appuser
     depends_on: 
       - identity-db
-      - budgetcast-db
       - seq
 
   expenses-api:
@@ -37,7 +35,7 @@ services:
       context: ./Web/WebSpa/BudgetCast.spa
       dockerfile: BudgetCast.Spa/Dockerfile
     depends_on: 
-      - dashboard-api  
+      - identity-api
       - expenses-api
   
   webstatus:
@@ -46,5 +44,6 @@ services:
       context: ./Web/WebStatus
       dockerfile: WebStatus/Dockerfile
     depends_on: 
-      - dashboard-api
+      - identity-api
+      - expenses-api
       - web-spa
