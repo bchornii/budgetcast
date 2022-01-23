@@ -1,4 +1,4 @@
-import { CampaignService } from './../../services/campaign.service';
+import { CampaignService } from '../../services/campaign.service';
 import { NgModel } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { finalize } from 'rxjs/operators';

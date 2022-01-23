@@ -1,10 +1,10 @@
 import { Routes, RouterModule } from '@angular/router';
-import { AddReceiptComponent } from './pages/add-receipt/add-receipt.component';
-import { ReceiptDashboardComponent } from './pages/receipt-dashboard/receipt-dashboard.component';
+import { AddReceiptComponent } from './pages/add-expense/add-receipt.component';
+import { ReceiptDashboardComponent } from './pages/expenses-dashboard/receipt-dashboard.component';
 import { NgModule } from '@angular/core';
-import { ReceiptManagementComponent } from './pages/receipt-management/receipt-management.component';
-import { ReceiptDetailsComponent } from './pages/receipt-details/receipt-details.component';
-import { ReceiptDetailsResolver } from './resolvers/receipt-items.resolver';
+import { ReceiptManagementComponent } from './pages/expense-management/receipt-management.component';
+import { ReceiptDetailsComponent } from './pages/expense-details/receipt-details.component';
+import { ReceiptDetailsResolver } from './resolvers/expense-items.resolver';
 
 export const routes: Routes = [
   {

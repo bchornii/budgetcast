@@ -9,7 +9,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'receipts',
-        loadChildren: () => import('../receipt-management/receipt-management.module').then(m => m.RecipeManagementModule)
+        loadChildren: () => import('../expense-management/expense-management.module').then(m => m.RecipeManagementModule)
       },
       {
         path: 'user-account',
