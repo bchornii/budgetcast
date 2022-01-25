@@ -1,4 +1,4 @@
-import { catchError, tap, flatMap } from 'rxjs/operators';
+import { catchError, tap, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ConfigurationService } from './configuration-service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,9 +8,11 @@ export function appStartInitializer(configService: ConfigurationService, authSer
   return () => {
 
     if(environment.name === 'nohost') {
-      const configFile = `assets/config/config.${environment.name}.json`;
-      return configService.load(configFile).pipe(
-        flatMap(_ => authService.checkUserAuthenticationStatus()),
+      const configFileUrl = `assets/config/config.${environment.name}.json`;
+
+      return configService.load(configFileUrl).pipe(
+        tap(_ => authService.verifyIfTokenPassedOnRedirectFromExternalIdp()),
+        mergeMap(_ => authService.checkUserAuthenticationStatus()),
         catchError(_ => {
           console.error('Cannot retrieve information about user.');
           return of(null);
@@ -23,7 +25,8 @@ export function appStartInitializer(configService: ConfigurationService, authSer
           : environment.devBaseUrl;
 
     return configService.load(baseURI).pipe(
-      flatMap(_ => authService.checkUserAuthenticationStatus()),
+      tap(_ => authService.verifyIfTokenPassedOnRedirectFromExternalIdp()),
+      mergeMap(_ => authService.checkUserAuthenticationStatus()),
       catchError(_ => {
         console.error('Cannot retrieve information about user.');
         return of(null);

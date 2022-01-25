@@ -26,7 +26,7 @@ export class LoginComponent {
     this.authService.login(this.loginModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(
-        _ => this.router.navigate(['/home']),
+        _ => this.router.navigate(['/']),
         _ => this.invalidCredentials = true);
   }
 

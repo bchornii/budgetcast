@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError, flatMap } from 'rxjs/operators';
+import { tap, catchError, mergeMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { UserIdentity } from '../models/user-identity-vm';
@@ -37,30 +37,30 @@ export class AuthService extends BaseService {
     super();
   }
 
-  verifyIfTokenPassedAfterRedirect() : Observable<string> {
-    var token = this.cookieService.get(XToken);
-    if (token) {
-      this.cookieService.delete(XToken);
-      this.localStorage.setItem(AccessTokenItem, token);
-    }
-    return of(token);
-  }
+  verifyIfTokenPassedOnRedirectFromExternalIdp() : Observable<string> {
 
-  checkUserAuthenticationStatus(accessToken?: string): Observable<UserIdentity> {
-
-    // Check for token passed from successful external login
     var xToken = this.cookieService.get(XToken);
+
     if (xToken) {
       this.cookieService.delete(XToken);
       this.localStorage.setItem(AccessTokenItem, xToken);
     }
 
-    // Check for token passed as a result of successful individual login
-    if (accessToken){
-      this.cookieService.delete(XToken);
-      this.localStorage.setItem(AccessTokenItem, accessToken);
-    }
+    return of(xToken);
+  }
 
+  replaceStoredAccessTokenWith(accessToken: string) : Observable<string> {    
+
+    // as a safety net - remove token from cookies (although should not exist at this point, but still)      
+    this.cookieService.delete(XToken);
+
+    // update value in local storage for futher usage
+    this.localStorage.setItem(AccessTokenItem, accessToken);
+
+    return of(accessToken);
+  }
+
+  checkUserAuthenticationStatus(): Observable<UserIdentity> {
     return this.httpClient.get<UserIdentity>(
       `${this.configService.endpoints.identity.account.isAuthenticated}`).pipe(tap(r => {
         this.userIdentitySubject.next(r);
@@ -74,7 +74,8 @@ export class AuthService extends BaseService {
 
   login(userLogin: UserLoginDto): Observable<any> {
     return this.httpClient.post<UserLoginVm>(`${this.configService.endpoints.identity.signIn.individual}`, userLogin).pipe(
-      flatMap(userLoginVm => this.checkUserAuthenticationStatus(userLoginVm.accessToken)),
+      tap(userLoginVm => this.replaceStoredAccessTokenWith(userLoginVm.accessToken)),
+      mergeMap(_ => this.checkUserAuthenticationStatus()),
       catchError(this.handleError)
     );
   }
