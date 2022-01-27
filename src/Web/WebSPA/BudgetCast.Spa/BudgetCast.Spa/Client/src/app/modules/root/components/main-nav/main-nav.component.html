@@ -9,26 +9,26 @@
       </a>
     </li>
     <li class="main-nav__item"
-        [class.open]="openedSubmenu === 'receipt'">
-      <span class="main-nav__link" (click)="openSubMenu('receipt')" >
-        <span class="icon icon--receipt"></span>
+        [class.open]="openedSubmenu === 'expense'">
+      <span class="main-nav__link" (click)="openSubMenu('expense')" >
+        <span class="icon icon--expense"></span>
         <span>Receipt</span>
         <span class="icon icon--expand-menu"></span>
       </span>
       <ul class="main-nav__secondary-menu">
         <li class="main-nav__item">
           <a class="main-nav__link"
-             [routerLink]="['/receipts/dashboard']"
+             [routerLink]="['/expenses/dashboard']"
              routerLinkActive="main-nav__item--active">
-            <span class="icon icon--receipt-dashboard"></span>
+            <span class="icon icon--expense-dashboard"></span>
             <span>Dashboard</span>
           </a>
         </li>
         <li class="main-nav__item">
             <a class="main-nav__link"
-               [routerLink]="['/receipts/add-receipt']"
+               [routerLink]="['/expenses/add-expense']"
                routerLinkActive="main-nav__item--active">
-              <span class="icon icon--receipt-add"></span>
+              <span class="icon icon--expense-add"></span>
               <span>Add Receipt</span>
             </a>
           </li>

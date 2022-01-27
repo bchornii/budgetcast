@@ -1,28 +1,28 @@
-<div class="receipt-details-header">
-    <div class="receipt-details-header__title">
-        <div class="receipt-details-header__item">
+<div class="expense-details-header">
+    <div class="expense-details-header__title">
+        <div class="expense-details-header__item">
             <span>Receipt No. </span> '{{expense?.id}}'
         </div>
         <button mat-stroked-button (click)="goBack()">Back</button>
     </div>
     <hr>
-    <div class="receipt-details-header__summary">
-        <div class="receipt-details-header__item">
+    <div class="expense-details-header__summary">
+        <div class="expense-details-header__item">
             <span>Date: </span>{{expense?.addedAt | date}}
         </div>
-        <div class="receipt-details-header__item">
+        <div class="expense-details-header__item">
             <span>Created At: </span>{{expense?.createdOn | date}}
         </div>
-        <div class="receipt-details-header__item">
+        <div class="expense-details-header__item">
             <span>Tags: </span> {{expense?.tags}}
         </div>
-        <div class="receipt-details-header__item">
+        <div class="expense-details-header__item">
             <span>Description:</span> {{expense?.description || '-'}}
         </div>
     </div>
 </div>
-<div class="receipt-details-items">
-    <div class="receipt-details-header__item">
+<div class="expense-details-items">
+    <div class="expense-details-header__item">
         <span>Expense items:</span>
     </div>
     <table mat-table [dataSource]="dataSource" 

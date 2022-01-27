@@ -3,7 +3,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { UserLogin } from 'src/app/models/user-login';
+import { UserLoginDto } from 'src/app/models/user-login-dto';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ import { UserLogin } from 'src/app/models/user-login';
 })
 export class LoginComponent {
 
-  loginModel = new UserLogin();
+  loginModel = new UserLoginDto();
   invalidCredentials: boolean;
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
@@ -26,7 +26,7 @@ export class LoginComponent {
     this.authService.login(this.loginModel).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(
-        _ => this.router.navigate(['/home']),
+        _ => this.router.navigate(['/']),
         _ => this.invalidCredentials = true);
   }
 

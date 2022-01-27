@@ -50,7 +50,7 @@
         }
       }
 
-      &--receipt {
+      &--expense {
         &:after {
           background: url(../../../../../assets/images/icons/bill.svg) no-repeat;
           height: 22px;
@@ -60,9 +60,9 @@
         }
       }
 
-      &--receipt-dashboard {
+      &--expense-dashboard {
         &:after {
-          background: url(../../../../../assets/images/icons/receipt-dashboard.svg) no-repeat;
+          background: url(../../../../../assets/images/icons/expense-dashboard.svg) no-repeat;
           height: 22px;
           left: 15px;
           top: 15px;
@@ -70,7 +70,7 @@
         }
       }
 
-      &--receipt-add {
+      &--expense-add {
         &:after {
           background: url(../../../../../assets/images/icons/add.svg) no-repeat;
           height: 22px;

@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { UserProfile } from 'src/app/modules/user-account/models/user-profile';
+import { UserProfileDto } from 'src/app/modules/user-account/models/user-profile-dto';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ProfileComponent {
 
   profileForm: FormGroup;
-  profileModel = new UserProfile();
+  profileModel = new UserProfileDto();
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
 
@@ -33,7 +33,7 @@ export class ProfileComponent {
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
       this.toastr.success('Profile was updated.');
-      this.router.navigate(['/receipts/dashboard']);
+      this.router.navigate(['/expenses/dashboard']);
     });
   }
 }

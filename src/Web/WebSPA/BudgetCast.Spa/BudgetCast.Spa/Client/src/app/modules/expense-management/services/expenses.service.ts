@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { PageResult } from 'src/app/models/page-result';
+import { PageResult } from 'src/app/models/page-result-vm';
 import { BaseService } from 'src/app/services/base-data.service';
 import { ConfigurationService } from 'src/app/services/configuration-service';
 import { AddExpenseDto } from '../pages/models/add-expense-dto';

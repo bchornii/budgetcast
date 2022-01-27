@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize } from 'rxjs/operators';
-import { ForgotPassword } from 'src/app/models/forgot-password';
+import { ForgotPasswordDto } from 'src/app/models/forgot-password-dto';
 
 @Component({
   selector: 'app-forgot-password',
@@ -26,7 +26,7 @@ import { ForgotPassword } from 'src/app/models/forgot-password';
 })
 export class ForgotPasswordComponent {
 
-  forgotPasswordModel = new ForgotPassword();
+  forgotPasswordModel = new ForgotPasswordDto();
 
   forgotPasswordForm: FormGroup;
   forgotPasswordError: boolean;

@@ -1,4 +1,4 @@
-import { CampaignService } from './../../services/campaign.service';
+import { CampaignService } from '../../services/campaign.service';
 import { NgModel } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { finalize } from 'rxjs/operators';
@@ -10,10 +10,10 @@ import { AddExpenseDto } from '../models/add-expense-dto';
 
 
 @Component({
-  selector: 'app-add-receipt',
-  templateUrl: './add-receipt.component.html'
+  selector: 'app-add-expense',
+  templateUrl: './add-expense.component.html'
 })
-export class AddReceiptComponent implements OnInit {
+export class AddExpenseComponent implements OnInit {
 
   @ViewChild(SpinnerComponent, { static: true }) spinner: SpinnerComponent;
   @ViewChild('totalAmount', { static: true, read: NgModel }) totAmount: NgModel;
@@ -58,7 +58,7 @@ export class AddReceiptComponent implements OnInit {
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
       this.toastr.success('Expense added.');
-      this.router.navigate(['/receipts/dashboard']);
+      this.router.navigate(['/expenses/dashboard']);
     });
   }
 }

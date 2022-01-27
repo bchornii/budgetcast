@@ -16,11 +16,11 @@ interface KeyValue<TKey, TValue> {
 }
 
 @Component({
-  selector: 'app-receipt-dashboard',
-  templateUrl: './receipt-dashboard.component.html',
-  styleUrls: ['./receipt-dashboard.component.scss']
+  selector: 'app-expense-dashboard',
+  templateUrl: './expense-dashboard.component.html',
+  styleUrls: ['./expense-dashboard.component.scss']
 })
-export class ReceiptDashboardComponent implements OnInit {
+export class ExpenseDashboardComponent implements OnInit {
 
   private catSelectionSubj = new Subject<string>();
   catSelection$ = this.catSelectionSubj.asObservable();
@@ -87,7 +87,7 @@ export class ReceiptDashboardComponent implements OnInit {
 
   onMore(receiptId: string) {
     this.spinner.show();
-    this.router.navigate(['receipts/receipt-details', receiptId])
+    this.router.navigate(['expenses/expense-details', receiptId])
       .finally(() => this.spinner.hide());
   }
 

@@ -1,6 +1,6 @@
 
 app-campaign-totals,
-app-receipt-details {
+app-expense-details {
     .mat-dialog-content {
         margin: 0;
         padding: 0;
@@ -20,8 +20,8 @@ app-receipt-details {
     }
 }
 
-app-receipt-details {
-    .receipt-details-items {        
+app-expense-details {
+    .expense-details-items {        
         .mat-header-row {
             height: 42px;
         }
