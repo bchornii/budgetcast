@@ -5,5 +5,7 @@
         long TenantId { get; }
 
         void SetCurrentTenant(long tenantId);
+
+        long GetCurrentTenant();
     }
 }

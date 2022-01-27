@@ -8,5 +8,8 @@
         {
             TenantId = tenantId;
         }
+
+        public long GetCurrentTenant()
+            => TenantId;
     }
 }
