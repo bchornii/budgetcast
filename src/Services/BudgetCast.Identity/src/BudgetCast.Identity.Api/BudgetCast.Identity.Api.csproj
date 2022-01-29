@@ -45,4 +45,8 @@
     <Folder Include="Dto\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
+  </ItemGroup>
+
 </Project>

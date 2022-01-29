@@ -95,7 +95,6 @@ namespace BudgetCast.Common.Web.Extensions
 
         public static IServiceCollection AddCurrentTenant(this IServiceCollection services)
         {
-            services.AddScoped<CurrentTenantMiddleware>();
             services.AddScoped<ITenantService, TenantService>();
             return services;
         }

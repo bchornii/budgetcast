@@ -37,11 +37,6 @@ export class HttpConfigInterceptor implements HttpInterceptor {
       headers: req.headers.set('Accept', 'application/json')
     });
 
-    // TODO: remove hardcoded tenant value
-    req = req.clone({
-      headers: req.headers.set('tenant', '7064')
-    });
-
     req = req.clone({
       withCredentials: true
     });

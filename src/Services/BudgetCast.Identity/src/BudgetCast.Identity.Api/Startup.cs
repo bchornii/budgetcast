@@ -1,4 +1,6 @@
-﻿using BudgetCast.Identity.Api.Infrastructure.Extensions;
+﻿using BudgetCast.Common.Web.Extensions;
+using BudgetCast.Identity.Api.Infrastructure.AppSettings;
+using BudgetCast.Identity.Api.Infrastructure.Extensions;
 using BudgetCast.Identity.Api.Infrastructure.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -31,7 +33,8 @@ namespace BudgetCast.Identity.Api
                 .AddAuthorization()
                 .AddJwtAuthentication(Configuration)
                 .AddCustomHealthCheck(Configuration)
-                .AddCustomHostedServices();
+                .AddCustomHostedServices()
+                .AddCurrentTenant();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -55,6 +58,8 @@ namespace BudgetCast.Identity.Api
             app.UseCors();
 
             app.UseAuthentication();
+            app.UseCurrentTenant(pathsToExlude:
+                TenantConfiguration.PathsToExcludeFromTenantVerification);
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

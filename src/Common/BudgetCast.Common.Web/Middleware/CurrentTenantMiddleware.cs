@@ -2,23 +2,28 @@
 
 namespace BudgetCast.Common.Web.Middleware
 {
-    public class CurrentTenantMiddleware : IMiddleware
+    public class CurrentTenantMiddleware
     {
-        private readonly ITenantService _tenantService;
+        private readonly HashSet<string> _cachedVerifiedExludePaths;
 
-        public CurrentTenantMiddleware(ITenantService tenantService)
+        private readonly RequestDelegate _next;
+        private readonly CurrentTenantMiddlewareConfiguration _configuration;
+
+        public CurrentTenantMiddleware(RequestDelegate next, CurrentTenantMiddlewareConfiguration configuration)
         {
-            _tenantService = tenantService;
+            _next = next;
+            _configuration = configuration;
+            _cachedVerifiedExludePaths = new HashSet<string>();
         }
 
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        public async Task InvokeAsync(HttpContext context, ITenantService tenantService)
         {
             if (!ExcludePath(context))
             {
                 string? tenantId = TenantResolver.Resolver(context);
                 if (!string.IsNullOrEmpty(tenantId))
                 {
-                    _tenantService.SetCurrentTenant(long.Parse(tenantId));
+                    tenantService.SetCurrentTenant(long.Parse(tenantId));
                 }
                 else
                 {
@@ -26,22 +31,21 @@ namespace BudgetCast.Common.Web.Middleware
                 }
             }
 
-            await next(context);
+            await _next(context);
         }
 
-        private static bool ExcludePath(HttpContext context)
+        private bool ExcludePath(HttpContext context)
         {
-            var listExclude = new List<string>()
+            if (_cachedVerifiedExludePaths.Contains(context.Request.Path))
             {
-                "/swagger",
-                "/jobs",
-                "/hc"
-            };
+                return true;
+            }
 
-            foreach (string item in listExclude)
+            foreach (string item in _configuration.PathsToExlude)
             {
-                if (context.Request.Path.StartsWithSegments(item))
+                if (context.Request.Path.StartsWithSegments(item, StringComparison.OrdinalIgnoreCase))
                 {
+                    _cachedVerifiedExludePaths.Add(context.Request.Path);
                     return true;
                 }
             }
