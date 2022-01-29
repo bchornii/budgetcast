@@ -45,27 +45,6 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddFakeIdentityContext(
-            this IServiceCollection services)
-        {
-            services.AddScoped<IIdentityContext>(factory =>
-            {
-                // TODO: remove this fake
-                return new IdentityContext
-                {
-                    UserIdentity = new ClaimsPrincipal(new ClaimsIdentity[]
-                    {
-                        new ClaimsIdentity(new Claim[]
-                        {
-                            new Claim(ClaimTypes.NameIdentifier, "bchornii")
-                        })
-                    })
-                };
-            });
-
-            return services;
-        }
-
         public static IServiceCollection AddIdentityContext(this IServiceCollection services)
         {
             services.AddScoped<IIdentityContext, IdentityContext>(provider =>
@@ -75,11 +54,7 @@ namespace BudgetCast.Common.Web.Extensions
 
                 if (!claimsPrincipal.IsAnyIdentityAuthenticated())
                 {
-                    claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, "bchornii")
-                    }));
-                    //return IdentityContext.NonAuthenticated;
+                    return IdentityContext.NonAuthenticated;
                 }
 
                 var identityContext = new IdentityContext

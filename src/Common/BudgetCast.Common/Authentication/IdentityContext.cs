@@ -16,6 +16,7 @@ namespace BudgetCast.Common.Authentication
 
         public ClaimsPrincipal UserIdentity { get; set; }
 
-        public string UserId => UserIdentity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        public string UserId => UserIdentity.Claims
+            .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
 }
