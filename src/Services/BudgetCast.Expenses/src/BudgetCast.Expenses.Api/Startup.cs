@@ -32,8 +32,7 @@ namespace BudgetCast.Expenses.Api
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
                 .AddCustomDbContext(Configuration, Env)
-                .AddCustomHealthCheck(Configuration)
-                .AddCurrentTenant();
+                .AddCustomHealthCheck(Configuration);
         }
 
         public void Configure(IApplicationBuilder app)

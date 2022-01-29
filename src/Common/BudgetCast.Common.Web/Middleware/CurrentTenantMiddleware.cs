@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BudgetCast.Common.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace BudgetCast.Common.Web.Middleware
 {
@@ -16,14 +17,14 @@ namespace BudgetCast.Common.Web.Middleware
             _cachedVerifiedExludePaths = new HashSet<string>();
         }
 
-        public async Task InvokeAsync(HttpContext context, ITenantService tenantService)
+        public async Task InvokeAsync(HttpContext context, IIdentityContext identityContext)
         {
             if (!ExcludePath(context))
             {
                 string? tenantId = TenantResolver.Resolver(context);
                 if (!string.IsNullOrEmpty(tenantId))
                 {
-                    tenantService.SetCurrentTenant(long.Parse(tenantId));
+                    identityContext.SetCurrentTenant(long.Parse(tenantId));
                 }
                 else
                 {

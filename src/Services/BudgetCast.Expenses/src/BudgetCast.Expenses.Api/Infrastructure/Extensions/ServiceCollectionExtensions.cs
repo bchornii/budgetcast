@@ -73,14 +73,6 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCustomControllers(
-            this IServiceCollection services)
-        {
-            services.AddControllers();
-
-            return services;
-        }
-
         public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
@@ -167,7 +159,11 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
                         ValidateAudience = true,
                         ValidAudience = jwtSettings.Audience,
 
+                        RequireExpirationTime = true,
                         ValidateLifetime = true,
+
+                        RequireSignedTokens = true,
+                        RequireAudience = true,
 
                         RoleClaimType = ClaimTypes.Role,
                         NameClaimType = ClaimTypes.Name,

@@ -28,8 +28,7 @@ namespace BudgetCast.Notifications.AppHub
                 .AddCustomHealthCheck(Configuration)
                 .AddJwtAuthentication(Configuration)
                 .AddCustomServices()
-                .AddIdentityContext()
-                .AddCurrentTenant();
+                .AddIdentityContext();
         }
 
         public void Configure(IApplicationBuilder app)

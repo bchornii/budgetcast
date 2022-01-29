@@ -34,7 +34,7 @@ namespace BudgetCast.Identity.Api
                 .AddJwtAuthentication(Configuration)
                 .AddCustomHealthCheck(Configuration)
                 .AddCustomHostedServices()
-                .AddCurrentTenant();
+                .AddIdentityContext();
         }
 
         public void Configure(IApplicationBuilder app)

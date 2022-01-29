@@ -18,7 +18,7 @@ namespace BudgetCast.Expenses.Data.Expenses
         public ExpensesDataAccess(ExpensesDbContext context, IIdentityContext identityContext)
         {
             _context = context;
-            TenantId = identityContext.TenantId;
+            TenantId = identityContext.TenantId!.Value;
         }
 
         public async Task<PageResult<ExpenseVm>> GetAsync(

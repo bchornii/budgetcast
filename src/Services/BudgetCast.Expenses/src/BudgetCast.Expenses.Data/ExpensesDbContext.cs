@@ -31,7 +31,7 @@ namespace BudgetCast.Expenses.Data
             IIdentityContext identityContext)
             : base(options)
         {
-            Tenant = identityContext.TenantId;
+            Tenant = identityContext.TenantId!.Value;
             UserId = identityContext.UserId;
 
             Expenses = Set<Expense>();
