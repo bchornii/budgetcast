@@ -1,4 +1,4 @@
-﻿using BudgetCast.Common.Web.Middleware;
+﻿using BudgetCast.Common.Authentication;
 using BudgetCast.Notifications.AppHub.Hubs;
 using BudgetCast.Notifications.AppHub.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -8,12 +8,14 @@ namespace BudgetCast.Notifications.AppHub.Services
     public class NotificationService : INotificationService
     {
         private readonly IHubContext<NotificationHub> _hubContext;
-        private readonly ITenantService _tenantService;
+        private readonly IIdentityContext _identityContext;
 
-        public NotificationService(IHubContext<NotificationHub> hubContext, ITenantService tenantService)
+        public NotificationService(
+            IHubContext<NotificationHub> hubContext, 
+            IIdentityContext identityContext)
         {
             _hubContext = hubContext;
-            _tenantService = tenantService;
+            _identityContext = identityContext;
         }
 
         #region RootTenantMethods
@@ -40,7 +42,7 @@ namespace BudgetCast.Notifications.AppHub.Services
 
         public async Task SendMessageAsync(INotificationMessage notification)
         {
-            var tenant = _tenantService.GetCurrentTenant();
+            var tenant = _identityContext.TenantId;
             await _hubContext
                 .Clients
                 .Group($"GroupTenant-{tenant}")
@@ -51,7 +53,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             INotificationMessage notification, 
             IEnumerable<string> excludedConnectionIds)
         {
-            var tenant = _tenantService.GetCurrentTenant();
+            var tenant = _identityContext.TenantId;
             await _hubContext
                 .Clients
                 .GroupExcept($"GroupTenant-{tenant}", excludedConnectionIds)

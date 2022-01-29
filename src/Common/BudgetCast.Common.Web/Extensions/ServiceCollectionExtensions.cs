@@ -50,17 +50,20 @@ namespace BudgetCast.Common.Web.Extensions
             services.AddScoped<IIdentityContext, IdentityContext>(provider =>
             {
                 var http = provider.GetRequiredService<IHttpContextAccessor>();
-                var claimsPrincipal = http.HttpContext.User;
+                var tenantService = provider.GetRequiredService<ITenantService>();
+                var principal = http.HttpContext.User;
 
-                if (!claimsPrincipal.IsAnyIdentityAuthenticated())
+                if (!principal.IsAnyIdentityAuthenticated())
                 {
                     return IdentityContext.NonAuthenticated;
                 }
 
-                var identityContext = new IdentityContext
-                {
-                    UserIdentity = claimsPrincipal,
-                };
+                var userId = principal.Claims
+                    .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                var identityContext = new IdentityContext(
+                    userId: userId,
+                    tenantId: tenantService.GetCurrentTenant());
 
                 return identityContext;
             });

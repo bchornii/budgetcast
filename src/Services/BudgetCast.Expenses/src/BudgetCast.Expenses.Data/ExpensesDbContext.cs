@@ -13,7 +13,6 @@ namespace BudgetCast.Expenses.Data
     public class ExpensesDbContext : DbContext, IUnitOfWork
     {
         public const string DbSchema = "dbo";
-        private readonly IIdentityContext _identityContext;
 
         public DbSet<Expense> Expenses { get; set; }
 
@@ -23,17 +22,18 @@ namespace BudgetCast.Expenses.Data
 
         public DbSet<CampaignVm> CampaignsView { get; set; }
 
-        public long Tenant { get; set; }
+        public long Tenant { get; }
+
+        public string UserId { get; }
 
         public ExpensesDbContext(
             DbContextOptions<ExpensesDbContext> options,
-            IIdentityContext identityContext,
-            ITenantService tenantService)
+            IIdentityContext identityContext)
             : base(options)
         {
-            Tenant = tenantService.TenantId;
+            Tenant = identityContext.TenantId;
+            UserId = identityContext.UserId;
 
-            _identityContext = identityContext;
             Expenses = Set<Expense>();
             ExpenseItems = Set<Expense>();
             Campaigns = Set<Campaign>();
@@ -53,12 +53,11 @@ namespace BudgetCast.Expenses.Data
 
         public async Task<bool> Commit()
         {
-            var currentUserId = _identityContext.UserId;
             var now = SystemDt.Current;
 
             ChangeTracker
                 .Entries<IAuditableEntity>()
-                .UpdateEntityAuditableValues(now, currentUserId);
+                .UpdateEntityAuditableValues(now, UserId);
 
             ChangeTracker
                 .Entries<IMustHaveTenant>()

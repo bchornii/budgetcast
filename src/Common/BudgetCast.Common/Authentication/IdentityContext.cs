@@ -7,16 +7,16 @@ namespace BudgetCast.Common.Authentication
         /// <summary>
         /// Represent non-authenticated user identity context.
         /// </summary>
-        public static readonly IdentityContext NonAuthenticated = new();
+        public static readonly IdentityContext NonAuthenticated = new(default!, 0);
 
-        public IdentityContext()
+        public string UserId { get; }
+
+        public long TenantId { get; }
+
+        public IdentityContext(string userId, long tenantId)
         {
-            UserIdentity = new ClaimsPrincipal(new ClaimsIdentity());
+            UserId = userId;
+            TenantId = tenantId;
         }
-
-        public ClaimsPrincipal UserIdentity { get; set; }
-
-        public string UserId => UserIdentity.Claims
-            .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
 }
