@@ -1,6 +1,8 @@
 ﻿using BudgetCast.Notifications.AppHub.Infrastructure.AppSettings;
+using BudgetCast.Notifications.AppHub.Infrastructure.HubFilters;
 using BudgetCast.Notifications.AppHub.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -40,7 +42,11 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions
 
             if (!signalRSettings.UseBackplane)
             {
-                services.AddSignalR();
+                services
+                    .AddSignalR(hubOptions =>
+                    {
+                        hubOptions.AddFilter(new CurrentTenantFilter());
+                    });
             }
             else
             {
@@ -63,7 +69,10 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions
                         }
 
                         services
-                            .AddSignalR()
+                            .AddSignalR(hubOptions =>
+                            {
+                                hubOptions.AddFilter(new CurrentTenantFilter());
+                            })
                             .AddStackExchangeRedis(backplaneSettings.StringConnection, options =>
                             {
                                 options.Configuration.AbortOnConnectFail = false;

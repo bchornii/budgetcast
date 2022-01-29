@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace BudgetCast.Common.Web.Middleware
 {
+    /// <summary>
+    /// Uses HTTP context (claims principal associated with it) to retrieve TenantId and
+    /// updates IdentityContext with it. 
+    /// <remarks>Not sutable for WebSocket communication based on SignalR</remarks>
+    /// </summary>
     public class CurrentTenantMiddleware
     {
         private readonly HashSet<string> _cachedVerifiedExludePaths;

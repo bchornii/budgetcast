@@ -32,9 +32,11 @@ namespace BudgetCast.Common.Web.Middleware
         private static string? ResolveFromUserAuth(HttpContext context) =>
             context.User.GetTenant();
 
+        [Obsolete("Tenant ID should be retrieved from auth ticket", error: false)]
         private static string? ResolveFromHeader(HttpContext context) =>
             context.Request.Headers.TryGetValue(HeaderConstants.Tenant, out var tenantFromHeader) ? (string)tenantFromHeader : default;
 
+        [Obsolete("Tenant ID should be retrieved from auth ticket", error: false)]
         private static string? ResolveFromQuery(HttpContext context) =>
             context.Request.Query.TryGetValue(QueryConstants.Tenant, out var tenantFromQueryString) ? (string)tenantFromQueryString : default;
     }

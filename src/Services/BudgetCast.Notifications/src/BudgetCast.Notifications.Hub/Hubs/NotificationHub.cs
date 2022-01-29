@@ -1,5 +1,4 @@
 ﻿using BudgetCast.Common.Authentication;
-using BudgetCast.Common.Web.Middleware;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetCast.Notifications.AppHub.Hubs
@@ -19,22 +18,18 @@ namespace BudgetCast.Notifications.AppHub.Hubs
         public override async Task OnConnectedAsync()
         {
             // TODO: uncomment
-            // await OnHeartbeatCheckTokenExpiration();
-
-            var tenant = _identityContext.TenantId;
-
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"GroupTenant-{tenant}");
+            //await OnHeartbeatCheckTokenExpiration();
+            
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"GroupTenant-{_identityContext.TenantId}");
             await base.OnConnectedAsync();
             _logger.LogInformation($"A client connected to NotificationHub: {Context.ConnectionId}");
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var tenant = _identityContext.TenantId;
-
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"GroupTenant-{tenant}");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"GroupTenant-{_identityContext.TenantId}");
             await base.OnDisconnectedAsync(exception);
             _logger.LogInformation($"A client disconnected from NotificationHub: {Context.ConnectionId}");
-        }        
+        }
     }
 }
