@@ -41,7 +41,9 @@ namespace BudgetCast.Notifications.AppHub
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseHttpsRedirection();
+            
             app.UseRouting();
             app.UseCors();
 
@@ -51,43 +53,35 @@ namespace BudgetCast.Notifications.AppHub
 
             app.Use(async (ctx, next) =>
             {
+                var notificationService = ctx.RequestServices
+                    .GetRequiredService<INotificationService>();
+
+                var identityCtx = ctx.RequestServices
+                    .GetRequiredService<IIdentityContext>();
+                
                 if (ctx.Request.Path.StartsWithSegments("/api/test-group"))
                 {
-                    var notificationService = ctx.RequestServices
-                       .GetRequiredService<INotificationService>();
-
-                    var identityCtx = ctx.RequestServices
-                        .GetRequiredService<IIdentityContext>();
-
                     var groupName = $"GroupTenant-{identityCtx.TenantId}";
                     await notificationService.SendMessageToGroupAsync(
                         notification: new BasicNotification
                         {
-                            Label = BasicNotification.LabelType.Success,
+                            Label = NotificationType.Success,
                             Message = $"Hi, group {groupName}",
                             MessageType = nameof(BasicNotification),
                         }, 
-                        group: groupName);
+                        @group: groupName, cancellationToken: CancellationToken.None);
 
                     await ctx.Response.WriteAsync("Message sent");
                 }
                 else if (ctx.Request.Path.StartsWithSegments("/api/test-user"))
                 {
-                    var notificationService = ctx.RequestServices
-                       .GetRequiredService<INotificationService>();
-
-                    var identityCtx = ctx.RequestServices
-                        .GetRequiredService<IIdentityContext>();
-
                     var userId = identityCtx.UserId;
-                    await notificationService.SendMessageToUserAsync(
-                        notification: new BasicNotification
-                        {
-                            Label = BasicNotification.LabelType.Success,
-                            Message = $"Hi, {userId}",
-                            MessageType = nameof(BasicNotification),
-                        },
-                        userId: userId);
+                    await notificationService.SendMessageToUserAsync(userId: userId, notification: new BasicNotification
+                    {
+                        Label = NotificationType.Success,
+                        Message = $"Hi, {userId}",
+                        MessageType = nameof(BasicNotification),
+                    }, cancellationToken: CancellationToken.None);
 
                     await ctx.Response.WriteAsync("Message sent");
                 }

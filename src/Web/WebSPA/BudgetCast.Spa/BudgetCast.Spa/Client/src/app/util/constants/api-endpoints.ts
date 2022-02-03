@@ -34,4 +34,8 @@ export interface Endpoints {
       details: string
     }
   };
+
+  notifications: {
+    all: string;
+  }
 }

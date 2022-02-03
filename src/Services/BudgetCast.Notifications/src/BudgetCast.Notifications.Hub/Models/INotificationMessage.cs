@@ -2,8 +2,10 @@
 {
     public interface INotificationMessage
     {
-        public string MessageType { get; set; }
+        public string MessageType { get; }
 
-        public string? Message { get; set; }
+        public string? Message { get; }
+        
+        public NotificationType Label { get; }
     }
 }

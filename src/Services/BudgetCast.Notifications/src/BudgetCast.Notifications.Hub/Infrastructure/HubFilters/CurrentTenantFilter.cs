@@ -74,14 +74,14 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.HubFilters
 
         private static void SetTenantFor(IIdentityContext identityContext, HttpContext httpContext)
         {
-            string? tenantId = TenantResolver.Resolver(httpContext);
+            var tenantId = TenantResolver.Resolver(httpContext);
             if (!string.IsNullOrEmpty(tenantId))
             {
                 identityContext.SetCurrentTenant(long.Parse(tenantId));
             }
             else
             {
-                throw new Exception("Tenant is not identifieable");
+                throw new Exception("Tenant cannot be identified");
             }
         }
     }

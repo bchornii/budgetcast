@@ -8,8 +8,17 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace BudgetCast.Notifications.AppHub.Hubs
 {
+    /// <summary>
+    /// Base type for signalR hubs. Derives from <see cref="Hub"/> which
+    /// is a high-level pipeline that allows communication between client
+    /// and server to call each others methods directly.
+    /// </summary>
     public class BaseAppHub : Hub
     {
+        /// <summary>
+        /// Checks for access token expiration on heart beats.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         protected virtual async Task OnHeartbeatCheckTokenExpiration()
         {
             var transportFeature = Context.Features.Get<IHttpTransportFeature>();

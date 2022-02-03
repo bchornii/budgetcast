@@ -1,19 +1,11 @@
 ﻿namespace BudgetCast.Notifications.AppHub.Models
 {
-    public class BasicNotification : INotificationMessage
+    public record BasicNotification : INotificationMessage
     {
-        public enum LabelType
-        {
-            Information,
-            Success,
-            Warning,
-            Error
-        }
+        public string MessageType { get; init; } = nameof(BasicNotification);
 
-        public string MessageType { get; set; } = typeof(BasicNotification).Name;
+        public string? Message { get; init; }
 
-        public string? Message { get; set; }
-
-        public LabelType Label { get; set; }
+        public NotificationType Label { get; init; }
     }
 }

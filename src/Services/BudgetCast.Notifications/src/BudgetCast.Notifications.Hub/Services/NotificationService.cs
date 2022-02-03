@@ -20,95 +20,106 @@ namespace BudgetCast.Notifications.AppHub.Services
 
         #region RootTenantMethods
 
-        public async Task BroadcastMessageAsync(INotificationMessage notification)
+        public async Task BroadcastMessageAsync(
+            INotificationMessage notification, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .All
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task BroadcastExceptMessageAsync(
-            INotificationMessage notification, 
-            IEnumerable<string> excludedConnectionIds)
+            INotificationMessage notification,
+            IEnumerable<string> excludedConnectionIds, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .AllExcept(excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         #endregion RootTenantMethods
 
-        public async Task SendMessageAsync(INotificationMessage notification)
+        public async Task SendMessageAsync(
+            INotificationMessage notification, 
+            CancellationToken cancellationToken)
         {
             var tenant = _identityContext.TenantId;
             await _hubContext
                 .Clients
                 .Group($"GroupTenant-{tenant}")
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageExceptAsync(
-            INotificationMessage notification, 
-            IEnumerable<string> excludedConnectionIds)
+            INotificationMessage notification,
+            IEnumerable<string> excludedConnectionIds, 
+            CancellationToken cancellationToken)
         {
             var tenant = _identityContext.TenantId;
             await _hubContext
                 .Clients
                 .GroupExcept($"GroupTenant-{tenant}", excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupAsync(
-            INotificationMessage notification, 
-            string group)
+            INotificationMessage notification,
+            string @group, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .Group(group)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupsAsync(
-            INotificationMessage notification, 
-            IEnumerable<string> groupNames)
+            INotificationMessage notification,
+            IEnumerable<string> groupNames, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .Groups(groupNames)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupExceptAsync(
-            INotificationMessage notification, 
-            string group, 
-            IEnumerable<string> excludedConnectionIds)
+            INotificationMessage notification,
+            string @group,
+            IEnumerable<string> excludedConnectionIds, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .GroupExcept(group, excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToUserAsync(
-            string userId, 
-            INotificationMessage notification)
+            string userId,
+            INotificationMessage notification, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .User(userId)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToUsersAsync(
-            IEnumerable<string> userIds, 
-            INotificationMessage notification)
+            IEnumerable<string> userIds,
+            INotificationMessage notification, 
+            CancellationToken cancellationToken)
         {
             await _hubContext
                 .Clients
                 .Users(userIds)
-                .SendAsync(notification.MessageType, notification);
+                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
         }
     }
 }
