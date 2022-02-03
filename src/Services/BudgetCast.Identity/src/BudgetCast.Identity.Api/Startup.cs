@@ -43,8 +43,15 @@ namespace BudgetCast.Identity.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseApiExceptionHandling(
+                    isDevelopment: Env.IsDevelopment());
+            }
 
             app.UseHttpsRedirection();
+            app.UseHttpLogging();
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

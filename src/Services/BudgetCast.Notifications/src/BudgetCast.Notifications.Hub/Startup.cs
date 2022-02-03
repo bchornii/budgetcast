@@ -2,6 +2,7 @@
 using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Notifications.AppHub.Hubs;
 using BudgetCast.Notifications.AppHub.Infrastructure.Extensions;
+using BudgetCast.Notifications.AppHub.Middlewares;
 using BudgetCast.Notifications.AppHub.Models;
 using BudgetCast.Notifications.AppHub.Services;
 using HealthChecks.UI.Client;
@@ -41,8 +42,14 @@ namespace BudgetCast.Notifications.AppHub
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseApiExceptionHandling(
+                    isDevelopment: Env.IsDevelopment());
+            }
             
             app.UseHttpsRedirection();
+            app.UseHttpLogging();
             
             app.UseRouting();
             app.UseCors();
@@ -51,45 +58,10 @@ namespace BudgetCast.Notifications.AppHub
             app.UseCurrentTenant();
             app.UseAuthorization();
 
-            app.Use(async (ctx, next) =>
+            if (Env.IsDevelopment())
             {
-                var notificationService = ctx.RequestServices
-                    .GetRequiredService<INotificationService>();
-
-                var identityCtx = ctx.RequestServices
-                    .GetRequiredService<IIdentityContext>();
-                
-                if (ctx.Request.Path.StartsWithSegments("/api/test-group"))
-                {
-                    var groupName = $"GroupTenant-{identityCtx.TenantId}";
-                    await notificationService.SendMessageToGroupAsync(
-                        notification: new BasicNotification
-                        {
-                            Label = NotificationType.Success,
-                            Message = $"Hi, group {groupName}",
-                            MessageType = nameof(BasicNotification),
-                        }, 
-                        @group: groupName, cancellationToken: CancellationToken.None);
-
-                    await ctx.Response.WriteAsync("Message sent");
-                }
-                else if (ctx.Request.Path.StartsWithSegments("/api/test-user"))
-                {
-                    var userId = identityCtx.UserId;
-                    await notificationService.SendMessageToUserAsync(userId: userId, notification: new BasicNotification
-                    {
-                        Label = NotificationType.Success,
-                        Message = $"Hi, {userId}",
-                        MessageType = nameof(BasicNotification),
-                    }, cancellationToken: CancellationToken.None);
-
-                    await ctx.Response.WriteAsync("Message sent");
-                }
-                else
-                {
-                    await next();
-                }
-            });
+                app.UseTestEndpoints();
+            }            
 
             app.UseEndpoints(endpoints =>
             {
