@@ -1,4 +1,5 @@
-﻿using BudgetCast.Common.Authentication;
+﻿using System.Net;
+using BudgetCast.Common.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace BudgetCast.Common.Web.Middleware
@@ -33,7 +34,9 @@ namespace BudgetCast.Common.Web.Middleware
                 }
                 else
                 {
-                    throw new Exception("Tenant is not identifieable");
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    await context.Response.WriteAsync("Unable to identify tenant");
+                    return;
                 }
             }
 

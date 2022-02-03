@@ -29,7 +29,7 @@ public class Program
         }
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseSerilog((ctx, services, configuration) =>
                 configuration.ReadFrom.Configuration(ctx.Configuration))
@@ -38,12 +38,10 @@ public class Program
                 webBuilder.UseStartup<Startup>();
             });
 
-    private static Serilog.ILogger CreateSerilogLogger()
-    {
-        return new LoggerConfiguration()
+    private static Serilog.ILogger CreateSerilogLogger() =>
+        new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .CreateBootstrapLogger();
-    }
 }
