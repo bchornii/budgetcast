@@ -6,6 +6,6 @@
 
         public string? Message { get; }
         
-        public NotificationType Label { get; }
+        public NotificationType Type { get; }
     }
 }

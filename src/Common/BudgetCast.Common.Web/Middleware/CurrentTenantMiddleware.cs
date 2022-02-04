@@ -6,7 +6,7 @@ namespace BudgetCast.Common.Web.Middleware
 {
     /// <summary>
     /// Uses HTTP context (claims principal associated with it) to retrieve TenantId and
-    /// updates IdentityContext with it. 
+    /// updates IdentityContext with it. If tenant can't be identified 401 status code is returned.
     /// <remarks>Not sutable for WebSocket communication based on SignalR</remarks>
     /// </summary>
     public class CurrentTenantMiddleware

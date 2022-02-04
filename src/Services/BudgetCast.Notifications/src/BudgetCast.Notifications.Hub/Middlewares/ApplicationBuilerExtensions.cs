@@ -22,7 +22,7 @@ namespace BudgetCast.Notifications.AppHub.Middlewares
                     await notificationService.SendMessageToGroupAsync(
                         notification: new BasicNotification
                         {
-                            Label = NotificationType.Success,
+                            Type = NotificationType.Success,
                             Message = $"Hi, group {groupName}",
                             MessageType = nameof(BasicNotification),
                         },
@@ -35,7 +35,7 @@ namespace BudgetCast.Notifications.AppHub.Middlewares
                     var userId = identityCtx.UserId;
                     await notificationService.SendMessageToUserAsync(userId: userId, notification: new BasicNotification
                     {
-                        Label = NotificationType.Success,
+                        Type = NotificationType.Success,
                         Message = $"Hi, {userId}",
                         MessageType = nameof(BasicNotification),
                     }, cancellationToken: CancellationToken.None);

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { ToastrService } from 'ngx-toastr';
 import { BasicNotification } from '../models/notifications/basic-notification-vm';
+import { NotificationType } from '../models/notifications/notification-type-vm';
 import { AuthService } from './auth.service';
 import { ConfigurationService } from './configuration-service';
 import { LocalStorageService } from './local-storage.service';
@@ -38,7 +39,23 @@ export class NotificationsService extends SignalRService {
 
   addNotificationsListener() {
     this._connection.on("BasicNotification", (notification: BasicNotification) => {
-      this.toastrService.success(notification.message, notification.messageType);
+      this.showNotification(notification.type, notification.message);
     });
+  }
+
+  private showNotification(type: NotificationType, message: string, title: string = 'Notification') {
+    if(type == NotificationType.Success){
+      this.toastrService.success(message, title);
+    }
+    if(type == NotificationType.Error) {
+      this.toastrService.error(message, title);
+    }
+    if(type == NotificationType.Information ||
+       type == NotificationType.Unknown) {
+      this.toastrService.info(message, title);
+    }
+    if(type == NotificationType.Warning) {
+      this.toastrService.warning(message, title);
+    }
   }
 }

@@ -49,7 +49,7 @@ namespace BudgetCast.Notifications.AppHub
             }
             
             app.UseHttpsRedirection();
-            app.UseHttpLogging();
+            //app.UseHttpLogging();
             
             app.UseRouting();
             app.UseCors();
