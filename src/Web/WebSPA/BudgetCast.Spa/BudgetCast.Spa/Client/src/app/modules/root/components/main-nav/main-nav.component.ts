@@ -4,6 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { filter } from 'rxjs/operators';
 import { ROUTE_NAV_ITEM_MAPPING } from '../../routes-nav-map';
+import { ArrayExtensions } from 'src/app/util/extensions/array-extensions';
 
 @Component({
   selector: 'app-main-nav',
@@ -13,8 +14,8 @@ import { ROUTE_NAV_ITEM_MAPPING } from '../../routes-nav-map';
 export class MainNavComponent implements OnInit, OnDestroy {
 
   private routerSubscription: Subscription;
-
-  openedSubmenu: string = null;
+  
+  openedSubMenus: string[] = [];
 
   constructor(private authService: AuthService,
               private router: Router) {
@@ -27,7 +28,7 @@ export class MainNavComponent implements OnInit, OnDestroy {
         .find(item => evt.urlAfterRedirects.includes(item.route));
 
       if (routeNavItem) {
-        this.openSubMenu(routeNavItem.navitem, true);
+        this.flipSubMenu(routeNavItem.navitem, false);
       }
     });
   }
@@ -39,11 +40,25 @@ export class MainNavComponent implements OnInit, OnDestroy {
     this.routerSubscription.unsubscribe();
   }
 
-  openSubMenu(subMenuName: string, isAutoNav = false): void {
-    if (this.openedSubmenu === subMenuName && !isAutoNav) {
-      this.openedSubmenu = null;
-    } else {
-      this.openedSubmenu = subMenuName;
+  isExpanded(subMenuName: string): boolean {
+    return !!this.openedSubMenus.find(x => x == subMenuName);
+  }
+
+  indexOfElement(subMenuName: string): number {
+    return this.openedSubMenus.indexOf(subMenuName);
+  }
+
+  flipSubMenu(subMenuName: string, isNotRoutingNavigation = true): void {
+    const expandedElementIdx = this.indexOfElement(subMenuName);
+    const isExpanded = expandedElementIdx != -1;
+    const isNotExpanded = expandedElementIdx == -1;
+
+    if(isExpanded && isNotRoutingNavigation) {
+      this.openedSubMenus.removeAt(expandedElementIdx);
+    } 
+
+    if(isNotExpanded) {
+      this.openedSubMenus.push(subMenuName);
     }
   }
 
