@@ -16,6 +16,7 @@ export class MainNavComponent implements OnInit, OnDestroy {
   private routerSubscription: Subscription;
   
   openedSubMenus: string[] = [];
+  currentNavRoute: string = null;
 
   constructor(private authService: AuthService,
               private router: Router) {
@@ -28,6 +29,7 @@ export class MainNavComponent implements OnInit, OnDestroy {
         .find(item => evt.urlAfterRedirects.includes(item.route));
 
       if (routeNavItem) {
+        this.currentNavRoute = routeNavItem.navitem;
         this.flipSubMenu(routeNavItem.navitem, false);
       }
     });
@@ -40,8 +42,12 @@ export class MainNavComponent implements OnInit, OnDestroy {
     this.routerSubscription.unsubscribe();
   }
 
+  isSubMenuRouteActive(subMenuName: string): boolean {
+    return this.currentNavRoute == subMenuName;
+  }
+
   isExpanded(subMenuName: string): boolean {
-    return !!this.openedSubMenus.find(x => x == subMenuName);
+    return this.openedSubMenus.indexOf(subMenuName) != -1;
   }
 
   indexOfElement(subMenuName: string): number {

@@ -12,7 +12,10 @@
         [class.open]="isExpanded('expense')">
       <span class="main-nav__link" (click)="flipSubMenu('expense')" >
         <span class="icon icon--expense"></span>
-        <span>Expenses</span>
+        <span class="icon-text" 
+              [class.icon-text--bold]="isSubMenuRouteActive('expense')">
+              Expenses
+        </span>
         <span class="icon icon--expand-menu"></span>
       </span>
       <ul class="main-nav__secondary-menu">
@@ -38,7 +41,10 @@
         [class.open]="isExpanded('account')">
       <span class="main-nav__link" (click)="flipSubMenu('account')" >
         <span class="icon icon--account"></span>
-        <span>User Account</span>
+        <span class="icon-text" 
+              [class.icon-text--bold]="isSubMenuRouteActive('account')">
+            User Account
+        </span>
         <span class="icon icon--expand-menu"></span>
       </span>
       <ul class="main-nav__secondary-menu">
