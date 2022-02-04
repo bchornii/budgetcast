@@ -4,7 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { filter } from 'rxjs/operators';
 import { ROUTE_NAV_ITEM_MAPPING } from '../../routes-nav-map';
-import { ArrayExtensions } from 'src/app/util/extensions/array-extensions';
+import 'src/app/util/extensions/array-extensions';
 
 @Component({
   selector: 'app-main-nav',
