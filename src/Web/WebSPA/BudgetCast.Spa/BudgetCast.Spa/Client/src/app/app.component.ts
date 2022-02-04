@@ -18,10 +18,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.userIdentity$
       .subscribe(async(a) => {
         if(a.isAuthenticated) {
-          await this.notificationService.startConnection();
-          this.notificationService.addNotificationsListener();
+          await this.notificationService
+            .initializeConnection()
+            .addListeners()
+            .startCommunication();
         } else {
-          await this.notificationService.stopConnection();
+          await this.notificationService
+            .stopCommunication();
         }
       });
   }

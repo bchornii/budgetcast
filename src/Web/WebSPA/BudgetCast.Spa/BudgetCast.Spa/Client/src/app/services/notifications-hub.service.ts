@@ -23,21 +23,30 @@ export class NotificationsService extends SignalRService {
     super(localStorage, toastrService);
   }
 
-  async startConnection() {
+  initializeConnection(): NotificationsService {
     let options = new signalRConnectionOptions()
       .withUri(this.configurationService.endpoints.notifications.all)
       .withReconnectOnConnectionDropPredicate(() => this.authService.isUserValid);    
 
     this._connection = this.createConnection(options);
 
+    return this;
+  }
+
+  addListeners(): NotificationsService {
+    this.addNotificationsListener();
+    return this;
+  }
+
+  async startCommunication() {
     await this.start(this._connection);
   }
 
-  async stopConnection() {
+  async stopCommunication() {
     await this.stop(this._connection); 
   }
 
-  addNotificationsListener() {
+  private addNotificationsListener() {
     this._connection.on("BasicNotification", (notification: BasicNotification) => {
       this.showNotification(notification.type, notification.message);
     });

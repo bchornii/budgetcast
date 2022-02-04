@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -14,7 +13,7 @@ export class SignalRService {
               protected toastrService: ToastrService) {
   }
 
-  createConnection(options: signalRConnectionOptions): signalR.HubConnection {
+  protected createConnection(options: signalRConnectionOptions): signalR.HubConnection {
     
     let {       
       hubUri,
@@ -74,7 +73,7 @@ export class SignalRService {
     }    
   }
 
-  async start(connection: signalR.HubConnection) {
+  protected async start(connection: signalR.HubConnection) {
     try {
       await connection.start();
     } catch(err) {
@@ -85,7 +84,7 @@ export class SignalRService {
     }
   }
 
-  async stop(connection: signalR.HubConnection) {
+  protected async stop(connection: signalR.HubConnection) {
     let isActive = connection &&
                   (connection.state == signalR.HubConnectionState.Connected ||
                    connection.state == signalR.HubConnectionState.Connecting ||
