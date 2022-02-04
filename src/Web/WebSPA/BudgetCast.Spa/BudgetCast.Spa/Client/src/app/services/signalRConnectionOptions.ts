@@ -5,7 +5,6 @@ export class signalRConnectionOptions {
   private _hubUri: string;
   private _logLevel: signalR.LogLevel;
   private _withAutoReconnect: boolean;
-  private _withAuth: boolean;
   private _withDefaultOnStateChangeActions: boolean;
   private _customReconnectDelays: number[];
 
@@ -17,10 +16,6 @@ export class signalRConnectionOptions {
 
   public get logLevel() {
     return this._logLevel;
-  }
-
-  public get withAuth() {
-    return this._withAuth;
   }
 
   public get withAutoReconnect() {
@@ -41,7 +36,6 @@ export class signalRConnectionOptions {
 
   constructor() {
     this._logLevel = signalR.LogLevel.Information;
-    this._withAuth = true;
     this._withAutoReconnect = true;
     this._withDefaultOnStateChangeActions = true;
     this._reconnectOnConnectionDropPredicate = () => false;

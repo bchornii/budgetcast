@@ -19,19 +19,17 @@ export class SignalRService {
       hubUri,
       logLevel,
       withAutoReconnect,
-      withAuth,
       withDefaultOnStateChangeActions,
       customReconnectDelays,
       reconnectOnConnectionDropPredicate
     } = options;
 
-    let uri = withAuth
-      ? this.getUriWithAccessToken(hubUri)
-      : hubUri;
     let validatedLogLevel = this.validateLogLevel(logLevel);
 
     let builder = new signalR.HubConnectionBuilder()
-      .withUrl(uri)
+      .withUrl(hubUri, {
+        accessTokenFactory: () => this.localStorage.getItem(AccessTokenItem)
+      })
       .configureLogging(validatedLogLevel);
 
     if (withAutoReconnect && customReconnectDelays) {
@@ -93,14 +91,6 @@ export class SignalRService {
     if(isActive) {
       await connection.stop();
     }
-  }
-
-  private getUriWithAccessToken(hubUri: string) {
-    const token: string = this.localStorage.getItem(AccessTokenItem);
-    if (token) {
-      return `${hubUri}?access_token=${token}`;
-    }
-    return hubUri;
   }
 
   private validateLogLevel(userSelectedLogLevel: signalR.LogLevel = null) {
