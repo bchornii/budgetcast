@@ -13,7 +13,8 @@ export interface Endpoints {
     signIn: {
       google: string,
       facebook: string,
-      individual: string,      
+      individual: string,
+      refreshAccessToken: string,
     },
 
     signOut: {

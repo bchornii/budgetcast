@@ -16,17 +16,17 @@ export class NotificationsService extends SignalRService {
 
   private _connection: signalR.HubConnection;
 
-  constructor(private authService: AuthService,
-              private configurationService: ConfigurationService,
+  constructor(private configurationService: ConfigurationService,
               localStorage: LocalStorageService,
-              toastrService: ToastrService) { 
-    super(localStorage, toastrService);
+              toastrService: ToastrService,
+              authService: AuthService) { 
+    super(localStorage, toastrService, authService);
   }
 
   initializeConnection(): NotificationsService {
     let options = new signalRConnectionOptions()
       .withUri(this.configurationService.endpoints.notifications.all)
-      .withReconnectOnConnectionDropPredicate(() => this.authService.isUserValid);    
+      .withReconnectOnConnectionDropPredicate(() => this.authService.isUserValid);    // TODO: maybe call isAuthenticated ?
 
     this._connection = this.createConnection(options);
 

@@ -29,7 +29,12 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  async ngOnDestroy() {
     this.authSubscription.unsubscribe();
+
+    // destroy signalr connection on component destroy
+    // in order to avoid connection leaks and increases
+    await this.notificationService
+      .stopCommunication();
   }
 }

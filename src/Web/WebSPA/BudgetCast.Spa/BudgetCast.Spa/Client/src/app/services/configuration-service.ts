@@ -71,7 +71,8 @@ export class ConfigurationService {
         signIn: {
           google: `${baseUrl}/signin/google`,
           facebook: `${baseUrl}/signin/facebook`,
-          individual: `${baseUrl}/signin/individual`
+          individual: `${baseUrl}/signin/individual`,
+          refreshAccessToken: `${baseUrl}/signin/refresh`
         },
     
         signOut: {

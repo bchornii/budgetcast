@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { tap, catchError, mergeMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { LocalStorageService } from './local-storage.service';
 import { AccessTokenItem, XToken } from '../util/constants/auth-constants';
 import { UserLoginVm } from '../models/user-login-vm';
+import { RefreshAccessTokenVm } from '../models/refresh-access-token-vm';
+import { RefreshAccessTokenDto } from '../models/refresh-access-token-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +82,13 @@ export class AuthService extends BaseService {
     );
   }
 
+  refreshAccessToken(refreshToken: RefreshAccessTokenDto): Observable<RefreshAccessTokenVm> {
+    return this.httpClient.post<RefreshAccessTokenVm>(`${this.configService.endpoints.identity.signIn.refreshAccessToken}`, refreshToken).pipe(
+      tap(vm => this.replaceStoredAccessTokenWith(vm.accessToken)),
+      catchError(this.handleError)
+    );
+  }
+
   googleLogin(): void {
     this.document.location.href = `${this.configService.endpoints.identity.signIn.google}`;
   }
@@ -114,5 +123,15 @@ export class AuthService extends BaseService {
       `${this.configService.endpoints.identity.account.passwordReset}`, resetPassword).pipe(
         catchError(this.handleError)
       );
+  }
+
+  isSignInPath(url: string): boolean {
+    return this.configService.endpoints.identity.signIn.individual.includes(url) ||
+           this.configService.endpoints.identity.signIn.facebook.includes(url) ||
+           this.configService.endpoints.identity.signIn.google.includes(url);
+  }
+
+  isRefreshTokenPath(url: string): boolean {
+    return this.configService.endpoints.identity.signIn.refreshAccessToken.includes(url);
   }
 }

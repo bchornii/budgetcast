@@ -2,15 +2,22 @@ import * as signalR from "@microsoft/signalr";
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { AccessTokenItem } from '../util/constants/auth-constants';
+import { AuthService } from "./auth.service";
 import { LocalStorageService } from './local-storage.service';
 import { signalRConnectionOptions } from './signalRConnectionOptions';
 
 export class SignalRService {
 
   private delayBeteweenReconnectOnStart: number = 3000;
+  private totalReconnectAttempts: number = 0;
+  private maxReconnectAttempts: number = 5;
+
+  private reconnectingInProgress = false;
+  private authRenewed = false;
 
   constructor(protected localStorage: LocalStorageService,
-              protected toastrService: ToastrService) {
+              protected toastrService: ToastrService,
+              protected authService: AuthService) {
   }
 
   protected createConnection(options: signalRConnectionOptions): signalR.HubConnection {
@@ -27,8 +34,20 @@ export class SignalRService {
     let validatedLogLevel = this.validateLogLevel(logLevel);
 
     let builder = new signalR.HubConnectionBuilder()
-      .withUrl(hubUri, {
-        accessTokenFactory: () => this.localStorage.getItem(AccessTokenItem)
+      .withUrl(`${hubUri}`, {
+        accessTokenFactory: async () => {
+          // During reconnection attempt token might be already
+          // expired, so it worth to renew it before proceeding.
+          if(this.reconnectingInProgress && !this.authRenewed) {            
+            this.authRenewed = true;
+            const token = this.localStorage.getItem(AccessTokenItem);              
+            await this.authService
+              .refreshAccessToken({ accessToken: token})
+              .toPromise();
+          }
+
+          return this.localStorage.getItem(AccessTokenItem)
+        }
       })
       .configureLogging(validatedLogLevel);
 
@@ -42,6 +61,8 @@ export class SignalRService {
       let connection = builder.build();
 
       connection.onreconnecting(() => {
+        this.reconnectingInProgress = true;
+        this.authRenewed = false;
         this.toastrService.warning(
           'Reconnecting to the server... Some notifications might be missing until done.', 
           'Notifications hub'
@@ -49,6 +70,7 @@ export class SignalRService {
       });
   
       connection.onreconnected(() => {
+        this.reconnectingInProgress = false;
         this.toastrService.success(
           'Reconnected to the server.', 
           'Notifications hub'
@@ -61,6 +83,7 @@ export class SignalRService {
             'Server connection is distrupted.',
             'Notifications hub'
           );
+          this.totalReconnectAttempts = 0;
           await this.start(connection);
         }      
       });
@@ -75,10 +98,15 @@ export class SignalRService {
     try {
       await connection.start();
     } catch(err) {
-      console.log('Error while starting the connection: ' + err);
-      setTimeout(() => {
-        this.start(connection);
-      }, this.delayBeteweenReconnectOnStart);
+      console.error('Error while starting the connection: ' + err);
+      if (this.totalReconnectAttempts < this.maxReconnectAttempts) {
+        setTimeout(() => {
+          this.totalReconnectAttempts++;
+          this.start(connection);
+        }, this.delayBeteweenReconnectOnStart);
+      } else {
+        console.error('Amount of reconnect attemps has reached max configured. No more recconects.')
+      }
     }
   }
 
