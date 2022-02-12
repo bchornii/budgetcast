@@ -49,7 +49,6 @@ services:
               published: ${IDENTITY_API_PORT}
             - target: 443
               published: ${IDENTITY_API_HTTPS_PORT}
-
         volumes: 
             - ./https:/https:ro
 
@@ -63,7 +62,28 @@ services:
         ports: 
             - target: 80
               published: ${EXPENSES_API_PORT}
-        
+    
+    notifications-hub:
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development            
+            - ASPNETCORE_URLS=https://+:443;http://+:80
+            - ASPNETCORE_HTTPS_PORT=${NOTIFICATIONS_API_HTTPS_PORT}
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=Install_new!
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
+            - Serilog__WriteTo__0__Args__serverUrl=http://seq
+            - Serilog__MinimumLevel__Override__Microsoft=Information
+            - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
+            - Azure__SignalR__ConnectionString=${NOTIFICATIONS_SIGNALR_CONNSTR}
+            - SignalRSettings__UseAzureSignalR=true
+            - ServiceBusSettings__AzureServiceBusEnabled=false
+        ports: 
+            - target: 80
+              published: ${NOTIFICATIONS_API_PORT}
+            - target: 443
+              published: ${NOTIFICATIONS_API_HTTPS_PORT}
+        volumes: 
+            - ./https:/https:ro
+
     web-spa:
         environment: 
             - ASPNETCORE_ENVIRONMENT=Prod
@@ -73,6 +93,7 @@ services:
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/budgetcast.pfx
             - Endpoints__Identity=https://${HOST_BASE_ADDR}:${IDENTITY_API_HTTPS_PORT}/api
             - Endpoints__Expenses=http://${HOST_BASE_ADDR}:${EXPENSES_API_PORT}/api
+            - Endpoints__Notifications=https://${HOST_BASE_ADDR}:${NOTIFICATIONS_API_HTTPS_PORT}/hubs
         ports: 
             - target: 80
               published: ${UI_PORT}

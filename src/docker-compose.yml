@@ -29,6 +29,16 @@ services:
     depends_on:
       - seq
 
+  notifications-hub:
+    image: ${REGISTRY:-budgetcast}/notifications.hub:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ./Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/Dockerfile
+      args:
+        - USERNAME=appuser
+    depends_on:
+      - seq
+
   web-spa:
     image: ${REGISTRY:-budgetcast}/spa:${PLATFORM:-linux}-${TAG:-latest}
     build: 

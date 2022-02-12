@@ -1,5 +1,4 @@
-
-# docker build . -t budgetcast/identityapi --rm --build-arg USERNAME=appuser --no-cache --file .\Services\BudgetCast.Identity\src\BudgetCast.Identity.Api\Dockerfile
+# docker build . -t budgetcast/notificationshub --rm --build-arg USERNAME=appuser --no-cache --file .\Services\BudgetCast.Notifications\src\BudgetCast.Notifications.Hub\Dockerfile
 
 # Global configuration
 ARG CONFIGURATION=Release
@@ -32,30 +31,32 @@ COPY ["Common/BudgetCast.Common.Application/BudgetCast.Common.Application.csproj
 COPY ["Common/BudgetCast.Common.Domain/BudgetCast.Common.Domain.csproj",            "Common/BudgetCast.Common.Domain/"]
 
 # application proj files
-COPY ["Services/BudgetCast.Identity/src/BudgetCast.Identity.Api/BudgetCast.Identity.Api.csproj", "Services/BudgetCast.Identity/src/BudgetCast.Identity.Api/"]
+COPY ["Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/BudgetCast.Notifications.AppHub.csproj", "Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/"]
+
 # sln
-COPY ["Services/BudgetCast.Identity/BudgetCast.Identity.sln", "Services/BudgetCast.Identity/BudgetCast.Identity.sln"]
+COPY ["Services/BudgetCast.Notifications/BudgetCast.Notifications.sln", "Services/BudgetCast.Notifications/BudgetCast.Notifications.sln"]
 
 # restore (without arguments it uses .sln file by default - feature of .net core v3+)
 # note: only runs if there's a !!!single!!! project or solution file in the folder
-RUN dotnet restore "Services/BudgetCast.Identity/BudgetCast.Identity.sln"
+RUN dotnet restore "Services/BudgetCast.Notifications/BudgetCast.Notifications.sln"
 
 # copy everything else
 COPY ["Common/", "Common/"]
-COPY ["Services/BudgetCast.Identity/src", "Services/BudgetCast.Identity/src"]
+COPY ["Services/BudgetCast.Notifications/src", "Services/BudgetCast.Notifications/src"]
 
 # build
-RUN dotnet build "Services/BudgetCast.Identity/src/BudgetCast.Identity.Api/BudgetCast.Identity.Api.csproj" -c $CONFIGURATION -o /app/build
+RUN dotnet build "Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/BudgetCast.Notifications.AppHub.csproj" -c $CONFIGURATION -o /app/build
 
 ######################################## test stage #########################################
 
 # no tests so far
 
 ######################################### publish app stage #########################################
+
 FROM build AS publish
 ARG CONFIGURATION
 WORKDIR /src
-RUN dotnet publish "Services/BudgetCast.Identity/src/BudgetCast.Identity.Api/BudgetCast.Identity.Api.csproj" -c $CONFIGURATION -o /app/publish --no-restore
+RUN dotnet publish "Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/BudgetCast.Notifications.AppHub.csproj" -c $CONFIGURATION -o /app/publish --no-restore
 
 ######################################### runtime stage - final #########################################
 FROM base AS final
@@ -73,4 +74,4 @@ RUN groupadd --gid $USER_GID $USERNAME \
 # switch to user
 USER $USERNAME
 
-ENTRYPOINT ["dotnet", "BudgetCast.Identity.Api.dll"]
+ENTRYPOINT ["dotnet", "BudgetCast.Notifications.AppHub.dll"]
