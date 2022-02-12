@@ -12,7 +12,11 @@
 
 This application is cross-platform at the server and client-side, thanks to .NET 6 services capable of running on Linux or Windows containers depending on your Docker host plus any browser for the client web apps. The architecture proposes a microservice oriented architecture implementation with multiple autonomous microservices (each one owning its own data/db) and implementing different approaches within each microservice (simple CRUD vs. DDD/CQRS patterns) using HTTP as the communication protocol between the client apps and the microservices and in the _next iterations_ asynchronous communication for data updates propagation across multiple services based on Integration Events and an Event Bus (a light message broker, to choose between RabbitMQ or Azure Service Bus/Azure Queue Storage).
 
-![budgetcast-containers-diagram](https://user-images.githubusercontent.com/16306082/150670149-bf3f87b7-5bd8-469e-a621-ae0bca07e7e1.jpg)
+To achieve runtime notifications when significant changes in the system occur and avoid constantly polling back-end services for such a changes, the system employs WebSocket connection communication channel. SignalR framework has been choosen to abstract any communication/transport low level details and be able to focus on business logic implementation only. 
+
+Azure SignalR Service integration was added in order to avoid potential problems with performance, scalability and availability of the solutions based on persistent client connections (aka. web sockets). These issues are handler for us with a 99.9% SLA.
+
+![budgetcast-containers-diagram](https://user-images.githubusercontent.com/16306082/153714357-9a475d81-57b2-46f4-8f3f-17c19b84a1a0.jpg)
 
 ## Code details 
  #### CRUD
