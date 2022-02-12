@@ -23,5 +23,8 @@ namespace BudgetCast.Identity.Api.Database.Models
             RefreshToken = default!;
             RefreshTokenExpiryTime = DateTime.MinValue;
         }
+
+        public bool RefreshTokenExpired()
+            => RefreshTokenExpiryTime <= DateTime.UtcNow;
     }
 }

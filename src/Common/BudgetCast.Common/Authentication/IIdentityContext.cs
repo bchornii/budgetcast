@@ -1,12 +1,29 @@
-﻿using System.Security.Claims;
-
-namespace BudgetCast.Common.Authentication
+﻿namespace BudgetCast.Common.Authentication
 {
     public interface IIdentityContext
     {
-        // ClaimsPrincipal is used until error logging has implementation based on it.
-        ClaimsPrincipal UserIdentity { get; set; }
-
+        /// <summary>
+        /// User identifier. Globally unique value across the system.
+        /// </summary>
         string UserId { get; }
+
+        /// <summary>
+        /// Tenant identifier. May be null initially, but for the most
+        /// operation is required.
+        /// </summary>
+        long? TenantId { get; }
+
+        /// <summary>
+        /// Sets tenant identifier.
+        /// </summary>
+        /// <param name="tenantId"></param>
+        void SetCurrentTenant(long tenantId);
+
+        /// <summary>
+        /// Sets user identifier but only in case it wasn't set during initial 
+        /// <see cref="IdentityContext"/> construction.
+        /// </summary>
+        /// <param name="userId"></param>
+        void SetUserId(string userId);
     }
 }

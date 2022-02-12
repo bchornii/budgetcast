@@ -32,8 +32,7 @@ namespace BudgetCast.Expenses.Api
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
                 .AddCustomDbContext(Configuration, Env)
-                .AddCustomHealthCheck(Configuration)
-                .AddCurrentTenant();
+                .AddCustomHealthCheck(Configuration);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -41,6 +40,11 @@ namespace BudgetCast.Expenses.Api
             if (Env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseApiExceptionHandling(
+                    isDevelopment: Env.IsDevelopment());
             }
 
             app.UseSwagger();

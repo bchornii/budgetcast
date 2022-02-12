@@ -2,7 +2,6 @@
 using BudgetCast.Common.Application.Behavior.Logging;
 using BudgetCast.Common.Application.Behavior.Validation;
 using BudgetCast.Common.Authentication;
-using BudgetCast.Common.Web.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -45,47 +44,28 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddFakeIdentityContext(
-            this IServiceCollection services)
-        {
-            services.AddScoped<IIdentityContext>(factory =>
-            {
-                // TODO: remove this fake
-                return new IdentityContext
-                {
-                    UserIdentity = new ClaimsPrincipal(new ClaimsIdentity[]
-                    {
-                        new ClaimsIdentity(new Claim[]
-                        {
-                            new Claim(ClaimTypes.NameIdentifier, "bchornii")
-                        })
-                    })
-                };
-            });
-
-            return services;
-        }
-
         public static IServiceCollection AddIdentityContext(this IServiceCollection services)
         {
             services.AddScoped<IIdentityContext, IdentityContext>(provider =>
-            {
-                var http = provider.GetRequiredService<IHttpContextAccessor>();
-                var claimsPrincipal = http.HttpContext.User;
+            {                
+                var httpCtxAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+                var httpContext = httpCtxAccessor.HttpContext;
 
-                if (!claimsPrincipal.IsAnyIdentityAuthenticated())
+                if (httpContext is null)
                 {
-                    claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, "bchornii")
-                    }));
-                    //return IdentityContext.NonAuthenticated;
+                    return IdentityContext.NotConstructed;
                 }
 
-                var identityContext = new IdentityContext
+                var principal = httpCtxAccessor.HttpContext.User;
+                if (!principal.IsAnyIdentityAuthenticated())
                 {
-                    UserIdentity = claimsPrincipal,
-                };
+                    return IdentityContext.NonAuthenticated;
+                }
+
+                var userId = principal.Claims
+                    .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                var identityContext = new IdentityContext(userId: userId);
 
                 return identityContext;
             });
@@ -93,14 +73,7 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCurrentTenant(this IServiceCollection services)
-        {
-            services.AddScoped<CurrentTenantMiddleware>();
-            services.AddScoped<ITenantService, TenantService>();
-            return services;
-        }
-
-        private static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
+        public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
             => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
     }
 }

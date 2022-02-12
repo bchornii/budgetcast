@@ -9,10 +9,13 @@
       </a>
     </li>
     <li class="main-nav__item"
-        [class.open]="openedSubmenu === 'expense'">
-      <span class="main-nav__link" (click)="openSubMenu('expense')" >
+        [class.open]="isExpanded('expense')">
+      <span class="main-nav__link" (click)="flipSubMenu('expense')" >
         <span class="icon icon--expense"></span>
-        <span>Receipt</span>
+        <span class="icon-text" 
+              [class.icon-text--bold]="isSubMenuRouteActive('expense')">
+              Expenses
+        </span>
         <span class="icon icon--expand-menu"></span>
       </span>
       <ul class="main-nav__secondary-menu">
@@ -20,25 +23,28 @@
           <a class="main-nav__link"
              [routerLink]="['/expenses/dashboard']"
              routerLinkActive="main-nav__item--active">
-            <span class="icon icon--expense-dashboard"></span>
-            <span>Dashboard</span>
+            <span class="icon sub-icon icon--expense-dashboard"></span>
+            <span>View</span>
           </a>
         </li>
         <li class="main-nav__item">
             <a class="main-nav__link"
                [routerLink]="['/expenses/add-expense']"
                routerLinkActive="main-nav__item--active">
-              <span class="icon icon--expense-add"></span>
-              <span>Add Receipt</span>
+              <span class="icon sub-icon icon--expense-add"></span>
+              <span>Add</span>
             </a>
           </li>
       </ul>
     </li>
     <li class="main-nav__item"
-        [class.open]="openedSubmenu === 'account'">
-      <span class="main-nav__link" (click)="openSubMenu('account')" >
+        [class.open]="isExpanded('account')">
+      <span class="main-nav__link" (click)="flipSubMenu('account')" >
         <span class="icon icon--account"></span>
-        <span>User Account</span>
+        <span class="icon-text" 
+              [class.icon-text--bold]="isSubMenuRouteActive('account')">
+            User Account
+        </span>
         <span class="icon icon--expand-menu"></span>
       </span>
       <ul class="main-nav__secondary-menu">
@@ -46,7 +52,7 @@
           <a class="main-nav__link"
              [routerLink]="['/user-account/profile']"
              routerLinkActive="main-nav__item--active">
-            <span class="icon icon--profile"></span>
+            <span class="icon sub-icon icon--profile"></span>
             <span>Profile Edit</span>
           </a>
         </li>

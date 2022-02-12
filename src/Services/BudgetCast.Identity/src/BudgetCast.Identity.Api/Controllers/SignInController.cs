@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Identity.Api.ApiModels.SignIn;
+using BudgetCast.Identity.Api.ApiModels.Token;
 using BudgetCast.Identity.Api.Database.Models;
 using BudgetCast.Identity.Api.Infrastructure.AppSettings;
 using BudgetCast.Identity.Api.Infrastructure.Extensions;
@@ -90,6 +91,37 @@ namespace BudgetCast.Identity.Api.Controllers
             await _userManager.UpdateAsync(user);
 
             return Ok(new LoginVm
+            {
+                AccessToken = tokenResponse.Token,
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh(
+            [FromBody] RefreshTokenDto dto)
+        {
+            var principal = _tokenService
+                .GetPrincipalFromExpiredToken(dto.AccessToken);
+            if(principal is null)
+            {
+                return Unauthorized(_localizer["Invalid credentials."]);
+            }
+
+            var userEmail = principal.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user is null || user.RefreshTokenExpired())
+            {
+                return Unauthorized(_localizer["Invalid credentials."]);
+            }
+
+            var tokenResponse = _tokenService
+                .GetToken(user, HttpContext.GenerateIpAddress());
+            user.RefreshToken = tokenResponse.RefreshToken;
+            user.RefreshTokenExpiryTime = tokenResponse.RefreshTokenExpiryTime;
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new RefreshAccessTokenVm
             {
                 AccessToken = tokenResponse.Token,
             });

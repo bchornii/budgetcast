@@ -1,5 +1,5 @@
-﻿using BudgetCast.Common.Models;
-using BudgetCast.Common.Web.Middleware;
+﻿using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Models;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;
 using BudgetCast.Expenses.Queries.Expenses;
 using BudgetCast.Expenses.Queries.Expenses.GetExpenseById;
@@ -15,10 +15,10 @@ namespace BudgetCast.Expenses.Data.Expenses
 
         public long TenantId { get; }
 
-        public ExpensesDataAccess(ExpensesDbContext context, ITenantService tenantService)
+        public ExpensesDataAccess(ExpensesDbContext context, IIdentityContext identityContext)
         {
             _context = context;
-            TenantId = tenantService.TenantId;
+            TenantId = identityContext.TenantId!.Value;
         }
 
         public async Task<PageResult<ExpenseVm>> GetAsync(

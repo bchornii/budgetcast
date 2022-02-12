@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Notifications.AppHub", "src\BudgetCast.Notifications.Hub\BudgetCast.Notifications.AppHub.csproj", "{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B65D6BA8-1266-42B7-B5CC-89EFB5A93630}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Web", "..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj", "{48BFD8AC-A52C-413C-A514-F364241B458C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48BFD8AC-A52C-413C-A514-F364241B458C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BFD8AC-A52C-413C-A514-F364241B458C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BFD8AC-A52C-413C-A514-F364241B458C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BFD8AC-A52C-413C-A514-F364241B458C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{48BFD8AC-A52C-413C-A514-F364241B458C} = {B65D6BA8-1266-42B7-B5CC-89EFB5A93630}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A8FBF95-1AAF-4D50-B70F-C76E055B7745}
+	EndGlobalSection
+EndGlobal

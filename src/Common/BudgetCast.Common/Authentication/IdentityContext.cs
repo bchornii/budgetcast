@@ -1,21 +1,32 @@
-﻿using System.Security.Claims;
-
-namespace BudgetCast.Common.Authentication
+﻿namespace BudgetCast.Common.Authentication
 {
     public sealed class IdentityContext : IIdentityContext
     {
         /// <summary>
         /// Represent non-authenticated user identity context.
         /// </summary>
-        public static readonly IdentityContext NonAuthenticated = new();
+        public static readonly IdentityContext NonAuthenticated = new(default!);
 
-        public IdentityContext()
+        /// <summary>
+        /// Represent identity context which wasn't constructed due to some runtime limitations.
+        /// </summary>
+        public static readonly IdentityContext NotConstructed = new(default!);
+
+        public string UserId { get; private set; }
+
+        public long? TenantId { get; private set; }
+
+        public IdentityContext(string userId)
         {
-            UserIdentity = new ClaimsPrincipal(new ClaimsIdentity());
+            UserId = userId;
         }
 
-        public ClaimsPrincipal UserIdentity { get; set; }
+        public void SetCurrentTenant(long tenantId)
+        {
+            TenantId = tenantId;
+        }
 
-        public string UserId => UserIdentity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        public void SetUserId(string userId)
+            => UserId = UserId ?? userId;
     }
 }

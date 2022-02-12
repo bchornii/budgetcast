@@ -15,7 +15,6 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IStringLocalizer<TokenService> _localizer;
         private readonly JwtSettings _jwtSettings;
 
@@ -24,87 +23,20 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
             IStringLocalizer<TokenService> localizer, 
             JwtSettings jwtSettings)
         {
-            _userManager = userManager;
             _localizer = localizer;
             _jwtSettings = jwtSettings;
-        }
-
-        public string GenerateAccessToken(ApplicationUser user, string ipAddress)
-        {
-            return GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
         }
 
         public TokenResponseVm GetToken(ApplicationUser user, string ipAddress)
         {
             var refreshToken = GenerateRefreshToken();
             var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
-            var token = GenerateAccessToken(user, ipAddress);
+            var token = GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
             var response = new TokenResponseVm(token, refreshToken, refreshTokenExpiryTime);
             return response;
         }
 
-        public async Task<TokenResponseVm> GetTokenAsync(TokenRequestDto request, string ipAddress)
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email.Trim().Normalize());
-            if (user == null)
-            {
-                throw new IdentityException(_localizer["identity.usernotfound"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            if (!user.IsActive)
-            {
-                throw new IdentityException(_localizer["identity.usernotactive"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            if (!await _userManager.IsEmailConfirmedAsync(user))
-            {
-                throw new IdentityException(_localizer["identity.emailnotconfirmed"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            bool passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (!passwordValid)
-            {
-                throw new IdentityException(_localizer["identity.invalidcredentials"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            user.RefreshToken = GenerateRefreshToken();
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
-            await _userManager.UpdateAsync(user);
-
-            var token = GenerateAccessToken(user, ipAddress);
-            var response = new TokenResponseVm(token, user.RefreshToken, user.RefreshTokenExpiryTime);
-            return response;
-        }
-
-        public async Task<TokenResponseVm> RefreshTokenAsync(RefreshTokenRequestDto request, string ipAddress)
-        {
-            if (request is null)
-            {
-                throw new IdentityException(_localizer["identity.invalidtoken"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            var userPrincipal = GetPrincipalFromExpiredToken(request.Token);
-            string userEmail = userPrincipal.FindFirstValue(ClaimTypes.Email);
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                throw new IdentityException(_localizer["identity.usernotfound"], statusCode: HttpStatusCode.NotFound);
-            }
-
-            if (user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                throw new IdentityException(_localizer["identity.invalidrefreshtoken"], statusCode: HttpStatusCode.Unauthorized);
-            }
-
-            string token = GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
-            user.RefreshToken = GenerateRefreshToken();
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
-            await _userManager.UpdateAsync(user);
-            var response = new TokenResponseVm(token, user.RefreshToken, user.RefreshTokenExpiryTime);
-            return response;
-        }
-
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
         {
             if (string.IsNullOrEmpty(_jwtSettings.Key))
             {
@@ -122,7 +54,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                 ValidateAudience = true,
                 ValidAudience = _jwtSettings.Audience,
 
-                ValidateLifetime = true,
+                ValidateLifetime = false,
 
                 RoleClaimType = ClaimTypes.Role,
                 NameClaimType = ClaimTypes.Name,
@@ -136,7 +68,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                     SecurityAlgorithms.HmacSha256,
                     StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new IdentityException(_localizer["identity.invalidtoken"], statusCode: HttpStatusCode.Unauthorized);
+                return null;
             }
 
             return principal;
@@ -186,7 +118,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                 new(ClaimConstants.IpAddress, ipAddress),
                 new(ClaimConstants.Tenant, "7064"),
                 new(ClaimConstants.ImageUrl, user.ImageUrl ?? string.Empty),
-                new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty)
+                new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
             };
         }
     }

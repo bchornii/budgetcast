@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Identity.Api", "src\BudgetCast.Identity.Api\BudgetCast.Identity.Api.csproj", "{226621D0-78A5-44C7-B91D-D21FEA246BA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Identity.Api", "src\BudgetCast.Identity.Api\BudgetCast.Identity.Api.csproj", "{226621D0-78A5-44C7-B91D-D21FEA246BA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C63CA143-3C73-4F52-85E7-DD79017C0517}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Web", "..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj", "{E5381956-B331-459E-87DB-61BDDF629191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{226621D0-78A5-44C7-B91D-D21FEA246BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{226621D0-78A5-44C7-B91D-D21FEA246BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{226621D0-78A5-44C7-B91D-D21FEA246BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5381956-B331-459E-87DB-61BDDF629191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5381956-B331-459E-87DB-61BDDF629191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5381956-B331-459E-87DB-61BDDF629191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5381956-B331-459E-87DB-61BDDF629191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E5381956-B331-459E-87DB-61BDDF629191} = {C63CA143-3C73-4F52-85E7-DD79017C0517}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE1CCA22-35DD-42FE-B214-04E602E6BA4C}

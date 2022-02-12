@@ -72,12 +72,12 @@ namespace BudgetCast.Identity.Api.Controllers
             user.LastName = model.SurName;
             await _userManager.UpdateAsync(user);
 
-            var accessToken = _tokenService
-                .GenerateAccessToken(user, HttpContext.GenerateIpAddress());
+            var tokenResponse = _tokenService
+                .GetToken(user, HttpContext.GenerateIpAddress());
 
             return Ok(new UpdateProfileVm
             {
-                AccessToken = accessToken,
+                AccessToken = tokenResponse.Token,
             });
         }
 

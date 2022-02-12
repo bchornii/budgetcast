@@ -1,6 +1,7 @@
 {
     "endpoints": {        
         "expenses": "http://localhost:5234/api",
-        "identity": "https://localhost:44305/api"
+        "identity": "https://localhost:44305/api",
+        "notifications": "https://localhost:44310/hubs"
     }
 }

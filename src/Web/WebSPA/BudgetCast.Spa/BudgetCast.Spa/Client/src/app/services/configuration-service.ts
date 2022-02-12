@@ -36,7 +36,8 @@ export class ConfigurationService {
     private getEndpoints(endpointsConfig: IConfiguration): Endpoints {
       return {
         identity: this.getIdentityEndpoints(endpointsConfig.endpoints.identity),
-        expenses: this.getExpensesEndpoints(endpointsConfig.endpoints.expenses)
+        expenses: this.getExpensesEndpoints(endpointsConfig.endpoints.expenses),
+        notifications: this.getNotificationsEndpoints(endpointsConfig.endpoints.notifications)
       };
     }
 
@@ -70,12 +71,19 @@ export class ConfigurationService {
         signIn: {
           google: `${baseUrl}/signin/google`,
           facebook: `${baseUrl}/signin/facebook`,
-          individual: `${baseUrl}/signin/individual`
+          individual: `${baseUrl}/signin/individual`,
+          refreshAccessToken: `${baseUrl}/signin/refresh`
         },
     
         signOut: {
           all: `${baseUrl}/signout`
         }
       };
+    }
+
+    private getNotificationsEndpoints(baseUrl) {
+      return {
+        all: `${baseUrl}/notifications`
+      }
     }
 }

@@ -10,5 +10,7 @@
         public string Identity { get; set; }
 
         public string Expenses { get; set; }
+
+        public string Notifications { get; set; }
     }
 }
