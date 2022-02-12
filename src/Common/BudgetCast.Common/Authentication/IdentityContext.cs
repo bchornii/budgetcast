@@ -7,7 +7,12 @@
         /// </summary>
         public static readonly IdentityContext NonAuthenticated = new(default!);
 
-        public string UserId { get; }
+        /// <summary>
+        /// Represent identity context which wasn't constructed due to some runtime limitations.
+        /// </summary>
+        public static readonly IdentityContext NotConstructed = new(default!);
+
+        public string UserId { get; private set; }
 
         public long? TenantId { get; private set; }
 
@@ -20,5 +25,8 @@
         {
             TenantId = tenantId;
         }
+
+        public void SetUserId(string userId)
+            => UserId = UserId ?? userId;
     }
 }

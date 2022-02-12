@@ -1,4 +1,5 @@
-﻿using BudgetCast.Notifications.AppHub.Infrastructure.AppSettings;
+﻿using BudgetCast.Notifications.AppHub.Hubs;
+using BudgetCast.Notifications.AppHub.Infrastructure.AppSettings;
 using BudgetCast.Notifications.AppHub.Infrastructure.HubFilters;
 using BudgetCast.Notifications.AppHub.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,50 +41,35 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions
             var signalRSettings = configuration
                 .GetSection(nameof(SignalRSettings)).Get<SignalRSettings>();
 
-            if (!signalRSettings.UseBackplane)
+            if (signalRSettings.UseAzureSignalR)
+            {
+                services
+                    .AddSignalR(hubOptions =>
+                    {
+                        hubOptions.AddFilter(new AuthInformationFilter());
+                        hubOptions.AddFilter(new CurrentTenantFilter());
+                    })
+                    .AddAzureSignalR(options =>
+                    {
+                        options.GracefulShutdown.Mode = Microsoft.Azure.SignalR.GracefulShutdownMode.WaitForClientsClose;
+                        options.GracefulShutdown.Timeout = TimeSpan.FromSeconds(30);
+                        options.GracefulShutdown.Add<NotificationHub>(async context =>
+                        {
+                            await context.Clients.All.SendAsync("exit");
+                        });
+                    });
+
+                logger.Information("SignalR is using Azure SignalR service");
+            }
+            else
             {
                 services
                     .AddSignalR(hubOptions =>
                     {
                         hubOptions.AddFilter(new CurrentTenantFilter());
                     });
-            }
-            else
-            {
-                var backplaneSettings = configuration
-                    .GetSection("SignalRSettings:Backplane")
-                    .Get<SignalRSettings.Backplane>();
 
-                if (backplaneSettings is null)
-                {
-                    throw new InvalidOperationException("Backplane enabled, but no backplane settings in config.");
-                }
-
-                switch (backplaneSettings.Provider)
-                {
-                    case "redis":
-                        
-                        if (backplaneSettings.StringConnection is null)
-                        {
-                            throw new InvalidOperationException("Redis backplane provider: No connectionString configured.");
-                        }
-
-                        services
-                            .AddSignalR(hubOptions =>
-                            {
-                                hubOptions.AddFilter(new CurrentTenantFilter());
-                            })
-                            .AddStackExchangeRedis(backplaneSettings.StringConnection, options =>
-                            {
-                                options.Configuration.AbortOnConnectFail = false;
-                            });
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"SignalR backplane Provider {backplaneSettings.Provider} is not supported.");
-                }
-
-                logger.Information($"SignalR Backplane Current Provider: {backplaneSettings.Provider}.");
+                logger.Information("SignalR is in self-hosting mode");
             }
 
             return services;
@@ -93,41 +79,21 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions
             this IServiceCollection services, 
             IConfiguration configuration)
         {
-            var signalRSettings = configuration.GetSection(nameof(SignalRSettings)).Get<SignalRSettings>();
-            var serviceBusSettings = configuration.GetSection(nameof(ServiceBusSettings)).Get<ServiceBusSettings>();
+            var serviceBusSettings = configuration
+                .GetSection(nameof(ServiceBusSettings)).Get<ServiceBusSettings>();
 
             ILogger logger = Log.ForContext(typeof(Startup));
 
             var hcBuilder = services.AddHealthChecks();
             hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
 
-            if (signalRSettings.UseBackplane)
-            {
-                var backplaneSettings = configuration
-                    .GetSection("SignalRSettings:Backplane")
-                    .Get<SignalRSettings.Backplane>();
-
-                if (backplaneSettings is null)
-                {
-                    throw new InvalidOperationException("Backplane enabled, but no backplane settings in config.");
-                }
-
-                hcBuilder
-                    .AddRedis(
-                        redisConnectionString: backplaneSettings.StringConnection,
-                        name: "signalr-redis-check",
-                        tags: new string[] { "redis" });
-
-                logger.Information("Enabled health checks for SignalR backplane (Redis)");
-            }
-
             if (serviceBusSettings.AzureServiceBusEnabled)
             {
                 hcBuilder
                     .AddAzureServiceBusTopic(
                         serviceBusSettings.EventBusConnection,
-                        topicName: "eshop_event_bus",
-                        name: "signalr-servicebus-check",
+                        topicName: "notifications",
+                        name: "notifications-servicebus-check",
                         tags: new string[] { "servicebus" });
 
                 logger.Information("Enabled health checks for Azure Service Bus");

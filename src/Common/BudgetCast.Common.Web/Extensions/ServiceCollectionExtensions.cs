@@ -2,7 +2,6 @@
 using BudgetCast.Common.Application.Behavior.Logging;
 using BudgetCast.Common.Application.Behavior.Validation;
 using BudgetCast.Common.Authentication;
-using BudgetCast.Common.Web.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -48,10 +47,16 @@ namespace BudgetCast.Common.Web.Extensions
         public static IServiceCollection AddIdentityContext(this IServiceCollection services)
         {
             services.AddScoped<IIdentityContext, IdentityContext>(provider =>
-            {
-                var http = provider.GetRequiredService<IHttpContextAccessor>();
-                var principal = http.HttpContext.User;
+            {                
+                var httpCtxAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+                var httpContext = httpCtxAccessor.HttpContext;
 
+                if (httpContext is null)
+                {
+                    return IdentityContext.NotConstructed;
+                }
+
+                var principal = httpCtxAccessor.HttpContext.User;
                 if (!principal.IsAnyIdentityAuthenticated())
                 {
                     return IdentityContext.NonAuthenticated;
@@ -68,7 +73,7 @@ namespace BudgetCast.Common.Web.Extensions
             return services;
         }
 
-        private static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
+        public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
             => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
     }
 }

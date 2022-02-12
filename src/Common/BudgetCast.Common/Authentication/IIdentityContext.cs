@@ -18,5 +18,12 @@
         /// </summary>
         /// <param name="tenantId"></param>
         void SetCurrentTenant(long tenantId);
+
+        /// <summary>
+        /// Sets user identifier but only in case it wasn't set during initial 
+        /// <see cref="IdentityContext"/> construction.
+        /// </summary>
+        /// <param name="userId"></param>
+        void SetUserId(string userId);
     }
 }
