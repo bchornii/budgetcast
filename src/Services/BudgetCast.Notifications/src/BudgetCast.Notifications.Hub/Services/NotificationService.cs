@@ -27,7 +27,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .All
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task BroadcastExceptMessageAsync(
@@ -38,7 +38,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .AllExcept(excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         #endregion RootTenantMethods
@@ -51,7 +51,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .Group($"GroupTenant-{tenant}")
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageExceptAsync(
@@ -63,7 +63,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .GroupExcept($"GroupTenant-{tenant}", excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupAsync(
@@ -74,7 +74,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .Group(group)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupsAsync(
@@ -85,7 +85,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .Groups(groupNames)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToGroupExceptAsync(
@@ -97,7 +97,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .GroupExcept(group, excludedConnectionIds)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToUserAsync(
@@ -108,7 +108,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .User(userId)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
 
         public async Task SendMessageToUsersAsync(
@@ -119,7 +119,7 @@ namespace BudgetCast.Notifications.AppHub.Services
             await _hubContext
                 .Clients
                 .Users(userIds)
-                .SendAsync(notification.MessageType, notification, cancellationToken: cancellationToken);
+                .SendAsync(notification.Target, notification, cancellationToken: cancellationToken);
         }
     }
 }
