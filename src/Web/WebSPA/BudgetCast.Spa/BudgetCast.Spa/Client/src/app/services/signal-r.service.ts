@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { AccessTokenItem } from '../util/constants/auth-constants';
 import { AuthService } from "./auth.service";
-import { LocalStorageService } from './local-storage.service';
+import { StorageService } from './storage.service';
 import { signalRConnectionOptions } from './signalRConnectionOptions';
 
 export class SignalRService {
@@ -15,7 +15,7 @@ export class SignalRService {
   private reconnectingInProgress = false;
   private authRenewed = false;
 
-  constructor(protected localStorage: LocalStorageService,
+  constructor(protected storageService: StorageService,
               protected toastrService: ToastrService,
               protected authService: AuthService) {
   }
@@ -40,13 +40,13 @@ export class SignalRService {
           // expired, so it worth to renew it before proceeding.
           if(this.reconnectingInProgress && !this.authRenewed) {            
             this.authRenewed = true;
-            const token = this.localStorage.getItem(AccessTokenItem);              
+            const token = this.storageService.getItem(AccessTokenItem);              
             await this.authService
               .refreshAccessToken({ accessToken: token})
               .toPromise();
           }
 
-          return this.localStorage.getItem(AccessTokenItem)
+          return this.storageService.getItem(AccessTokenItem)
         }
       })
       .configureLogging(validatedLogLevel);

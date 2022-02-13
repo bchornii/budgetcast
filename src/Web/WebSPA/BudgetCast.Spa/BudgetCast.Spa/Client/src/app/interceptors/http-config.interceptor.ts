@@ -5,7 +5,7 @@ import { catchError, filter, finalize, switchMap, take, tap } from 'rxjs/operato
 import { ResponseStatus } from 'src/app/util/constants/response-status';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../services/local-storage.service';
+import { StorageService } from '../services/storage.service';
 import { AccessTokenItem } from '../util/constants/auth-constants';
 import { BehaviorSubject, of } from 'rxjs';
 
@@ -20,7 +20,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService,
               private router: Router,
               private toastr: ToastrService,
-              private localStorage: LocalStorageService) { }
+              private storageService: StorageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
@@ -55,7 +55,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                 this.isRefreshTokenInProgress = true;
                 this.accessTokenSubject.next(null);
 
-                const token: string = this.localStorage.getItem(AccessTokenItem);
+                const token: string = this.storageService.getItem(AccessTokenItem);
 
                 if(token) {
                   return this.authService.refreshAccessToken({ accessToken: token}).pipe(
@@ -79,7 +79,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
   private addHeaders(req: HttpRequest<any>): HttpRequest<any> {
 
-    const token: string = this.localStorage.getItem(AccessTokenItem);
+    const token: string = this.storageService.getItem(AccessTokenItem);
 
     if (token) {
       req = req.clone({

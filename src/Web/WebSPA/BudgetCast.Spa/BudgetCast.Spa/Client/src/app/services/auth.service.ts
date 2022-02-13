@@ -11,7 +11,7 @@ import { ResetPasswordDto } from '../models/reset-password-dto';
 import { BaseService } from './base-data.service';
 import { ConfigurationService } from './configuration-service';
 import { CookieService } from 'ngx-cookie-service';
-import { LocalStorageService } from './local-storage.service';
+import { StorageService } from './storage.service';
 import { AccessTokenItem, XToken } from '../util/constants/auth-constants';
 import { UserLoginVm } from '../models/user-login-vm';
 import { RefreshAccessTokenVm } from '../models/refresh-access-token-vm';
@@ -35,7 +35,7 @@ export class AuthService extends BaseService {
               private httpClient: HttpClient,
               private configService: ConfigurationService,
               private cookieService: CookieService,
-              private localStorage: LocalStorageService) {
+              private storageService: StorageService) {
     super();
   }
 
@@ -45,7 +45,7 @@ export class AuthService extends BaseService {
 
     if (xToken) {
       this.cookieService.delete(XToken);
-      this.localStorage.setItem(AccessTokenItem, xToken);
+      this.storageService.setItem(AccessTokenItem, xToken);
     }
 
     return of(xToken);
@@ -57,7 +57,7 @@ export class AuthService extends BaseService {
     this.cookieService.delete(XToken);
 
     // update value in local storage for futher usage
-    this.localStorage.setItem(AccessTokenItem, accessToken);
+    this.storageService.setItem(AccessTokenItem, accessToken);
 
     return of(accessToken);
   }
@@ -70,7 +70,7 @@ export class AuthService extends BaseService {
   }
 
   invalidateUserAuthentication(): void {
-    this.localStorage.removeItem(AccessTokenItem);
+    this.storageService.removeItem(AccessTokenItem);
     this.userIdentitySubject.next(this.invalidUserIdentity);
   }
 

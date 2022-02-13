@@ -5,7 +5,7 @@ import { BasicNotification } from '../models/notifications/basic-notification-vm
 import { NotificationType } from '../models/notifications/notification-type-vm';
 import { AuthService } from './auth.service';
 import { ConfigurationService } from './configuration-service';
-import { LocalStorageService } from './local-storage.service';
+import { StorageService } from './storage.service';
 import { SignalRService } from './signal-r.service';
 import { signalRConnectionOptions } from "./signalRConnectionOptions";
 
@@ -17,10 +17,10 @@ export class NotificationsService extends SignalRService {
   private _connection: signalR.HubConnection;
 
   constructor(private configurationService: ConfigurationService,
-              localStorage: LocalStorageService,
+              storageService: StorageService,
               toastrService: ToastrService,
               authService: AuthService) { 
-    super(localStorage, toastrService, authService);
+    super(storageService, toastrService, authService);
   }
 
   initializeConnection(): NotificationsService {

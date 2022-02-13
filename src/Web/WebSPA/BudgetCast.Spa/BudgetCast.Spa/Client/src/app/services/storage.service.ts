@@ -4,23 +4,25 @@ import { BaseService } from './base-data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class LocalStorageService extends BaseService {
+export class StorageService {
+
+  private storage: any;
 
   constructor() { 
-    super();
+    this.storage = localStorage;
   }
 
   public setItem(key: string, value: string) {
-    localStorage.setItem(key, value);
+    this.storage.setItem(key, value);
   }
     
   public getItem(key: string){ 
-    return localStorage.getItem(key)
+    return this.storage.getItem(key)
   }
   public removeItem(key:string) {
-    localStorage.removeItem(key);
+    this.storage.removeItem(key);
   }
   public clear(){
-    localStorage.clear(); 
+    this.storage.clear(); 
   }
 }
