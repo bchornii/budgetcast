@@ -1,14 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { SpinnerComponent } from 'src/app/modules/shared/components/spinner/spinner.component';
 import { finalize, concatMap, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { CampaignService } from '../../services/campaign.service';
-import { Subject, forkJoin } from 'rxjs';
+import { Subject, forkJoin, Observable, Subscription } from 'rxjs';
 import { TotalsPerCampaignVm } from '../models/totals-per-campaign-vm';
 import { CampaignTotalsComponent } from '../../components/campaign-totals/campaign-totals.component';
 import { Router } from '@angular/router';
 import { ExpenseVm } from '../models/expense-vm';
 import { ExpensesService } from '../../services/expenses.service';
+import { ExpensesAppEvent } from '../../events/expenses-event';
+import { ChannelsService } from 'src/app/channels/channels.service';
+import { ChannelTypes } from 'src/app/channels/channel-types';
 
 interface KeyValue<TKey, TValue> {
   key: TKey;
@@ -20,10 +24,13 @@ interface KeyValue<TKey, TValue> {
   templateUrl: './expense-dashboard.component.html',
   styleUrls: ['./expense-dashboard.component.scss']
 })
-export class ExpenseDashboardComponent implements OnInit {
+export class ExpenseDashboardComponent implements OnInit, OnDestroy {
 
   private catSelectionSubj = new Subject<string>();
   catSelection$ = this.catSelectionSubj.asObservable();
+
+  private expensesChannel$: Observable<ExpensesAppEvent>;
+  private expensesSubscriptions: Subscription;
 
   page = 1;
   pageSize = 10;
@@ -56,14 +63,14 @@ export class ExpenseDashboardComponent implements OnInit {
   constructor(private campaignService: CampaignService,
               private expensesService: ExpensesService,
               private matDialog: MatDialog,
-              private router: Router) { }
+              private router: Router,
+              private channelsService: ChannelsService) { }
 
   ngOnInit() {
     const matcher = this.pageSizeMediaMatchers.find(m => m.key.matches);
     this.pageSize = matcher ? matcher.value : this.pageSizeOptions[1];
 
     this.spinner.show();
-
     this.campaignService.getAllCampaigns().pipe(
       tap(campaigns => {
         this.campaignOptions = campaigns ?
@@ -78,11 +85,24 @@ export class ExpenseDashboardComponent implements OnInit {
       ])),
 
       finalize(() => this.spinner.hide())
-    ).subscribe(([pageResult, totalsPerCampaign]) => {
+    )
+    .subscribe(([pageResult, totalsPerCampaign]) => {
         this.total = pageResult.totalCount;
         this.items = pageResult.items;
         this.totalsPerCampaign = totalsPerCampaign;
+    });
+
+    this.expensesChannel$ = this.channelsService.channels$
+      .get(ChannelTypes.Expenses);
+
+    this.expensesSubscriptions = this.expensesChannel$
+      .subscribe(appEvent => {
+        console.log('Applicant event received: ' + JSON.stringify(appEvent));
       });
+  }
+
+  ngOnDestroy(): void {
+    this.expensesSubscriptions.unsubscribe();
   }
 
   onMore(receiptId: string) {

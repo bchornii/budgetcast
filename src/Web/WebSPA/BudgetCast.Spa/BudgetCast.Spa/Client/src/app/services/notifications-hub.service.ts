@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { ToastrService } from 'ngx-toastr';
-import { BasicNotification } from '../models/notifications/basic-notification-vm';
 import { NotificationType } from '../models/notifications/notification-type-vm';
 import { AuthService } from './auth.service';
 import { ConfigurationService } from './configuration-service';
 import { StorageService } from './storage.service';
 import { SignalRService } from './signal-r.service';
 import { signalRConnectionOptions } from "./signalRConnectionOptions";
+import { NotificationBase } from '../models/notifications/notification-base.vm';
+import { GeneralNotification } from '../models/notifications/general-notification-vm';
+import { ChannelsService } from '../channels/channels.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class NotificationsService extends SignalRService {
   private _connection: signalR.HubConnection;
 
   constructor(private configurationService: ConfigurationService,
+              private channelsService: ChannelsService,
               storageService: StorageService,
               toastrService: ToastrService,
               authService: AuthService) { 
@@ -47,12 +50,16 @@ export class NotificationsService extends SignalRService {
   }
 
   private addNotificationsListener() {
-    this._connection.on("BasicNotification", (notification: BasicNotification) => {
-      this.showNotification(notification.type, notification.message);
+    this._connection.on("GeneralNotification", (notification: GeneralNotification) => {
+      this.showNotification(notification);
+      this.channelsService.write(notification);      
     });
   }
 
-  private showNotification(type: NotificationType, message: string, title: string = 'Notification') {
+  private showNotification(notification: NotificationBase, title: string = 'Notification') {
+
+    let { type, message } = notification;
+
     if(type == NotificationType.Success){
       this.toastrService.success(message, title);
     }
