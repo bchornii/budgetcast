@@ -2,13 +2,18 @@
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
-    public record Tag : ValueObject
+    public class Tag : ValueObject
     {
         public string Name { get; init; }
 
         public Tag()
         {
             Name = default!;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Name;
         }
     }
 }
