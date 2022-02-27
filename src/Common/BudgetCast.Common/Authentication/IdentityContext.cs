@@ -2,19 +2,13 @@
 {
     public sealed class IdentityContext : IIdentityContext
     {
-        /// <summary>
-        /// Represent non-authenticated user identity context.
-        /// </summary>
-        public static readonly IdentityContext NonAuthenticated = new(default!);
-
-        /// <summary>
-        /// Represent identity context which wasn't constructed due to some runtime limitations.
-        /// </summary>
-        public static readonly IdentityContext NotConstructed = new(default!);
-
         public string UserId { get; private set; }
 
         public long? TenantId { get; private set; }
+
+        public bool HasAssociatedTenant => TenantId.HasValue;
+
+        public bool HasAssociatedUser => string.IsNullOrWhiteSpace(UserId);
 
         public IdentityContext(string userId)
         {
@@ -27,6 +21,11 @@
         }
 
         public void SetUserId(string userId)
-            => UserId = UserId ?? userId;
+        {
+            UserId = UserId ?? userId;
+        }
+
+        public static IdentityContext GetNewEmpty()
+            => new(default!);
     }
 }

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BudgetCast.Common.Messaging.Abstractions\BudgetCast.Common.Messaging.Abstractions.csproj" />
+    <ProjectReference Include="..\BudgetCast.Common\BudgetCast.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
+using BudgetCast.Common.Messaging.AzServiceBus.Extensions;
 using BudgetCast.Notifications.AppHub;
+using BudgetCast.Notifications.AppHub.EventHandlers;
 using Serilog;
 using Serilog.Events;
 
@@ -33,6 +35,15 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .UseSerilog((ctx, services, configuration) =>
                 configuration.ReadFrom.Configuration(ctx.Configuration))
+            .UseAzServiceBus(
+                registerHandlers: services =>
+                {
+                    services.AddScoped<TestIntegrationEventHandler>();
+                },
+                subscribeToEvents: processor =>
+                {
+                    processor.SubscribeTo<TestIntegrationEvent, TestIntegrationEventHandler>();
+                })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

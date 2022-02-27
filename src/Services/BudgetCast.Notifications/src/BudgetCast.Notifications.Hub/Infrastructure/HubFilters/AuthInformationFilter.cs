@@ -34,7 +34,7 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.HubFilters
                 .GetRequiredService<IIdentityContext>();
             var httpContext = lifetimeContext.Context.GetHttpContext();
 
-            if (identityContext == IdentityContext.NotConstructed && httpContext is not null)
+            if (!identityContext.HasAssociatedUser && httpContext is not null)
             {
                 var principal = httpContext.User;
                 if (!principal.IsAnyIdentityAuthenticated())

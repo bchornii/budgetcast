@@ -53,13 +53,13 @@ namespace BudgetCast.Common.Web.Extensions
 
                 if (httpContext is null)
                 {
-                    return IdentityContext.NotConstructed;
+                    return IdentityContext.GetNewEmpty();
                 }
 
                 var principal = httpCtxAccessor.HttpContext.User;
                 if (!principal.IsAnyIdentityAuthenticated())
                 {
-                    return IdentityContext.NonAuthenticated;
+                    return IdentityContext.GetNewEmpty();
                 }
 
                 var userId = principal.Claims
