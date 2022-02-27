@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Web", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Messaging.Abstractions", "..\..\Common\BudgetCast.Common.Messaging.Abstractions\BudgetCast.Common.Messaging.Abstractions.csproj", "{8D4500E0-78F5-4909-BA84-71DE1625B37D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Messaging.AzServiceBus", "..\..\Common\BudgetCast.Common.Messaging.AzServiceBus\BudgetCast.Common.Messaging.AzServiceBus.csproj", "{910DBF0C-F90A-44A5-8B2E-FEC73C6FB2D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common.Messaging.Azure.ServiceBus", "..\..\Common\BudgetCast.Common.Messaging.Azure.ServiceBus\BudgetCast.Common.Messaging.Azure.ServiceBus.csproj", "{910DBF0C-F90A-44A5-8B2E-FEC73C6FB2D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCast.Common", "..\..\Common\BudgetCast.Common\BudgetCast.Common.csproj", "{8025D14A-1C04-4567-BAC8-9E8D4553F0A7}"
 EndProject

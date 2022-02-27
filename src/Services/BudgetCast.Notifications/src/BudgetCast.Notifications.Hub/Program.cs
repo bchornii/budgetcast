@@ -1,4 +1,4 @@
-using BudgetCast.Common.Messaging.AzServiceBus.Extensions;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using BudgetCast.Notifications.AppHub;
 using BudgetCast.Notifications.AppHub.EventHandlers;
 using Serilog;
