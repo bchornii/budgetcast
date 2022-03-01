@@ -3,7 +3,7 @@ using BudgetCast.Common.Messaging.Abstractions.Events;
 
 namespace BudgetCast.Notifications.AppHub.EventHandlers;
 
-public class TestIntegrationEventHandler : IEventHandler<IntegrationEvent>
+public class TestIntegrationEventHandler : IEventHandler<TestIntegrationEvent>
 {
     private readonly IIdentityContext _identityContext;
     private readonly ILogger<TestIntegrationEventHandler> _logger;
@@ -14,7 +14,7 @@ public class TestIntegrationEventHandler : IEventHandler<IntegrationEvent>
         _logger = logger;
     }
     
-    public Task Handle(IntegrationEvent @event, CancellationToken cancellationToken)
+    public Task Handle(TestIntegrationEvent @event, CancellationToken cancellationToken)
     {
         var userId = _identityContext.UserId;
         var tenantId = _identityContext.TenantId;
