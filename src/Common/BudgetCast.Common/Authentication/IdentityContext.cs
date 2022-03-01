@@ -8,7 +8,7 @@
 
         public bool HasAssociatedTenant => TenantId.HasValue;
 
-        public bool HasAssociatedUser => string.IsNullOrWhiteSpace(UserId);
+        public bool HasAssociatedUser => !string.IsNullOrWhiteSpace(UserId);
 
         public IdentityContext(string userId)
         {

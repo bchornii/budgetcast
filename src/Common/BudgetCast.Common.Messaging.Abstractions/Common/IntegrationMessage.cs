@@ -44,13 +44,13 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
         /// </summary>
         /// <param name="tenantId"></param>
         public void SetCurrentTenant(long tenantId) => 
-            Metadata[nameof(TenantIdMetadataKey)] = tenantId.ToString();
+            Metadata[TenantIdMetadataKey] = tenantId.ToString();
 
         /// <summary>
         /// Sets user identifier.
         /// </summary>
         /// <param name="userId"></param>
         public void SetUserId(string userId) 
-            => Metadata[nameof(UserIdMetadataKey)] = userId;
+            => Metadata[UserIdMetadataKey] = userId;
     }
 }

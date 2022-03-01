@@ -52,21 +52,21 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common
                 }
 
                 var eventType = _subscriptionManager.GetEventTypeByName(eventName);
-                var messagePreProcessor = scopedServiceProvider.GetRequiredService<IMessageSerializer>();
-                var integrationEvent = messagePreProcessor.UnpackFromJson(messageData, eventType);
+                var messageSerializer = scopedServiceProvider.GetRequiredService<IMessageSerializer>();
+                var integrationEvent = messageSerializer.UnpackFromJson(messageData, eventType);
 
                 var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
                 var handleMethod = handlerType.GetMethod(nameof(IEventHandler<IntegrationEvent>.Handle));
 
                 _logger.LogInformationIfEnabled(
-                    "Started execution of pre handling steps for {EventName}",
+                    "Started execution of pre-processing steps for {EventName}",
                     eventName);
-                await ExecutePreHandlingSteps(
+                await ExecutePreProcessingSteps(
                     scopedServiceProvider,
                     integrationEvent, 
                     cancellationToken);
                 _logger.LogInformationIfEnabled(
-                    "Finished execution of pre handling steps for {EventName}",
+                    "Finished execution of pre-processing steps for {EventName}",
                     eventName);
 
                 _logger.LogInformationIfEnabled(
@@ -86,14 +86,14 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common
                     eventName);
                 
                 _logger.LogInformationIfEnabled(
-                    "Started execution of post handling steps for {EventName}",
+                    "Started execution of post-processing steps for {EventName}",
                     eventName);
-                await ExecutePostHandlingSteps(
+                await ExecutePostProcessingSteps(
                     scopedServiceProvider, 
                     integrationEvent, 
                     cancellationToken);
                 _logger.LogInformationIfEnabled(
-                    "Finished execution of post handling steps for {EventName}",
+                    "Finished execution of post-processing steps for {EventName}",
                     eventName);
             }
             
@@ -107,23 +107,32 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common
         /// <param name="integrationMessage">Received integration message - event or command.</param>
         /// <param name="cancellationToken">Cancellation token for cooperative cancellation.</param>
         /// <returns></returns>
-        private async Task ExecutePreHandlingSteps(
+        private async Task ExecutePreProcessingSteps(
             IServiceProvider serviceProvider,
             object? integrationMessage, 
             CancellationToken cancellationToken)
         {
-            var preHandlingSteps = serviceProvider
+            var preProcessingSteps = serviceProvider
                 .GetServices<IMessagePreProcessingStep>()
                 .ToArray();
 
             _logger.LogInformationIfEnabled(
-                "Resolved {PreHandlingStepsTotal} pre handling steps",
-                preHandlingSteps.Length);
+                "Resolved {MessagePreProcessingStepsTotal} pre-processing steps",
+                preProcessingSteps.Length);
             
-            foreach (var step in preHandlingSteps.OrEmpty())
+            foreach (var step in preProcessingSteps.OrEmpty())
             {
                 var message = integrationMessage as IntegrationMessage;
+
+                _logger.LogInformationIfEnabled(
+                    "Started execution of {MessagePreProcessingStepName} pre-processing step",
+                    step.GetType().Name);
+
                 await step.Execute(message!, cancellationToken);
+
+                _logger.LogInformationIfEnabled(
+                    "Finished execution of {MessagePreProcessingStepName} pre-processing step",
+                    step.GetType().Name);
             }
         }
 
@@ -134,23 +143,32 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common
         /// <param name="integrationMessage">Received integration message - event or command.</param>
         /// <param name="cancellationToken">Cancellation token for cooperative cancellation.</param>
         /// <returns></returns>
-        private async Task ExecutePostHandlingSteps(
+        private async Task ExecutePostProcessingSteps(
             IServiceProvider serviceProvider, 
             object? integrationMessage, 
             CancellationToken cancellationToken)
         {
-            var postHandlingSteps = serviceProvider
+            var postProcessingSteps = serviceProvider
                 .GetServices<IMessagePostProcessingStep>()
                 .ToArray();
 
             _logger.LogInformationIfEnabled(
-                "Resolved {PostHandlingStepsTotal} post handling steps",
-                postHandlingSteps.Length);
+                "Resolved {PostProcessingStepsTotal} post-processing steps",
+                postProcessingSteps.Length);
             
-            foreach (var step in postHandlingSteps.OrEmpty())
+            foreach (var step in postProcessingSteps.OrEmpty())
             {
                 var message = integrationMessage as IntegrationMessage;
+
+                _logger.LogInformationIfEnabled(
+                    "Started execution of {MessagePreProcessingStepName} post-processing step",
+                    step.GetType().Name);
+
                 await step.Execute(message!, cancellationToken);
+
+                _logger.LogInformationIfEnabled(
+                    "Finished execution of {MessagePreProcessingStepName} post-processing step",
+                    step.GetType().Name);
             }
         }
     }

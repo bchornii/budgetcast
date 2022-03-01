@@ -37,7 +37,7 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
             MaxConcurrentCalls = 1,
         };
         _processor = eventBusClient.Client
-            .CreatePluginProcessor(TopicName, subscriptionClientName, options);
+            .CreatePluginProcessor(topicName: TopicName, subscriptionName: subscriptionClientName, options);
     }
 
     public async Task Start(CancellationToken cancellationToken)
@@ -54,7 +54,8 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
             try
             {
                 _logger.LogInformationIfEnabled(
-                    "Executing message {MessageId} handling pipeline", args.Message.MessageId);
+                    "Started execution of message processing pipeline for message with id {MessageId}", 
+                    args.Message.MessageId);
                 
                 var isHandled = await _processingPipeline
                     .Handle(eventName, messageData, args.CancellationToken);
@@ -62,29 +63,34 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
                 if (isHandled)
                 {
                     _logger.LogInformationIfEnabled(
-                        "Message {MessageId} handling pipeline executed successfully",
+                        "Finished execution of message processing pipeline for message with id {MessageId}",
                         args.Message.MessageId);
-                    
+
+                    _logger.LogInformationIfEnabled("Makring message with id {MessageId} as completed", args.Message.MessageId);
+
                     await args.CompleteMessageAsync(args.Message, args.CancellationToken);
                     
-                    _logger.LogInformationIfEnabled("Message {MessageId} marked as completed", args.Message.MessageId);
+                    _logger.LogInformationIfEnabled("Marked message with id {MessageId} as completed", args.Message.MessageId);
                 }
-
-                if (!isHandled && args.Message.DeliveryCount > MaxDeliveryCount)
+                else
                 {
-                    _logger.LogWarning(
-                        "Message {MessageId} handling failed and delivery count max value reached", 
+                    _logger.LogError(
+                        "Finished execution of message processing pipeline for message with id {MessageId} with error",
                         args.Message.MessageId);
-                    
-                    await args.DeadLetterMessageAsync(
+
+                    if (args.Message.DeliveryCount > MaxDeliveryCount)
+                    {
+                        await args.DeadLetterMessageAsync(
                         args.Message,
                         deadLetterReason: "MaxAppDeliveryCount",
                         deadLetterErrorDescription: "Application reached max preconfigured delivery count.",
                         cancellationToken: args.CancellationToken);
-                    
-                    _logger.LogWarning(
-                        "Message {MessageId} dead lettered", 
-                        args.Message.MessageId);
+
+                        _logger.LogWarning(
+                            "Message {MessageId} dead lettered due to reaching max delivery count of {MaxDeliveryCount}",
+                            args.Message.MessageId,
+                            MaxDeliveryCount);
+                    }
                 }
             }
             catch (Exception ex)
@@ -135,9 +141,7 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
         where THandler : IEventHandler<TEvent>
     {
         var eventName = GetEventName<TEvent>();
-
         _subscriptionManager.AddSubscription<TEvent, THandler>();
-        _logger.LogInformation("Subscribed {EventHandler} to {EventName}", typeof(THandler), eventName);
 
         return Task.CompletedTask;
     }
@@ -147,9 +151,7 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
         where THandler : IEventHandler<TEvent>
     {
         var eventName = GetEventName<TEvent>();
-
         _subscriptionManager.RemoveSubscription<TEvent, THandler>();
-        _logger.LogInformation("Unsubscribed {EventHandler} from event {EventName}", typeof(THandler), eventName);
 
         return Task.CompletedTask;
     }

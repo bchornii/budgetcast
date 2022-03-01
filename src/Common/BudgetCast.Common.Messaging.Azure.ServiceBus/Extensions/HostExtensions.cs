@@ -65,8 +65,8 @@ public static class HostExtensions
             });
             
             services.AddSingleton<IMessageProcessingPipeline, MessageProcessingPipeline>();
-            services.TryAddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
-            services.TryAddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();
+            services.AddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
+            services.AddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();
 
             services.AddHostedService<EventsProcessorHostedService>();
 

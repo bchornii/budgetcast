@@ -1,4 +1,6 @@
 ﻿using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Notifications.AppHub.EventHandlers;
 using BudgetCast.Notifications.AppHub.Models;
 using BudgetCast.Notifications.AppHub.Services;
 
@@ -73,7 +75,7 @@ namespace BudgetCast.Notifications.AppHub.Middlewares
                 {
                     var userId = identityCtx.UserId;
                     await notificationService.SendMessageToUserAsync(
-                        userId: userId, 
+                        userId: userId,
                         notification: new GeneralNotification
                         {
                             Type = NotificationType.Success,
@@ -81,6 +83,15 @@ namespace BudgetCast.Notifications.AppHub.Middlewares
                         }, cancellationToken: CancellationToken.None);
 
                     await ctx.Response.WriteAsync("Message sent");
+                }
+                else if (ctx.Request.Path.StartsWithSegments("/api/test-event"))
+                {
+                    var eventPublisher = ctx.RequestServices
+                        .GetRequiredService<IEventsPublisher>();
+
+                    var id = Guid.NewGuid();
+                    await eventPublisher
+                        .Publish(new TestIntegrationEvent(id), CancellationToken.None);
                 }
                 else
                 {

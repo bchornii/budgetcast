@@ -3,7 +3,7 @@ using BudgetCast.Common.Messaging.Abstractions.Common;
 
 namespace BudgetCast.Common.Messaging.Abstractions.Events
 {
-    public class IntegrationEvent : IntegrationMessage
+    public abstract class IntegrationEvent : IntegrationMessage
     {
         public IntegrationEvent()
         {
@@ -12,7 +12,7 @@ namespace BudgetCast.Common.Messaging.Abstractions.Events
         }
 
         [JsonConstructor]
-        public IntegrationEvent(Guid id, DateTime createdAt)
+        protected IntegrationEvent(Guid id, DateTime createdAt)
         {
             Id = id;
             CreatedAt = createdAt;

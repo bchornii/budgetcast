@@ -8,31 +8,21 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
 {
     public class EventsProcessorHostedService : IHostedService
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<EventsProcessorHostedService> _logger;
+        private readonly IEventsProcessor _eventsProcessor;
 
-        public EventsProcessorHostedService(IServiceProvider serviceProvider, ILogger<EventsProcessorHostedService> logger)
+        public EventsProcessorHostedService(IEventsProcessor eventsProcessor)
         {
-            _serviceProvider = serviceProvider;
-            _logger = logger;
+            _eventsProcessor = eventsProcessor;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var eventBus = _serviceProvider.GetRequiredService<IEventsProcessor>();
-            await eventBus.Start(cancellationToken);
-
-            _logger.LogInformationIfEnabled(
-                "Started event processing at {StartedAt}", DateTime.UtcNow);
+            await _eventsProcessor.Start(cancellationToken);
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            var eventBus = _serviceProvider.GetRequiredService<IEventsProcessor>();
-            await eventBus.Stop(cancellationToken);
-            
-            _logger.LogInformationIfEnabled(
-                "Stopped event processing at {StartedAt}", DateTime.UtcNow);
+            await _eventsProcessor.Stop(cancellationToken);
         }
     }
 }

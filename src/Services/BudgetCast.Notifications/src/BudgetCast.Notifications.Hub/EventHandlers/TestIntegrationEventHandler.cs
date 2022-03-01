@@ -19,7 +19,7 @@ public class TestIntegrationEventHandler : IEventHandler<IntegrationEvent>
         var userId = _identityContext.UserId;
         var tenantId = _identityContext.TenantId;
 
-        _logger.LogInformation("Received event: {@Event}", @event);
+        _logger.LogInformation("Handled event: {@Event} for TenantId={TenantId} and UserId={UserId}", @event, tenantId, userId);
         
         return Task.CompletedTask;
     }

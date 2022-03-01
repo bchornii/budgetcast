@@ -92,7 +92,7 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions
                 hcBuilder
                     .AddAzureServiceBusTopic(
                         serviceBusSettings.EventBusConnection,
-                        topicName: "notifications",
+                        topicName: "budgetcast_events_topic",
                         name: "notifications-servicebus-check",
                         tags: new string[] { "servicebus" });
 
