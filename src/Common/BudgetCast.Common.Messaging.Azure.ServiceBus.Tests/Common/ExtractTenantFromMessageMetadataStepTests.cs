@@ -13,7 +13,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Common;
 
 public class ExtractTenantFromMessageMetadataStepTests
 {
-    private ExtractTenantFromMessageMetadataStepFixture _fixture;
+    private readonly ExtractTenantFromMessageMetadataStepFixture _fixture;
 
     public ExtractTenantFromMessageMetadataStepTests()
     {

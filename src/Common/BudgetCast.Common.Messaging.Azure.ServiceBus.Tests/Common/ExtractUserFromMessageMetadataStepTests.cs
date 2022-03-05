@@ -12,7 +12,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Common;
 
 public class ExtractUserFromMessageMetadataStepTests
 {
-    private ExtractUserFromMessageMetadataStepFixture _fixture;
+    private readonly ExtractUserFromMessageMetadataStepFixture _fixture;
 
     public ExtractUserFromMessageMetadataStepTests()
     {

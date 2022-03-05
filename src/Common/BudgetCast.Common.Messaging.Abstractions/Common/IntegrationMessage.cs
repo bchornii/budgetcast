@@ -4,8 +4,8 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
 {
     public abstract class IntegrationMessage
     {
-        private const string UserIdMetadataKey = "UserId";
-        private const string TenantIdMetadataKey = "TenantId";
+        public const string UserIdMetadataKey = "UserId";
+        public const string TenantIdMetadataKey = "TenantId";
 
         [JsonInclude]
         public Guid Id { get; protected init; }
