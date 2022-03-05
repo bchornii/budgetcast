@@ -4,25 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
+namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
+
+// TODO: unit test
+public class EventsProcessorHostedService : IHostedService
 {
-    public class EventsProcessorHostedService : IHostedService
-    {
-        private readonly IEventsProcessor _eventsProcessor;
+    private readonly IEventsProcessor _eventsProcessor;
 
-        public EventsProcessorHostedService(IEventsProcessor eventsProcessor)
-        {
-            _eventsProcessor = eventsProcessor;
-        }
+    public EventsProcessorHostedService(IEventsProcessor eventsProcessor) 
+        => _eventsProcessor = eventsProcessor;
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await _eventsProcessor.Start(cancellationToken);
-        }
+    public async Task StartAsync(CancellationToken cancellationToken) 
+        => await _eventsProcessor.Start(cancellationToken);
 
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _eventsProcessor.Stop(cancellationToken);
-        }
-    }
+    public async Task StopAsync(CancellationToken cancellationToken) 
+        => await _eventsProcessor.Stop(cancellationToken);
 }

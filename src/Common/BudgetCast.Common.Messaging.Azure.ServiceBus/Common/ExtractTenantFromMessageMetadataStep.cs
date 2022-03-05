@@ -3,37 +3,36 @@ using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using Microsoft.Extensions.Logging;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common
+namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
+
+public class ExtractTenantFromMessageMetadataStep :
+    IMessagePreProcessingStep
 {
-    public class ExtractTenantFromMessageMetadataStep :
-        IMessagePreProcessingStep
+    private readonly IIdentityContext _identityContext;
+    private readonly ILogger<ExtractTenantFromMessageMetadataStep> _logger;
+
+    public ExtractTenantFromMessageMetadataStep(
+        IIdentityContext identityContext,
+        ILogger<ExtractTenantFromMessageMetadataStep> logger)
     {
-        private readonly IIdentityContext _identityContext;
-        private readonly ILogger<ExtractTenantFromMessageMetadataStep> _logger;
+        _identityContext = identityContext;
+        _logger = logger;
+    }
 
-        public ExtractTenantFromMessageMetadataStep(
-            IIdentityContext identityContext,
-            ILogger<ExtractTenantFromMessageMetadataStep> logger)
+    public Task Execute(IntegrationMessage message, CancellationToken cancellationToken)
+    {
+        if (!_identityContext.HasAssociatedTenant)
         {
-            _identityContext = identityContext;
-            _logger = logger;
-        }
-
-        public Task Execute(IntegrationMessage message, CancellationToken cancellationToken)
-        {
-            if (!_identityContext.HasAssociatedTenant)
-            {
-                var tenantId = message.GetTenantId();
-                _logger.LogInformationIfEnabled(
-                    "Extracted {TenantId} tenant id from message {MessageId}", tenantId, message.Id);
+            var tenantId = message.GetTenantId();
+            _logger.LogInformationIfEnabled(
+                "Extracted {TenantId} tenant id from message {MessageId}", tenantId, message.Id);
                 
-                if (tenantId.HasValue)
-                {
-                    _identityContext.SetCurrentTenant(tenantId.Value);
-                }
+            if (tenantId.HasValue)
+            {
+                _identityContext.SetCurrentTenant(tenantId.Value);
             }
-
-            return Task.CompletedTask;
         }
+
+        return Task.CompletedTask;
     }
 }

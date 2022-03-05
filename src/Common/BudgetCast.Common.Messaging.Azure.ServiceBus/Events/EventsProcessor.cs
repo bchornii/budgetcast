@@ -8,11 +8,12 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+// TODO: unit test
 public class EventsProcessor : IEventsProcessor, IAsyncDisposable
 {
     private const int MaxDeliveryCount = 3;
 
-    private readonly ServiceBusPluginProcessor _processor;
+    private readonly ServiceBusProcessor _processor;
 
     private readonly IEventsSubscriptionManager _subscriptionManager;
     private readonly ILogger<EventsProcessor> _logger;
@@ -37,10 +38,46 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
             MaxConcurrentCalls = 1,
         };
         _processor = eventBusClient.Client
-            .CreatePluginProcessor(topicName: TopicName, subscriptionName: subscriptionClientName, options);
+            .CreateProcessor(topicName: TopicName, subscriptionName: subscriptionClientName, options);
     }
 
     public async Task Start(CancellationToken cancellationToken)
+    {
+        SubscribeToMessageProcessing();
+        SubscribeToErrorProcessing();
+
+        _logger.LogInformationIfEnabled("Starting event processing at {StartingAt} UTC", DateTime.UtcNow);
+        await _processor.StartProcessingAsync(cancellationToken);
+        _logger.LogInformationIfEnabled("Event processing started at {StartedAt} UTC", DateTime.UtcNow);
+    }
+
+    public async Task Stop(CancellationToken cancellationToken)
+    {
+        _logger.LogInformationIfEnabled("Stopping event processing at {StartedAt} UTC", DateTime.UtcNow);
+        await _processor.StopProcessingAsync(cancellationToken);
+        _logger.LogInformationIfEnabled("Event processing stopped at {StartedAt} UTC", DateTime.UtcNow);
+    }
+
+    public Task SubscribeTo<TEvent, THandler>()
+        where TEvent : IntegrationEvent
+        where THandler : IEventHandler<TEvent>
+    {
+        _subscriptionManager.AddSubscription<TEvent, THandler>();
+        return Task.CompletedTask;
+    }
+
+    public Task UnsubscribeFrom<TEvent, THandler>()
+        where TEvent : IntegrationEvent
+        where THandler : IEventHandler<TEvent>
+    {
+        _subscriptionManager.RemoveSubscription<TEvent, THandler>();
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+        => await _processor.DisposeAsync();
+
+    private void SubscribeToMessageProcessing()
     {
         _processor.ProcessMessageAsync += async (args) =>
         {
@@ -95,7 +132,10 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
                 throw;
             }
         };
+    }
 
+    private void SubscribeToErrorProcessing()
+    {
         _processor.ProcessErrorAsync += (args) =>
         {
             var ex = args.Exception;
@@ -105,46 +145,5 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
 
             return Task.CompletedTask;
         };
-
-        _logger.LogInformationIfEnabled("Starting event processing at {StartingAt} UTC", DateTime.UtcNow);
-        await _processor.StartProcessingAsync(cancellationToken);
-        _logger.LogInformationIfEnabled("Event processing started at {StartedAt} UTC", DateTime.UtcNow);
     }
-
-    public async Task Stop(CancellationToken cancellationToken)
-    {
-        _logger.LogInformationIfEnabled("Stopping event processing at {StartedAt} UTC", DateTime.UtcNow);
-        await _processor.StopProcessingAsync(cancellationToken);
-        _logger.LogInformationIfEnabled("Event processing stopped at {StartedAt} UTC", DateTime.UtcNow);
-    }
-
-    public Task SubscribeTo<TEvent, THandler>()
-        where TEvent : IntegrationEvent
-        where THandler : IEventHandler<TEvent>
-    {
-        var eventName = GetEventName<TEvent>();
-        _subscriptionManager.AddSubscription<TEvent, THandler>();
-
-        return Task.CompletedTask;
-    }
-
-    public Task UnsubscribeFrom<TEvent, THandler>()
-        where TEvent : IntegrationEvent
-        where THandler : IEventHandler<TEvent>
-    {
-        var eventName = GetEventName<TEvent>();
-        _subscriptionManager.RemoveSubscription<TEvent, THandler>();
-
-        return Task.CompletedTask;
-    }
-
-    public async ValueTask DisposeAsync()
-        => await _processor.DisposeAsync();
-
-    private static string GetEventName<TEvent>()
-        where TEvent : IntegrationEvent =>
-        GetEventName(typeof(TEvent));
-
-    private static string GetEventName(Type eventType)
-        => eventType.Name;
 }

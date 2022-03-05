@@ -9,7 +9,7 @@ public class EventBusClient : IAsyncDisposable
     private ServiceBusClient _client;
     private readonly string _connectionString;
 
-    public ServiceBusClient Client
+    public virtual ServiceBusClient Client
     {
         get
         {

@@ -25,7 +25,7 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
         /// Retrieves user id from message metadata.
         /// </summary>
         /// <returns></returns>
-        public string GetUserId() => Metadata
+        public virtual string GetUserId() => Metadata
             .TryGetValue(UserIdMetadataKey, out var value) 
             ? value 
             : string.Empty;
@@ -34,7 +34,7 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
         /// Retrieves tenant id from message metadata.
         /// </summary>
         /// <returns></returns>
-        public long? GetTenantId() => Metadata
+        public virtual long? GetTenantId() => Metadata
             .TryGetValue(TenantIdMetadataKey, out var value) 
             ? long.Parse(value) 
             : null;
@@ -43,14 +43,14 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
         /// Sets tenant identifier.
         /// </summary>
         /// <param name="tenantId"></param>
-        public void SetCurrentTenant(long tenantId) => 
+        public virtual void SetCurrentTenant(long tenantId) => 
             Metadata[TenantIdMetadataKey] = tenantId.ToString();
 
         /// <summary>
         /// Sets user identifier.
         /// </summary>
         /// <param name="userId"></param>
-        public void SetUserId(string userId) 
+        public virtual void SetUserId(string userId) 
             => Metadata[UserIdMetadataKey] = userId;
     }
 }

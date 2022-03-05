@@ -8,11 +8,12 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+// TODO: unit test
 public class EventsPublisher : IEventsPublisher, IAsyncDisposable
 {
     private readonly IMessageSerializer _messagePreProcessor;
     private readonly ILogger<EventsPublisher> _logger;
-    private readonly ServiceBusPluginSender _sender;
+    private readonly ServiceBusSender _sender;
 
     public EventsPublisher(
         EventBusClient eventBusClient, 
@@ -21,7 +22,7 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
     {
         _messagePreProcessor = messagePreProcessor;
         _logger = logger;
-        _sender = eventBusClient.Client.CreatePluginSender(TopicName);
+        _sender = eventBusClient.Client.CreateSender(TopicName);
     }
     
     public async Task Publish(IntegrationEvent @event, CancellationToken cancellationToken)
@@ -36,20 +37,13 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
         };
         await _sender.SendMessageAsync(message, cancellationToken);
 
-        _logger.LogDebugIfEnabled(
-            "Event {EventName} with id {EventId} and '{Payload}' payload has been published at {PublishedAt} UTC",
-            message.Subject,
-            message.MessageId, 
-            json, 
-            DateTime.UtcNow);
+        _logger.LogDebugIfEnabled("Event {EventName} with id {EventId} and '{Payload}' payload has been published at {PublishedAt} UTC",
+            message.Subject, message.MessageId, json, DateTime.UtcNow);
 
         if (!_logger.IsEnabled(LogLevel.Debug))
         {
-            _logger.LogInformationIfEnabled(
-                "Event {EventName} with id {EventId} has been published at {PublishedAt} UTC",
-                message.Subject,
-                message.MessageId, 
-                DateTime.UtcNow);
+            _logger.LogInformationIfEnabled("Event {EventName} with id {EventId} has been published at {PublishedAt} UTC",
+                message.Subject, message.MessageId, DateTime.UtcNow);
         }
     }
     
