@@ -7,17 +7,17 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
     public class EventsSubscriptionManager : IEventsSubscriptionManager
     {
         private readonly ILogger<EventsSubscriptionManager> _logger;
-        private readonly Dictionary<string, List<EventSubscriptionInformation>> _handlers;
+        private readonly Dictionary<string, List<EventSubscriptionInformation>> _eventNameSubscriptionMap;
         private readonly List<Type> _eventTypes;
 
-        public bool HasNoSubscriptions => _handlers is { Count: 0 };
+        public bool HasNoSubscriptions => _eventNameSubscriptionMap is { Count: 0 };
 
         public event EventHandler<string> OnEventRemoved;
 
         public EventsSubscriptionManager(ILogger<EventsSubscriptionManager> logger)
         {
             _logger = logger;
-            _handlers = new Dictionary<string, List<EventSubscriptionInformation>>();
+            _eventNameSubscriptionMap = new Dictionary<string, List<EventSubscriptionInformation>>();
             _eventTypes = new List<Type>();
 
             OnEventRemoved = (_, __) => { };
@@ -31,62 +31,61 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
 
             if (!HasSubscriptionsForEvent(eventName))
             {
-                _handlers.Add(eventName, new List<EventSubscriptionInformation>());
+                _eventNameSubscriptionMap.Add(eventName, new List<EventSubscriptionInformation>());
             }
 
-            var handlerType = typeof(THandler);
-            if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
+            var eventHandlerType = typeof(THandler);
+            var hasSubscriptionToTheSameHandler = _eventNameSubscriptionMap[eventName]
+                .Any(s => s.EventHandlerType == eventHandlerType);
+            
+            if (hasSubscriptionToTheSameHandler)
             {
                 throw new ArgumentException(
-                    $"Handler Type {handlerType.Name} already registered " +
-                    $"for '{eventName}'", nameof(handlerType));
+                    $"Handler Type {eventHandlerType.Name} already registered " +
+                    $"for '{eventName}'", nameof(eventHandlerType));
             }
 
-            _handlers[eventName]
-                .Add(new EventSubscriptionInformation(handlerType));
+            var eventSubscription = new EventSubscriptionInformation(
+                eventType: typeof(TEvent),
+                eventHandlerType: eventHandlerType);
+            _eventNameSubscriptionMap[eventName].Add(eventSubscription);
 
             if (!_eventTypes.Contains(typeof(TEvent)))
             {
                 _eventTypes.Add(typeof(TEvent));
             }
 
-            _logger.LogInformationIfEnabled(
-                "Subscription added: {EventHandler} handler subscribed to {EventType} event",
-                handlerType.Name,
-                eventName);
+            _logger.LogInformationIfEnabled("{Subscription} subscription has been created", eventSubscription);
         }
 
         public void RemoveSubscription<TEvent, THandler>()
             where TEvent : IntegrationEvent
             where THandler : IEventHandler<TEvent>
         {
-            var subscriptionInformation = FindSubscriptionToRemove<TEvent, THandler>();
+            var eventSubscription = FindSubscriptionToRemove<TEvent, THandler>();
 
-            if (subscriptionInformation == EventSubscriptionInformation.Null)
+            if (eventSubscription == EventSubscriptionInformation.Null)
             {
                 return;
             }
 
             var eventName = GetEventKey<TEvent>();
-            _handlers[eventName].Remove(subscriptionInformation);
-            if (!_handlers[eventName].Any())
+            _eventNameSubscriptionMap[eventName].Remove(eventSubscription);
+            if (!_eventNameSubscriptionMap[eventName].Any())
             {
-                _handlers.Remove(eventName);
+                _eventNameSubscriptionMap.Remove(eventName);
 
                 var eventType = _eventTypes
                     .Single(e => e.Name == eventName);
                 _eventTypes.Remove(eventType);
 
                 RaiseOnEventRemoved(eventName);
-                
-                _logger.LogInformationIfEnabled(
-                    "Subscription removed: {EventHandler} handler unsubscribed from {EventType} event",
-                    subscriptionInformation.HandlerType.Name,
-                    eventName);
+
+                _logger.LogInformationIfEnabled("{Subscription} subscription has been removed", eventSubscription);
             }
         }
 
-        public void Clear() => _handlers.Clear();
+        public void Clear() => _eventNameSubscriptionMap.Clear();
 
         public string GetEventKey<T>() => typeof(T).Name;
 
@@ -101,7 +100,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
         }
 
         public IReadOnlyList<EventSubscriptionInformation> GetHandlersForEvent(string eventName)
-            => _handlers[eventName];
+            => _eventNameSubscriptionMap[eventName];
 
         public bool HasSubscriptionsForEvent<T>() 
             where T : IntegrationEvent
@@ -111,7 +110,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
         }
 
         public bool HasSubscriptionsForEvent(string eventName)
-            => _handlers.ContainsKey(eventName);
+            => _eventNameSubscriptionMap.ContainsKey(eventName);
 
         private EventSubscriptionInformation FindSubscriptionToRemove<TEvent, THandler>()
             where TEvent : IntegrationEvent
@@ -124,8 +123,8 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events
                 return EventSubscriptionInformation.Null;
             }
 
-            return _handlers[eventName]
-                .Single(s => s.HandlerType == typeof(TEvent));
+            return _eventNameSubscriptionMap[eventName]
+                .Single(s => s.EventHandlerType == typeof(TEvent));
         }
 
         private void RaiseOnEventRemoved(string eventName)

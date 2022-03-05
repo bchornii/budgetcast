@@ -6,7 +6,7 @@ using BudgetCast.Notifications.AppHub.Services;
 
 namespace BudgetCast.Notifications.AppHub.Middlewares
 {
-    public static class ApplicationBuilerExtensions
+    public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseTestEndpoints(this IApplicationBuilder app)
         {

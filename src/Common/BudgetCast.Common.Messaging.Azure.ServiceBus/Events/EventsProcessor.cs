@@ -45,51 +45,40 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
         _processor.ProcessMessageAsync += async (args) =>
         {
             var eventName = args.Message.Subject;
-            var messageData = args.Message.Body.ToString();
+            var eventId = args.Message.MessageId;
+            var eventData = args.Message.Body.ToString();
 
-            _logger.LogInformationIfEnabled(
-                "Received {EventName} event",
-                eventName);
+            _logger.LogInformationIfEnabled("Received {EventName} event with id {EventId}", eventName, eventId);
 
             try
             {
-                _logger.LogInformationIfEnabled(
-                    "Started execution of message processing pipeline for message with id {MessageId}", 
-                    args.Message.MessageId);
+                _logger.LogInformationIfEnabled("Starting execution of event processing pipeline for {EventName} event with id {EventId}", eventName, eventId);
                 
                 var isHandled = await _processingPipeline
-                    .Handle(eventName, messageData, args.CancellationToken);
+                    .Handle(eventId, eventName, eventData, args.CancellationToken);
 
                 if (isHandled)
                 {
                     _logger.LogInformationIfEnabled(
-                        "Finished execution of message processing pipeline for message with id {MessageId}",
-                        args.Message.MessageId);
+                        "Finished execution of event processing pipeline for {EventName} event with id {EventId}", eventName, eventId);
 
-                    _logger.LogInformationIfEnabled("Makring message with id {MessageId} as completed", args.Message.MessageId);
-
+                    _logger.LogInformationIfEnabled("Marking {EventName} event with id {EventId} as completed", eventName, eventId);
                     await args.CompleteMessageAsync(args.Message, args.CancellationToken);
-                    
-                    _logger.LogInformationIfEnabled("Marked message with id {MessageId} as completed", args.Message.MessageId);
+                    _logger.LogInformationIfEnabled("Marked {EventName} event with id {EventId} as completed", eventName, eventId);
                 }
                 else
                 {
-                    _logger.LogError(
-                        "Finished execution of message processing pipeline for message with id {MessageId} with error",
-                        args.Message.MessageId);
+                    _logger.LogError("Finished execution of event processing pipeline for {EventName} event with id {EventId} with error", eventName, eventId);
 
                     if (args.Message.DeliveryCount > MaxDeliveryCount)
                     {
                         await args.DeadLetterMessageAsync(
-                        args.Message,
-                        deadLetterReason: "MaxAppDeliveryCount",
-                        deadLetterErrorDescription: "Application reached max preconfigured delivery count.",
-                        cancellationToken: args.CancellationToken);
+                            args.Message,
+                            deadLetterReason: "MaxAppDeliveryCount",
+                            deadLetterErrorDescription: "Application reached max preconfigured delivery count.",
+                            cancellationToken: args.CancellationToken);
 
-                        _logger.LogWarning(
-                            "Message {MessageId} dead lettered due to reaching max delivery count of {MaxDeliveryCount}",
-                            args.Message.MessageId,
-                            MaxDeliveryCount);
+                        _logger.LogWarning("{EventName} event with id {EventId} dead lettered due to reaching max delivery count of {MaxDeliveryCount}", eventName, eventId, MaxDeliveryCount);
                     }
                 }
             }
@@ -97,13 +86,11 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
             {
                 await args.DeadLetterMessageAsync(
                     message: args.Message,
-                    deadLetterReason: "MessageProcessingException",
+                    deadLetterReason: "EventProcessingException",
                     deadLetterErrorDescription: ex.ToString(),
                     cancellationToken: args.CancellationToken);
 
-                _logger.LogWarning(
-                    "Message {MessageId} dead lettered due to exception in a message handling pipeline",
-                    args.Message.MessageId);
+                _logger.LogWarning("{EventName} event with id {EventId} dead lettered due to exception in a event handling pipeline", eventName, eventId);
                 
                 throw;
             }
@@ -114,26 +101,21 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
             var ex = args.Exception;
             var context = args.ErrorSource;
 
-            _logger.LogError(ex, "ERROR handling message: {ExceptionMessage} - Context: {@ExceptionContext}",
-                ex.Message, context);
+            _logger.LogError(ex, "ERROR handling event: {ExceptionMessage} - Context: {@ExceptionContext}", ex.Message, context);
 
             return Task.CompletedTask;
         };
 
+        _logger.LogInformationIfEnabled("Starting event processing at {StartingAt} UTC", DateTime.UtcNow);
         await _processor.StartProcessingAsync(cancellationToken);
-
-        _logger.LogInformationIfEnabled(
-            "Event processing started at {StartedAt} UTC", 
-            DateTime.UtcNow);
+        _logger.LogInformationIfEnabled("Event processing started at {StartedAt} UTC", DateTime.UtcNow);
     }
 
     public async Task Stop(CancellationToken cancellationToken)
     {
+        _logger.LogInformationIfEnabled("Stopping event processing at {StartedAt} UTC", DateTime.UtcNow);
         await _processor.StopProcessingAsync(cancellationToken);
-        
-        _logger.LogInformationIfEnabled(
-            "Event processing stopped at {StartedAt} UTC", 
-            DateTime.UtcNow);
+        _logger.LogInformationIfEnabled("Event processing stopped at {StartedAt} UTC", DateTime.UtcNow);
     }
 
     public Task SubscribeTo<TEvent, THandler>()

@@ -1,10 +1,11 @@
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
-using BudgetCast.Notifications.AppHub;
 using BudgetCast.Notifications.AppHub.EventHandlers;
 using Serilog;
 using Serilog.Events;
 
-public class Program
+namespace BudgetCast.Notifications.AppHub;
+
+public static class Program
 {
     public static int Main(string[] args)
     {
@@ -35,7 +36,7 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .UseSerilog((ctx, services, configuration) =>
                 configuration.ReadFrom.Configuration(ctx.Configuration))
-            .UseAzServiceBus(
+            .UseAzureServiceBus(
                 registerHandlers: services =>
                 {
                     services.AddScoped<TestIntegrationEventHandler>();

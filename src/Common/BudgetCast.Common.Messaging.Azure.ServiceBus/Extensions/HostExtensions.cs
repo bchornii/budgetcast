@@ -4,7 +4,6 @@ using BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +16,16 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 
 public static class HostExtensions
 {
-    public static IHostBuilder UseAzServiceBus(
+    /// <summary>
+    /// Registers all types required to send and receive messages to/from
+    /// Azure Service Bus.
+    /// </summary>
+    /// <param name="hostBuilder">Generic host builder</param>
+    /// <param name="registerHandlers">Action to register message handlers in DI container</param>
+    /// <param name="subscribeToEvents">Action to map events to their handlers</param>
+    /// <param name="options">Azure Service Bus configuration parameters</param>
+    /// <returns></returns>
+    public static IHostBuilder UseAzureServiceBus(
         this IHostBuilder hostBuilder, 
         Action<IServiceCollection> registerHandlers,
         Action<IEventsProcessor> subscribeToEvents,
@@ -32,6 +40,10 @@ public static class HostExtensions
                 options(config);   
             }
 
+            // Common services
+            services.AddScoped<IMessageSerializer, MessageSerializer>();
+            
+            // Event bus client
             services.AddSingleton(provider =>
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
@@ -39,10 +51,11 @@ public static class HostExtensions
                     connectionString: config?.AzureServiceBusConnectionString ?? 
                                       configuration["ServiceBusSettings:EventBusConnection"]);
             });
-            
+
+            // Sending message types
             services.AddScoped<IEventsPublisher, EventsPublisher>();
-            services.AddScoped<IMessageSerializer, MessageSerializer>();
-            
+
+            // Processing message types
             services.AddSingleton<IEventsSubscriptionManager, EventsSubscriptionManager>();
             services.AddSingleton<IEventsProcessor, EventsProcessor>(provider =>
             {
@@ -64,13 +77,47 @@ public static class HostExtensions
                 return eventProcessor;
             });
             
-            services.AddSingleton<IMessageProcessingPipeline, MessageProcessingPipeline>();
+            services.AddSingleton<IMessageProcessingPipeline, EventProcessingPipeline>();
             services.AddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
             services.AddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();
 
             services.AddHostedService<EventsProcessorHostedService>();
 
             registerHandlers(services);
+        });
+
+        return hostBuilder;
+    }
+
+    /// <summary>
+    /// Registers types required to send messages to Azure Service Bus.
+    /// </summary>
+    /// <param name="hostBuilder">Generic host builder</param>
+    /// <param name="options">Azure Service Bus configuration parameters</param>
+    /// <returns></returns>
+    public static IHostBuilder UseAzureServiceBus(
+        this IHostBuilder hostBuilder,
+        Action<ServiceBusConfiguration>? options = null)
+    {
+        hostBuilder.ConfigureServices((ctx, services) =>
+        {
+            ServiceBusConfiguration? config = null;
+            if (options is not null)
+            {
+                config = new ServiceBusConfiguration();
+                options(config);
+            }
+
+            services.AddSingleton(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                return new EventBusClient(
+                    connectionString: config?.AzureServiceBusConnectionString ??
+                                      configuration["ServiceBusSettings:EventBusConnection"]);
+            });
+
+            services.AddScoped<IEventsPublisher, EventsPublisher>();
+            services.AddScoped<IMessageSerializer, MessageSerializer>();
         });
 
         return hostBuilder;
