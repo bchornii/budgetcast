@@ -4,14 +4,14 @@ using Azure.Messaging.ServiceBus;
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
 [ExcludeFromCodeCoverage]
-public class EventBusClient : IAsyncDisposable
+public class EventBusClient : IAsyncDisposable, IEventBusClient
 {
     private static readonly object Token = new();
  
     private ServiceBusClient _client;
     private readonly string _connectionString;
 
-    public virtual ServiceBusClient Client
+    public ServiceBusClient Client
     {
         get
         {

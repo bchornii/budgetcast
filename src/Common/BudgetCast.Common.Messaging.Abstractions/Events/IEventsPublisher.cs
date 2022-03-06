@@ -2,5 +2,5 @@
 
 public interface IEventsPublisher
 {
-    Task Publish(IntegrationEvent @event, CancellationToken cancellationToken);
+    Task<bool> Publish(IntegrationEvent @event, CancellationToken cancellationToken);
 }

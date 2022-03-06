@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
-// TODO: unit test
 public class EventsProcessorHostedService : IHostedService
 {
     private readonly IEventsProcessor _eventsProcessor;

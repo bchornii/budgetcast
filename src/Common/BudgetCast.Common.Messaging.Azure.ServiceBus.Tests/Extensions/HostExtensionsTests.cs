@@ -8,6 +8,7 @@ using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Events.Fakes;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,7 +72,7 @@ public class HostExtensionsTests
         // Assert
         Mock.Get(_fixture.ServiceCollection)
             .Verify(v => v.Add(It.Is<ServiceDescriptor>(it => 
-                it.ServiceType == typeof(EventBusClient) &&
+                it.ServiceType == typeof(IEventBusClient) &&
                 it.Lifetime == ServiceLifetime.Singleton)));
     }
 
@@ -156,7 +157,7 @@ public class HostExtensionsTests
         // Assert
         Mock.Get(_fixture.ServiceCollection)
             .Verify(v => v.Add(It.Is<ServiceDescriptor>(it => 
-                it.ServiceType == typeof(EventBusClient) &&
+                it.ServiceType == typeof(IEventBusClient) &&
                 it.Lifetime == ServiceLifetime.Singleton)));
     }
     
@@ -376,21 +377,5 @@ public class HostExtensionsTests
 
             public IDictionary<object, object> Properties { get; }
         }
-    }
-    
-    private class FakeIntegrationEvent : IntegrationEvent
-    {
-    }
-
-    private class FakeEventHandler1 : IEventHandler<FakeIntegrationEvent>
-    {
-        public Task Handle(FakeIntegrationEvent @event, CancellationToken cancellationToken) 
-            => Task.CompletedTask;
-    }
-
-    private class FakeEventHandler2 : IEventHandler<FakeIntegrationEvent>
-    {
-        public Task Handle(FakeIntegrationEvent @event, CancellationToken cancellationToken) 
-            => Task.CompletedTask;
     }
 }

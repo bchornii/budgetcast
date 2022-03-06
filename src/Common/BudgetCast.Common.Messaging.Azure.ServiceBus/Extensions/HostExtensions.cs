@@ -44,7 +44,7 @@ public static class HostExtensions
             services.AddScoped<IMessageSerializer, MessageSerializer>();
             
             // Event bus client
-            services.AddSingleton(provider =>
+            services.AddSingleton<IEventBusClient, EventBusClient>(provider =>
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
                 return new EventBusClient(
@@ -108,7 +108,7 @@ public static class HostExtensions
                 options(config);
             }
 
-            services.AddSingleton(provider =>
+            services.AddSingleton<IEventBusClient, EventBusClient>(provider =>
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
                 return new EventBusClient(

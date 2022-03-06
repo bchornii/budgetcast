@@ -16,7 +16,7 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
     private readonly ServiceBusSender _sender;
 
     public EventsPublisher(
-        EventBusClient eventBusClient, 
+        IEventBusClient eventBusClient, 
         IMessageSerializer messagePreProcessor,
         ILogger<EventsPublisher> logger)
     {
@@ -25,11 +25,16 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
         _sender = eventBusClient.Client.CreateSender(TopicName);
     }
     
-    public async Task Publish(IntegrationEvent @event, CancellationToken cancellationToken)
+    public async Task<bool> Publish(IntegrationEvent @event, CancellationToken cancellationToken)
     {
         var eventName = @event.GetMessageName();
         var json = _messagePreProcessor.PackAsJson(@event);
 
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return false;
+        }
+        
         var message = new ServiceBusMessage(body: json)
         {
             MessageId = @event.Id.ToString(),
@@ -45,6 +50,8 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
             _logger.LogInformationIfEnabled("Event {EventName} with id {EventId} has been published at {PublishedAt} UTC",
                 message.Subject, message.MessageId, DateTime.UtcNow);
         }
+
+        return true;
     }
     
     public async ValueTask DisposeAsync() 
