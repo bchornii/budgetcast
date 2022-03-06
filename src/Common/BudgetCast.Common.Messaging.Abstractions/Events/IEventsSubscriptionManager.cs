@@ -38,20 +38,27 @@ namespace BudgetCast.Common.Messaging.Abstractions.Events
         void RemoveAll();
 
         /// <summary>
-        /// Verifies if any subscription for event of type <see cref="T"/> have been added.
-        /// </summary>
-        /// <typeparam name="T">Integration event type</typeparam>
-        /// <returns></returns>
-        bool HasSubscriptionsForEvent<T>() 
-            where T : IntegrationEvent;
-        
-        /// <summary>
         /// Verifies if any subscription for event name have been added.
         /// </summary>
         /// <param name="eventName">Integration event name</param>
         /// <returns></returns>
         bool HasSubscriptionsForEvent(string eventName);
         
+        /// <summary>
+        /// Verifies if any subscription for event of type <see cref="T"/> have been added.
+        /// </summary>
+        /// <typeparam name="T">Integration event type</typeparam>
+        /// <returns></returns>
+        bool HasSubscriptionsForEvent<T>() 
+            where T : IntegrationEvent;
+
+        /// <summary>
+        /// Returns event key (name) for event type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        string GetEventKey<T>();
+
         /// <summary>
         /// Retrieves integration event type from name.
         /// </summary>

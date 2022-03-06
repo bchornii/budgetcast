@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
-// TODO: unit test
 public class EventsSubscriptionManager : IEventsSubscriptionManager
 {
     private readonly ILogger<EventsSubscriptionManager> _logger;
@@ -47,6 +46,7 @@ public class EventsSubscriptionManager : IEventsSubscriptionManager
         var eventSubscription = new EventSubscriptionInformation(
             eventType: typeof(TEvent),
             eventHandlerType: eventHandlerType);
+        
         _eventNameSubscriptionMap[eventName].Add(eventSubscription);
 
         if (!_eventTypes.Contains(typeof(TEvent)))
@@ -86,8 +86,19 @@ public class EventsSubscriptionManager : IEventsSubscriptionManager
 
     public void RemoveAll() 
         => _eventNameSubscriptionMap.Clear();
+    
+    public bool HasSubscriptionsForEvent<T>() 
+        where T : IntegrationEvent
+    {
+        var key = GetEventKey<T>();
+        return HasSubscriptionsForEvent(key);
+    }
 
-    public string GetEventKey<T>() => typeof(T).Name;
+    public bool HasSubscriptionsForEvent(string eventName)
+        => _eventNameSubscriptionMap.ContainsKey(eventName);
+    
+    public string GetEventKey<T>() 
+        => typeof(T).Name;
 
     public Type GetEventTypeByName(string eventName)
         => _eventTypes.Single(t => t.Name == eventName);
@@ -102,16 +113,6 @@ public class EventsSubscriptionManager : IEventsSubscriptionManager
     public IReadOnlyList<EventSubscriptionInformation> GetHandlersForEvent(string eventName)
         => _eventNameSubscriptionMap[eventName];
 
-    public bool HasSubscriptionsForEvent<T>() 
-        where T : IntegrationEvent
-    {
-        var key = GetEventKey<T>();
-        return HasSubscriptionsForEvent(key);
-    }
-
-    public bool HasSubscriptionsForEvent(string eventName)
-        => _eventNameSubscriptionMap.ContainsKey(eventName);
-
     private EventSubscriptionInformation FindSubscriptionToRemove<TEvent, THandler>()
         where TEvent : IntegrationEvent
         where THandler : IEventHandler<TEvent>
@@ -124,7 +125,7 @@ public class EventsSubscriptionManager : IEventsSubscriptionManager
         }
 
         return _eventNameSubscriptionMap[eventName]
-            .Single(s => s.EventHandlerType == typeof(TEvent));
+            .Single(s => s.EventHandlerType == typeof(THandler));
     }
 
     private void RaiseOnEventRemoved(string eventName)

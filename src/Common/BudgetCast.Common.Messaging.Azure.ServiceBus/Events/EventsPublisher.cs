@@ -8,7 +8,6 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
-// TODO: unit test
 public class EventsPublisher : IEventsPublisher, IAsyncDisposable
 {
     private readonly IMessageSerializer _messagePreProcessor;
