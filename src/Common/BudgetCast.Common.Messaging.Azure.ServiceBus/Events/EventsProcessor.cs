@@ -2,7 +2,6 @@
 using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Messaging.Abstractions.Events;
-using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Microsoft.Extensions.Logging;
 using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstants;
 
@@ -24,7 +23,7 @@ public class EventsProcessor : IEventsProcessor, IAsyncDisposable
         ILogger<EventsProcessor> logger,
         string subscriptionClientName,
         IMessageProcessingPipeline processingPipeline,
-        EventBusClient eventBusClient,
+        IEventBusClient eventBusClient,
         ServiceBusProcessorOptions? serviceBusProcessorOptions = null)
     {
         _subscriptionManager = subscriptionManager;

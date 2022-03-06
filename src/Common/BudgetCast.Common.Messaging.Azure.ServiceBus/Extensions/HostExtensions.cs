@@ -63,7 +63,7 @@ public static class HostExtensions
                 var logger = provider.GetRequiredService<ILogger<EventsProcessor>>();
                 var configuration = provider.GetRequiredService<IConfiguration>();
                 var processingPipeline = provider.GetRequiredService<IMessageProcessingPipeline>();
-                var eventBusClient = provider.GetRequiredService<EventBusClient>();
+                var eventBusClient = provider.GetRequiredService<IEventBusClient>();
                 var eventProcessor = new EventsProcessor(
                     subscriptionManager: subscriptionManager,
                     logger: logger,
