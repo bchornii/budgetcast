@@ -1,7 +1,9 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure.Messaging.ServiceBus;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+[ExcludeFromCodeCoverage]
 public class EventBusClient : IAsyncDisposable
 {
     private static readonly object Token = new();

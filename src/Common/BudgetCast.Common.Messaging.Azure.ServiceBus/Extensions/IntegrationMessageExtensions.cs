@@ -5,6 +5,8 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 
 public static class IntegrationMessageExtensions
 {
+    public const string FallBackMessageName = "UndeterminedMessageName";
+    
     public static string GetMessageName(this IntegrationMessage? message)
-        => message?.GetType().Name ?? "UndeterminedMessageName";
+        => message?.GetType().Name ?? FallBackMessageName;
 }

@@ -5,7 +5,7 @@ namespace BudgetCast.Common.Messaging.Abstractions.Events
 {
     public abstract class IntegrationEvent : IntegrationMessage
     {
-        public IntegrationEvent()
+        protected IntegrationEvent()
         {
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;

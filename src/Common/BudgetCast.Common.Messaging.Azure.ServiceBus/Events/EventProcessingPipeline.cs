@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
-// TODO: unit test
 public class EventProcessingPipeline : IMessageProcessingPipeline
 {
     private readonly IServiceProvider _serviceProvider;
@@ -55,7 +54,7 @@ public class EventProcessingPipeline : IMessageProcessingPipeline
                 _logger.LogWarning("Handler for {Subscription} subscription can not be resolved from DI for event id {EventId}", eventSubscription, messageId);
                 return false;
             }
-                
+
             _logger.LogInformationIfEnabled("Handler for {Subscription} subscription has been resolved from DI for event id {EventId}", eventSubscription, messageId);
 
             var eventType = _subscriptionManager.GetEventTypeByName(messageName);
@@ -67,23 +66,22 @@ public class EventProcessingPipeline : IMessageProcessingPipeline
                 return false;
             }
 
-            var eventHandlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-            var eventHandlerTypeName = eventHandlerType.GetGenericTypeName();
-            var eventHandlerMethod = eventHandlerType.GetMethod(nameof(IEventHandler<IntegrationEvent>.Handle));
-
             _logger.LogInformationIfEnabled("Started execution of {Subscription} subscription pre-processing steps for event with id {EventId}", eventSubscription, messageId);
             await ExecutePreProcessingSteps(scopedServiceProvider, eventData, cancellationToken);
             _logger.LogInformationIfEnabled("Finished execution of {Subscription} subscription pre-processing steps for event with id {EventId}", eventSubscription, messageId);
 
             _logger.LogInformationIfEnabled("Starting execution of {Subscription} subscription handler for event with id {EventId}", eventSubscription, messageId);
+            var eventHandlerMethod = typeof(IEventHandler<>)
+                .MakeGenericType(typeArguments: eventType)
+                .GetMethod(name: nameof(IEventHandler<IntegrationEvent>.Handle));
             await (Task)eventHandlerMethod!.Invoke(
-                eventHandler,
-                new[]
+                obj: eventHandler,
+                parameters: new[]
                 {
                     eventData,
                     cancellationToken
                 })!;
-            _logger.LogInformationIfEnabled("Finished execution of {Subscription} subscription handler for event with {EventId}", eventHandlerTypeName, messageId);
+            _logger.LogInformationIfEnabled("Finished execution of {Subscription} subscription handler for event with {EventId}", eventSubscription, messageId);
                 
             _logger.LogInformationIfEnabled("Started execution of {Subscription} subscription post-processing steps for event with id {EventId}", eventSubscription, messageId);
             await ExecutePostProcessingSteps(scopedServiceProvider, eventData, cancellationToken);
