@@ -1,5 +1,9 @@
 ﻿using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Notifications.AppHub.Hubs;
+using BudgetCast.Notifications.AppHub.Models;
+using BudgetCast.Notifications.AppHub.Services;
 
 namespace BudgetCast.Notifications.AppHub.EventHandlers;
 
@@ -7,20 +11,40 @@ public class TestIntegrationEventHandler : IEventHandler<TestIntegrationEvent>
 {
     private readonly IIdentityContext _identityContext;
     private readonly ILogger<TestIntegrationEventHandler> _logger;
+    private readonly INotificationService _notificationService;
 
-    public TestIntegrationEventHandler(IIdentityContext identityContext, ILogger<TestIntegrationEventHandler> logger)
+    public TestIntegrationEventHandler(
+        IIdentityContext identityContext, 
+        ILogger<TestIntegrationEventHandler> logger, 
+        INotificationService notificationService)
     {
         _identityContext = identityContext;
         _logger = logger;
+        _notificationService = notificationService;
     }
     
-    public Task Handle(TestIntegrationEvent @event, CancellationToken cancellationToken)
+    public async Task Handle(TestIntegrationEvent @event, CancellationToken cancellationToken)
     {
-        var userId = _identityContext.UserId;
-        var tenantId = _identityContext.TenantId;
+        var groupName = $"{NotificationHub.GroupPrefix}-{_identityContext.TenantId}";
 
-        _logger.LogInformation("Handled event: {@Event} for TenantId={TenantId} and UserId={UserId}", @event, tenantId, userId);
+        _logger.LogInformationIfEnabled("Sending notification to {GroupName}", groupName);
         
-        return Task.CompletedTask;
+        await _notificationService.SendMessageToGroupAsync(
+            notification: new GeneralNotification
+            {
+                Type = NotificationType.Success,
+                Message = $"Hi, group {groupName}",
+                MessageType = NotificationMessageTypes.ExpensesAdded,
+                Data = new
+                {
+                    Id = Guid.NewGuid(),
+                    Total = 1023.0,
+                    AddedBy = "bchornii",
+                    AddedAt = DateTime.Now
+                }
+            },
+            @group: groupName, cancellationToken: CancellationToken.None);
+        
+        _logger.LogInformationIfEnabled("Notification to {GroupName} has been successfully sent", groupName);
     }
 }

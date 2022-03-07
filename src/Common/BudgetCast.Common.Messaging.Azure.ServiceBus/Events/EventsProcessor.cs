@@ -7,10 +7,9 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
-// TODO: unit test
 public class EventsProcessor : IEventsProcessor, IAsyncDisposable
 {
-    private const int MaxDeliveryCount = 3;
+    public const int MaxDeliveryCount = 3;
 
     private readonly ServiceBusProcessor _processor;
 

@@ -6,7 +6,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Events.Fakes;
 
 internal class FakeServiceBusSender : ServiceBusSender
 {
-    public ServiceBusMessage CachedMessage { get; private set; }
+    public ServiceBusMessage CachedMessage { get; private set; } = default!;
             
     public override Task SendMessageAsync(
         ServiceBusMessage message, 
