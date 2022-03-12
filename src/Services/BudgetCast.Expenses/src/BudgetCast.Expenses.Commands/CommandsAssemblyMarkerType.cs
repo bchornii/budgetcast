@@ -1,4 +1,3 @@
-﻿namespace BudgetCast.Expenses.Commands
-{
-    public record CommandsAssemblyMarkerType;
-}
+﻿namespace BudgetCast.Expenses.Commands;
+
+public record CommandsAssemblyMarkerType;

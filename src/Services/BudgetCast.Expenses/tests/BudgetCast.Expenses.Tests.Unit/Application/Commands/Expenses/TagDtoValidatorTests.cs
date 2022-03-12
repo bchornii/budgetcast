@@ -1,31 +1,30 @@
-﻿using BudgetCast.Expenses.Commands.Tags;
+﻿using BudgetCast.Expenses.Commands.Expenses.Tags;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
+namespace BudgetCast.Expenses.Tests.Unit.Application.Commands.Expenses;
+
+public class TagDtoValidatorTests
 {
-    public class TagDtoValidatorTests
+    private readonly TagDtoValidator _tagDtoValidator;
+
+    public TagDtoValidatorTests()
     {
-        private TagDtoValidator _tagDtoValidator;
+        _tagDtoValidator = new TagDtoValidator();
+    }
 
-        public TagDtoValidatorTests()
-        {
-            _tagDtoValidator = new TagDtoValidator();
-        }
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void Name_IsEmpty_IsInvalid(string name)
+    {
+        // Arrange
 
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public void Name_IsEmpty_IsInvalid(string name)
-        {
-            // Arrange
+        // Act
+        var result = _tagDtoValidator.TestValidate(new TagDto(name));
 
-            // Act
-            var result = _tagDtoValidator.TestValidate(new TagDto(name));
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name);
     }
 }

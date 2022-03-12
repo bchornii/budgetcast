@@ -1,7 +1,6 @@
-﻿namespace BudgetCast.Common.Domain
+﻿namespace BudgetCast.Common.Domain;
+
+public interface IMustHaveTenant
 {
-    public interface IMustHaveTenant
-    {
-        public long TenantId { get; set; }
-    }
+    public long TenantId { get; set; }
 }

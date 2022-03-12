@@ -51,7 +51,7 @@ namespace BudgetCast.Expenses.Data
                 .AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
         }
 
-        public async Task<bool> Commit()
+        public async Task<bool> Commit(CancellationToken cancellationToken)
         {
             var now = SystemDt.Current;
 
@@ -63,7 +63,7 @@ namespace BudgetCast.Expenses.Data
                 .Entries<IMustHaveTenant>()
                 .UpdateTenantValues(Tenant);
 
-            var result = await base.SaveChangesAsync();
+            var result = await base.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
     }

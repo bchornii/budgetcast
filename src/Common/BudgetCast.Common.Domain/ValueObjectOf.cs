@@ -1,40 +1,39 @@
-﻿namespace BudgetCast.Common.Domain
+﻿namespace BudgetCast.Common.Domain;
+
+public abstract class ValueObjectOf<T>
+    where T : ValueObjectOf<T>
 {
-    public abstract class ValueObjectOf<T>
-        where T : ValueObjectOf<T>
+    protected abstract bool EqualsCore(T other);
+    protected abstract int GetHashCodeCore();
+
+    public override bool Equals(object obj)
     {
-        protected abstract bool EqualsCore(T other);
-        protected abstract int GetHashCodeCore();
+        var valueObj = obj as T;
 
-        public override bool Equals(object obj)
+        if (ReferenceEquals(valueObj, null))
         {
-            var valueObj = obj as T;
+            return false;
+        }
+        return EqualsCore(valueObj);
+    }
 
-            if (ReferenceEquals(valueObj, null))
-            {
-                return false;
-            }
-            return EqualsCore(valueObj);
+    public override int GetHashCode()
+    {
+        return GetHashCodeCore();
+    }
+
+    public static bool operator ==(ValueObjectOf<T> left, ValueObjectOf<T> right)
+    {
+        if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
+        {
+            return false;
         }
 
-        public override int GetHashCode()
-        {
-            return GetHashCodeCore();
-        }
+        return left.Equals(right);
+    }
 
-        public static bool operator ==(ValueObjectOf<T> left, ValueObjectOf<T> right)
-        {
-            if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
-            {
-                return false;
-            }
-
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(ValueObjectOf<T> left, ValueObjectOf<T> right)
-        {
-            return !(left == right);
-        }
+    public static bool operator !=(ValueObjectOf<T> left, ValueObjectOf<T> right)
+    {
+        return !(left == right);
     }
 }

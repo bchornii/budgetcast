@@ -1,4 +1,3 @@
-﻿namespace BudgetCast.Expenses.Commands.Tags
-{
-    public record TagDto(string Name);
-}
+﻿namespace BudgetCast.Expenses.Commands.Expenses.Tags;
+
+public record TagDto(string Name);

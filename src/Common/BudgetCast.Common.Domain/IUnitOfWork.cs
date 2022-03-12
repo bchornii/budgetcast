@@ -1,7 +1,6 @@
-﻿namespace BudgetCast.Common.Domain
+﻿namespace BudgetCast.Common.Domain;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task<bool> Commit();
-    }
+    Task<bool> Commit(CancellationToken cancellationToken);
 }

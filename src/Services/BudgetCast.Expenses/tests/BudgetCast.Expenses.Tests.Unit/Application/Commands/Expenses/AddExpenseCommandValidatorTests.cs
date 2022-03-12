@@ -1,123 +1,122 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using BudgetCast.Expenses.Commands.Expenses;
-using BudgetCast.Expenses.Commands.Tags;
+using BudgetCast.Expenses.Commands.Expenses.Tags;
 using FluentValidation.TestHelper;
-using System;
 using Xunit;
 
-namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
+namespace BudgetCast.Expenses.Tests.Unit.Application.Commands.Expenses;
+
+public class AddExpenseCommandValidatorTests
 {
-    public class AddExpenseCommandValidatorTests
+    private readonly AddExpenseCommandValidatorFixture _fixture;
+
+    public AddExpenseCommandValidatorTests()
     {
-        private AddExpenseCommandValidatorFixture _fixture;
-
-        public AddExpenseCommandValidatorTests()
-        {
-            _fixture = new AddExpenseCommandValidatorFixture();
-        }
-
-        [Fact]
-        public void AddedAt_HasDefaultValue_Is_Invalid()
-        {
-            // Arrange
-            var defaultCommand = _fixture.CreatePopulated();
-            var command = defaultCommand with { AddedAt = default };
-            // Act
-            var result = _fixture.Validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.AddedAt);
-        }
-
-        [Fact]
-        public void CampaignName_HasDefaultValue_Is_Invalid()
-        {
-            // Arrange
-            var defaultCommand = _fixture.CreatePopulated();
-            var command = defaultCommand with { CampaignName = default };
-            // Act
-            var result = _fixture.Validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.CampaignName);
-        }
-
-        private class AddExpenseCommandValidatorFixture
-        {
-            public AddExpenseCommandValidator Validator { get; }
-
-            public AddExpenseCommandValidatorFixture()
-            {
-                Validator = new AddExpenseCommandValidator();
-            }
-
-            public AddExpenseCommand CreatePopulated()
-                => new Fixture().Create<AddExpenseCommand>();
-        }
+        _fixture = new AddExpenseCommandValidatorFixture();
     }
 
-    public class UpdateExpenseTagsCommandValidatorTests
+    [Fact]
+    public void AddedAt_HasDefaultValue_Is_Invalid()
     {
-        private UpdateExpenseTagsCommandValidatorFixture _fixture;
+        // Arrange
+        var defaultCommand = _fixture.CreatePopulated();
+        var command = defaultCommand with { AddedAt = default };
+        // Act
+        var result = _fixture.Validator.TestValidate(command);
 
-        public UpdateExpenseTagsCommandValidatorTests()
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.AddedAt);
+    }
+
+    [Fact]
+    public void CampaignName_HasDefaultValue_Is_Invalid()
+    {
+        // Arrange
+        var defaultCommand = _fixture.CreatePopulated();
+        var command = defaultCommand with { CampaignName = default };
+        // Act
+        var result = _fixture.Validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.CampaignName);
+    }
+
+    private class AddExpenseCommandValidatorFixture
+    {
+        public AddExpenseCommandValidator Validator { get; }
+
+        public AddExpenseCommandValidatorFixture()
         {
-            _fixture = new UpdateExpenseTagsCommandValidatorFixture();
+            Validator = new AddExpenseCommandValidator();
         }
 
-        [Fact]
-        public void ExpenseId_IsDefault_IsInvalid()
+        public AddExpenseCommand CreatePopulated()
+            => new Fixture().Create<AddExpenseCommand>();
+    }
+}
+
+public class UpdateExpenseTagsCommandValidatorTests
+{
+    private UpdateExpenseTagsCommandValidatorFixture _fixture;
+
+    public UpdateExpenseTagsCommandValidatorTests()
+    {
+        _fixture = new UpdateExpenseTagsCommandValidatorFixture();
+    }
+
+    [Fact]
+    public void ExpenseId_IsDefault_IsInvalid()
+    {
+        // Arrange
+        var defaultCommand = _fixture.GetPopulated();
+        var command = defaultCommand with { ExpenseId = default };
+
+        // Act
+        var result = _fixture.Validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.ExpenseId);
+    }
+
+    [Fact]
+    public void Tags_IsEmptyCollection_IsInvalid()
+    {
+        // Arrange
+        var defaultCommand = _fixture.GetPopulated();
+        var command = defaultCommand with { Tags = Array.Empty<string>() };
+
+        // Act
+        var result = _fixture.Validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Tags);
+    }
+
+    [Fact]
+    public void Tags_IsNull_IsInvalid()
+    {
+        // Arrange
+        var defaultCommand = _fixture.GetPopulated();
+        var command = defaultCommand with { Tags = default! };
+
+        // Act
+        var result = _fixture.Validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Tags);
+    }
+
+    private class UpdateExpenseTagsCommandValidatorFixture
+    {
+        public UpdateExpenseTagsCommandValidator Validator { get; }
+
+        public UpdateExpenseTagsCommandValidatorFixture()
         {
-            // Arrange
-            var defaultCommand = _fixture.GetPopulated();
-            var command = defaultCommand with { ExpenseId = default };
-
-            // Act
-            var result = _fixture.Validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ExpenseId);
+            Validator = new UpdateExpenseTagsCommandValidator();
         }
 
-        [Fact]
-        public void Tags_IsEmptyCollection_IsInvalid()
-        {
-            // Arrange
-            var defaultCommand = _fixture.GetPopulated();
-            var command = defaultCommand with { Tags = Array.Empty<string>() };
-
-            // Act
-            var result = _fixture.Validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Tags);
-        }
-
-        [Fact]
-        public void Tags_IsNull_IsInvalid()
-        {
-            // Arrange
-            var defaultCommand = _fixture.GetPopulated();
-            var command = defaultCommand with { Tags = default! };
-
-            // Act
-            var result = _fixture.Validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Tags);
-        }
-
-        private class UpdateExpenseTagsCommandValidatorFixture
-        {
-            public UpdateExpenseTagsCommandValidator Validator { get; }
-
-            public UpdateExpenseTagsCommandValidatorFixture()
-            {
-                Validator = new UpdateExpenseTagsCommandValidator();
-            }
-
-            public UpdateExpenseTagsCommand GetPopulated()
-                => new Fixture().Create<UpdateExpenseTagsCommand>();
-        }
+        public UpdateExpenseTagsCommand GetPopulated()
+            => new Fixture().Create<UpdateExpenseTagsCommand>();
     }
 }

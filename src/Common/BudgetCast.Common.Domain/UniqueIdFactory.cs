@@ -1,7 +1,6 @@
-﻿namespace BudgetCast.Common.Domain
+﻿namespace BudgetCast.Common.Domain;
+
+public class UniqueIdFactory
 {
-    public class UniqueIdFactory
-    {
-        public static string GetId() => Guid.NewGuid().ToString("N");
-    }
+    public static string GetId() => Guid.NewGuid().ToString("N");
 }

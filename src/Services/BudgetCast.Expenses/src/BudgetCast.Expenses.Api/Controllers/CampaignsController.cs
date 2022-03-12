@@ -1,5 +1,5 @@
 ﻿using BudgetCast.Common.Web.Extensions;
-using BudgetCast.Expenses.Commands.Campaigns;
+using BudgetCast.Expenses.Commands.Campaigns.CreateMonthlyCampaign;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaignByName;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaigns;
 using BudgetCast.Expenses.Queries.Campaigns.GetCampaignTotals;

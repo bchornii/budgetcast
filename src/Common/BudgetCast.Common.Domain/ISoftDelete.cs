@@ -1,9 +1,8 @@
-﻿namespace BudgetCast.Common.Domain
-{
-    public interface ISoftDelete
-    {
-        DateTime? DeletedOn { get; set; }
+﻿namespace BudgetCast.Common.Domain;
 
-        string? DeletedBy { get; set; }
-    }
+public interface ISoftDelete
+{
+    DateTime? DeletedOn { get; set; }
+
+    string? DeletedBy { get; set; }
 }

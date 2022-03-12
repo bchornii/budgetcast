@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace BudgetCast.Expenses.Commands.Tags
+namespace BudgetCast.Expenses.Commands.Expenses.Tags;
+
+public class TagDtoValidator : AbstractValidator<TagDto>
 {
-    public class TagDtoValidator : AbstractValidator<TagDto>
+    public TagDtoValidator()
     {
-        public TagDtoValidator()
-        {
-            RuleFor(x => x.Name)
-                .NotEmpty();
-        }
+        RuleFor(x => x.Name)
+            .NotEmpty();
     }
 }
