@@ -20,6 +20,11 @@ export class SignalRService {
               protected authService: AuthService) {
   }
 
+  /**
+   * 
+   * @param options signalR connection options (url, authentication details, etc)
+   * @returns initialized and ready to use signalR.HubConnection
+   */
   protected createConnection(options: signalRConnectionOptions): signalR.HubConnection {
     
     let {       

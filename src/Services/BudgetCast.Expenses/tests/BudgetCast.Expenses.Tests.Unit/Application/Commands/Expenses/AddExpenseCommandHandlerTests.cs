@@ -172,6 +172,10 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 Mock.Get(ExpensesRepository)
                     .Setup(e => e.AddAsync(It.IsAny<Expense>(), CancellationToken.None))
                     .ReturnsAsync(Fixture.Create<Expense>());
+                
+                Mock.Get(IdentityContext)
+                    .Setup(s => s.TenantId)
+                    .Returns(Fixture.Create<long>());
 
                 return this;
             }
