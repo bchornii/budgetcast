@@ -60,7 +60,7 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.HubFilters
         /// <returns></returns>
         public Task OnDisconnectedAsync(
             HubLifetimeContext lifetimeContext, 
-            Exception exception, 
+            Exception? exception, 
             Func<HubLifetimeContext, Exception, Task> next)
         {
             var identityContext = lifetimeContext.ServiceProvider
@@ -75,7 +75,7 @@ namespace BudgetCast.Notifications.AppHub.Infrastructure.HubFilters
         private static void SetTenantFor(IIdentityContext identityContext, HttpContext httpContext)
         {
             var tenantId = TenantResolver.Resolver(httpContext);
-            if (!string.IsNullOrEmpty(tenantId))
+            if (!identityContext.HasAssociatedTenant && !string.IsNullOrEmpty(tenantId))
             {
                 identityContext.SetCurrentTenant(long.Parse(tenantId));
             }

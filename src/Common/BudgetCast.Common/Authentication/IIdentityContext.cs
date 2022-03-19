@@ -3,6 +3,16 @@
     public interface IIdentityContext
     {
         /// <summary>
+        /// Allows to verify if <seealso cref="IIdentityContext"/> has been initialized.
+        /// </summary>
+        bool HasAssociatedTenant { get; }
+
+        /// <summary>
+        /// Allows to verify if <seealso cref="IIdentityContext"/> has been authenticated.
+        /// </summary>
+        bool HasAssociatedUser { get; }
+
+        /// <summary>
         /// User identifier. Globally unique value across the system.
         /// </summary>
         string UserId { get; }

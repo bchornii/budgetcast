@@ -32,13 +32,17 @@ COPY ["Common/BudgetCast.Common.Domain/BudgetCast.Common.Domain.csproj",        
 COPY ["Common/BudgetCast.Common.Tests/BudgetCast.Common.Tests.csproj",									  "Common/BudgetCast.Common.Tests/"]
 COPY ["Common/BudgetCast.Common.Application.Tests.Unit/BudgetCast.Common.Application.Tests.Unit.csproj",  "Common/BudgetCast.Common.Application.Tests.Unit/"]
 
+COPY ["Common/BudgetCast.Common.Messaging.Abstractions/BudgetCast.Common.Messaging.Abstractions.csproj",            "Common/BudgetCast.Common.Messaging.Abstractions/"]
+COPY ["Common/BudgetCast.Common.Messaging.Azure.ServiceBus/BudgetCast.Common.Messaging.Azure.ServiceBus.csproj",    "Common/BudgetCast.Common.Messaging.Azure.ServiceBus/"]
+
 # application proj files
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/BudgetCast.Expenses.Api.csproj",           "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/"]
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Data/BudgetCast.Expenses.Data.csproj",         "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Data/"]
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Queries/BudgetCast.Expenses.Queries.csproj",   "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Queries/"]
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Domain/BudgetCast.Expenses.Domain.csproj",     "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Domain/"]
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Commands/BudgetCast.Expenses.Commands.csproj", "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Commands/"]
-COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Db/BudgetCast.Expenses.Db.sqlproj",			   "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Db/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/BudgetCast.Expenses.Api.csproj",                "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Api/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Data/BudgetCast.Expenses.Data.csproj",              "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Data/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Queries/BudgetCast.Expenses.Queries.csproj",        "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Queries/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Domain/BudgetCast.Expenses.Domain.csproj",          "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Domain/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Commands/BudgetCast.Expenses.Commands.csproj",      "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Commands/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Db/BudgetCast.Expenses.Db.sqlproj",			        "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Db/"]
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging/BudgetCast.Expenses.Messaging.csproj",    "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging/"]
 
 # tests proj files
 COPY ["Services/BudgetCast.Expenses/tests/BudgetCast.Expenses.Tests.Unit/BudgetCast.Expenses.Tests.Unit.csproj", "Services/BudgetCast.Expenses/tests/BudgetCast.Expenses.Tests.Unit/"]

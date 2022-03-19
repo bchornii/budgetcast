@@ -57,7 +57,7 @@ export class AddExpenseComponent implements OnInit {
     this.expensesService.addExpense(this.expenseDto).pipe(
       finalize(() => this.spinner.hide())
     ).subscribe(_ => {
-      this.toastr.success('Expense added.');
+      this.toastr.success('Expense sent for processing.');
       this.router.navigate(['/expenses/dashboard']);
     });
   }

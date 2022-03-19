@@ -5,4 +5,5 @@ export class ExpensesAddedAppEvent extends ExpensesAppEvent {
     total: number;
     addedBy: string;
     addedAt: Date;
+    campaignName: string;
 }

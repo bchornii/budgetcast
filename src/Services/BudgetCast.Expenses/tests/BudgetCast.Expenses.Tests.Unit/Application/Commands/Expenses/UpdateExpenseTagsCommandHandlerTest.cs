@@ -61,7 +61,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
 
             // Assert
             Mock.Get(_fixture.UnitOfWork)
-                .Verify(v => v.Commit(), Times.Once());
+                .Verify(v => v.Commit(CancellationToken.None), Times.Once());
         }
         private sealed class UpdateExpenseTagsCommandHandlerFixture
         {

@@ -1,5 +1,4 @@
-﻿using BudgetCast.Expenses.Commands.Tags;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace BudgetCast.Expenses.Commands.Expenses
 {

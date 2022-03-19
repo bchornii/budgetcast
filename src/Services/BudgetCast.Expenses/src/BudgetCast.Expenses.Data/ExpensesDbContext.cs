@@ -51,7 +51,7 @@ namespace BudgetCast.Expenses.Data
                 .AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
         }
 
-        public async Task<bool> Commit()
+        public async Task<bool> Commit(CancellationToken cancellationToken)
         {
             var now = SystemDt.Current;
 

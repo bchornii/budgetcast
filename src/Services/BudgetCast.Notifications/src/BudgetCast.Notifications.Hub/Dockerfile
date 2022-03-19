@@ -30,6 +30,13 @@ COPY ["Common/BudgetCast.Common.Web/BudgetCast.Common.Web.csproj",              
 COPY ["Common/BudgetCast.Common.Application/BudgetCast.Common.Application.csproj",  "Common/BudgetCast.Common.Application/"]
 COPY ["Common/BudgetCast.Common.Domain/BudgetCast.Common.Domain.csproj",            "Common/BudgetCast.Common.Domain/"]
 
+COPY ["Common/BudgetCast.Common.Messaging.Abstractions/BudgetCast.Common.Messaging.Abstractions.csproj",                        "Common/BudgetCast.Common.Messaging.Abstractions/"]
+COPY ["Common/BudgetCast.Common.Messaging.Azure.ServiceBus/BudgetCast.Common.Messaging.Azure.ServiceBus.csproj",                "Common/BudgetCast.Common.Messaging.Azure.ServiceBus/"]
+COPY ["Common/BudgetCast.Common.Messaging.Azure.ServiceBus.Tests/BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.csproj",    "Common/BudgetCast.Common.Messaging.Azure.ServiceBus.Tests/"]
+
+# integration with other services - in future libraries will be published as Nuget packages
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging/BudgetCast.Expenses.Messaging.csproj",    "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging/"]
+
 # application proj files
 COPY ["Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/BudgetCast.Notifications.AppHub.csproj", "Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/"]
 
@@ -43,6 +50,9 @@ RUN dotnet restore "Services/BudgetCast.Notifications/BudgetCast.Notifications.s
 # copy everything else
 COPY ["Common/", "Common/"]
 COPY ["Services/BudgetCast.Notifications/src", "Services/BudgetCast.Notifications/src"]
+
+# integration with other services - in future libraries will be published as Nuget packages
+COPY ["Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging", "Services/BudgetCast.Expenses/src/BudgetCast.Expenses.Messaging"]
 
 # build
 RUN dotnet build "Services/BudgetCast.Notifications/src/BudgetCast.Notifications.Hub/BudgetCast.Notifications.AppHub.csproj" -c $CONFIGURATION -o /app/build

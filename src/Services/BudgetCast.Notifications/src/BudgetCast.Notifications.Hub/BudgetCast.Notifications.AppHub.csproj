@@ -31,7 +31,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Messaging.Azure.ServiceBus\BudgetCast.Common.Messaging.Azure.ServiceBus.csproj" />
 	  <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
+	  <ProjectReference Include="..\..\..\BudgetCast.Expenses\src\BudgetCast.Expenses.Messaging\BudgetCast.Expenses.Messaging.csproj" />
 	</ItemGroup>
 
 </Project>

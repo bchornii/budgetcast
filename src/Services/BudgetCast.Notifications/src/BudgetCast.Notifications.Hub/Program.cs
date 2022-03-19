@@ -1,47 +1,94 @@
-using BudgetCast.Notifications.AppHub;
+using BudgetCast.Common.Web.Extensions;
+using BudgetCast.Notifications.AppHub.Hubs;
+using BudgetCast.Notifications.AppHub.Infrastructure.Extensions;
+using BudgetCast.Notifications.AppHub.Middlewares;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
 
-public class Program
+var logger = CreateSerilogLogger();
+var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+Log.Logger = logger;
+
+Log.Information("Populating services in DI container");
+builder
+    .Services
+    .AddWebAppServices(configuration);
+
+Log.Information("Configuring web host");
+builder
+    .Host
+    .AddWebAppHostConfiguration();
+
+try
 {
-    public static int Main(string[] args)
+    Log.Information("Building web host");
+    var app = builder.Build();
+    Log.Information("Web host was successfully built");
+    
+    Log.Information("Configuring web app pipeline");
+    var env = app.Environment;
+    
+    if (env.IsDevelopment())
     {
-        Log.Logger = CreateSerilogLogger();
-
-        try
-        {
-            Log.Information("Configuring web host");
-            var host = CreateHostBuilder(args).Build();
-
-            Log.Information("Starting web host");
-            host.Run();
-
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly");
-            return 1;
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
+        app.UseDeveloperExceptionPage();
     }
+    else
+    {
+        app.UseApiExceptionHandling(
+            isDevelopment: env.IsDevelopment());
+    }
+            
+    app.UseHttpsRedirection();
+    //app.UseHttpLogging();
+    
+    app.UseCors();
 
-    private static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog((ctx, services, configuration) =>
-                configuration.ReadFrom.Configuration(ctx.Configuration))
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    app.UseAuthentication();
+    app.UseCurrentTenant();
+    app.UseAuthorization();
 
-    private static Serilog.ILogger CreateSerilogLogger() =>
-        new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateBootstrapLogger();
+    if (env.IsDevelopment())
+    {
+        app.UseTestEndpoints();
+    }            
+
+    app.MapHub<NotificationHub>("/hubs/notifications", options =>
+    {
+        //options.CloseOnAuthenticationExpiration = true;
+    });
+
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+        AllowCachingResponses = false
+    });
+    app.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self"),
+        AllowCachingResponses = false
+    });
+    Log.Information("Web app pipeline configured");
+    
+    Log.Information("Starting web host");
+    await app.RunAsync();
+    Log.Information("Stopping web host");
 }
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+
+Serilog.ILogger CreateSerilogLogger() =>
+    new LoggerConfiguration()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .CreateBootstrapLogger();

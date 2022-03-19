@@ -26,6 +26,10 @@ export class NotificationsService extends SignalRService {
     super(storageService, toastrService, authService);
   }
 
+  /**
+   * Initializes connection to signalR notifications hub.
+   * @returns instance of NotificationsService service
+   */
   initializeConnection(): NotificationsService {
     let options = new signalRConnectionOptions()
       .withUri(this.configurationService.endpoints.notifications.all)
@@ -36,15 +40,25 @@ export class NotificationsService extends SignalRService {
     return this;
   }
 
+  /**
+   * Adds notification listeners.
+   * @returns instance of NotificationsService service
+   */
   addListeners(): NotificationsService {
     this.addNotificationsListener();
     return this;
   }
 
+  /**
+   * Starts communication based on previously initialized signalR connection.
+   */
   async startCommunication() {
     await this.start(this._connection);
   }
 
+  /**
+   * Stops communication based on previously initialized signalR connection.
+   */
   async stopCommunication() {
     await this.stop(this._connection); 
   }

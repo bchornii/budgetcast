@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Application\BudgetCast.Common.Application.csproj" />
     <ProjectReference Include="..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Messaging\BudgetCast.Expenses.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

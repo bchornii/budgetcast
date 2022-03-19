@@ -95,9 +95,9 @@ export class ExpenseDashboardComponent implements OnInit, OnDestroy {
     this.expensesChannel$ = this.channelsService.channels$
       .get(ChannelTypes.Expenses);
 
-    this.expensesSubscriptions = this.expensesChannel$
+    this.expensesSubscriptions = this.expensesChannel$      
       .subscribe(appEvent => {
-        console.log('Applicant event received: ' + JSON.stringify(appEvent));
+        console.log('Application event received: ' + JSON.stringify(appEvent));
       });
   }
 

@@ -1,3 +1,6 @@
+/**
+ * Notification types which might be sent by the notification service.
+ */
 export enum NotificationMessageTypes {
     Unknown = "Unknown",
 

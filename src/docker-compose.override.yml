@@ -59,6 +59,7 @@ services:
             - Serilog__WriteTo__0__Args__serverUrl=http://seq
             - ExpensesDb__ConnectionString=Server=host.docker.internal,1433;Database=ExpensesDb;User Id=sa;Password=Install_new!
             - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
+            - ServiceBusSettings__EventBusConnection=${EXPENSES_AZBUS_CONNSTR}
         ports: 
             - target: 80
               published: ${EXPENSES_API_PORT}
@@ -74,6 +75,7 @@ services:
             - Serilog__MinimumLevel__Override__Microsoft=Information
             - UiLinks__Root=https://${HOST_BASE_ADDR}:${UI_HTTPS_PORT}
             - Azure__SignalR__ConnectionString=${NOTIFICATIONS_SIGNALR_CONNSTR}
+            - ServiceBusSettings__EventBusConnection=${NOTIFICATIONS_AZBUS_CONNSTR}
             - SignalRSettings__UseAzureSignalR=true
             - ServiceBusSettings__AzureServiceBusEnabled=false
         ports: 

@@ -10,12 +10,21 @@ import { AppEvent } from "./app-event";
   })
 export class AppEventsMapper {
     
+    /**
+     * Maps notification type name to mapping function which is used to convert the notification
+     * into an application event.
+     */
     private notificationsMap = new Map<string, ((notification: GeneralNotification) => AppEvent)>()
 
     constructor() {
         this.initializeMaps();
     }
 
+    /**
+     * Maps a notification received from an external source to an application event
+     * @param notification Any notification type which implements GeneralNotification interface
+     * @returns An application event initialized by the notification data
+     */
     mapFrom(notification: GeneralNotification): AppEvent {
         let mapToAppEvent = this.notificationsMap.get(notification.messageType);
         return mapToAppEvent(notification);
@@ -42,7 +51,8 @@ export class AppEventsMapper {
             id: notification.data.id,
             total: notification.data.total,
             addedBy: notification.data.addedBy,
-            addedAt: notification.data.addedAt
+            addedAt: notification.data.addedAt,
+            campaignName: notification.data.campaignName,
         };
     }
 

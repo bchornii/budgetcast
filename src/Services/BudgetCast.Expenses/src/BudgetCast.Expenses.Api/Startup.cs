@@ -37,15 +37,7 @@ namespace BudgetCast.Expenses.Api
 
         public void Configure(IApplicationBuilder app)
         {
-            if (Env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseApiExceptionHandling(
-                    isDevelopment: Env.IsDevelopment());
-            }
+            app.UseApiExceptionHandling(isDevelopment: false);
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
