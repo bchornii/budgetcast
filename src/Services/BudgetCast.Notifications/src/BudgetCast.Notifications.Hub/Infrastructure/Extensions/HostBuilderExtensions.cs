@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
+using BudgetCast.Expenses.Messaging;
 using BudgetCast.Notifications.AppHub.EventHandlers;
 using Serilog;
 
@@ -13,10 +14,10 @@ public static class HostBuilderExtensions
             .UseAzureServiceBus(
                 registerHandlers: services =>
                 {
-                    services.AddScoped<TestIntegrationEventHandler>();
+                    services.AddScoped<ExpensesEventsHandler>();
                 },
                 subscribeToEvents: processor =>
                 {
-                    processor.SubscribeTo<TestIntegrationEvent, TestIntegrationEventHandler>();
+                    processor.SubscribeTo<ExpensesAddedEvent, ExpensesEventsHandler>();
                 });
 }

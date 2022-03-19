@@ -7,12 +7,12 @@ namespace BudgetCast.Common.Messaging.Abstractions.Events
     {
         protected IntegrationEvent()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString("D");
             CreatedAt = DateTime.UtcNow;
         }
 
         [JsonConstructor]
-        protected IntegrationEvent(Guid id, DateTime createdAt)
+        protected IntegrationEvent(string id, DateTime createdAt)
         {
             Id = id;
             CreatedAt = createdAt;

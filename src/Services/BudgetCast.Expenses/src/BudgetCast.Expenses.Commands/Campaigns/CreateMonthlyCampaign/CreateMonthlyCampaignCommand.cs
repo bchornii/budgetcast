@@ -27,7 +27,7 @@ namespace BudgetCast.Expenses.Commands.Campaigns
         {
             var campaign = new Campaign(request.Name);
             await _campaignRepository.AddAsync(campaign, cancellationToken);
-            await _unitOfWork.Commit();
+            await _unitOfWork.Commit(cancellationToken);
 
             return campaign.Id;
         }

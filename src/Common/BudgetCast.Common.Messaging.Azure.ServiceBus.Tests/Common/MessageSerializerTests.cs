@@ -184,7 +184,7 @@ public class MessageSerializerTests
         // Assert
         result!.Id
             .Should()
-            .Be(Guid.Parse("7e7bb340-326f-2345-1234-f6cb65133b54"));
+            .Be("7e7bb340-326f-2345-1234-f6cb65133b54");
 
         result.CreatedAt
             .Should()

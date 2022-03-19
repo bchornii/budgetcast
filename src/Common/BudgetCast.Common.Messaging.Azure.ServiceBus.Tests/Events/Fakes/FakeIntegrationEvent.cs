@@ -12,7 +12,7 @@ internal class FakeIntegrationEvent : IntegrationEvent
         State = new FakeIntegrationEventState();
     }
 
-    public FakeIntegrationEvent(Guid id) : base(id, DateTime.Now)
+    public FakeIntegrationEvent(Guid id) : base(id.ToString(), DateTime.Now)
     {
         State = new FakeIntegrationEventState();
     }

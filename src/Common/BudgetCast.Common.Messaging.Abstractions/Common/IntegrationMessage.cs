@@ -8,7 +8,7 @@ namespace BudgetCast.Common.Messaging.Abstractions.Common
         public const string TenantIdMetadataKey = "TenantId";
 
         [JsonInclude]
-        public Guid Id { get; protected init; }
+        public string Id { get; protected init; }
 
         [JsonInclude]
         public DateTime CreatedAt { get; protected init; }

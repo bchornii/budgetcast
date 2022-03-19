@@ -31,7 +31,7 @@ namespace BudgetCast.Expenses.Commands.Tags
                 .GetAsync(request.ExpenseId, cancellationToken);
             var tags = Mapper.MapFrom(request.Tags);
             expense.AddTags(tags);
-            await _unitOfWork.Commit();
+            await _unitOfWork.Commit(cancellationToken);
             return Success.Empty;
         }
     }

@@ -1,8 +1,10 @@
-using BudgetCast.Expenses.Api;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Serilog;
 using Serilog.Events;
 
-public class Program
+namespace BudgetCast.Expenses.Api;
+
+public static class Program
 {
     public static int Main(string[] args)
     {
@@ -29,10 +31,11 @@ public class Program
         }
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseSerilog((ctx, services, configuration) =>
                 configuration.ReadFrom.Configuration(ctx.Configuration))
+            .UseAzureServiceBus()
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
