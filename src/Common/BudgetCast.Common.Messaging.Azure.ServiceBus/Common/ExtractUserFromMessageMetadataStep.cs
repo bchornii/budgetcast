@@ -5,7 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
 
-// TODO: unit test
+/// <summary>
+/// Extracts user id from a received integration event and passes it
+/// to <see cref="IIdentityContext"/>
+/// </summary>
 public class ExtractUserFromMessageMetadataStep :
     IMessagePreProcessingStep
 {
@@ -20,6 +23,7 @@ public class ExtractUserFromMessageMetadataStep :
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public Task Execute(IntegrationMessage message, CancellationToken cancellationToken)
     {
         if (!_identityContext.HasAssociatedUser)

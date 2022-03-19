@@ -8,6 +8,9 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+/// <summary>
+/// Event publisher implementation based on <see cref="ServiceBusSender"/> API.
+/// </summary>
 public class EventsPublisher : IEventsPublisher, IAsyncDisposable
 {
     private readonly IMessageSerializer _messagePreProcessor;

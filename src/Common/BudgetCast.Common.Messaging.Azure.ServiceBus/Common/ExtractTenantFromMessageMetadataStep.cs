@@ -5,6 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
 
+/// <summary>
+/// Extracts tenant id from a received integration event and passes it
+/// to <see cref="IIdentityContext"/>
+/// </summary>
 public class ExtractTenantFromMessageMetadataStep :
     IMessagePreProcessingStep
 {
@@ -19,6 +23,7 @@ public class ExtractTenantFromMessageMetadataStep :
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public Task Execute(IntegrationMessage message, CancellationToken cancellationToken)
     {
         if (!_identityContext.HasAssociatedTenant)

@@ -7,6 +7,9 @@ using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstan
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+/// <summary>
+/// Event processing implementation based on <see cref="ServiceBusProcessor"/> API.
+/// </summary>
 public class EventsProcessor : IEventsProcessor, IAsyncDisposable
 {
     public const int MaxDeliveryCount = 3;

@@ -4,6 +4,10 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+/// <summary>
+/// Implementation of in-memory events subscription manager which keeps track of
+/// added/removed integration events subscriptions.
+/// </summary>
 public class EventsSubscriptionManager : IEventsSubscriptionManager
 {
     private readonly ILogger<EventsSubscriptionManager> _logger;

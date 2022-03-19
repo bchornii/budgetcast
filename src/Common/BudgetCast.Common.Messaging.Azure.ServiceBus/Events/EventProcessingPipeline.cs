@@ -7,6 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 
+/// Event processing pipeline implementation. Acts as an entry point for
+/// any received integration event and orchestrates event handler, pre- and post-
+/// processing steps. Uses <see cref="IEventsSubscriptionManager"/> for event
+/// subscription lookup.
 public class EventProcessingPipeline : IMessageProcessingPipeline
 {
     private readonly IServiceProvider _serviceProvider;
@@ -23,6 +27,7 @@ public class EventProcessingPipeline : IMessageProcessingPipeline
         _logger = logger;
     }
         
+    /// <inheritdoc/>
     public async Task<bool> Handle(
         string messageId, 
         string messageName, 

@@ -1,5 +1,8 @@
 ﻿namespace BudgetCast.Common.Messaging.Abstractions.Common;
 
+/// <summary>
+/// Represents an abstraction over message serializer
+/// </summary>
 public interface IMessageSerializer
 {
     /// <summary>
