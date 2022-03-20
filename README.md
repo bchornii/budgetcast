@@ -16,7 +16,7 @@ To achieve runtime notifications when significant changes in the system occur an
 
 Azure SignalR Service integration was added in order to avoid potential problems with performance, scalability and availability of the solutions based on persistent client connections (aka. web sockets). These issues are handler for us with a 99.9% SLA.
 
-![budgetcast-containers-diagram](https://user-images.githubusercontent.com/16306082/153714357-9a475d81-57b2-46f4-8f3f-17c19b84a1a0.jpg)
+![budgetcast-containers-diagram](https://user-images.githubusercontent.com/16306082/159163472-61edfea9-d634-4ce5-af6a-ce81d98a32d7.jpg)
 
 ## Code details 
  #### CRUD
@@ -28,7 +28,7 @@ Azure SignalR Service integration was added in order to avoid potential problems
  #### DDD
  Expenses service uses DDD patterns at domain layer to model its domain.
  
- #### Clear architecture
+ #### Clean architecture
  The fundamental rule is that all code can depend on layers more central, but code cannot depend on layers further out from the core. In other words, all coupling is toward the center.
 
 ## Tech stack
@@ -45,9 +45,8 @@ Azure SignalR Service integration was added in order to avoid potential problems
       - Polly
       - Swagger
       - Serilog
-    - MsSql Server
-    - MongoDB
-      - MongoDB.Driver 2.10
+    - MS Sql Server
+    - Azure SDK
     - Seq
     
  - **UI**
@@ -59,8 +58,8 @@ Azure SignalR Service integration was added in order to avoid potential problems
     - moment
     
  - **Web Status UI**
-    - Asp.Net Core 3.1
-      - Asp.Net Core Health Checks UI 3.1
+    - Asp.Net 6
+      - Asp.Net Core Health Checks UI 6
     - Serilog
 
 ## Hosting platform
@@ -82,30 +81,45 @@ Azure SignalR Service integration was added in order to avoid potential problems
   
  #### The following environments variables must be set:
  ```
-  - GOOGLE CREDENTIALS (from google console where you register you app with OAuth)
-    - GOOGLE_CLIENT_SECRET=?
-    - GOOGLE_CLIENT_ID=?
+  - GOOGLE CREDENTIALS [to use OAth2.0 for user delegated authorization]
+    - GOOGLE_CLIENT_SECRET=[google client secret]
+    - GOOGLE_CLIENT_ID=[google client id]
 
-  - FACECBOOK CREDENTIALS (from fb console where you register you app with OAuth)
-    - FACEBOOK_CLIENT_SECRET=?
-    - FACEBOOK_CLIENT_ID=?
+  - FACECBOOK CREDENTIALS [to use OAth2.0 for user delegated authorization]
+    - FACEBOOK_CLIENT_SECRET=[facebook client secret]
+    - FACEBOOK_CLIENT_ID=[facebook client id]
 
-  - EMAIL PARAMS (used for individual user account confrmation)
-     - EMAIL_FROM=?
-     - EMAIL_PASSWORD=?
-  
-  - LOCAL ENV PARAMS
+  - EMAIL PARAMS [for individual user account confrmation]
+     - EMAIL_FROM=[service email box address]
+     - EMAIL_PASSWORD=[service email box password]
+     
+  - BASE ENV VARIABLES
     - HOST_BASE_ADDR=localhost (as default)
-
-  - LOCAL TCP PORTs
+    
+  - IDENTITY MICROSERVICE
     - IDENTITY_DB_PORT=5433
     - IDENTITY_API_PORT=5100
     - IDENTITY_API_HTTPS_PORT=5140
+    
+  - EXPENSES MICROSERVICE
+    - EXPENSES_API_PORT = 5101
+    - EXPENSES_DB_PORT=5433
+    - EXPENSES_AZBUS_CONNSTR=[azure service bus connection string - send/listen]
+    
+  - NOTIFICATION MICROSERVICE
+    - NOTIFICATIONS_API_PORT=5102
+    - NOTIFICATIONS_API_HTTPS_PORT=5142
+    - NOTIFICATIONS_SIGNALR_CONNSTR=[azure signalR connection string]
+    - NOTIFICATIONS_AZBUS_CONNSTR=[azure service bus connection string - send/listen/manage]
+    
+  - WEB UI HOST MICROSERVICE
     - UI_PORT=5200
     - UI_HTTPS_PORT=5240
+    
+  - HEALTH CHECKS MICROSERVICE [web ui with health check information about the system]
     - HEALTHCHECKS_UI_PORT=5201
     - HEALTHCHECKS_UI_HTTPS_PORT=5241
-    - EXPENSES_API_PORT=5101
-    - EXPENSES_DB_PORT=5433
+ 
+  - SEQ [logs storage]
     - SEQ_PORT=5341
 ```
