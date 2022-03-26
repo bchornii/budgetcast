@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Operations;
 using Xunit;
 
 namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
