@@ -1,9 +1,11 @@
-﻿namespace BudgetCast.Common.Messaging.Abstractions.Events;
+﻿using BudgetCast.Common.Messaging.Abstractions.Common;
+
+namespace BudgetCast.Common.Messaging.Abstractions.Events;
 
 /// <summary>
 /// Represents an abstraction over events publisher
 /// </summary>
-public interface IEventsPublisher
+public interface IEventsPublisher : IMessageSender
 {
     /// <summary>
     /// Publishes event to an underlying transport

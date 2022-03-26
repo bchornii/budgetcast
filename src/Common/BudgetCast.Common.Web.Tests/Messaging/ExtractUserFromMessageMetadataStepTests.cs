@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using AutoFixture;
 using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Messaging.Abstractions.Common;
-using BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
+using BudgetCast.Common.Web.Messaging;
+using BudgetCast.Common.Web.Tests.Messaging.Fakes;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using static BudgetCast.Common.Web.Messaging.MessageMetadataConstants;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Common;
+namespace BudgetCast.Common.Web.Tests.Messaging;
 
 public class ExtractUserFromMessageMetadataStepTests
 {
@@ -25,7 +27,7 @@ public class ExtractUserFromMessageMetadataStepTests
         // Arrange
         var expectedUserId = _fixture.Fixture.Create<string>();
         var integrationMessage = new FakeIntegrationMessage();
-        integrationMessage.SetUserId(expectedUserId);
+        integrationMessage.SetMetadata(UserIdMetadataKey, expectedUserId);
 
         // Act
         await _fixture.Step.Execute(integrationMessage, CancellationToken.None);
@@ -41,7 +43,7 @@ public class ExtractUserFromMessageMetadataStepTests
         // Arrange
         var messageUserId = _fixture.Fixture.Create<string>();
         var integrationMessage = new FakeIntegrationMessage();
-        integrationMessage.SetUserId(messageUserId);
+        integrationMessage.SetMetadata(UserIdMetadataKey, messageUserId);
 
         Mock.Get(_fixture.IdentityContext)
             .Setup(x => x.HasAssociatedUser)
@@ -66,7 +68,7 @@ public class ExtractUserFromMessageMetadataStepTests
         var integrationMessage = new Mock<IntegrationMessage>().Object;
 
         Mock.Get(integrationMessage)
-            .Setup(s => s.GetUserId())
+            .Setup(s => s.GetMetadata(UserIdMetadataKey))
             .Returns(messageUserId);
 
         // Act
@@ -94,9 +96,5 @@ public class ExtractUserFromMessageMetadataStepTests
             Logger = Mock.Of<ILogger<ExtractUserFromMessageMetadataStep>>();
             Step = new ExtractUserFromMessageMetadataStep(IdentityContext, Logger);
         }
-    }
-
-    private class FakeIntegrationMessage : IntegrationMessage
-    {
     }
 }

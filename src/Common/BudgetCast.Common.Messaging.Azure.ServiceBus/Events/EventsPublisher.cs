@@ -1,5 +1,4 @@
 ﻿using Azure.Messaging.ServiceBus;
-using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
@@ -13,24 +12,32 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 /// </summary>
 public class EventsPublisher : IEventsPublisher, IAsyncDisposable
 {
-    private readonly IMessageSerializer _messagePreProcessor;
+    private readonly IMessageSerializer _messageSerializer;
     private readonly ILogger<EventsPublisher> _logger;
+    private readonly IEnumerable<IMessagePreSendingStep> _messagePreSendingSteps;
     private readonly ServiceBusSender _sender;
 
     public EventsPublisher(
         IEventBusClient eventBusClient, 
-        IMessageSerializer messagePreProcessor,
-        ILogger<EventsPublisher> logger)
+        IMessageSerializer messageSerializer,
+        ILogger<EventsPublisher> logger,
+        IEnumerable<IMessagePreSendingStep> messagePreSendingSteps)
     {
-        _messagePreProcessor = messagePreProcessor;
+        _messageSerializer = messageSerializer;
         _logger = logger;
+        _messagePreSendingSteps = messagePreSendingSteps;
         _sender = eventBusClient.Client.CreateSender(TopicName);
     }
     
     public async Task<bool> Publish(IntegrationEvent @event, CancellationToken cancellationToken)
     {
+        foreach (var preSendingStep in _messagePreSendingSteps)
+        {
+            await preSendingStep.Execute(@event, cancellationToken);
+        }
+        
         var eventName = @event.GetMessageName();
-        var json = _messagePreProcessor.PackAsJson(@event);
+        var json = _messageSerializer.PackAsJson(@event);
 
         if (string.IsNullOrWhiteSpace(json))
         {

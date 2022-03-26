@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
@@ -80,6 +81,8 @@ public class EventsPublisherTests
         private FakeServiceBusClient ServiceBusClient { get; }
         
         private FakeServiceBusSender ServiceBusSender { get; }
+        
+        public IReadOnlyCollection<IMessagePreSendingStep> PreSendingSteps { get; }
 
         public ServiceBusMessage SentMessage => ServiceBusSender.CachedMessage;
         
@@ -90,6 +93,7 @@ public class EventsPublisherTests
             ServiceBusSender = new FakeServiceBusSender();
             ServiceBusClient = new FakeServiceBusClient(ServiceBusSender);
 
+            PreSendingSteps = Array.Empty<IMessagePreSendingStep>();
             MessageSerializer = Mock.Of<IMessageSerializer>();
             Logger = Mock.Of<ILogger<EventsPublisher>>();
             EventBusClient = Mock.Of<IEventBusClient>();
@@ -97,7 +101,7 @@ public class EventsPublisherTests
                 .Setup(s => s.Client)
                 .Returns(ServiceBusClient);
             
-            Publisher = new EventsPublisher(EventBusClient, MessageSerializer, Logger);
+            Publisher = new EventsPublisher(EventBusClient, MessageSerializer, Logger, PreSendingSteps);
         }
 
         public EventsPublisherFixture SetupMessageSerializerToReturnNull()

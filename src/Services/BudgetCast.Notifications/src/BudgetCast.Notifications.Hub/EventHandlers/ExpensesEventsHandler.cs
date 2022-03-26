@@ -1,6 +1,6 @@
 ﻿using BudgetCast.Common.Authentication;
-using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using BudgetCast.Expenses.Messaging;
 using BudgetCast.Notifications.AppHub.Models;
 using BudgetCast.Notifications.AppHub.Services;

@@ -1,9 +1,11 @@
 ﻿using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Microsoft.Extensions.Logging;
+using static BudgetCast.Common.Web.Messaging.MessageMetadataConstants;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
+namespace BudgetCast.Common.Web.Messaging;
 
 /// <summary>
 /// Extracts tenant id from a received integration event and passes it
@@ -28,7 +30,10 @@ public class ExtractTenantFromMessageMetadataStep :
     {
         if (!_identityContext.HasAssociatedTenant)
         {
-            var tenantId = message.GetTenantId();
+            var tenantId = message
+                .GetMetadata(TenantIdMetadataKey)
+                .ToNullableLong();
+            
             _logger.LogInformationIfEnabled(
                 "Extracted {TenantId} tenant id from message {MessageId}", tenantId, message.Id);
                 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace BudgetCast.Common.Extensions;
+namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 
 public static class LoggerExtensions
 {

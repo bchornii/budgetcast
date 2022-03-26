@@ -239,43 +239,7 @@ public class HostExtensionsTests
                 it.ServiceType == typeof(IMessageProcessingPipeline) &&
                 it.Lifetime == ServiceLifetime.Singleton)));
     }
-    
-    [Fact]
-    public void UseAzureServiceBus_Should_Add_ExtractTenantFromMessageMetadataStep_AsScoped()
-    {
-        // Arrange
 
-        // Act
-        _fixture.HostBuilder.UseAzureServiceBus(
-            registerHandlers: collection => { },
-            subscribeToEvents: processor => { });
-
-        // Assert
-        Mock.Get(_fixture.ServiceCollection)
-            .Verify(v => v.Add(It.Is<ServiceDescriptor>(it => 
-                it.ImplementationType == typeof(ExtractTenantFromMessageMetadataStep) &&
-                it.ServiceType == typeof(IMessagePreProcessingStep) &&
-                it.Lifetime == ServiceLifetime.Scoped)));
-    }
-    
-    [Fact]
-    public void UseAzureServiceBus_Should_Add_ExtractUserFromMessageMetadataStep_AsScoped()
-    {
-        // Arrange
-
-        // Act
-        _fixture.HostBuilder.UseAzureServiceBus(
-            registerHandlers: collection => { },
-            subscribeToEvents: processor => { });
-
-        // Assert
-        Mock.Get(_fixture.ServiceCollection)
-            .Verify(v => v.Add(It.Is<ServiceDescriptor>(it => 
-                it.ImplementationType == typeof(ExtractUserFromMessageMetadataStep) &&
-                it.ServiceType == typeof(IMessagePreProcessingStep) &&
-                it.Lifetime == ServiceLifetime.Scoped)));
-    }
-    
     [Fact]
     public void UseAzureServiceBus_Should_Populate_ServiceBusConfiguration()
     {

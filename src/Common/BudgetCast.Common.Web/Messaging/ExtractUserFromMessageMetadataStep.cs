@@ -1,9 +1,11 @@
 ﻿using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Microsoft.Extensions.Logging;
+using static BudgetCast.Common.Web.Messaging.MessageMetadataConstants;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
+namespace BudgetCast.Common.Web.Messaging;
 
 /// <summary>
 /// Extracts user id from a received integration event and passes it
@@ -28,7 +30,7 @@ public class ExtractUserFromMessageMetadataStep :
     {
         if (!_identityContext.HasAssociatedUser)
         {
-            var userId = message.GetUserId();
+            var userId = message.GetMetadata(UserIdMetadataKey);
                 
             _logger.LogInformationIfEnabled(
                 "Extracted {UserId} user id from message {MessageId}", userId, message.Id);

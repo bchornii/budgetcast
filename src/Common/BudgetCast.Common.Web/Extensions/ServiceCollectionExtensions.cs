@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Operations;
+using BudgetCast.Common.Web.Messaging;
 
 namespace BudgetCast.Common.Web.Extensions;
 
@@ -59,6 +61,22 @@ public static class ServiceCollectionExtensions
             return OperationContext.New();
         });
 
+        return services;
+    }
+
+    /// <summary>
+    /// Registers messaging pre- and post- sending/processing steps to supplement it
+    /// with a contextual information provided by the application
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddMessagingExtensions(this IServiceCollection services)
+    {
+        services.AddScoped<IMessagePreSendingStep, AddTenantToMessageMetadataStep>();
+        services.AddScoped<IMessagePreSendingStep, AddUserToMessageMetadataStep>();
+        
+        services.AddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
+        services.AddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();
         return services;
     }
 

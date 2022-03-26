@@ -33,7 +33,8 @@ public static class ServiceCollectionExtensions
             .AddJwtAuthentication(configuration)
             .AddCustomServices()
             .AddIdentityContext()
-            .AddHttpContextAccessor();
+            .AddHttpContextAccessor()
+            .AddMessagingExtensions();
         
         return services;
     }
