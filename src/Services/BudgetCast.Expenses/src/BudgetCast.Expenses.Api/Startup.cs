@@ -1,4 +1,5 @@
-﻿using BudgetCast.Common.Web.Extensions;
+﻿using BudgetCast.Common.Application.Extensions;
+using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Api.Infrastructure.Extensions;
 using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Queries;

@@ -1,79 +1,67 @@
-﻿using BudgetCast.Common.Application.Behavior.Idempotency;
-using BudgetCast.Common.Application.Behavior.Logging;
-using BudgetCast.Common.Application.Behavior.Validation;
-using BudgetCast.Common.Authentication;
-using FluentValidation;
-using MediatR;
+﻿using BudgetCast.Common.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.Reflection;
 using System.Security.Claims;
+using BudgetCast.Common.Operations;
 
-namespace BudgetCast.Common.Web.Extensions
+namespace BudgetCast.Common.Web.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddIdentityContext(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationServices(
-            this IServiceCollection services, 
-            params Assembly[] assemblies)
-        {
-            services.AddMediatR(assemblies);
+        services.AddScoped<IIdentityContext, IdentityContext>(provider =>
+        {                
+            var httpCtxAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+            var httpContext = httpCtxAccessor.HttpContext;
 
-            // Register MediatR pipelines for logging, validation and idempotency
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
-            services.AddTransient(service =>
+            if (httpContext is null)
             {
-                var options = service.GetRequiredService<IOptionsMonitor<LoggingOptions>>();
-                var currentValue = options.CurrentValue;
-                return new LoggingBehaviorSetting(
-                    enableRequestPayloadTrace: currentValue.IncludeRequestBody,
-                    enableResponsePayloadTrace: currentValue.IncludePayload);
-            });
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotentBehavior<,>));
-
-            services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();
-
-            // Register Fluent Validators from the same assembly where Commands/Queries
-            foreach (var assembly in assemblies)
-            {
-                services.AddValidatorsFromAssembly(assembly);
+                return IdentityContext.GetNewEmpty();
             }
 
-            return services;
-        }
+            var principal = httpCtxAccessor.HttpContext.User;
+            if (!principal.IsAnyIdentityAuthenticated())
+            {
+                return IdentityContext.GetNewEmpty();
+            }
 
-        public static IServiceCollection AddIdentityContext(this IServiceCollection services)
-        {
-            services.AddScoped<IIdentityContext, IdentityContext>(provider =>
-            {                
-                var httpCtxAccessor = provider.GetRequiredService<IHttpContextAccessor>();
-                var httpContext = httpCtxAccessor.HttpContext;
+            var userId = principal.Claims
+                .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                if (httpContext is null)
-                {
-                    return IdentityContext.GetNewEmpty();
-                }
+            var identityContext = new IdentityContext(userId: userId);
 
-                var principal = httpCtxAccessor.HttpContext.User;
-                if (!principal.IsAnyIdentityAuthenticated())
-                {
-                    return IdentityContext.GetNewEmpty();
-                }
+            return identityContext;
+        });
 
-                var userId = principal.Claims
-                    .First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-
-                var identityContext = new IdentityContext(userId: userId);
-
-                return identityContext;
-            });
-
-            return services;
-        }
-
-        public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
-            => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
+        return services;
     }
+    
+    /// <summary>
+    /// Adds OperationContext instance to DI, so interested service can retrieve it and
+    /// get the information about a distributed operation
+    /// </summary>
+    /// <param name="services">IServiceCollection</param>
+    /// <returns>IServiceCollection</returns>
+    public static IServiceCollection AddOperationContext(this IServiceCollection services)
+    {
+        services.AddScoped(provider =>
+        {
+            var http = provider.GetRequiredService<IHttpContextAccessor>();
+
+            if (http.HttpContext.Request.Headers.ContainsKey(OperationContext.HeaderName))
+            {
+                var operationContextHeader = http.HttpContext.Request.Headers[OperationContext.HeaderName];
+                return OperationContext.Unpack(operationContextHeader);
+            }
+
+            // If the value was not present in the headers - assume this is the start
+            return OperationContext.New();
+        });
+
+        return services;
+    }
+
+    public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
+        => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
 }

@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Messaging
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Messaging.Azure.ServiceBus", "..\..\Common\BudgetCast.Common.Messaging.Azure.ServiceBus\BudgetCast.Common.Messaging.Azure.ServiceBus.csproj", "{72B771AD-0120-42FF-9470-2E604DC76FA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Application.Extensions", "..\..\Common\BudgetCast.Common.Application.Extensions\BudgetCast.Common.Application.Extensions.csproj", "{3B44854E-0F86-4330-8EC4-C3ADDB148FB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{72B771AD-0120-42FF-9470-2E604DC76FA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72B771AD-0120-42FF-9470-2E604DC76FA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72B771AD-0120-42FF-9470-2E604DC76FA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +144,7 @@ Global
 		{9979DDA6-97FD-4DE7-8717-4B03A6A7412F} = {1FEAB7D2-9455-42E1-AB93-5C70E11ADBE7}
 		{D6177FA1-1E3A-41B1-9E50-704E8FA97F0F} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 		{72B771AD-0120-42FF-9470-2E604DC76FA3} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
+		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5045AC5-A2C9-480C-9373-33E83F4DB204}

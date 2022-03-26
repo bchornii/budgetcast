@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Common.Web.Extensions
+﻿namespace BudgetCast.Common.Application.Extensions
 {
     public class LoggingOptions
     {
