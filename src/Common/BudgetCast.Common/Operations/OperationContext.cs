@@ -4,7 +4,9 @@ namespace BudgetCast.Common.Operations;
 
 public sealed class OperationContext
 {
-    public const string HeaderName = "OperationContext";
+    public const string MetaName = "OperationContextData";
+    
+    private readonly List<OperationPart> _operationParts;
 
     /// <summary>
     /// A unique Id, which is stays the same for all commands in a complex operation
@@ -21,6 +23,11 @@ public sealed class OperationContext
     /// Contains a collection of all operation parts tracked from the start of a complex operation
     /// </summary>
     public IReadOnlyCollection<OperationPart> OperationParts => _operationParts;
+
+    /// <summary>
+    /// Returns <c>true</c> if operation context does not have any parts added.
+    /// </summary>
+    public bool IsEmpty => _operationParts.Count == 0;
 
     /// <summary>
     /// The last performed operation
@@ -80,9 +87,25 @@ public sealed class OperationContext
         return $"{CorrelationId:N}:{StartedOn.Ticks}";
     }
 
+    public string GetDescription()
+        => string.Join(" --> ", OperationParts.Select(p => p.Name));
+
     public override string ToString()
         => $"The operation with CorrelationId: {CorrelationId} was started on {StartedOn}. {Environment.NewLine}" +
            $"Operation parts: {string.Join(",", OperationParts.Select(p => p.Name))}";
+    
+    private bool Equals(OperationContext other)
+    {
+        return CorrelationId == other.CorrelationId;
+    }
 
-    private readonly List<OperationPart> _operationParts;
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is OperationContext other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return CorrelationId.GetHashCode();
+    }
 }

@@ -34,7 +34,8 @@ public static class ServiceCollectionExtensions
             .AddCustomServices()
             .AddIdentityContext()
             .AddHttpContextAccessor()
-            .AddMessagingExtensions();
+            .AddMessagingExtensions()
+            .AddOperationContext();
         
         return services;
     }

@@ -30,7 +30,5 @@ public class ExpensesRemovedEvent : IntegrationEvent
         AddedBy = addedBy;
         AddedAt = addedAt;
         CampaignName = campaignName;
-
-        Id = $"{TenantId}-{ExpenseId}";
     }
 }

@@ -10,7 +10,7 @@ namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;
 /// <summary>
 /// Event publisher implementation based on <see cref="ServiceBusSender"/> API.
 /// </summary>
-public class EventsPublisher : IEventsPublisher, IAsyncDisposable
+public class EventsPublisher : IEventsPublisher, IAsyncDisposable, IDisposable
 {
     private readonly IMessageSerializer _messageSerializer;
     private readonly ILogger<EventsPublisher> _logger;
@@ -63,6 +63,15 @@ public class EventsPublisher : IEventsPublisher, IAsyncDisposable
         return true;
     }
     
-    public async ValueTask DisposeAsync() 
-        => await _sender.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await _sender.CloseAsync();
+        await _sender.DisposeAsync();
+    }
+
+    public void Dispose()
+    {
+        _sender.CloseAsync().GetAwaiter().GetResult();
+        _sender.DisposeAsync().GetAwaiter().GetResult();
+    }
 }

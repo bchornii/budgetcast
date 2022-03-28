@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using BudgetCast.Common.Web.Filters;
 
 namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
 {
@@ -34,7 +35,8 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
                         .AllowCredentials());
             });
 
-            services.AddControllers();
+            services.AddControllers(
+                options => options.Filters.Add<OperationFilter>());
 
             return services;
         }

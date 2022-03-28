@@ -31,6 +31,15 @@ public static class LoggerExtensions
         return logger;
     }
     
+    public static ILogger LogInformationIfEnabled(this ILogger logger, string? message, object arg1, object arg2, object arg3, object arg4)
+    {
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation(message, arg1, arg2, arg3, arg4);
+        }
+        return logger;
+    }
+    
     public static ILogger LogDebugIfEnabled(this ILogger logger, string? message, params object?[] args)
     {
         if (logger.IsEnabled(LogLevel.Debug))
