@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Operations;
+using BudgetCast.Common.Web.Contextual;
 using BudgetCast.Common.Web.Messaging;
 
 namespace BudgetCast.Common.Web.Extensions;
@@ -49,17 +50,34 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped(provider =>
         {
-            var http = provider.GetRequiredService<IHttpContextAccessor>();
+            var http = provider.GetService<IHttpContextAccessor>();
+            var httpContext = http?.HttpContext;
 
-            if (http.HttpContext.Request.Headers.ContainsKey(OperationContext.HeaderName))
+            // If it's downstream HTTP call context
+            if (httpContext is not null && httpContext.Request.Headers.ContainsKey(OperationContext.MetaName))
             {
-                var operationContextHeader = http.HttpContext.Request.Headers[OperationContext.HeaderName];
+                var operationContextHeader = httpContext.Request.Headers[OperationContext.MetaName];
                 return OperationContext.Unpack(operationContextHeader);
             }
+            
+            // If it's ongoing call and operation context has already been initialized (Http-based workload)
+            if (httpContext is not null && httpContext.Items.ContainsKey(OperationContext.MetaName))
+            {
+                return (OperationContext)httpContext.Items[OperationContext.MetaName];
+            }
+            
+            // If it's ongoing call and operation context has already been initialized (Non Http-based workload)
+            var workloadContext = provider.GetRequiredService<WorkloadContext>();
+            if (workloadContext.Contains(OperationContext.MetaName))
+            {
+                return (OperationContext)workloadContext.GetItem(OperationContext.MetaName);
+            }
 
-            // If the value was not present in the headers - assume this is the start
+            // If previous checks failed assume it's a new operation context
             return OperationContext.New();
         });
+
+        services.AddWorkloadContext();
 
         return services;
     }
@@ -74,12 +92,25 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IMessagePreSendingStep, AddTenantToMessageMetadataStep>();
         services.AddScoped<IMessagePreSendingStep, AddUserToMessageMetadataStep>();
+        services.AddScoped<IMessagePreSendingStep, AddOrUpdateOperationContext>();
         
         services.AddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
         services.AddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();
+        services.AddScoped<IMessagePreProcessingStep, ExtractOperationContextFromMessageMetadataStep>();
         return services;
     }
 
     public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
+    
+    /// <summary>
+    /// Registers <see cref="WorkloadContext"/> as a <see cref="ServiceLifetime.Scoped"/> service.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection AddWorkloadContext(this IServiceCollection services)
+    {
+        services.AddScoped<WorkloadContext>();
+        return services;
+    }
 }
