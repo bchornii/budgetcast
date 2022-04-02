@@ -150,6 +150,9 @@
     <Build Include="dbo\Tables\ScriptDeploymentLog.sql" />
     <Build Include="dbo\StoredProcedures\spGetScriptDeploymentLog.sql" />
     <Build Include="dbo\StoredProcedures\spSaveScriptDeploymentLog.sql" />
+    <Build Include="dbo\Tables\OperationRegistry.sql">
+      <AnsiNulls>On</AnsiNulls>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

@@ -1,12 +1,11 @@
 ﻿using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Data;
 using BudgetCast.Common.Domain;
-using BudgetCast.Common.Web.Middleware;
 using BudgetCast.Expenses.Data.Extensions;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using BudgetCast.Expenses.Queries.Campaigns;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BudgetCast.Expenses.Data
 {
@@ -44,6 +43,7 @@ namespace BudgetCast.Expenses.Data
         {
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(ExpensesDbContext).Assembly)
+                .ApplyConfiguration(new OperationRegistryEntityTypeConfiguration("OperationsRegistry", DbSchema))
                 .MarkDateTimeColumnsAsDateTimeInDb();
 
             modelBuilder

@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using BudgetCast.Common.Data;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Operations;
 using BudgetCast.Common.Web.Contextual;
+using BudgetCast.Common.Web.HostedServices;
 using BudgetCast.Common.Web.Messaging;
+using Microsoft.Extensions.Configuration;
 
 namespace BudgetCast.Common.Web.Extensions;
 
@@ -100,6 +103,21 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    /// <summary>
+    /// Registers application hosted services.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddHostedServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<OperationsRegistryOptions>(
+            configuration.GetSection(nameof(OperationsRegistryOptions)));
+        services.AddScoped<IOperationsDal, OperationsDal>();
+        services.AddHostedService<OperationsHostedService>();
+        return services;
+    }
+    
     public static bool IsAnyIdentityAuthenticated(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.Identities.Any(i => i.IsAuthenticated);
     

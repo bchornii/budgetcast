@@ -110,6 +110,9 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
                     options.EnableSensitiveDataLogging();
                 }
             });
+            
+            services.AddScoped<DbContext>(services =>
+                services.GetRequiredService<ExpensesDbContext>());
 
             services.AddScoped<IUnitOfWork>(services =>
                     services.GetRequiredService<ExpensesDbContext>());

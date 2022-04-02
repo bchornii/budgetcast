@@ -14,9 +14,10 @@ public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services, 
-            params Assembly[] assemblies)
+            Type? operationRegistryType = null,
+            params Assembly[] commandAndQueryAssemblies)
         {
-            services.AddMediatR(assemblies);
+            services.AddMediatR(commandAndQueryAssemblies);
 
             // Register MediatR pipelines for logging, validation and idempotency
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
@@ -31,10 +32,17 @@ public static class ServiceCollectionExtensions
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotentBehavior<,>));
 
-            services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();
+            if (operationRegistryType is null)
+            {
+                services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();   
+            }
+            else
+            {
+                services.AddScoped(typeof(IOperationsRegistry), operationRegistryType);
+            }
 
             // Register Fluent Validators from the same assembly where Commands/Queries
-            foreach (var assembly in assemblies)
+            foreach (var assembly in commandAndQueryAssemblies)
             {
                 services.AddValidatorsFromAssembly(assembly);
             }

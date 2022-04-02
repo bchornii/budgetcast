@@ -36,7 +36,7 @@ public class IdempotentBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         if (isOperationExists)
         {
-            _logger.LogInformation("Operation {CommandName} has been already executed", commandName);
+            _logger.LogInformation("Operation {CommandName} has been already executed and won't be repeated", commandName);
 
             if (!string.IsNullOrWhiteSpace(operationResult))
             {
