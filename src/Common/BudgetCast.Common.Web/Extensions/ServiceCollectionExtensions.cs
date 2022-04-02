@@ -92,7 +92,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IMessagePreSendingStep, AddTenantToMessageMetadataStep>();
         services.AddScoped<IMessagePreSendingStep, AddUserToMessageMetadataStep>();
-        services.AddScoped<IMessagePreSendingStep, AddOrUpdateOperationContext>();
+        services.AddScoped<IMessagePreSendingStep, AddOrUpdateOperationContextStep>();
         
         services.AddScoped<IMessagePreProcessingStep, ExtractTenantFromMessageMetadataStep>();
         services.AddScoped<IMessagePreProcessingStep, ExtractUserFromMessageMetadataStep>();

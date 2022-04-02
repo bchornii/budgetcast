@@ -32,8 +32,8 @@ public class ExtractOperationContextFromMessageMetadataStep :
         
         if (messageHasOperationContext && wcDoesNotHaveOperationContext)
         {
-            var operationContextFromMessage = message.GetMetadata(OperationContext.MetaName);
-            var operationContext = OperationContext.Unpack(operationContextFromMessage);
+            var messageOperationContext = message.GetMetadata(OperationContext.MetaName);
+            var operationContext = OperationContext.Unpack(messageOperationContext);
             _logger.LogInformationIfEnabled(
                 "Extracted operation context with {OperationContextId} id and '{OperationContextPath}' path from message {MessageId}", 
                 operationContext.CorrelationId, operationContext.GetDescription(), message.Id);

@@ -16,6 +16,11 @@ public class WorkloadContext
     }
 
     /// <summary>
+    /// Returns total items in collection
+    /// </summary>
+    public int TotalItems => _items.Count;
+
+    /// <summary>
     /// Verifies if specified key exists.
     /// </summary>
     /// <param name="key"></param>
@@ -34,15 +39,38 @@ public class WorkloadContext
     /// <summary>
     /// Adds value into collection of items via specific key.
     /// </summary>
-    /// <remarks>
-    /// If <see cref="HttpContext"/> is available items is also
-    /// added into <see cref="HttpContext.Items"/> collection.
-    /// </remarks>
     /// <param name="key">Key</param>
     /// <param name="value">Value</param>
     public void AddItem(object key, object value) 
         => _items[key] = value;
 
+    /// <summary>
+    /// Removes all records from items collection.
+    /// </summary>
+    public void Clear()
+        => _items.Clear();
+    
     public override string ToString() 
         => string.Join("-", _items.Select(x => $"{x.Key}:{x.Value}"));
+    
+    protected bool Equals(WorkloadContext other) 
+        => _items.Equals(other._items);
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+        
+        return obj.GetType() == GetType() && Equals((WorkloadContext) obj);
+    }
+
+    public override int GetHashCode() 
+        => _items.GetHashCode();
 }
