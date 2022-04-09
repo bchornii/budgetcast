@@ -32,7 +32,7 @@ public class IdempotentBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         var commandName = typeof(TRequest).GetGenericTypeName();
 
         _logger.LogInformation("Checking {CommandName} for prior execution", commandName);
-        var (isOperationExists, operationResult) = await _operationsRegistry.TryAddCurrentOperationAsync();
+        var (isOperationExists, operationResult) = await _operationsRegistry.TryAddCurrentOperationAsync(cancellationToken);
 
         if (isOperationExists)
         {
@@ -60,12 +60,12 @@ public class IdempotentBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
                 var json = JsonSerializer.Serialize(result, result.GetType(), AppConstants.DefaultOptions);
                 _logger.LogInformation("Saving operation result of {CommandName} with payload {Payload}", commandName, json);
 
-                await _operationsRegistry.SetCurrentOperationCompletedAsync(json);
+                await _operationsRegistry.SetCurrentOperationCompletedAsync(json, cancellationToken);
             }
             else
             {
                 _logger.LogInformation("Saving operation result of {CommandName} with empty payload", commandName);
-                await _operationsRegistry.SetCurrentOperationCompletedAsync();
+                await _operationsRegistry.SetCurrentOperationCompletedAsync((CancellationToken) cancellationToken);
             }
 
             _logger.LogInformation("Operation result of {CommandName} saved", commandName);

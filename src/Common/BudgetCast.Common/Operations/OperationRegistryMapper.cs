@@ -8,7 +8,7 @@ public static class OperationRegistryMapper
         {
             Operations = context.OperationParts.ToList(),
             StartedOn = context.StartedOn,
-            CorrelationId = context.CorrelationId.ToString(),
+            CorrelationId = context.CorrelationId,
             IdempodentOperationName = context.IdempodentOperation.Name,
             OperationResult = string.Empty,
         };
