@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Operations;
 using Xunit;
 
 namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
@@ -34,7 +35,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _nonGenericResultBehavior.StubHandlerDelegate();
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: true, OperationResult: string.Empty));
 
             // Act
@@ -55,7 +56,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _genericResultBehavior.StubHandlerDelegate();
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: true, OperationResult: fakeDataAsOperationResult));
             
             // Act
@@ -81,7 +82,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _nonGenericResultBehavior.HandlerDelegate(commandResult);
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -100,7 +101,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _genericResultBehavior.HandlerDelegate(commandResult);
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -123,7 +124,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _nonGenericResultBehavior.HandlerDelegate(commandResult);
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -133,9 +134,9 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
 
             // Assert
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync((CancellationToken) CancellationToken.None), Times.Never);
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>()), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>(), CancellationToken.None), Times.Never);
         }
 
         [Theory]
@@ -145,7 +146,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _genericResultBehavior.HandlerDelegate(commandResult);
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -155,9 +156,9 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
 
             // Assert
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync((CancellationToken) CancellationToken.None), Times.Never);
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>()), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>(), CancellationToken.None), Times.Never);
         }
 
         #endregion
@@ -171,7 +172,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _nonGenericResultBehavior.HandlerDelegate(commandResult);
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -181,9 +182,9 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
 
             // Assert
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(), Times.Once);
+                .Verify(v => v.SetCurrentOperationCompletedAsync((CancellationToken) CancellationToken.None), Times.Once);
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>()), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync(It.IsAny<string>(), CancellationToken.None), Times.Never);
         }
 
         [Theory]
@@ -195,7 +196,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             var json = JsonSerializer.Serialize(commandResult, commandResult.GetType(), AppConstants.DefaultOptions);
 
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
 
             // Act
@@ -205,9 +206,9 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
 
             // Assert
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(), Times.Never);
+                .Verify(v => v.SetCurrentOperationCompletedAsync((CancellationToken) CancellationToken.None), Times.Never);
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Verify(v => v.SetCurrentOperationCompletedAsync(json), Times.Once);
+                .Verify(v => v.SetCurrentOperationCompletedAsync(json, CancellationToken.None), Times.Once);
         }
         #endregion
 
@@ -218,7 +219,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _nonGenericResultBehavior.ExceptionHandlerDelegate();
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
             // Act
             var result = _nonGenericResultBehavior
@@ -235,7 +236,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Arrange
             var successHandler = _genericResultBehavior.ExceptionHandlerDelegate();
             Mock.Get(_genericResultBehavior.OperationsRegistry)
-                .Setup(s => s.TryAddCurrentOperationAsync())
+                .Setup(s => s.TryAddCurrentOperationAsync(CancellationToken.None))
                 .ReturnsAsync((IsOperationExists: false, OperationResult: string.Empty));
             // Act
             var result = _genericResultBehavior

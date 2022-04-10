@@ -19,5 +19,6 @@ public static class HostBuilderExtensions
                 subscribeToEvents: processor =>
                 {
                     processor.SubscribeTo<ExpensesAddedEvent, ExpensesEventsHandler>();
+                    processor.SubscribeTo<ExpensesRemovedEvent, ExpensesEventsHandler>();
                 });
 }

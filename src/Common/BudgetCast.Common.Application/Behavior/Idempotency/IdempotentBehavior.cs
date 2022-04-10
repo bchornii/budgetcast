@@ -3,90 +3,90 @@ using BudgetCast.Common.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using BudgetCast.Common.Operations;
 
-namespace BudgetCast.Common.Application.Behavior.Idempotency
+namespace BudgetCast.Common.Application.Behavior.Idempotency;
+
+/// <summary>
+/// For any command of type <see cref="ICommand{TResult}"/> where <c>TResult</c> is
+/// <see cref="Result"/> or <seealso cref="Result{T}"/> verifies if it was previously executed by
+/// relying on <see cref="IOperationsRegistry"/> as a source.
+/// </summary>
+public class IdempotentBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : ICommand<TResponse>
+    where TResponse : Result
 {
-    /// <summary>
-    /// For any command of type <see cref="ICommand{TResult}"/> where <c>TResult</c> is
-    /// <see cref="Result"/> or <seealso cref="Result{T}"/> verifies if it was previously executed by
-    /// relying on <see cref="IOperationsRegistry"/> as a source.
-    /// </summary>
-    public class IdempotentBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : ICommand<TResponse>
-        where TResponse : Result
+    private readonly IOperationsRegistry _operationsRegistry;
+    private readonly ILogger<IdempotentBehavior<TRequest, TResponse>> _logger;
+
+    public IdempotentBehavior(
+        IOperationsRegistry operationsRegistry,
+        ILogger<IdempotentBehavior<TRequest, TResponse>> logger)
     {
-        private readonly IOperationsRegistry _operationsRegistry;
-        private readonly ILogger<IdempotentBehavior<TRequest, TResponse>> _logger;
+        _operationsRegistry = operationsRegistry;
+        _logger = logger;
+    }
 
-        public IdempotentBehavior(
-            IOperationsRegistry operationsRegistry,
-            ILogger<IdempotentBehavior<TRequest, TResponse>> logger)
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    {
+        var commandName = typeof(TRequest).GetGenericTypeName();
+
+        _logger.LogInformation("Checking {CommandName} for prior execution", commandName);
+        var (isOperationExists, operationResult) = await _operationsRegistry.TryAddCurrentOperationAsync(cancellationToken);
+
+        if (isOperationExists)
         {
-            _operationsRegistry = operationsRegistry;
-            _logger = logger;
-        }
+            _logger.LogInformation("Operation {CommandName} has been already executed and won't be repeated", commandName);
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-        {
-            var commandName = typeof(TRequest).GetGenericTypeName();
-
-            _logger.LogInformation("Checking {CommandName} for prior execution", commandName);
-            var (isOperationExists, operationResult) = await _operationsRegistry.TryAddCurrentOperationAsync();
-
-            if (isOperationExists)
+            if (!string.IsNullOrWhiteSpace(operationResult))
             {
-                _logger.LogInformation("Operation {CommandName} has been already executed", commandName);
-
-                if (!string.IsNullOrWhiteSpace(operationResult))
-                {
-                    var data = GetGenericResultOf(operationResult);
-                    return (data as TResponse)!;
-                }
-
-                return (Success.Empty as TResponse)!;
+                var data = GetGenericResultOf(operationResult);
+                return (data as TResponse)!;
             }
 
-            _logger.LogInformation("Sending {CommandName} command for execution", commandName);
-            var result = await next();
-            _logger.LogInformation("{CommandName} command executed", commandName);
+            return (Success.Empty as TResponse)!;
+        }
 
-            var (isOfSuccessType, isGeneric) = result.CheckIfSuccess();
+        _logger.LogInformation("Sending {CommandName} command for execution", commandName);
+        var result = await next();
+        _logger.LogInformation("{CommandName} command executed", commandName);
 
-            if (isOfSuccessType)
+        var (isOfSuccessType, isGeneric) = result.CheckIfSuccess();
+
+        if (isOfSuccessType)
+        {
+            if (isGeneric)
             {
-                if (isGeneric)
-                {
-                    var json = JsonSerializer.Serialize(result, result.GetType(), AppConstants.DefaultOptions);
-                    _logger.LogInformation("Saving operation result of {CommandName} with payload {Payload}", commandName, json);
+                var json = JsonSerializer.Serialize(result, result.GetType(), AppConstants.DefaultOptions);
+                _logger.LogInformation("Saving operation result of {CommandName} with payload {Payload}", commandName, json);
 
-                    await _operationsRegistry.SetCurrentOperationCompletedAsync(json);
-                }
-                else
-                {
-                    _logger.LogInformation("Saving operation result of {CommandName} with empty payload", commandName);
-                    await _operationsRegistry.SetCurrentOperationCompletedAsync();
-                }
-
-                _logger.LogInformation("Operation result of {CommandName} saved", commandName);
+                await _operationsRegistry.SetCurrentOperationCompletedAsync(json, cancellationToken);
+            }
+            else
+            {
+                _logger.LogInformation("Saving operation result of {CommandName} with empty payload", commandName);
+                await _operationsRegistry.SetCurrentOperationCompletedAsync((CancellationToken) cancellationToken);
             }
 
-            return result;
+            _logger.LogInformation("Operation result of {CommandName} saved", commandName);
         }
 
-        private static object GetGenericResultOf(string operationResult)
-        {
-            var genericArgumentType = typeof(TResponse)
-                .GetGenericResultArgumentType();
+        return result;
+    }
 
-            var genericResultType = typeof(Success<>)
-                .MakeGenericType(genericArgumentType);
+    private static object GetGenericResultOf(string operationResult)
+    {
+        var genericArgumentType = typeof(TResponse)
+            .GetGenericResultArgumentType();
 
-            var data = JsonSerializer.Deserialize(
-                json: operationResult,
-                returnType: genericResultType,
-                options: AppConstants.DefaultOptions);
+        var genericResultType = typeof(Success<>)
+            .MakeGenericType(genericArgumentType);
 
-            return data!;
-        }
+        var data = JsonSerializer.Deserialize(
+            json: operationResult,
+            returnType: genericResultType,
+            options: AppConstants.DefaultOptions);
+
+        return data!;
     }
 }

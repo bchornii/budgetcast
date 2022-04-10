@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
@@ -38,6 +39,27 @@ public class EventsPublisherTests
     }
 
     [Fact]
+    public async Task Publish_Has_3_PreSending_Steps_Should_Execute_Them()
+    {
+        // Arrange
+        var @event = new FakeIntegrationEvent();
+        
+        _fixture
+            .Setup3PreSendingSteps();
+
+        // Act
+        await _fixture.Publisher
+            .Publish(@event, CancellationToken.None);
+        
+        // Assert
+        foreach (var preSendingStep in _fixture.PreSendingSteps)
+        {
+            Mock.Get(preSendingStep)
+                .Verify(v => v.Execute(@event, CancellationToken.None));
+        }
+    }
+
+    [Fact]
     public async Task Publish_Message_Serialized_Should_Be_Sent()
     {
         // Arrange
@@ -71,6 +93,8 @@ public class EventsPublisherTests
     
     private class EventsPublisherFixture
     {
+        private List<IMessagePreSendingStep> _preSendingSteps;
+        
         private IMessageSerializer MessageSerializer { get; }
 
         private ILogger<EventsPublisher> Logger { get; }
@@ -81,6 +105,8 @@ public class EventsPublisherTests
         
         private FakeServiceBusSender ServiceBusSender { get; }
 
+        public IReadOnlyCollection<IMessagePreSendingStep> PreSendingSteps => _preSendingSteps;
+
         public ServiceBusMessage SentMessage => ServiceBusSender.CachedMessage;
         
         public EventsPublisher Publisher { get; }
@@ -90,6 +116,7 @@ public class EventsPublisherTests
             ServiceBusSender = new FakeServiceBusSender();
             ServiceBusClient = new FakeServiceBusClient(ServiceBusSender);
 
+            _preSendingSteps = new List<IMessagePreSendingStep>();
             MessageSerializer = Mock.Of<IMessageSerializer>();
             Logger = Mock.Of<ILogger<EventsPublisher>>();
             EventBusClient = Mock.Of<IEventBusClient>();
@@ -97,7 +124,7 @@ public class EventsPublisherTests
                 .Setup(s => s.Client)
                 .Returns(ServiceBusClient);
             
-            Publisher = new EventsPublisher(EventBusClient, MessageSerializer, Logger);
+            Publisher = new EventsPublisher(EventBusClient, MessageSerializer, Logger, PreSendingSteps);
         }
 
         public EventsPublisherFixture SetupMessageSerializerToReturnNull()
@@ -118,6 +145,18 @@ public class EventsPublisherTests
                 .Setup(s => s
                     .PackAsJson(It.IsAny<IntegrationEvent>()))
                 .Returns(json);
+            
+            return this;
+        }
+
+        public EventsPublisherFixture Setup3PreSendingSteps()
+        {
+            _preSendingSteps.AddRange(new[]
+            {
+                Mock.Of<IMessagePreSendingStep>(),
+                Mock.Of<IMessagePreSendingStep>(),
+                Mock.Of<IMessagePreSendingStep>(),
+            });
             
             return this;
         }

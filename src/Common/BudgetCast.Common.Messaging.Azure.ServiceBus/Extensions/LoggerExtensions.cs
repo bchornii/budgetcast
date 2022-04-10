@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace BudgetCast.Common.Extensions;
+namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 
 public static class LoggerExtensions
 {
@@ -27,6 +27,15 @@ public static class LoggerExtensions
         if (logger.IsEnabled(LogLevel.Information))
         {
             logger.LogInformation(message, arg1, arg2, arg3);
+        }
+        return logger;
+    }
+    
+    public static ILogger LogInformationIfEnabled(this ILogger logger, string? message, object arg1, object arg2, object arg3, object arg4)
+    {
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation(message, arg1, arg2, arg3, arg4);
         }
         return logger;
     }

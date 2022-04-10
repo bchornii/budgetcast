@@ -1,5 +1,5 @@
-﻿using BudgetCast.Common.Extensions;
-using BudgetCast.Common.Messaging.Abstractions.Events;
+﻿using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Events;

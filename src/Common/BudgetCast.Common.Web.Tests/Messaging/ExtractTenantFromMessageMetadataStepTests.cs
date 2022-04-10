@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using AutoFixture;
 using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Messaging.Abstractions.Common;
-using BudgetCast.Common.Messaging.Azure.ServiceBus.Common;
-using FluentAssertions;
+using BudgetCast.Common.Web.Messaging;
+using BudgetCast.Common.Web.Tests.Messaging.Fakes;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using static BudgetCast.Common.Web.Messaging.MessageMetadataConstants;
 
-namespace BudgetCast.Common.Messaging.Azure.ServiceBus.Tests.Common;
+namespace BudgetCast.Common.Web.Tests.Messaging;
 
 public class ExtractTenantFromMessageMetadataStepTests
 {
@@ -26,7 +27,7 @@ public class ExtractTenantFromMessageMetadataStepTests
         // Arrange
         var expectedTenantId = _fixture.Fixture.Create<long>();
         var integrationMessage = new FakeIntegrationMessage();
-        integrationMessage.SetCurrentTenant(expectedTenantId);
+        integrationMessage.SetMetadata(TenantIdMetadataKey, expectedTenantId.ToString());
 
         // Act
         await _fixture.Step.Execute(integrationMessage, CancellationToken.None);
@@ -42,7 +43,7 @@ public class ExtractTenantFromMessageMetadataStepTests
         // Arrange
         var messageTenantId = _fixture.Fixture.Create<long>();
         var integrationMessage = new FakeIntegrationMessage();
-        integrationMessage.SetCurrentTenant(messageTenantId);
+        integrationMessage.SetMetadata(TenantIdMetadataKey, messageTenantId.ToString());
 
         Mock.Get(_fixture.IdentityContext)
             .Setup(x => x.HasAssociatedTenant)
@@ -63,8 +64,8 @@ public class ExtractTenantFromMessageMetadataStepTests
         var integrationMessage = new Mock<IntegrationMessage>().Object;
 
         Mock.Get(integrationMessage)
-            .Setup(s => s.GetTenantId())
-            .Returns((long?)null);
+            .Setup(s => s.GetMetadata(TenantIdMetadataKey))
+            .Returns((string)null!);
 
         // Act
         await _fixture.Step.Execute(integrationMessage, CancellationToken.None);
@@ -91,9 +92,5 @@ public class ExtractTenantFromMessageMetadataStepTests
             Logger = Mock.Of<ILogger<ExtractTenantFromMessageMetadataStep>>();
             Step = new ExtractTenantFromMessageMetadataStep(IdentityContext, Logger);
         }
-    }
-
-    private class FakeIntegrationMessage : IntegrationMessage
-    {
     }
 }

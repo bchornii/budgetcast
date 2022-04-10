@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Security.Claims;
 using System.Text;
+using BudgetCast.Common.Application.Extensions;
+using BudgetCast.Common.Operations;
 using BudgetCast.Common.Web.Extensions;
 using ILogger = Serilog.ILogger;
 
@@ -27,13 +29,18 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         services
+            .AddApplicationServices(
+                operationRegistryType: typeof(InMemoryOperationRegistry),
+                commandAndQueryAssemblies: typeof(Program).Assembly)
             .AddCustomCors(configuration)
             .AddCustomSignalR(configuration)
             .AddCustomHealthCheck(configuration)
             .AddJwtAuthentication(configuration)
             .AddCustomServices()
             .AddIdentityContext()
-            .AddHttpContextAccessor();
+            .AddHttpContextAccessor()
+            .AddMessagingExtensions()
+            .AddOperationContext();
         
         return services;
     }

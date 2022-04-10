@@ -1,7 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
-using BudgetCast.Common.Extensions;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using Microsoft.Extensions.Logging;
 using static BudgetCast.Common.Messaging.Azure.ServiceBus.Events.EventBusConstants;
 

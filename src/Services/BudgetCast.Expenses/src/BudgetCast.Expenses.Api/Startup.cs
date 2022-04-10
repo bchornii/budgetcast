@@ -1,4 +1,6 @@
-﻿using BudgetCast.Common.Web.Extensions;
+﻿using BudgetCast.Common.Application.Extensions;
+using BudgetCast.Common.Data;
+using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Api.Infrastructure.Extensions;
 using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Queries;
@@ -22,6 +24,7 @@ namespace BudgetCast.Expenses.Api
         {
             services
                 .AddCustomMvc(Configuration)
+                .AddHostedServices(Configuration)
                 .AddJwtAuthentication(Configuration)
                 .AddHttpContextAccessor()
                 .AddCustomSwagger()
@@ -29,10 +32,13 @@ namespace BudgetCast.Expenses.Api
                 .AddDomainServices()
                 .AddDataAccessServices()
                 .AddApplicationServices(
+                    operationRegistryType: typeof(MsSqlOperationsRegistry),
                     typeof(CommandsAssemblyMarkerType).Assembly,
                     typeof(QueriesAssemblyMarkerType).Assembly)
                 .AddCustomDbContext(Configuration, Env)
-                .AddCustomHealthCheck(Configuration);
+                .AddCustomHealthCheck(Configuration)
+                .AddMessagingExtensions()
+                .AddOperationContext();
         }
 
         public void Configure(IApplicationBuilder app)
