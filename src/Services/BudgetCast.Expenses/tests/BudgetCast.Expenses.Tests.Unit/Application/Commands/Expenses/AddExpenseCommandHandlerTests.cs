@@ -104,7 +104,6 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             // Arrange
             var tenantId = _fixture.Fixture.Create<long>();
             var expenseId = _fixture.Fixture.Create<long>();
-            var expectedEvtId = $"{tenantId}-{expenseId}";
             
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
             
@@ -125,10 +124,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             await _fixture.Handler.Handle(command, CancellationToken.None);
             
             // Assert
-            publishedEvent
-                .Id
-                .Should()
-                .Be(expectedEvtId);
+            Mock.Get(_fixture.EventsPublisher)
+                .Verify(v => v.Publish(publishedEvent, CancellationToken.None));
         }
 
         private sealed class AddExpenseCommandHandlerFixture
