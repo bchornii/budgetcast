@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Data\BudgetCast.Common.Data.csproj" />
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj" />
     <ProjectReference Include="..\..\..\..\Common\BudgetCast.Common\BudgetCast.Common.csproj" />
+    <ProjectReference Include="..\BudgetCast.Expenses.Commands\BudgetCast.Expenses.Commands.csproj" />
     <ProjectReference Include="..\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
     <ProjectReference Include="..\BudgetCast.Expenses.Queries\BudgetCast.Expenses.Queries.csproj" />
   </ItemGroup>

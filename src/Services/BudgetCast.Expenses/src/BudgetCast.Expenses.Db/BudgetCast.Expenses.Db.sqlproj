@@ -153,6 +153,7 @@
     <Build Include="dbo\Tables\OperationRegistry.sql">
       <AnsiNulls>On</AnsiNulls>
     </Build>
+    <Build Include="dbo\Tables\IntegrationEventLog.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

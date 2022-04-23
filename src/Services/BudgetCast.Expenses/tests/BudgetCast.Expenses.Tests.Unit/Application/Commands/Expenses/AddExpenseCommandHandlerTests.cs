@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Messaging;
 using Xunit;
 
@@ -99,7 +100,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         }
 
         [Fact]
-        public async Task Handle_Should_Publish_ExpenseAddedEvent()
+        public async Task Handle_Should_Add_ExpenseAdded_IntegrationEvent()
         {
             // Arrange
             var tenantId = _fixture.Fixture.Create<long>();
@@ -108,8 +109,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
             
             ExpensesAddedEvent publishedEvent = default!;
-            Mock.Get(_fixture.EventsPublisher)
-                .Setup(s => s.Publish(It.IsAny<ExpensesAddedEvent>(), CancellationToken.None))
+            Mock.Get(_fixture.EventLogService)
+                .Setup(s => s.AddEventAsync(It.IsAny<ExpensesAddedEvent>(), CancellationToken.None))
                 .Callback<IntegrationEvent, CancellationToken>((evt, _) => publishedEvent = (ExpensesAddedEvent)evt);
 
             Mock.Get(_fixture.IdentityContext)
@@ -124,8 +125,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             await _fixture.Handler.Handle(command, CancellationToken.None);
             
             // Assert
-            Mock.Get(_fixture.EventsPublisher)
-                .Verify(v => v.Publish(publishedEvent, CancellationToken.None));
+            Mock.Get(_fixture.EventLogService)
+                .Verify(v => v.AddEventAsync(publishedEvent, CancellationToken.None));
         }
 
         private sealed class AddExpenseCommandHandlerFixture
@@ -138,7 +139,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
 
             public IUnitOfWork UnitOfWork { get; }
             
-            public IEventsPublisher EventsPublisher { get; }
+            public IIntegrationEventLogService EventLogService { get; }
             
             public IIdentityContext IdentityContext { get; }
 
@@ -150,14 +151,14 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 ExpensesRepository = Mock.Of<IExpensesRepository>();
                 CampaignRepository = Mock.Of<ICampaignRepository>();
                 UnitOfWork = Mock.Of<IUnitOfWork>();
-                EventsPublisher = Mock.Of<IEventsPublisher>();
+                EventLogService = Mock.Of<IIntegrationEventLogService>();
                 IdentityContext = Mock.Of<IIdentityContext>();
                 Handler = new AddExpenseCommandHandler(
                     ExpensesRepository, 
                     CampaignRepository, 
                     UnitOfWork,
-                    EventsPublisher,
-                    IdentityContext);
+                    IdentityContext,
+                    EventLogService);
             }
 
             public AddExpenseCommandHandlerFixture InitDefaultStubs()

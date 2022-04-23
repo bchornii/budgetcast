@@ -2,14 +2,14 @@ using BudgetCast.Common.Operations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BudgetCast.Common.Data;
+namespace BudgetCast.Common.Data.OperationRegistry;
 
 public class OperationsDal : IOperationsDal
 {
-    private readonly DbContext _dbContext;
+    private readonly OperationalDbContext _dbContext;
     private readonly ILogger<OperationsDal> _logger;
 
-    public OperationsDal(DbContext context, ILogger<OperationsDal> logger)
+    public OperationsDal(OperationalDbContext context, ILogger<OperationsDal> logger)
     {
         _dbContext = context;
         _logger = logger;
@@ -18,7 +18,7 @@ public class OperationsDal : IOperationsDal
     public async Task<string> CleanAsync(CancellationToken cancellationToken)
     {
         var tableName = _dbContext.Model
-            .FindEntityType(typeof(OperationRegistryEntity))!.GetTableName();
+            .FindEntityType(typeof(OperationRegistryEntry))!.GetTableName();
 
         _logger.LogInformation("Start 'TRUNCATE TABLE {TableName}' operation", tableName);
         await _dbContext.Database.OpenConnectionAsync(cancellationToken);

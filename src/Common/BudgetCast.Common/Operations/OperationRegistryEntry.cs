@@ -1,6 +1,6 @@
 namespace BudgetCast.Common.Operations;
 
-public class OperationRegistryEntity
+public class OperationRegistryEntry
 {
     public int Id { get; set; }
 

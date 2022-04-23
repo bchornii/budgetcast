@@ -2,9 +2,9 @@ namespace BudgetCast.Common.Operations;
 
 public static class OperationRegistryMapper
 {
-    public static OperationRegistryEntity MapOperationRegistry(OperationContext context)
+    public static OperationRegistryEntry MapOperationRegistry(OperationContext context)
     {
-        return new OperationRegistryEntity
+        return new OperationRegistryEntry
         {
             Operations = context.OperationParts.ToList(),
             StartedOn = context.StartedOn,

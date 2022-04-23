@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
-using BudgetCast.Common.Data;
+using BudgetCast.Common.Data.OperationRegistry;
 using BudgetCast.Common.Messaging.Abstractions.Common;
 using BudgetCast.Common.Operations;
 using BudgetCast.Common.Web.Contextual;

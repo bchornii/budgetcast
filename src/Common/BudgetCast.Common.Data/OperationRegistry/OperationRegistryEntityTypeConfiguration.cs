@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 
-namespace BudgetCast.Common.Data;
+namespace BudgetCast.Common.Data.OperationRegistry;
 
-public sealed class OperationRegistryEntityTypeConfiguration : IEntityTypeConfiguration<OperationRegistryEntity>
+public sealed class OperationRegistryEntityTypeConfiguration : IEntityTypeConfiguration<OperationRegistryEntry>
 {
     private readonly string _tableName;
     private readonly string _schemaName;
@@ -16,7 +16,7 @@ public sealed class OperationRegistryEntityTypeConfiguration : IEntityTypeConfig
         _schemaName = schemaName;
     }
 
-    public void Configure(EntityTypeBuilder<OperationRegistryEntity> builder)
+    public void Configure(EntityTypeBuilder<OperationRegistryEntry> builder)
     {
         builder.ToTable(_tableName, _schemaName);
 

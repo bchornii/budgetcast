@@ -6,16 +6,22 @@ namespace BudgetCast.Expenses.Data.Campaigns
 {
     internal class CampaignEntityTypeConfiguration : IEntityTypeConfiguration<Campaign>
     {
+        private readonly string _schemaName;
         private const string CampaignIdSeq = nameof(CampaignIdSeq);
 
+        public CampaignEntityTypeConfiguration(string schemaName)
+        {
+            _schemaName = schemaName;
+        }
+        
         public void Configure(EntityTypeBuilder<Campaign> builder)
         {
-            builder.ToTable("Campaigns", ExpensesDbContext.DbSchema);
+            builder.ToTable("Campaigns", _schemaName);
 
             builder.HasKey(x => new { x.TenantId, x.Id });
 
             builder.Property(x => x.Id)
-                .UseHiLo(CampaignIdSeq, ExpensesDbContext.DbSchema);
+                .UseHiLo(CampaignIdSeq, _schemaName);
 
             builder.Ignore(x => x.DomainEvents);
 

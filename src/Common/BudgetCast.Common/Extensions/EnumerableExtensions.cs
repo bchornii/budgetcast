@@ -19,5 +19,8 @@
         {
             return !source?.Any() ?? true;
         }
+
+        public static IEnumerable<T> OrEmpty<T>(this IEnumerable<T>? source)
+            => source ?? Array.Empty<T>();
     }
 }

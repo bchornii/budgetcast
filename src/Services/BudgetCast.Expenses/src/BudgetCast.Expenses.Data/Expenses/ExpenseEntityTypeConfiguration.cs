@@ -7,16 +7,22 @@ namespace BudgetCast.Expenses.Data.Expenses
 {
     internal class ExpenseEntityTypeConfiguration : IEntityTypeConfiguration<Expense>
     {
+        private readonly string _schemaName;
         private const string ExpenseIdSeq = nameof(ExpenseIdSeq);
 
+        public ExpenseEntityTypeConfiguration(string schemaName)
+        {
+            _schemaName = schemaName;
+        }
+        
         public void Configure(EntityTypeBuilder<Expense> builder)
         {
-            builder.ToTable("Expenses", ExpensesDbContext.DbSchema);
+            builder.ToTable("Expenses", _schemaName);
 
             builder.HasKey(x => new { x.TenantId, x.Id });
 
             builder.Property(x => x.Id)
-                .UseHiLo(ExpenseIdSeq, ExpensesDbContext.DbSchema);
+                .UseHiLo(ExpenseIdSeq, _schemaName);
 
             builder.Ignore(x => x.DomainEvents);
 
@@ -32,7 +38,7 @@ namespace BudgetCast.Expenses.Data.Expenses
 
             builder.OwnsMany<Tag>(nameof(Expense.Tags), x =>
             {
-                x.ToTable("Tags", ExpensesDbContext.DbSchema);
+                x.ToTable("Tags", _schemaName);
                 x.WithOwner().HasForeignKey("ExpenseTenantId", "ExpenseId");
                 x.Property<long>("Id");
                 x.HasKey("Id");

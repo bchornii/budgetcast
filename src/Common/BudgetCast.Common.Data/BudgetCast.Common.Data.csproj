@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BudgetCast.Common.Application\BudgetCast.Common.Application.csproj" />
+      <ProjectReference Include="..\BudgetCast.Common.Domain\BudgetCast.Common.Domain.csproj" />
       <ProjectReference Include="..\BudgetCast.Common\BudgetCast.Common.csproj" />
     </ItemGroup>
 
