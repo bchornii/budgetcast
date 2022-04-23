@@ -8,17 +8,15 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BudgetCast.Common.Data;
 
-public class OperationalDbContext : DbContext
+public abstract class OperationalDbContext : DbContext
 {
     private IDbContextTransaction? _currentTransaction;
-    
-    public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction;
-    
-    public DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; }
-    
-    public DbSet<OperationRegistryEntry> OperationRegistryEntries { get; set; }
 
-    public bool HasActiveTransaction => _currentTransaction != null;
+    public virtual DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; }
+    
+    public virtual DbSet<OperationRegistryEntry> OperationRegistryEntries { get; set; }
+
+    public virtual bool HasActiveTransaction => _currentTransaction != null;
     
     protected virtual string DbSchema => "dbo";
 
@@ -33,7 +31,10 @@ public class OperationalDbContext : DbContext
         OperationRegistryEntries = Set<OperationRegistryEntry>();
     }
     
-    public async Task<IDbContextTransaction?> BeginTransactionAsync()
+    public virtual IDbContextTransaction? GetCurrentTransaction() 
+        => _currentTransaction;
+    
+    public virtual async Task<IDbContextTransaction?> BeginTransactionAsync()
     {
         if (_currentTransaction != null)
         {
@@ -45,7 +46,7 @@ public class OperationalDbContext : DbContext
         return _currentTransaction;
     }
     
-    public async Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken)
+    public virtual async Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken)
     {
         if (transaction == null)
         {
