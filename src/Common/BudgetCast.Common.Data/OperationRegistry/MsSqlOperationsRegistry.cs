@@ -1,15 +1,15 @@
 ﻿using BudgetCast.Common.Operations;
 using Microsoft.EntityFrameworkCore;
 
-namespace BudgetCast.Common.Data;
+namespace BudgetCast.Common.Data.OperationRegistry;
 
 public class MsSqlOperationsRegistry : IOperationsRegistry
 {
     private readonly OperationContext _operationContext;
 
-    private readonly DbContext _dbContext;
+    private readonly OperationalDbContext _dbContext;
 
-    public MsSqlOperationsRegistry(OperationContext operationContext, DbContext dbContext)
+    public MsSqlOperationsRegistry(OperationContext operationContext, OperationalDbContext dbContext)
     {
         _operationContext = operationContext;
         _dbContext = dbContext;
@@ -27,8 +27,7 @@ public class MsSqlOperationsRegistry : IOperationsRegistry
                     string.Empty : operation.OperationResult);
         }
 
-        _dbContext
-            .Set<OperationRegistryEntity>()
+        _dbContext.OperationRegistryEntries
             .Add(OperationRegistryMapper.MapOperationRegistry(_operationContext));
 
         return (false, string.Empty);
@@ -53,9 +52,9 @@ public class MsSqlOperationsRegistry : IOperationsRegistry
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<OperationRegistryEntity?> GetOperationAsync(CancellationToken cancellationToken) =>
+    private async Task<OperationRegistryEntry?> GetOperationAsync(CancellationToken cancellationToken) =>
         await _dbContext
-            .Set<OperationRegistryEntity>()
+            .OperationRegistryEntries
             .Where(s => s.CorrelationId == _operationContext.CorrelationId
                         && s.IdempodentOperationName == _operationContext.IdempodentOperation.Name)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);

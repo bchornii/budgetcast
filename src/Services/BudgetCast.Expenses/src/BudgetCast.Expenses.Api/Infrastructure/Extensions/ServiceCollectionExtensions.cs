@@ -15,7 +15,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using BudgetCast.Common.Data;
+using BudgetCast.Common.Data.EventLog;
+using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Web.Filters;
+using BudgetCast.Expenses.Commands;
+using BudgetCast.Expenses.Messaging;
 
 namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
 {
@@ -110,12 +115,22 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
                     options.EnableSensitiveDataLogging();
                 }
             });
-            
-            services.AddScoped<DbContext>(services =>
+
+            services.AddScoped<OperationalDbContext>(services =>
                 services.GetRequiredService<ExpensesDbContext>());
 
-            services.AddScoped<IUnitOfWork>(services =>
-                    services.GetRequiredService<ExpensesDbContext>());
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            services.AddScoped<IIntegrationEventLogService>(services => new IntegrationEventLogService(
+                services.GetRequiredService<OperationalDbContext>(), () =>
+                {
+                    var integrationEventType = typeof(IntegrationEvent);
+                    return typeof(ExpensesAddedEvent)
+                        .Assembly
+                        .GetTypes()
+                        .Where(t => t.IsAssignableTo(integrationEventType))
+                        .ToList();
+                }));
 
             return services;
         }

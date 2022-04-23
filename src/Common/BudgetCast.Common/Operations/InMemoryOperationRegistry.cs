@@ -30,9 +30,9 @@ public sealed class InMemoryOperationRegistry : IOperationsRegistry
         if (!string.IsNullOrWhiteSpace(existingOperationEntityJson))
         {
             var existingOperationEntity = JsonSerializer
-                .Deserialize(existingOperationEntityJson, typeof(OperationRegistryEntity));
+                .Deserialize(existingOperationEntityJson, typeof(OperationRegistryEntry));
             
-            if (existingOperationEntity is OperationRegistryEntity entity)
+            if (existingOperationEntity is OperationRegistryEntry entity)
             {
                 var operationResult = entity.OperationResult;
                 return (true, operationResult.ToEmptyIfNull());
@@ -41,7 +41,7 @@ public sealed class InMemoryOperationRegistry : IOperationsRegistry
 
         var operationEntity = OperationRegistryMapper.MapOperationRegistry(_operationContext);
         var operationEntityJson = JsonSerializer
-            .Serialize(operationEntity, typeof(OperationRegistryEntity));
+            .Serialize(operationEntity, typeof(OperationRegistryEntry));
         await _cache.SetStringAsync(key, operationEntityJson, _cacheEntryOptions, cancellationToken);
 
         return (false, string.Empty);
@@ -62,14 +62,14 @@ public sealed class InMemoryOperationRegistry : IOperationsRegistry
         if (existingOperationEntityJson is not null)
         {
             var existingOperationEntity = JsonSerializer
-                .Deserialize(existingOperationEntityJson, typeof(OperationRegistryEntity));
+                .Deserialize(existingOperationEntityJson, typeof(OperationRegistryEntry));
             
-            if (existingOperationEntity is OperationRegistryEntity entity)
+            if (existingOperationEntity is OperationRegistryEntry entity)
             {
                 entity.OperationResult = result;
                 
                 var operationEntityJson = JsonSerializer
-                    .Serialize(entity, typeof(OperationRegistryEntity));
+                    .Serialize(entity, typeof(OperationRegistryEntry));
                 await _cache.SetStringAsync(key, operationEntityJson, _cacheEntryOptions, cancellationToken);
             }
         }

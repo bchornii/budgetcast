@@ -1,6 +1,8 @@
 ﻿using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Data;
 using BudgetCast.Common.Domain;
+using BudgetCast.Expenses.Data.Campaigns;
+using BudgetCast.Expenses.Data.Expenses;
 using BudgetCast.Expenses.Data.Extensions;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
@@ -9,10 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCast.Expenses.Data
 {
-    public class ExpensesDbContext : DbContext, IUnitOfWork
+    public class ExpensesDbContext : OperationalDbContext
     {
-        public const string DbSchema = "dbo";
-
         public DbSet<Expense> Expenses { get; set; }
 
         public DbSet<Expense> ExpenseItems { get; set; }
@@ -26,7 +26,7 @@ namespace BudgetCast.Expenses.Data
         public string UserId { get; }
 
         public ExpensesDbContext(
-            DbContextOptions<ExpensesDbContext> options,
+            DbContextOptions options,
             IIdentityContext identityContext)
             : base(options)
         {
@@ -41,9 +41,12 @@ namespace BudgetCast.Expenses.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            
             modelBuilder
-                .ApplyConfigurationsFromAssembly(typeof(ExpensesDbContext).Assembly)
-                .ApplyConfiguration(new OperationRegistryEntityTypeConfiguration("OperationsRegistry", DbSchema))
+                .ApplyConfiguration(new ExpenseEntityTypeConfiguration(DbSchema))
+                .ApplyConfiguration(new ExpenseItemEntityTypeConfiguration(DbSchema))
+                .ApplyConfiguration(new CampaignEntityTypeConfiguration(DbSchema))
                 .MarkDateTimeColumnsAsDateTimeInDb();
 
             modelBuilder
@@ -51,7 +54,7 @@ namespace BudgetCast.Expenses.Data
                 .AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
         }
 
-        public async Task<bool> Commit(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var now = SystemDt.Current;
 
@@ -62,9 +65,8 @@ namespace BudgetCast.Expenses.Data
             ChangeTracker
                 .Entries<IMustHaveTenant>()
                 .UpdateTenantValues(Tenant);
-
-            var result = await base.SaveChangesAsync();
-            return result > 0;
+            
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

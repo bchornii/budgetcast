@@ -6,16 +6,22 @@ namespace BudgetCast.Expenses.Data.Expenses
 {
     internal class ExpenseItemEntityTypeConfiguration : IEntityTypeConfiguration<ExpenseItem>
     {
+        private readonly string _schemaName;
         private const string ExpenseItemIdSeq = nameof(ExpenseItemIdSeq);
 
+        public ExpenseItemEntityTypeConfiguration(string schemaName)
+        {
+            _schemaName = schemaName;
+        }
+        
         public void Configure(EntityTypeBuilder<ExpenseItem> builder)
         {
-            builder.ToTable("ExpenseItems", ExpensesDbContext.DbSchema);
+            builder.ToTable("ExpenseItems", _schemaName);
 
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .UseHiLo(ExpenseItemIdSeq, ExpensesDbContext.DbSchema);
+                .UseHiLo(ExpenseItemIdSeq, _schemaName);
 
             builder.Ignore(x => x.DomainEvents);
 

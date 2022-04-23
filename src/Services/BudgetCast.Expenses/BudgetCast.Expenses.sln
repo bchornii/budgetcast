@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Data", "..\..\Common\BudgetCast.Common.Data\BudgetCast.Common.Data.csproj", "{CAFE7EB1-CA8F-4818-AD1A-8F112FA73040}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Data.Tests.Unit", "..\..\Common\BudgetCast.Common.Data.Tests.Unit\BudgetCast.Common.Data.Tests.Unit.csproj", "{C550F9AB-ABE3-4728-A7C2-57088471DE29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{CAFE7EB1-CA8F-4818-AD1A-8F112FA73040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAFE7EB1-CA8F-4818-AD1A-8F112FA73040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAFE7EB1-CA8F-4818-AD1A-8F112FA73040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C550F9AB-ABE3-4728-A7C2-57088471DE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C550F9AB-ABE3-4728-A7C2-57088471DE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C550F9AB-ABE3-4728-A7C2-57088471DE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C550F9AB-ABE3-4728-A7C2-57088471DE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{72B771AD-0120-42FF-9470-2E604DC76FA3} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 		{3B44854E-0F86-4330-8EC4-C3ADDB148FB6} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 		{CAFE7EB1-CA8F-4818-AD1A-8F112FA73040} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
+		{C550F9AB-ABE3-4728-A7C2-57088471DE29} = {788E6D87-EB09-423F-806A-49FCBF469EBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5045AC5-A2C9-480C-9373-33E83F4DB204}

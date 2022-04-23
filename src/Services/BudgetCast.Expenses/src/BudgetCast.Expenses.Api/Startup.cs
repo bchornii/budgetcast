@@ -1,5 +1,5 @@
 ﻿using BudgetCast.Common.Application.Extensions;
-using BudgetCast.Common.Data;
+using BudgetCast.Common.Data.OperationRegistry;
 using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Expenses.Api.Infrastructure.Extensions;
 using BudgetCast.Expenses.Commands;

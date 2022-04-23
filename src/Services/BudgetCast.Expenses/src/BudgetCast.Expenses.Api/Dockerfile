@@ -40,6 +40,7 @@ COPY ["Common/BudgetCast.Common.Data/BudgetCast.Common.Data.csproj",            
 COPY ["Common/BudgetCast.Common.Tests/BudgetCast.Common.Tests.csproj",									  	"Common/BudgetCast.Common.Tests/"]
 COPY ["Common/BudgetCast.Common.Application.Tests.Unit/BudgetCast.Common.Application.Tests.Unit.csproj",  	"Common/BudgetCast.Common.Application.Tests.Unit/"]
 COPY ["Common/BudgetCast.Common.Web.Tests/BudgetCast.Common.Web.Tests.csproj",  							"Common/BudgetCast.Common.Web.Tests/"]
+COPY ["Common/BudgetCast.Common.Data.Tests.Unit/BudgetCast.Common.Data.Tests.Unit.csproj",  				"Common/BudgetCast.Common.Data.Tests.Unit/"]
 
 COPY ["Common/BudgetCast.Common.Messaging.Abstractions/BudgetCast.Common.Messaging.Abstractions.csproj",            "Common/BudgetCast.Common.Messaging.Abstractions/"]
 COPY ["Common/BudgetCast.Common.Messaging.Azure.ServiceBus/BudgetCast.Common.Messaging.Azure.ServiceBus.csproj",    "Common/BudgetCast.Common.Messaging.Azure.ServiceBus/"]
