@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BudgetCast.Common.Data;
 
-public abstract class OperationalDbContext : DbContext
+public class OperationalDbContext : DbContext
 {
     private IDbContextTransaction? _currentTransaction;
 
@@ -60,7 +60,6 @@ public abstract class OperationalDbContext : DbContext
 
         try
         {
-            await base.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
         catch

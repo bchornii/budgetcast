@@ -10,7 +10,7 @@ public class IntegrationEventLogService : IIntegrationEventLogService
     private readonly OperationalDbContext _dbContext;
     private readonly List<Type> _eventTypes;
 
-    private string ScopeId { get; }
+    public string ScopeId { get; }
 
     public IntegrationEventLogService(OperationalDbContext dbContext, Func<List<Type>> eventTypes)
     {
@@ -28,29 +28,6 @@ public class IntegrationEventLogService : IIntegrationEventLogService
     {
         var result = await _dbContext.IntegrationEventLogs
             .Where(e => e.ScopeId == ScopeId && e.State == EventStateEnum.NotPublished)
-            .ToListAsync();
-
-        if (result.Any())
-        {
-            return result
-                .OrderBy(o => o.CreationTime)
-                .Select(e => e.DeserializeJsonContent(_eventTypes.Find(t => t.Name == e.EventTypeShortName)!));
-        }
-
-        return Array.Empty<IntegrationEventLogEntry>();
-    }
-    
-    /// <summary>
-    /// Retrieve events pending to be published which were emitted in scope of particular transaction.
-    /// </summary>
-    /// <param name="transactionId"></param>
-    /// <returns></returns>
-    public async Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventsPendingToPublishAsync(Guid transactionId)
-    {
-        var tid = transactionId.ToString();
-
-        var result = await _dbContext.IntegrationEventLogs
-            .Where(e => e.TransactionId == tid && e.State == EventStateEnum.NotPublished)
             .ToListAsync();
 
         if (result.Any())

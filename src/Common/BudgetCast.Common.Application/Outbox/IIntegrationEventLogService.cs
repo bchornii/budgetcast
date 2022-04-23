@@ -12,13 +12,6 @@ public interface IIntegrationEventLogService
     Task<IEnumerable<IntegrationEventLogEntry>> RetrieveScopedEventsPendingToPublishAsync();
 
     /// <summary>
-    /// Retrieve events pending to be published which were emitted in scope of particular transaction.
-    /// </summary>
-    /// <param name="transactionId"></param>
-    /// <returns></returns>
-    Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventsPendingToPublishAsync(Guid transactionId);
-
-    /// <summary>
     /// Add event to event store. Note, at this point it won't be actually saved.
     /// </summary>
     /// <param name="event"></param>
