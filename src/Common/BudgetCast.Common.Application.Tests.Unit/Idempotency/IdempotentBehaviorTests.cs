@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Operations;
 using Xunit;
 
@@ -67,7 +68,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Assert
             result
                 .Should().BeOfType<Success<FakeData>>()
-                .Subject.Data
+                .Subject.Value
                 .Should().Be(fakeData);
         }
 

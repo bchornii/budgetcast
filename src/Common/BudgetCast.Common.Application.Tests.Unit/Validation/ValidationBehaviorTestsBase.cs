@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Common.Application.Tests.Unit.Validation
 {

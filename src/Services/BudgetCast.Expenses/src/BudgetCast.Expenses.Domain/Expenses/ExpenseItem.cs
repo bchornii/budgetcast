@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
@@ -40,19 +41,47 @@ namespace BudgetCast.Expenses.Domain.Expenses
             Title = title;
         }
 
+        public static Result<ExpenseItem> Create(string title, decimal price, int quantity = 1)
+        {
+            if (price < 0)
+            {
+                return Errors.Expenses.ExpenseItems.ExpenseItemPriceIsZero();
+            }
+
+            if (quantity < 1 || quantity > 1000)
+            {
+                return Errors.Expenses.ExpenseItems.ItemsQuantityIsMoreThan1000();
+            }
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return Errors.Expenses.ExpenseItems.ItemShouldHaveTitle();
+            }
+
+            return new ExpenseItem(title, price, quantity);
+        }
+
         public ExpenseItem(string title, decimal price,
             int quantity, string note) : this(title, price, quantity)
         {
             Note = note;
         }
 
-        public void UpdateNote(string note)
+        public static Result<ExpenseItem> Create(string title, decimal price,
+            int quantity, string note)
+        {
+            return new ExpenseItem(title, price, quantity, note);
+        }
+
+        public Result UpdateNote(string note)
         {
             if(string.IsNullOrWhiteSpace(note))
             {
-                throw new Exception("Note should contain some text.");
+                return Errors.Expenses.ExpenseItems.NoteShouldHaveText();
             }
             Note = note;
+            
+            return Success.Empty;
         }
 
         public string GetTitle() => Title;

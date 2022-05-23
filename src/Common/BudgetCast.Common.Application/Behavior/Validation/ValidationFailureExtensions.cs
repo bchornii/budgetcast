@@ -4,7 +4,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
 {
     public static class ValidationFailureExtensions
     {
-        public static Dictionary<string, string[]> GetErrors(this IEnumerable<ValidationFailure> validationFailures)
+        public static Dictionary<string, List<string>> GetErrors(this IEnumerable<ValidationFailure> validationFailures)
         {
             return validationFailures
                 .ToLookup(
@@ -12,7 +12,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
                         ? "generalErrors"
                         : f.PropertyName,
                     f => f.ErrorMessage)
-                .ToDictionary(e => e.Key, e => e.ToArray());
+                .ToDictionary(e => e.Key, e => e.ToList());
         }
 
         public static ValidationErrorCode GetMostSevereErrorCode(this IEnumerable<ValidationFailure> validationFailures)

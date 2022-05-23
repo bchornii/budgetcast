@@ -3,6 +3,7 @@ using BudgetCast.Common.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Operations;
 
 namespace BudgetCast.Common.Application.Behavior.Idempotency;

@@ -1,4 +1,5 @@
-﻿using BudgetCast.Common.Extensions;
+﻿using BudgetCast.Common.Domain.Results;
+using BudgetCast.Common.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;

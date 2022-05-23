@@ -1,4 +1,5 @@
-﻿using BudgetCast.Common.Extensions;
+﻿using BudgetCast.Common.Domain.Results;
+using BudgetCast.Common.Extensions;
 
 namespace BudgetCast.Common.Application.Behavior.Validation
 {
@@ -34,7 +35,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
             };
         }
 
-        public Result AsResult(IDictionary<string, string[]> errors)
+        public Result AsResult(IDictionary<string, List<string>> errors)
         {
             var codeIdLowerCase = Code.ToLowerInvariant();
             return codeIdLowerCase switch
@@ -58,7 +59,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
             };
         }
 
-        public Result AsGenericResultOf(Type underlyingType, IDictionary<string, string[]> errors)
+        public Result AsGenericResultOf(Type underlyingType, IDictionary<string, List<string>> errors)
         {
             var code = Code.ToLowerInvariant();
             return code switch

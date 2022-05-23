@@ -3,6 +3,7 @@ using BudgetCast.Common.Application.Behavior.Validation;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using BudgetCast.Common.Domain.Results;
 using Xunit;
 
 namespace BudgetCast.Common.Application.Tests.Unit.Validation

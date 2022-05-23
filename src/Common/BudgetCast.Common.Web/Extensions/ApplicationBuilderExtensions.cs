@@ -75,6 +75,8 @@ namespace BudgetCast.Common.Web.Extensions
                     { "traceId", exceptionId.ToString() },
                     { "connectionId", connection.ConnectionId },
                 },
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Instance = "ApiExceptionHandling",
             })
             {
                 StatusCode = (int)HttpStatusCode.InternalServerError,
