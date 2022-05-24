@@ -170,10 +170,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
                 var result = new Tag[totalItems];
                 for (int i = 0; i < result.Length; i++)
                 {
-                    result[i] = new Tag
-                    {
-                        Name = Fixture.Create<string>()
-                    };
+                    result[i] = Tag.Create(Fixture.Create<string>()).Value;
                 }
                 return result;
             }

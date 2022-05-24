@@ -25,7 +25,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
 
         public static ValidationErrorCode Parse(string errorCode)
         {
-            var errorCodeLowerCase = errorCode.ToLowerInvariant();
+            var errorCodeLowerCase = errorCode?.ToLowerInvariant();
             return errorCodeLowerCase switch
             {
                 NonExistingDataCode => NonExistingData,

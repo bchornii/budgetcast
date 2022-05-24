@@ -31,7 +31,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
                 .GetValidatorsWithNoErrorResults();
             _nonGenericResultBehavior.AddValidators(validatorsWithoutErrors);
 
-            var successHandler = _nonGenericResultBehavior.HandlerDelegate(new Success());
+            var successHandler = _nonGenericResultBehavior.HandlerDelegate(Success.Empty);
 
             // Act
             var result = await _nonGenericResultBehavior

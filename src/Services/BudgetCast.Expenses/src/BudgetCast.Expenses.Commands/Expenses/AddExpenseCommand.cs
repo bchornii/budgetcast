@@ -58,7 +58,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             }
 
             var expense = Expense.Create(request.AddedAt, campaign, request.Description).Value;
-
+            
             var tags = Mapper.MapFrom(request.Tags);
             var addTagsResult = expense.AddTags(tags);
 

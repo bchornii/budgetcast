@@ -8,9 +8,9 @@ namespace BudgetCast.Common.Application.Behavior.Validation
         {
             return validationFailures
                 .ToLookup(
-                    f => string.IsNullOrEmpty(f.PropertyName)
-                        ? "generalErrors"
-                        : f.PropertyName,
+                    f => string.IsNullOrEmpty(f.ErrorCode) || !f.ErrorCode.Contains('.')
+                        ? "app.general"
+                        : f.ErrorCode,
                     f => f.ErrorMessage)
                 .ToDictionary(e => e.Key, e => e.ToList());
         }
@@ -19,7 +19,7 @@ namespace BudgetCast.Common.Application.Behavior.Validation
         {
             return validationFailures
                 .Select(f => ValidationErrorCode.Parse(f.ErrorCode))
-                .OrderByDescending(code => code.Severity)
+                .OrderBy(code => code.Severity)
                 .First();
         }
     }

@@ -5,9 +5,11 @@ namespace BudgetCast.Expenses.Domain;
 
 public static class Errors
 {
+    public const string AppPrefix = "app";
+    
     public static class Expenses
     {
-        public static readonly string ErrorsExpenses = $"{nameof(Errors)}.{nameof(Expenses)}".ToLowerInvariant();
+        public static readonly string ErrorsExpenses = $"{AppPrefix}.{nameof(Expenses)}".ToLowerInvariant();
         
         public static Error NotMoreThan30Tags() 
             => new(ErrorsExpenses, "Receipt can't have more than 10 tags.");
@@ -17,10 +19,17 @@ public static class Errors
         public static Error AddedAtIsLessThan365() 
             => new(ErrorsExpenses, "Expense can be created with past date not more than 365 ago.");
 
+        public static class Tags
+        {
+            public static readonly string ErrorsTags = $"{AppPrefix}.{nameof(Tag)}".ToLowerInvariant();
+
+            public static Error TagNameShouldHaveValue()
+                => new(ErrorsTags, "Tag name should have non empty name.");
+        }
+
         public static class ExpenseItems
         {
-            public static readonly string ErrorsExpenseItem =
-                $"{nameof(Errors)}.{nameof(ExpenseItem)}".ToLowerInvariant();
+            public static readonly string ErrorsExpenseItem = $"{AppPrefix}.{nameof(ExpenseItem)}".ToLowerInvariant();
             
             public static Error ExpenseItemPriceIsZero()
                 => new(ErrorsExpenseItem, "Expense item price should be greater that 0.");

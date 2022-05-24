@@ -56,7 +56,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
         public void AsResult_DifferentCode_Values_Should_Return_Correct_Result(string code, Type resultType)
         {
             // Arrange
-            var errors = _fixture.Create<Dictionary<string, string[]>>();
+            var errors = _fixture.Create<Dictionary<string, List<string>>>();
             var validationErrorCode = ValidationErrorCode.Parse(code);
 
             // Act
@@ -74,7 +74,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
         public void AsGenericResultOf_DifferentCode_Values_Should_Return_Correct_Result(string code, Type resultType, Type underlyingType)
         {
             // Arrange
-            var errors = _fixture.Create<Dictionary<string, string[]>>();
+            var errors = _fixture.Create<Dictionary<string, List<string>>>();
             var validationErrorCode = ValidationErrorCode.Parse(code);
 
             // Act
