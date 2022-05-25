@@ -6,6 +6,20 @@ namespace BudgetCast.Expenses.Domain;
 public static class Errors
 {
     public const string AppPrefix = "app";
+
+    public static class Campaigns
+    {
+        public static readonly string ErrorsCampaigns = $"{AppPrefix}.{nameof(Campaigns)}".ToLowerInvariant();
+
+        public static Error CampaignNameCantBeEmpty()
+            => new(ErrorsCampaigns, "Campaign name cannot be empty.");
+
+        public static Error CampaignStartDateShouldBeLessThanCompletionDate()
+            => new(ErrorsCampaigns, "Campaign start date should not be ahead of complete date.");
+
+        public static Error CampaignWithTheSameNameAlreadyExists()
+            => new(ErrorsCampaigns, "Campaign with the same name already exists.");
+    }
     
     public static class Expenses
     {

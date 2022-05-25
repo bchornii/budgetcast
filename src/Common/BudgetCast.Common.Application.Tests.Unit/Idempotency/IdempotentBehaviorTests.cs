@@ -300,7 +300,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                 yield return new object[]
                 {
                     fakeObject,
-                    $"{{\"Data\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}",
+                    $"{{\"Value\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}",
                 };
             }
             yield return new object[]
@@ -311,7 +311,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                     DwellingAge = 1,
                     Notes = "Some notes",
                 },
-                "{\"Data\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}",
+                "{\"Value\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}",
             };
             yield return new object[]
             {
@@ -319,7 +319,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                 {
                     DealNumber = 123,
                 },
-                "{\"Data\":{\"DealNumber\":123}}",
+                "{\"Value\":{\"DealNumber\":123}}",
             };
         }
     }

@@ -1,6 +1,6 @@
-﻿namespace BudgetCast.Common.Domain.Results;
+﻿using BudgetCast.Common.Domain.Results.Exceptions;
 
-#region Abstract untyped Result
+namespace BudgetCast.Common.Domain.Results;
 
 /// <summary>
 /// Represents untyped operation result.
@@ -158,14 +158,14 @@ public abstract record Result
         return fail;
     }
     
-    public static GeneralFail GeneralFail(Result r1)
-        => GeneralFail(r1, Results.Success.Empty, Results.Success.Empty, Results.Success.Empty);
+    public static GeneralFail GeneralFailOf(Result r1)
+        => GeneralFailOf(r1, Results.Success.Empty, Results.Success.Empty, Results.Success.Empty);
     
-    public static GeneralFail GeneralFail(Result r1, Result r2)
-        => GeneralFail(r1, r2, Results.Success.Empty, Results.Success.Empty);
+    public static GeneralFail GeneralFailOf(Result r1, Result r2)
+        => GeneralFailOf(r1, r2, Results.Success.Empty, Results.Success.Empty);
 
-    public static GeneralFail GeneralFail(Result r1, Result r2, Result r3)
-        => GeneralFail(r1, r2, r3, Results.Success.Empty);
+    public static GeneralFail GeneralFailOf(Result r1, Result r2, Result r3)
+        => GeneralFailOf(r1, r2, r3, Results.Success.Empty);
 
     /// <summary>
     /// Creates <see cref="BudgetCast.Common.Domain.Results.GeneralFail"/> result and merges
@@ -176,7 +176,7 @@ public abstract record Result
     /// <param name="r3">Result #3</param>
     /// <param name="r4">Result #4</param>
     /// <returns></returns>
-    public static GeneralFail GeneralFail(Result r1, Result r2, Result r3, Result r4)
+    public static GeneralFail GeneralFailOf(Result r1, Result r2, Result r3, Result r4)
     {
         var fail = GeneralFail();
         
@@ -233,14 +233,14 @@ public abstract record Result
         return fail;
     }
 
-    public static GeneralFail<T> GeneralFail<T>(Result r1)
-        where T : notnull => GeneralFail<T>(r1, Results.Success.Empty, Results.Success.Empty, Results.Success.Empty);
+    public static GeneralFail<T> GeneralFailOf<T>(Result r1)
+        where T : notnull => GeneralFailOf<T>(r1, Results.Success.Empty, Results.Success.Empty, Results.Success.Empty);
     
-    public static GeneralFail<T> GeneralFail<T>(Result r1, Result r2)
-        where T : notnull => GeneralFail<T>(r1, r2, Results.Success.Empty, Results.Success.Empty);
+    public static GeneralFail<T> GeneralFailOf<T>(Result r1, Result r2)
+        where T : notnull => GeneralFailOf<T>(r1, r2, Results.Success.Empty, Results.Success.Empty);
 
-    public static GeneralFail<T> GeneralFail<T>(Result r1, Result r2, Result r3)
-        where T : notnull => GeneralFail<T>(r1, r2, r3, Results.Success.Empty);
+    public static GeneralFail<T> GeneralFailOf<T>(Result r1, Result r2, Result r3)
+        where T : notnull => GeneralFailOf<T>(r1, r2, r3, Results.Success.Empty);
 
     /// <summary>
     /// Creates <see cref="BudgetCast.Common.Domain.Results.GeneralFail{T}"/> result and merges
@@ -252,7 +252,7 @@ public abstract record Result
     /// <param name="r4">Result #4</param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static GeneralFail<T> GeneralFail<T>(Result r1, Result r2, Result r3, Result r4)
+    public static GeneralFail<T> GeneralFailOf<T>(Result r1, Result r2, Result r3, Result r4)
         where T : notnull
     {
         var fail = GeneralFail<T>();
@@ -339,9 +339,7 @@ public abstract record Result
 
     #endregion
 }
-#endregion
 
-#region Abstract typed Result
 /// <summary>
 /// Represented typed operation result.
 /// </summary>
@@ -392,70 +390,3 @@ public abstract record Result<T> : Result
     /// <returns></returns>
     public static implicit operator Result<T>(T value) => Success(value);
 }
-
-#endregion
-
-#region Success Result types
-
-public record Success : Result
-{
-    public static Success Empty { get; } = new();
-}
-
-public record Success<T> : Result<T> 
-    where T : notnull
-{
-    public Success(T value)
-    {
-        Value = value;
-    }
-    
-    public static implicit operator Success<T>(T value) => new(value);
-}
-
-#endregion
-
-#region General failure error types
-
-public record GeneralFail : Result
-{
-    public static implicit operator GeneralFail(Error error) => GeneralFail(error);
-}
-
-public record GeneralFail<T> : Result<T>
-    where T : notnull
-{
-    public static implicit operator GeneralFail<T>(Error error) => GeneralFail<T>(error);
-}
-
-#endregion
-
-#region Invalid input error types
-
-public record InvalidInput : GeneralFail
-{
-    public static implicit operator InvalidInput(Error error) => InvalidInput(error);
-}
-
-public record InvalidInput<T> : GeneralFail<T>
-    where T : notnull
-{
-    public static implicit operator InvalidInput<T>(Error error) => InvalidInput<T>(error);
-}
-
-#endregion
-
-#region Not-found error types
-
-public record NotFound : GeneralFail
-{
-    public static implicit operator NotFound(Error error) => Result.NotFound(error);
-}
-
-public record NotFound<T> : GeneralFail<T>
-    where T : notnull
-{
-    public static implicit operator NotFound<T>(Error error) => Result.NotFound<T>(error);
-}
-
-#endregion

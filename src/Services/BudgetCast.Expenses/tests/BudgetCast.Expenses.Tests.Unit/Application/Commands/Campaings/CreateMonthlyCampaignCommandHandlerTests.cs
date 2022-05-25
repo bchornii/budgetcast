@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Expenses.Commands.Campaigns.CreateMonthlyCampaign;
 using Xunit;
 
 namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
@@ -18,6 +19,24 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
         public CreateMonthlyCampaignCommandHandlerTests()
         {
             _fixture = new CreateMonthlyCampaignCommandHandlerFixture();
+        }
+        
+        [Fact]
+        public async Task Handle_Campaign_With_Passed_Name_Exists_Should_Return_Error_Result()
+        {
+            // Arrange
+            var command = _fixture.Fixture.Create<CreateMonthlyCampaignCommand>();
+            
+            Mock.Get(_fixture.CampaignRepository)
+                .Setup(s => s.ExistsAsync(It.IsAny<string>(), CancellationToken.None))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _fixture
+                .Handler.Handle(command, CancellationToken.None);
+
+            // Assert            
+            Assert.False(result);
         }
 
         [Fact]

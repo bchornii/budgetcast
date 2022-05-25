@@ -53,12 +53,12 @@ namespace BudgetCast.Expenses.Commands.Expenses
 
             if(campaign is null)
             {
-                var newCampaign = new Campaign(request.CampaignName);
+                var newCampaign = Campaign.Create(request.CampaignName).Value;
                 campaign = await _campaignRepository.AddAsync(newCampaign, cancellationToken);
             }
 
             var expense = Expense.Create(request.AddedAt, campaign, request.Description).Value;
-            
+
             var tags = Mapper.MapFrom(request.Tags);
             var addTagsResult = expense.AddTags(tags);
 
@@ -67,7 +67,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             
             if (!addTagsResult || !addItemResult)
             {
-                return Result.GeneralFail<long>(addTagsResult, addItemResult);
+                return Result.GeneralFailOf<long>(addTagsResult, addItemResult);
             }
             
             await _expensesRepository.AddAsync(expense, cancellationToken);

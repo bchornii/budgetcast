@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace BudgetCast.Common.Domain.Results;
+namespace BudgetCast.Common.Domain.Results.Exceptions;
 
 public class AddingErrorsToSuccessResultException : Exception
 {

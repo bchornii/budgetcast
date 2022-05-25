@@ -26,5 +26,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             yield return Name;
         }
+
+        public Tag Clone() => Create(this.Name).Value;
     }
 }

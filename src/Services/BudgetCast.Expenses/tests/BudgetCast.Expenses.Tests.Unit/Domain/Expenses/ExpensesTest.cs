@@ -60,7 +60,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
         }
 
         [Fact]
-        public void AddItem_100_Items_Exist_Should_Throw_Error()
+        public void AddItem_100_Items_Exist_Should_Return_Error_Result()
         {
             // Arrange
             var expense = _fixture.CreateFakeExpense();
@@ -72,17 +72,14 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
 
             var initTotalItems = expense.ExpenseItems.Count;
 
-            Action addExpenseItem = () =>
-            {
-                var expenseItem = _fixture.CreateFakeExpenseItems(1).First();
-                expense.AddItem(expenseItem);
-            };
+            var expenseItem = _fixture.CreateFakeExpenseItems(1).First();
 
             // Act
+            var result = expense.AddItem(expenseItem);
 
             // Assert
             initTotalItems.Should().Be(100);
-            Assert.Throws<Exception>(addExpenseItem);
+            Assert.False(result);
         }
 
         [Fact]
@@ -109,14 +106,11 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             var initTagsAmount = expense.Tags.Count;
 
             // Act
-            Action addTags = () =>
-            {
-                expense.AddTags(tags);
-            };
+            var result = expense.AddTags(tags);
 
             // Assert
             initTagsAmount.Should().Be(0);
-            Assert.Throws<Exception>(addTags);
+            Assert.False(result);
         }
 
         [Fact]
@@ -128,7 +122,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             expense.AddTags(initialTags);
             var initTagsAmount = expense.Tags.Count;
 
-            var copyOfInitialTags = initialTags.CloneJson();
+            var copyOfInitialTags = initialTags.Select(t => t.Clone()).ToArray();
 
             var additionalTags = copyOfInitialTags
                 .Concat(_fixture.CreateFakeTags(2)).ToArray();
@@ -150,7 +144,10 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             }
 
             public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<Campaign>(), Fixture.Create<string>());
+            {
+                var campaign = Campaign.Create(Fixture.Create<string>()).Value;
+                return Expense.Create(Fixture.Create<DateTime>(), campaign, Fixture.Create<string>()).Value;
+            }
 
             public ExpenseItem[] CreateFakeExpenseItems(int totalItems = 5)
             {

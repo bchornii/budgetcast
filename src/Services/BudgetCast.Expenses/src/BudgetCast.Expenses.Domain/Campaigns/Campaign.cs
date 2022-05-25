@@ -1,8 +1,9 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Expenses.Domain.Campaigns
 {
-    public class Campaign : AggregateRoot
+    public partial class Campaign : AggregateRoot
     {
         public string Name { get; private set; }
 
@@ -10,32 +11,39 @@ namespace BudgetCast.Expenses.Domain.Campaigns
 
         public DateTime? CompletesAt { get; private set; }
 
-        protected Campaign() 
+        private Campaign() 
         {
             Name = default!;
         }
 
-        public Campaign(string name) : this()
+        private Campaign(string name) : this()
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new Exception("Campaign should have title.");
-            }
-
             Name = name;
-
             (StartsAt, CompletesAt) = GetFirstAndLastDaysOfTheMonth();
         }
 
-        public Campaign(string title, DateTime startsAt, DateTime? completesAt) : this(title)
+        public static Result<Campaign> Create(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return Errors.Campaigns.CampaignNameCantBeEmpty();
+            }
+
+            return new Campaign(name);
+        }
+
+        public static Result<Campaign> Create(string name, DateTime startsAt, DateTime? completesAt)
         {
             if (startsAt > completesAt)
             {
-                throw new Exception("Campaign start date should not be ahead of complete date.");
+                return Errors.Campaigns.CampaignStartDateShouldBeLessThanCompletionDate();
             }
 
-            StartsAt = startsAt;
-            CompletesAt = completesAt;
+            var campaign = Create(name).Value;
+            campaign.StartsAt = startsAt;
+            campaign.CompletesAt = completesAt;
+
+            return campaign;
         }
 
         private static (DateTime, DateTime) GetFirstAndLastDaysOfTheMonth()

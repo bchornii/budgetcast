@@ -1,10 +1,10 @@
-﻿using BudgetCast.Common.Application;
-using BudgetCast.Common.Application.Command;
+﻿using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Domain;
 using BudgetCast.Common.Domain.Results;
+using BudgetCast.Expenses.Domain;
 using BudgetCast.Expenses.Domain.Campaigns;
 
-namespace BudgetCast.Expenses.Commands.Campaigns
+namespace BudgetCast.Expenses.Commands.Campaigns.CreateMonthlyCampaign
 {
     public record CreateMonthlyCampaignCommand(string Name) : ICommand<Result<long>>;
 
@@ -26,7 +26,15 @@ namespace BudgetCast.Expenses.Commands.Campaigns
             CreateMonthlyCampaignCommand request, 
             CancellationToken cancellationToken)
         {
-            var campaign = new Campaign(request.Name);
+            var campaignExists = await _campaignRepository
+                .ExistsAsync(request.Name, cancellationToken);
+
+            if (campaignExists)
+            {
+                return Errors.Campaigns.CampaignWithTheSameNameAlreadyExists();
+            }
+            
+            var campaign = Campaign.Create(request.Name).Value;
             await _campaignRepository.AddAsync(campaign, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
 

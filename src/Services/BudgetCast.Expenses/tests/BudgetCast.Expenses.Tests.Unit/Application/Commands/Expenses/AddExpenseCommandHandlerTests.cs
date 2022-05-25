@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using BudgetCast.Common.Domain;
 using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Commands.Expenses;
@@ -49,7 +50,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
-            var campaign = _fixture.Fixture.Create<Campaign>();
+            var campaign = Campaign.Create(_fixture.Fixture.Create<string>()).Value;
 
             Mock.Get(_fixture.CampaignRepository)
                 .Setup(s => s.GetByNameAsync(It.IsAny<string>(), CancellationToken.None))
@@ -163,13 +164,15 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
 
             public AddExpenseCommandHandlerFixture InitDefaultStubs()
             {
+                var campaign = Campaign.Create(Fixture.Create<string>()).Value;
                 Mock.Get(CampaignRepository)
                     .Setup(c => c.AddAsync(It.IsAny<Campaign>(), CancellationToken.None))
-                    .ReturnsAsync(Fixture.Create<Campaign>());
+                    .ReturnsAsync(campaign);
 
+                var expense = Expense.Create(Fixture.Create<DateTime>(), campaign, Fixture.Create<string>()).Value;
                 Mock.Get(ExpensesRepository)
                     .Setup(e => e.AddAsync(It.IsAny<Expense>(), CancellationToken.None))
-                    .ReturnsAsync(Fixture.Create<Expense>());
+                    .ReturnsAsync(expense);
                 
                 Mock.Get(IdentityContext)
                     .Setup(s => s.TenantId)

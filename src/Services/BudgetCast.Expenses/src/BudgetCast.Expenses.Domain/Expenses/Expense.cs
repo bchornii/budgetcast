@@ -21,14 +21,14 @@ namespace BudgetCast.Expenses.Domain.Expenses
         private readonly List<Tag> _tags;
         public IReadOnlyCollection<Tag> Tags => _tags;
 
-        protected Expense()
+        private Expense()
         {
             Description = default!;
             _expenseItems = new List<ExpenseItem>();
             _tags = new List<Tag>();
         }
 
-        public Expense(
+        private Expense(
             DateTime addedAt,
             Campaign campaign, 
             string description) : this()
@@ -45,12 +45,18 @@ namespace BudgetCast.Expenses.Domain.Expenses
             Campaign campaign,
             string description)
         {
-            if (addedAt < DateTime.Now.AddDays(-365))
+            var validatedAddedAt = IsValidAddingDt(addedAt).Value;
+            return new Expense(validatedAddedAt, campaign, description);
+        }
+
+        public static Result<DateTime> IsValidAddingDt(DateTime value)
+        {
+            if (value < DateTime.Now.AddDays(-365))
             {
                 return Errors.Expenses.AddedAtIsLessThan365();
             }
             
-            return new Expense(addedAt, campaign, description);
+            return value;
         }
 
         public virtual Result AddItem(ExpenseItem expenseItem)
