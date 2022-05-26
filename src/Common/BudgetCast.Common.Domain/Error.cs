@@ -27,22 +27,4 @@ public sealed class Error : ValueObject
     {
         yield return Code;
     }
-
-    /// <summary>
-    /// Formats <see cref="Error"/> as a string by splitting its parts via separator.
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString() => $"{Code}{Separator}{Value}";
-
-    public static Error Parse(string error)
-    {
-        var errorParts = error.Split(Separator);
-
-        if (errorParts.Length < 2)
-        {
-            throw new ArgumentException("Cannot parse error into Error type", nameof(error));
-        }
-        
-        return new Error(errorParts[0], errorParts[1]);
-    }
 }

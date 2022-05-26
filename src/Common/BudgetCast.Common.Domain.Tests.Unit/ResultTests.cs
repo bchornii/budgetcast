@@ -398,6 +398,20 @@ public class ResultTests
         result.Should().BeOfType<GeneralFail<FakeData>>();
         result.Errors[error.Code].Should().Contain(v => v == error.Value);
     }
+
+    [Fact]
+    public void GeneralFail_StringError_Should_Create_New_Instance_Of_Typed_GeneralFail_Type_With_Errors()
+    {
+        // Arrange
+        var errorMessage = _fixture.Fixture.Create<string>();
+        
+        // Act
+        var result = Result.GeneralFail<FakeData>(errorMessage);
+
+        // Assert
+        result.Should().BeOfType<GeneralFail<FakeData>>();
+        result.Errors["general"].Should().Contain(v => v == errorMessage);
+    }
     
     [Fact]
     public void GeneralFail_ErrorHashTable_Should_Create_New_Instance_Of_Typed_GeneralFail_Type_With_Errors()
@@ -460,6 +474,118 @@ public class ResultTests
     }
     
     #endregion
+    
+    #region Creation methods - invalid input
+
+    [Fact]
+    public void InvalidInput_Should_Return_New_Instance_Of_Untyped_InvalidInput_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.InvalidInput();
+
+        // Assert
+        result.Should().BeOfType<InvalidInput>();
+    }
+    
+    [Fact]
+    public void InvalidInput_ErrorType_Should_Create_New_Instance_Of_Untyped_InvalidInput_Type_With_Errors()
+    {
+        // Arrange
+        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.InvalidInput(error);
+
+        // Assert
+        result.Should().BeOfType<InvalidInput>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    [Fact]
+    public void InvalidInput_Should_Return_New_Instance_Of_Typed_InvalidInput_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.InvalidInput<FakeData>();
+
+        // Assert
+        result.Should().BeOfType<InvalidInput<FakeData>>();
+    }
+    
+    [Fact]
+    public void InvalidInput_ErrorType_Should_Create_New_Instance_Of_Typed_InvalidInput_Type_With_Errors()
+    {
+        // Arrange
+        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.InvalidInput<FakeData>(error);
+
+        // Assert
+        result.Should().BeOfType<InvalidInput<FakeData>>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    #endregion
+    
+    #region Creation methods - not found
+    
+    [Fact]
+    public void NotFound_Should_Return_New_Instance_Of_Untyped_NotFound_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.NotFound();
+
+        // Assert
+        result.Should().BeOfType<NotFound>();
+    }
+    
+    [Fact]
+    public void NotFound_ErrorType_Should_Create_New_Instance_Of_Untyped_NotFound_Type_With_Errors()
+    {
+        // Arrange
+        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.NotFound(error);
+
+        // Assert
+        result.Should().BeOfType<NotFound>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    [Fact]
+    public void NotFound_Should_Return_New_Instance_Of_Typed_NotFound_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.NotFound<FakeData>();
+
+        // Assert
+        result.Should().BeOfType<NotFound<FakeData>>();
+    }
+    
+    [Fact]
+    public void NotFound_ErrorType_Should_Create_New_Instance_Of_Typed_NotFound_Type_With_Errors()
+    {
+        // Arrange
+        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.NotFound<FakeData>(error);
+
+        // Assert
+        result.Should().BeOfType<NotFound<FakeData>>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    #endregion
 
     private sealed class ResultFixture
     {
@@ -469,9 +595,6 @@ public class ResultTests
         {
             Fixture = new Fixture();
         }
-        
-        public static IEnumerable<object[]> GetInstancesOfAllResultTypes()
-            => GetSuccessResultInstances().Concat(GetNonSuccessResultInstances());
 
         public static IEnumerable<object[]> GetSuccessResultInstances()
         {
@@ -489,6 +612,4 @@ public class ResultTests
             yield return new object[] { Result.NotFound<FakeData>() };
         }
     }
-    
-    public record FakeData;
 }
