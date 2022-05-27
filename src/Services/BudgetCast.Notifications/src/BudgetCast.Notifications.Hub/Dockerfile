@@ -31,9 +31,9 @@ WORKDIR /src
 # common proj files
 COPY ["Common/BudgetCast.Common/BudgetCast.Common.csproj",                          						"Common/BudgetCast.Common/"]
 COPY ["Common/BudgetCast.Common.Web/BudgetCast.Common.Web.csproj",                  						"Common/BudgetCast.Common.Web/"]
+COPY ["Common/BudgetCast.Common.Domain/BudgetCast.Common.Domain.csproj",            						"Common/BudgetCast.Common.Domain/"]
 COPY ["Common/BudgetCast.Common.Application/BudgetCast.Common.Application.csproj",  						"Common/BudgetCast.Common.Application/"]
 COPY ["Common/BudgetCast.Common.Application.Extensions/BudgetCast.Common.Application.Extensions.csproj",  	"Common/BudgetCast.Common.Application.Extensions/"]
-COPY ["Common/BudgetCast.Common.Domain/BudgetCast.Common.Domain.csproj",            						"Common/BudgetCast.Common.Domain/"]
 COPY ["Common/BudgetCast.Common.Data/BudgetCast.Common.Data.csproj",            							"Common/BudgetCast.Common.Data/"]
 
 COPY ["Common/BudgetCast.Common.Messaging.Abstractions/BudgetCast.Common.Messaging.Abstractions.csproj",                        "Common/BudgetCast.Common.Messaging.Abstractions/"]

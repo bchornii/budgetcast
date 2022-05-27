@@ -15,6 +15,8 @@ public record Success : Result
 public sealed record Success<T> : Result<T> 
     where T : notnull
 {
+    public static Success<bool> Empty { get; } = new(true);
+    
     public Success(T value)
     {
         Value = value;

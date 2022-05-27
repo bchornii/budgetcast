@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Services\BudgetCast.Expenses\src\BudgetCast.Expenses.Domain\BudgetCast.Expenses.Domain.csproj" />
+	  <ProjectReference Include="..\BudgetCast.Common.Domain\BudgetCast.Common.Domain.csproj" />
 	  <ProjectReference Include="..\BudgetCast.Common.Messaging.Abstractions\BudgetCast.Common.Messaging.Abstractions.csproj" />
 	  <ProjectReference Include="..\BudgetCast.Common\BudgetCast.Common.csproj" />
 	</ItemGroup>

@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hub", "Hub", "{E0135A7D-4BE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Notifications.Tests.Unit", "tests\BudgetCast.Notifications.Tests.Unit\BudgetCast.Notifications.Tests.Unit.csproj", "{E0E4F9FA-3984-499D-9DAA-3F0E450D3549}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Domain", "..\..\Common\BudgetCast.Common.Domain\BudgetCast.Common.Domain.csproj", "{05C8EA07-6209-420D-AB29-5755C24629DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{E0E4F9FA-3984-499D-9DAA-3F0E450D3549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0E4F9FA-3984-499D-9DAA-3F0E450D3549}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0E4F9FA-3984-499D-9DAA-3F0E450D3549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C8EA07-6209-420D-AB29-5755C24629DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C8EA07-6209-420D-AB29-5755C24629DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C8EA07-6209-420D-AB29-5755C24629DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C8EA07-6209-420D-AB29-5755C24629DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{18C51771-52FD-4D29-8625-13B4A2F9F9C3} = {B65D6BA8-1266-42B7-B5CC-89EFB5A93630}
 		{EDC5654B-ECEB-4BF1-9F0B-180FDAEEF2F5} = {E0135A7D-4BE6-476F-A999-94CF03D944D8}
 		{E0E4F9FA-3984-499D-9DAA-3F0E450D3549} = {6F264BE3-04D9-4A57-A7AE-BBC5CFF01D47}
+		{05C8EA07-6209-420D-AB29-5755C24629DE} = {B65D6BA8-1266-42B7-B5CC-89EFB5A93630}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A8FBF95-1AAF-4D50-B70F-C76E055B7745}

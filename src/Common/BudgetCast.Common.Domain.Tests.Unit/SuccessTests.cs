@@ -23,6 +23,24 @@ public class SuccessTests
             .Subject
             .Should().Be(result3);
     }
+    
+    [Fact]
+    public void Empty_Should_Return_The_Same_Instance_Of_Generic_Success_When_Called_Multiple_Times()
+    {
+        // Arrange
+        
+        // Act
+        var result1 = Success<bool>.Empty;
+        var result2 = Success<bool>.Empty;
+        var result3 = Success<bool>.Empty;
+
+        // Assert
+        result1
+            .Should().Be(result2)
+            .And
+            .Subject
+            .Should().Be(result3);
+    }
 
     [Fact]
     public void Implicit_Conversion_From_GenericType_Argument_Should_Create_New_Instance_Of_Typed_Success_Type()
