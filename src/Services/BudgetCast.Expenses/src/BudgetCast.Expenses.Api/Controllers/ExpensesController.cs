@@ -54,17 +54,4 @@ namespace BudgetCast.Expenses.Api.Controllers
             return result.ToActionResult();
         }
     }
-
-    public class Dto
-    {
-        public DateTime AddedAt { get; init; }
-
-        public string[] Tags { get; init; } = default!;
-
-        public string CampaignName { get; init; } = default!;
-
-        public string? Description { get; init; } = default!;
-
-        public decimal TotalAmount { get; set; }
-    }
 }

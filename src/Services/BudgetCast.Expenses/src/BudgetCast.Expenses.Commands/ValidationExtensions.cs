@@ -5,7 +5,7 @@ using BudgetCast.Common.Extensions;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace BudgetCast.Common.Application.Behavior.Validation;
+namespace BudgetCast.Expenses.Commands;
 
 [ExcludeFromCodeCoverage]
 public static class ValidationExtensions
@@ -23,7 +23,7 @@ public static class ValidationExtensions
             {
                 result
                     .Errors
-                    .MapToValidationFailures(context.PropertyName)
+                    .MapToValidationFailuresFor(context.PropertyName)
                     .ForEach(context.AddFailure);
             }
         });
@@ -42,7 +42,7 @@ public static class ValidationExtensions
             {
                 result
                     .Errors
-                    .MapToValidationFailures(context.PropertyName)
+                    .MapToValidationFailuresFor(context.PropertyName)
                     .ForEach(context.AddFailure);
             }
         });
@@ -60,13 +60,13 @@ public static class ValidationExtensions
             {
                 result
                     .Errors
-                    .MapToValidationFailures(context.PropertyName)
+                    .MapToValidationFailuresFor(context.PropertyName)
                     .ForEach(context.AddFailure);
             }
         });
     }
 
-    private static IEnumerable<ValidationFailure> MapToValidationFailures(
+    private static IEnumerable<ValidationFailure> MapToValidationFailuresFor(
         this IDictionary<string, List<string>> errors, 
         string propertyName)
     {

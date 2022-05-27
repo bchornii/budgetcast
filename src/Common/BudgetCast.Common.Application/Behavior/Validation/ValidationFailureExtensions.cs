@@ -1,9 +1,15 @@
-﻿using FluentValidation.Results;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace BudgetCast.Common.Application.Behavior.Validation
 {
     public static class ValidationFailureExtensions
     {
+        /// <summary>
+        /// Converts collection of <see cref="ValidationFailure"/> items into <see cref="Dictionary{TKey,TValue}"/>
+        /// </summary>
+        /// <param name="validationFailures"></param>
+        /// <returns></returns>
         public static Dictionary<string, List<string>> GetErrors(this IEnumerable<ValidationFailure> validationFailures)
         {
             return validationFailures
