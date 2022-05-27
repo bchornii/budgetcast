@@ -6,7 +6,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
     {
         public static Tag[] MapFrom(string[] dto)
         {
-            return dto.Select(x => new Tag { Name = x }).ToArray();
+            return dto.Select(x => Tag.Create(name: x).Value).ToArray();
         }
     }
 }

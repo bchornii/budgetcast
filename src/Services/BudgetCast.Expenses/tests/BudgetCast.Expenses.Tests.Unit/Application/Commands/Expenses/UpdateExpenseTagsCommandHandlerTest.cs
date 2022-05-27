@@ -1,15 +1,15 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using BudgetCast.Common.Domain;
 using BudgetCast.Common.Tests.Extensions;
 using BudgetCast.Expenses.Commands.Tags;
-using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using FluentAssertions;
 using Moq;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Expenses.Domain.Campaigns;
 using Xunit;
 
 namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
@@ -28,21 +28,21 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<UpdateExpenseTagsCommand>();
-            var expensesMock = new Mock<Expense>();
+            var expense = _fixture.CreateExpenseWithDefaultData();
 
             Mock.Get(_fixture.ExpensesRepository)
                 .Setup(s => s.GetAsync(It.IsAny<long>(), CancellationToken.None))
-                .ReturnsAsync(expensesMock.Object);
+                .ReturnsAsync(expense);
 
             // Act
             await _fixture.Handler.Handle(command, CancellationToken.None);
 
             // Assert
-            var tags = Mock.Get(expensesMock.Object)
-                .GetExecutionArgumentsOf(nameof(Expense.AddTags))
-                .FirstArgumentOf<Tag[]>();
+            var expenseTags = expense.Tags.Select(t => t.Name).ToArray();
 
-            tags.Select(x => x.Name).Should().BeEquivalentTo(command.Tags);
+            expenseTags
+                .Should()
+                .BeEquivalentTo(command.Tags);
         }
 
         [Fact]
@@ -50,11 +50,11 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<UpdateExpenseTagsCommand>();
-            var expensesMock = new Mock<Expense>();
+            var expense = _fixture.CreateExpenseWithDefaultData();
 
             Mock.Get(_fixture.ExpensesRepository)
                 .Setup(s => s.GetAsync(It.IsAny<long>(), CancellationToken.None))
-                .ReturnsAsync(expensesMock.Object);
+                .ReturnsAsync(expense);
 
             // Act
             await _fixture.Handler.Handle(command, CancellationToken.None);
@@ -81,8 +81,14 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 Handler = new UpdateExpenseTagsCommandHandler(ExpensesRepository, UnitOfWork);
             }
 
-            public Expense CreateFakeExpense()
-                => new(Fixture.Create<DateTime>(), Fixture.Create<Campaign>(), Fixture.Create<string>());
+            public Expense CreateExpenseWithDefaultData()
+            {
+                var campaign = Campaign.Create(Fixture.Create<string>()).Value;
+                return Expense.Create(
+                    Fixture.Create<DateTime>(),
+                    campaign,
+                    Fixture.Create<string>()).Value;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using BudgetCast.Common.Operations;
 using BudgetCast.Expenses.Messaging;

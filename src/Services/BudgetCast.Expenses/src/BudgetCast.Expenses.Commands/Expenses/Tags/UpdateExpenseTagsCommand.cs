@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Expenses.Commands.Expenses;
 using BudgetCast.Expenses.Domain.Expenses;
 

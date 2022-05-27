@@ -4,6 +4,7 @@ using FluentValidation.TestHelper;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Expenses.Commands.Campaigns.CreateMonthlyCampaign;
 using Xunit;
 
 namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
@@ -28,22 +29,6 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Campaings
             // Act
             var result = _fixture.Validator.TestValidate(
                 new CreateMonthlyCampaignCommand(name));
-
-            // Assert            
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
-
-        [Fact]
-        public async Task Name_Exists_Should_Be_Invalid()
-        {
-            // Arrange
-            Mock.Get(_fixture.CampaignRepository)
-                .Setup(s => s.ExistsAsync(It.IsAny<string>(), CancellationToken.None))
-                .ReturnsAsync(true);
-
-            // Act
-            var result = await _fixture.Validator.TestValidateAsync(
-                new CreateMonthlyCampaignCommand("Name"));
 
             // Assert            
             result.ShouldHaveValidationErrorFor(x => x.Name);

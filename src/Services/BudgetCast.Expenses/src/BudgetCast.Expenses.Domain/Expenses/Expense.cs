@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Expenses.Domain.Campaigns;
 
 namespace BudgetCast.Expenses.Domain.Expenses
@@ -20,14 +21,14 @@ namespace BudgetCast.Expenses.Domain.Expenses
         private readonly List<Tag> _tags;
         public IReadOnlyCollection<Tag> Tags => _tags;
 
-        protected Expense()
+        private Expense()
         {
             Description = default!;
             _expenseItems = new List<ExpenseItem>();
             _tags = new List<Tag>();
         }
 
-        public Expense(
+        private Expense(
             DateTime addedAt,
             Campaign campaign, 
             string description) : this()
@@ -39,32 +40,56 @@ namespace BudgetCast.Expenses.Domain.Expenses
             _campaignTenantId = campaign.TenantId;
         }
 
-        public virtual void AddItem(ExpenseItem expenseItem)
+        public static Result<Expense> Create(
+            DateTime addedAt,
+            Campaign campaign,
+            string description)
+        {
+            var validatedAddedAt = IsValidAddingDt(addedAt).Value;
+            return new Expense(validatedAddedAt, campaign, description);
+        }
+
+        public static Result<DateTime> IsValidAddingDt(DateTime value)
+        {
+            if (value < DateTime.Now.AddDays(-365))
+            {
+                return Errors.Expenses.AddedAtIsLessThan365();
+            }
+            
+            return value;
+        }
+
+        public virtual Result AddItem(ExpenseItem expenseItem)
         {
             if (_expenseItems.Count >= 100)
             {
-                throw new Exception("Receipt can't hold more than 1000 items.'");
+                return Errors.Expenses.NoMoreThan1000Items();
             }
 
             _expenseItems.Add(expenseItem);
             RecalculateTotalPrice();
+            
+            return Success.Empty;
         }
 
-        public virtual void AddTags(Tag[] tags)
+        public virtual Result AddTags(Tag[] tags)
         {
             if ((_tags.Count + tags.Length) > 100)
             {
-                throw new Exception("Receipt can't have more than 10 tags.");
+                return Errors.Expenses.NotMoreThan30Tags();
             }
 
             var nonExistingTags = tags
                 .Where(t => !_tags.Contains(t)).ToArray();
             _tags.AddRange(nonExistingTags);
+            
+            return Success.Empty;
         }
 
-        public virtual void SetCampaignId(long campaignId)
+        public virtual Result SetCampaignId(long campaignId)
         {
             _campaignId = campaignId;
+            return Success.Empty;
         }
 
         public long GetCampaignId() => _campaignId;

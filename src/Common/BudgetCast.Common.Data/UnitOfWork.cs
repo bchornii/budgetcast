@@ -53,6 +53,10 @@ public class UnitOfWork : IUnitOfWork
         return result > 0;
     }
         
+    // TODO: Move this logic into separate MediatR behavior which wraps Idempotent Behavior to handle the case
+    // TODO: when CommandHandler was processed, business data and outgoing message are stored in database but processing failed
+    // TODO: on '_eventsPublisher.Publish' execution (no exception handling). In such a case client might retry operation
+    // TODO: but since there is a record in idempotent tracking store, command handler won't be triggered again, and UoW won't resent message.
     private async Task PublishPendingIntegrationEvents(CancellationToken cancellationToken)
     {
         var pendingLogEvents = await _eventLogService
@@ -72,6 +76,7 @@ public class UnitOfWork : IUnitOfWork
             }
             catch (Exception ex)
             {
+                // TODO: reevaluate if that's appropriate approach for web and event handling processing scenarios. For event-based
                 _logger.LogError(ex, "ERROR publishing integration event: {IntegrationEventId}", logEvt.EventId);
                 await _eventLogService.MarkEventAsFailedAsync(logEvt.EventId);
             }

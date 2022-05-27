@@ -5,6 +5,7 @@ using FluentAssertions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Domain.Results;
 using Xunit;
 
 namespace BudgetCast.Common.Application.Tests.Unit.Validation
@@ -30,7 +31,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
                 .GetValidatorsWithNoErrorResults();
             _nonGenericResultBehavior.AddValidators(validatorsWithoutErrors);
 
-            var successHandler = _nonGenericResultBehavior.HandlerDelegate(new Success());
+            var successHandler = _nonGenericResultBehavior.HandlerDelegate(Success.Empty);
 
             // Act
             var result = await _nonGenericResultBehavior
@@ -60,7 +61,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Assert
             result
                 .Should().BeOfType<Success<FakeData>>()
-                .Subject.Data
+                .Subject.Value
                 .Should().Be(fakeData);
         }
 

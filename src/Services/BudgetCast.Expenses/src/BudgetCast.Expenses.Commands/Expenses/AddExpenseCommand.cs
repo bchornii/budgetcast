@@ -1,7 +1,7 @@
-﻿using BudgetCast.Common.Application;
-using BudgetCast.Common.Application.Command;
+﻿using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Authentication;
 using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Expenses.Domain.Campaigns;
 using BudgetCast.Expenses.Domain.Expenses;
 using BudgetCast.Expenses.Messaging;
@@ -53,17 +53,23 @@ namespace BudgetCast.Expenses.Commands.Expenses
 
             if(campaign is null)
             {
-                var newCampaign = new Campaign(request.CampaignName);
+                var newCampaign = Campaign.Create(request.CampaignName).Value;
                 campaign = await _campaignRepository.AddAsync(newCampaign, cancellationToken);
             }
 
-            var expense = new Expense(request.AddedAt, campaign, request.Description);
+            var expense = Expense.Create(request.AddedAt, campaign, request.Description).Value;
 
             var tags = Mapper.MapFrom(request.Tags);
-            expense.AddTags(tags);
+            var addTagsResult = expense.AddTags(tags);
 
-            var expenseItem = new ExpenseItem("Default item", request.TotalAmount);
-            expense.AddItem(expenseItem);
+            var expenseItem = ExpenseItem.Create("Default item", request.TotalAmount).Value;
+            var addItemResult = expense.AddItem(expenseItem);
+            
+            if (!addTagsResult || !addItemResult)
+            {
+                return Result.GeneralFailOf<long>(addTagsResult, addItemResult);
+            }
+            
             await _expensesRepository.AddAsync(expense, cancellationToken);
             
             var expenseAddedEvent = new ExpensesAddedEvent(

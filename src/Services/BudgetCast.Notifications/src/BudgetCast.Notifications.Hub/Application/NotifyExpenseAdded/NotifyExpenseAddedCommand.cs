@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Command;
 using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
 using BudgetCast.Expenses.Messaging;
@@ -73,6 +74,6 @@ public class NotifyExpenseAddedCommandHandler : ICommandHandler<NotifyExpenseAdd
         
         _logger.LogInformationIfEnabled("Notification to {GroupName} has been successfully sent", groupName);
         
-        return new Result<bool>();
+        return Success<bool>.Empty;
     }
 }

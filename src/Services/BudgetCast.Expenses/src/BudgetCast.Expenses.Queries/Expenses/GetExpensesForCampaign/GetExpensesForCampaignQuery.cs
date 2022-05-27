@@ -1,5 +1,6 @@
 ﻿using BudgetCast.Common.Application;
 using BudgetCast.Common.Application.Queries;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Models;
 using BudgetCast.Expenses.Queries.Campaigns;
 

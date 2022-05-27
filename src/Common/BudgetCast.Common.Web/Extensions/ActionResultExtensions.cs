@@ -1,4 +1,7 @@
-﻿using BudgetCast.Common.Application;
+﻿using System.Net;
+using BudgetCast.Common.Application;
+using BudgetCast.Common.Domain.Results;
+using BudgetCast.Common.Web.ActionResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetCast.Common.Web.Extensions
@@ -10,18 +13,9 @@ namespace BudgetCast.Common.Web.Extensions
             return result switch
             {
                 Success => new OkResult(),
-                NotFound notFound => new NotFoundObjectResult(new
-                {
-                    notFound.Errors,
-                }),
-                InvalidInput invalidInput => new BadRequestObjectResult(new
-                {
-                    invalidInput.Errors,
-                }),
-                GeneralFail generalFail => new BadRequestObjectResult(new
-                {
-                    generalFail.Errors,
-                }),
+                NotFound notFound => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(notFound.Errors), HttpStatusCode.NotFound),
+                InvalidInput invalidInput => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(invalidInput.Errors), HttpStatusCode.BadRequest),
+                GeneralFail generalFail => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(generalFail.Errors), HttpStatusCode.BadRequest),
                 _ => new OkResult(),
             };
         }
@@ -30,19 +24,10 @@ namespace BudgetCast.Common.Web.Extensions
         {
             return result switch
             {
-                Success<T> success => new OkObjectResult(success.Data),
-                NotFound<T> notFound => new NotFoundObjectResult(new
-                {
-                    notFound.Errors,
-                }),
-                InvalidInput<T> invalidInput => new BadRequestObjectResult(new
-                {
-                    invalidInput.Errors,
-                }),
-                GeneralFail<T> generalFail => new BadRequestObjectResult(new
-                {
-                    generalFail.Errors,
-                }),
+                Success<T> success => new OkObjectResult(success.Value),
+                NotFound<T> notFound => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(notFound.Errors), HttpStatusCode.NotFound),
+                InvalidInput<T> invalidInput => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(invalidInput.Errors), HttpStatusCode.BadRequest),
+                GeneralFail<T> generalFail => new ProblemDetailsResult(ProblemDetailsEnvelope.Error(generalFail.Errors), HttpStatusCode.BadRequest),
                 _ => new OkResult(),
             };
         }

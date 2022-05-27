@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Operations;
 using Xunit;
 
@@ -67,7 +68,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Assert
             result
                 .Should().BeOfType<Success<FakeData>>()
-                .Subject.Data
+                .Subject.Value
                 .Should().Be(fakeData);
         }
 
@@ -299,7 +300,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                 yield return new object[]
                 {
                     fakeObject,
-                    $"{{\"Data\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}",
+                    $"{{\"Value\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}",
                 };
             }
             yield return new object[]
@@ -310,7 +311,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                     DwellingAge = 1,
                     Notes = "Some notes",
                 },
-                "{\"Data\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}",
+                "{\"Value\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}",
             };
             yield return new object[]
             {
@@ -318,7 +319,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
                 {
                     DealNumber = 123,
                 },
-                "{\"Data\":{\"DealNumber\":123}}",
+                "{\"Value\":{\"DealNumber\":123}}",
             };
         }
     }

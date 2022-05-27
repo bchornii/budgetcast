@@ -18,6 +18,7 @@ using System.Text;
 using BudgetCast.Common.Data;
 using BudgetCast.Common.Data.EventLog;
 using BudgetCast.Common.Messaging.Abstractions.Events;
+using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Common.Web.Filters;
 using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Messaging;
@@ -40,8 +41,12 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
                         .AllowCredentials());
             });
 
-            services.AddControllers(
-                options => options.Filters.Add<OperationFilter>());
+            services
+                .AddControllers(options => options.Filters.Add<OperationFilter>())
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
+                });
 
             return services;
         }

@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Domain;
+using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
@@ -6,14 +7,26 @@ namespace BudgetCast.Expenses.Domain.Expenses
     {
         public string Name { get; init; }
 
-        public Tag()
+        private Tag(string name)
         {
-            Name = default!;
+            Name = name;
+        }
+
+        public static Result<Tag> Create(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return Errors.Expenses.Tags.TagNameShouldHaveValue();
+            }
+
+            return new Tag(name);
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Name;
         }
+
+        public Tag Clone() => Create(this.Name).Value;
     }
 }

@@ -12,36 +12,30 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Campaigns
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public void Campaign_Creation_With_Empty_Name_Should_Throw_Error(string name)
+        public void Campaign_Creation_With_Empty_Name_Should_Return_Error_Result(string name)
         {
             // Arrange
-            Action createCampaignWithEmptyName = () =>
-            {
-                _ = new Campaign(name);
-            };
 
             // Act
+            var result = Campaign.Create(name);
 
             // Assert
-            Assert.Throws<Exception>(createCampaignWithEmptyName);
+            Assert.False(result);
         }
 
         [Fact]
-        public void Campaign_Creation_With_CompletesAtDate_SmallerThan_StartsAtDate_Should_Throw_Error()
+        public void Campaign_Creation_With_CompletesAtDate_SmallerThan_StartsAtDate_Should_Return_Error_Result()
         {
             // Arrange
-            Action createCampaignWithWrongDates = () =>
-            {
-                var completesAt = new DateTime(2000, 1, 1);
-                var startsAt = new DateTime(2001, 1, 1);
-                var name = new Fixture().Create<string>();
-                _ = new Campaign(name, startsAt, completesAt);
-            };
+            var completesAt = new DateTime(2000, 1, 1);
+            var startsAt = new DateTime(2001, 1, 1);
+            var name = new Fixture().Create<string>();
 
             // Act
+            var result = Campaign.Create(name, startsAt, completesAt);
 
             // Assert
-            Assert.Throws<Exception>(createCampaignWithWrongDates);
+            Assert.False(result);
         }
 
         [Fact]
@@ -51,9 +45,9 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Campaigns
             var completesAt = new DateTime(2002, 1, 1);
             var startsAt = new DateTime(2001, 1, 1);
             var name = new Fixture().Create<string>();
-            var campaign = new Campaign(name, startsAt, completesAt);
 
             // Act
+            var campaign = Campaign.Create(name, startsAt, completesAt).Value;
 
             // Assert
             campaign.Name.Should().Be(name);

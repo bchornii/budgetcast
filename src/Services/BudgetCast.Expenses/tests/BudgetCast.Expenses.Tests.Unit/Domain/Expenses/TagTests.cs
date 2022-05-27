@@ -14,10 +14,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
         public void TagCtor_DoesNot_Change_Values_During_Init(string name, ulong expenseId)
         {
             // Arrange
-            var tag = new Tag
-            {
-                Name = name,
-            };
+            var tag = Tag.Create(name).Value;
 
             // Act
 

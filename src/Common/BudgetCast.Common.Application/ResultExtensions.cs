@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Common.Application
 {
@@ -12,7 +13,7 @@ namespace BudgetCast.Common.Application
         public static Type GetGenericResultArgumentType(this Type type)
             => type.GetGenericArguments().First();
 
-        public static Result WithErrors(this object result, IDictionary<string, string[]> errors)
+        public static Result WithErrors(this object result, IDictionary<string, List<string>> errors)
         {
             var resultType = result.GetType();
             var errorsProperty = resultType.GetProperty(
