@@ -281,6 +281,37 @@ public class ResultTests
     
     #endregion
     
+    #region Creation methods - maybe
+
+    [Fact]
+    public void Maybe_Should_Return_New_Instance_Of_Typed_Maybe_Type()
+    {
+        // Arrange
+        var data = new FakeData();
+        
+        // Act
+        var result = Result.Maybe(data);
+
+        // Assert
+        result.Should().BeOfType<Maybe<FakeData>>();
+        result.Value.Should().Be(data);
+    }
+    
+    [Fact]
+    public void Maybe_Null_As_Data_Should_Not_Throw_Exception()
+    {
+        // Arrange
+
+        // Act
+        var result = Result.Maybe<FakeData>(null!);
+
+        // Assert
+        result.Should().BeOfType<Maybe<FakeData>>();
+        result.Value.Should().BeNull();
+    }
+    
+    #endregion
+    
     #region Creation methods - general fail - untyped
 
     [Fact]
@@ -600,6 +631,7 @@ public class ResultTests
         {
             yield return new object[] { Result.Success() };
             yield return new object[] { Result.Success(new FakeData()) };
+            yield return new object[] { Result.Maybe(new FakeData()) };
         }
         
         public static IEnumerable<object[]> GetNonSuccessResultInstances()

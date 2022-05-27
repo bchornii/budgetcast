@@ -1,11 +1,18 @@
 ﻿namespace BudgetCast.Common.Domain.Results;
 
+/// <summary>
+/// This type represents success result with no value.
+/// </summary>
 public record Success : Result
 {
     public static Success Empty { get; } = new();
 }
 
-public record Success<T> : Result<T> 
+/// <summary>
+/// This type represents success result with not null value.
+/// </summary>
+/// <typeparam name="T">Not nullable type</typeparam>
+public sealed record Success<T> : Result<T> 
     where T : notnull
 {
     public Success(T value)

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetCast.Common.Web.ActionResults;
 
+/// <summary>
+/// Represents custom API result based on <see cref="ProblemDetailsEnvelope"/>.
+/// </summary>
 public class ProblemDetailsResult : IActionResult
 {
     private readonly ProblemDetailsEnvelope _envelope;

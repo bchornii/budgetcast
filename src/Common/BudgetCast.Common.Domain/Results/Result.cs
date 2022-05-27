@@ -139,6 +139,13 @@ public abstract record Result
         where T : notnull => new(value);
     
     #endregion
+
+    #region Creation methods - maybe
+
+    public static Maybe<T> Maybe<T>(T value)
+        => new(value);
+
+    #endregion
     
     #region Creation methods - general fail - untyped
 
@@ -334,7 +341,8 @@ public abstract record Result
     {
         var type = GetType();
         return type.IsAssignableTo(typeof(Success)) ||
-               (type.IsGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(Success<>)));
+               (type.IsGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(Success<>))) ||
+               (type.IsGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(Maybe<>)));
     }
 
     #endregion
@@ -354,7 +362,7 @@ public abstract record Result<T> : Result
     /// </summary>
     /// <exception cref="ResultValueIsNullException">Thrown when client tries to access value
     /// but it is set to <c>null</c></exception>
-    public T Value
+    public virtual T Value
     {
         get
         {

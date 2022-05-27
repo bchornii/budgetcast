@@ -3,7 +3,7 @@ using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Expenses.Domain.Campaigns
 {
-    public partial class Campaign : AggregateRoot
+    public class Campaign : AggregateRoot
     {
         public string Name { get; private set; }
 
