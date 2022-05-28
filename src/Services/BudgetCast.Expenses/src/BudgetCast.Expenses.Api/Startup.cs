@@ -1,11 +1,13 @@
 ﻿using BudgetCast.Common.Application.Extensions;
 using BudgetCast.Common.Data.OperationRegistry;
 using BudgetCast.Common.Web.Extensions;
+using BudgetCast.Common.Web.Logs;
 using BudgetCast.Expenses.Api.Infrastructure.Extensions;
 using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Queries;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpLogging;
 
 namespace BudgetCast.Expenses.Api
 {
@@ -38,7 +40,19 @@ namespace BudgetCast.Expenses.Api
                 .AddCustomDbContext(Configuration, Env)
                 .AddCustomHealthCheck(Configuration)
                 .AddMessagingExtensions()
-                .AddOperationContext();
+                .AddOperationContext()
+                .AddApplicationInsightsTelemetry(options =>
+                {
+                    options.ConnectionString = Configuration
+                        .GetValue<string>("BudgetCast:ApplicationInsights:ConnectionString");
+                })
+                .AddHttpLogging(options =>
+                {
+                    options.LoggingFields = HttpLoggingFields.All;
+                    options.RequestHeaders.Add("X-Correlation-ID");
+                    options.RequestBodyLogLimit = 4096;
+                    options.ResponseBodyLogLimit = 4096;
+                });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -54,6 +68,9 @@ namespace BudgetCast.Expenses.Api
             app.UseRouting();
             app.UseCors();
 
+            app.UseHttpLogging();
+            app.UseSharedSerilogRequestLogging();
+            
             app.UseAuthentication();
             app.UseCurrentTenant();
             app.UseAuthorization();

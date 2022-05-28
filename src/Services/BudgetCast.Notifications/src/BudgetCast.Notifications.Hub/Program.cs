@@ -7,7 +7,12 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
 
-var logger = CreateSerilogLogger();
+var logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 Log.Logger = logger;
@@ -31,19 +36,10 @@ try
     Log.Information("Configuring web app pipeline");
     var env = app.Environment;
     
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
-    else
-    {
-        app.UseApiExceptionHandling(
-            isDevelopment: env.IsDevelopment());
-    }
+    app.UseApiExceptionHandling(isDevelopment: false);
             
     app.UseHttpsRedirection();
-    //app.UseHttpLogging();
-    
+
     app.UseCors();
 
     app.UseAuthentication();
@@ -85,10 +81,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-
-Serilog.ILogger CreateSerilogLogger() =>
-    new LoggerConfiguration()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .CreateBootstrapLogger();

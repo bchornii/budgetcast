@@ -1,9 +1,11 @@
 ﻿using BudgetCast.Common.Web.Extensions;
+using BudgetCast.Common.Web.Logs;
 using BudgetCast.Identity.Api.Infrastructure.AppSettings;
 using BudgetCast.Identity.Api.Infrastructure.Extensions;
 using BudgetCast.Identity.Api.Infrastructure.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
 
 namespace BudgetCast.Identity.Api
@@ -34,36 +36,39 @@ namespace BudgetCast.Identity.Api
                 .AddJwtAuthentication(Configuration)
                 .AddCustomHealthCheck(Configuration)
                 .AddCustomHostedServices()
-                .AddIdentityContext();
+                .AddIdentityContext()
+                .AddApplicationInsightsTelemetry(options =>
+                {
+                    options.ConnectionString = Configuration
+                        .GetValue<string>("BudgetCast:ApplicationInsights:ConnectionString");
+                })
+                .AddHttpLogging(options =>
+                {
+                    options.LoggingFields = HttpLoggingFields.All;
+                    options.RequestHeaders.Add("X-Correlation-ID");
+                    options.RequestBodyLogLimit = 4096;
+                    options.ResponseBodyLogLimit = 4096;
+                });
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            if (Env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseApiExceptionHandling(
-                    isDevelopment: Env.IsDevelopment());
-            }
+            app.UseApiExceptionHandling(isDevelopment: false);
 
             app.UseHttpsRedirection();
-            app.UseHttpLogging();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
             });
 
-            app.UseSerilogRequestLogging(opts
-                => opts.EnrichDiagnosticContext = LogEnricher.EnrichFromRequest);
-
             app.UseRouting();
             app.UseCors();
 
+            app.UseHttpLogging();
+            app.UseSharedSerilogRequestLogging();
+            
             app.UseAuthentication();
             app.UseCurrentTenant(pathsToExlude:
                 TenantConfiguration.PathsToExcludeFromTenantVerification);

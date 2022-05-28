@@ -12,6 +12,7 @@ using System.Text;
 using BudgetCast.Common.Application.Extensions;
 using BudgetCast.Common.Operations;
 using BudgetCast.Common.Web.Extensions;
+using Microsoft.AspNetCore.HttpLogging;
 using ILogger = Serilog.ILogger;
 
 namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions;
@@ -40,7 +41,12 @@ public static class ServiceCollectionExtensions
             .AddIdentityContext()
             .AddHttpContextAccessor()
             .AddMessagingExtensions()
-            .AddOperationContext();
+            .AddOperationContext()
+            .AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = configuration
+                    .GetValue<string>("BudgetCast:ApplicationInsights:ConnectionString");
+            });
         
         return services;
     }

@@ -1,4 +1,5 @@
 using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
+using BudgetCast.Common.Web.Logs;
 using Serilog;
 using Serilog.Events;
 
@@ -8,7 +9,11 @@ public static class Program
 {
     public static int Main(string[] args)
     {
-        Log.Logger = CreateSerilogLogger();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();;
 
         try
         {
@@ -33,20 +38,10 @@ public static class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .UseSerilog((ctx, services, configuration) =>
-                configuration.ReadFrom.Configuration(ctx.Configuration))
+            .UseSharedSerilogConfiguration()
             .UseAzureServiceBus()
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
-
-    private static Serilog.ILogger CreateSerilogLogger()
-    {
-        return new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateBootstrapLogger();
-    }
 }
