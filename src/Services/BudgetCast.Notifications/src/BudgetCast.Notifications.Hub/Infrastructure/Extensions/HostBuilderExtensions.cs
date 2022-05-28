@@ -1,4 +1,5 @@
 ﻿using BudgetCast.Common.Messaging.Azure.ServiceBus.Extensions;
+using BudgetCast.Common.Web.Logs;
 using BudgetCast.Expenses.Messaging;
 using BudgetCast.Notifications.AppHub.EventHandlers;
 using Serilog;
@@ -9,8 +10,7 @@ public static class HostBuilderExtensions
 {
     public static IHostBuilder AddWebAppHostConfiguration(this IHostBuilder hostBuilder)
         => hostBuilder
-            .UseSerilog((ctx, services, config) =>
-                config.ReadFrom.Configuration(ctx.Configuration))
+            .UseSharedSerilogConfiguration()
             .UseAzureServiceBus(
                 registerHandlers: services =>
                 {

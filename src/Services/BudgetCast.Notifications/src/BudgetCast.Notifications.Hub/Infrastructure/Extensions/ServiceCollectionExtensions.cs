@@ -12,6 +12,7 @@ using System.Text;
 using BudgetCast.Common.Application.Extensions;
 using BudgetCast.Common.Operations;
 using BudgetCast.Common.Web.Extensions;
+using Microsoft.AspNetCore.HttpLogging;
 using ILogger = Serilog.ILogger;
 
 namespace BudgetCast.Notifications.AppHub.Infrastructure.Extensions;
@@ -40,12 +41,17 @@ public static class ServiceCollectionExtensions
             .AddIdentityContext()
             .AddHttpContextAccessor()
             .AddMessagingExtensions()
-            .AddOperationContext();
+            .AddOperationContext()
+            .AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = configuration
+                    .GetValue<string>("BudgetCast:ApplicationInsights:ConnectionString");
+            });
         
         return services;
     }
-    
-    public static IServiceCollection AddCustomCors(this IServiceCollection services,
+
+    private static IServiceCollection AddCustomCors(this IServiceCollection services,
         IConfiguration configuration)
     {
         var uiRoot = configuration["UiLinks:Root"];
@@ -62,7 +68,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomSignalR(
+    private static IServiceCollection AddCustomSignalR(
         this IServiceCollection services, 
         IConfiguration configuration)
     {
@@ -105,7 +111,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomHealthCheck(
+    private static IServiceCollection AddCustomHealthCheck(
         this IServiceCollection services, 
         IConfiguration configuration)
     {
@@ -142,7 +148,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection($"SecuritySettings:{nameof(JwtSettings)}").Get<JwtSettings>();
 
@@ -205,7 +211,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomServices(this IServiceCollection services)
+    private static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<INotificationService, NotificationService>();
 

@@ -1,12 +1,17 @@
+using BudgetCast.Common.Web.Logs;
 using BudgetCast.Identity.Api;
 using Serilog;
 using Serilog.Events;
 
-public class Program
+public static class Program
 {
     public static int Main(string[] args)
     {
-        Log.Logger = CreateSerilogLogger();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();;
 
         try
         {
@@ -31,19 +36,9 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .UseSerilog((ctx, services, configuration) =>
-                configuration.ReadFrom.Configuration(ctx.Configuration))            
+            .UseSharedSerilogConfiguration()          
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
-
-    private static Serilog.ILogger CreateSerilogLogger()
-    {
-        return new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateBootstrapLogger();
-    }
 }
