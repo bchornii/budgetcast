@@ -2,11 +2,11 @@
 
 public record NotFound : GeneralFail
 {
-    public static implicit operator NotFound(Error error) => Result.NotFound(error);
+    public static implicit operator NotFound(ValidationError error) => Result.NotFound(error);
 }
 
 public record NotFound<T> : GeneralFail<T>
     where T : notnull
 {
-    public static implicit operator NotFound<T>(Error error) => Result.NotFound<T>(error);
+    public static implicit operator NotFound<T>(ValidationError error) => Result.NotFound<T>(error);
 }

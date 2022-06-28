@@ -26,7 +26,7 @@ namespace BudgetCast.Expenses.Domain.Campaigns
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return Errors.Campaigns.CampaignNameCantBeEmpty();
+                return InvariantViolations.Campaigns.CampaignNameCantBeEmpty();
             }
 
             return new Campaign(name);
@@ -36,7 +36,7 @@ namespace BudgetCast.Expenses.Domain.Campaigns
         {
             if (startsAt > completesAt)
             {
-                return Errors.Campaigns.CampaignStartDateShouldBeLessThanCompletionDate();
+                return InvariantViolations.Campaigns.CampaignStartDateShouldBeLessThanCompletionDate();
             }
 
             var campaign = Create(name).Value;

@@ -18,10 +18,10 @@ public class NotFoundTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_NotFound_Type()
     {
         // Arrange
-        static NotFound FromError(Error error)
+        static NotFound FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);
@@ -35,10 +35,10 @@ public class NotFoundTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_Generic_NotFound_Type()
     {
         // Arrange
-        static NotFound<FakeData> FromError(Error error)
+        static NotFound<FakeData> FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);

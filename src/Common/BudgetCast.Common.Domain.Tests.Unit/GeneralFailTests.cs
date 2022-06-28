@@ -18,10 +18,10 @@ public class GeneralFailTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_GeneralFail_Type()
     {
         // Arrange
-        static GeneralFail FromError(Error error)
+        static GeneralFail FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);
@@ -35,10 +35,10 @@ public class GeneralFailTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_Generic_GeneralFail_Type()
     {
         // Arrange
-        static GeneralFail<FakeData> FromError(Error error)
+        static GeneralFail<FakeData> FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);

@@ -1,9 +1,7 @@
 ﻿namespace BudgetCast.Common.Domain;
 
-public sealed class Error : ValueObject
+public sealed class ValidationError : ValueObject
 {
-    private const char Separator = '=';
-    
     /// <summary>
     /// Represents error code which is part of the contract with the clients.
     /// As an example, it may contain property name which triggered the error,
@@ -17,7 +15,7 @@ public sealed class Error : ValueObject
     /// </summary>
     public string Value { get; }
 
-    public Error(string code, string message)
+    public ValidationError(string code, string message)
     {
         Code = code;
         Value = message;

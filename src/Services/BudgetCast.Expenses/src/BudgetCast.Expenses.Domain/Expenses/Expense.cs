@@ -53,7 +53,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if (value < DateTime.Now.AddDays(-365))
             {
-                return Errors.Expenses.AddedAtIsLessThan365();
+                return InvariantViolations.Expenses.AddedAtIsLessThan365();
             }
             
             return value;
@@ -63,7 +63,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if (_expenseItems.Count >= 100)
             {
-                return Errors.Expenses.NoMoreThan1000Items();
+                return InvariantViolations.Expenses.NoMoreThan1000Items();
             }
 
             _expenseItems.Add(expenseItem);
@@ -76,7 +76,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if ((_tags.Count + tags.Length) > 100)
             {
-                return Errors.Expenses.NotMoreThan30Tags();
+                return InvariantViolations.Expenses.NotMoreThan30Tags();
             }
 
             var nonExistingTags = tags
