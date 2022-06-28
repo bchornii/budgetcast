@@ -45,17 +45,17 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if (price < 0)
             {
-                return Errors.Expenses.ExpenseItems.ExpenseItemPriceIsZero();
+                return InvariantViolations.Expenses.ExpenseItems.ExpenseItemPriceIsZero();
             }
 
             if (quantity < 1 || quantity > 1000)
             {
-                return Errors.Expenses.ExpenseItems.ItemsQuantityIsMoreThan1000();
+                return InvariantViolations.Expenses.ExpenseItems.ItemsQuantityIsMoreThan1000();
             }
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                return Errors.Expenses.ExpenseItems.ItemShouldHaveTitle();
+                return InvariantViolations.Expenses.ExpenseItems.ItemShouldHaveTitle();
             }
 
             return new ExpenseItem(title, price, quantity);
@@ -77,7 +77,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if(string.IsNullOrWhiteSpace(note))
             {
-                return Errors.Expenses.ExpenseItems.NoteShouldHaveText();
+                return InvariantViolations.Expenses.ExpenseItems.NoteShouldHaveText();
             }
             Note = note;
             

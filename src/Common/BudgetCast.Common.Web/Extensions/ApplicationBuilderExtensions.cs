@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using BudgetCast.Common.Domain.Results.Exceptions;
+using BudgetCast.Common.Web.ActionResults;
 
 namespace BudgetCast.Common.Web.Extensions
 {
@@ -47,7 +49,15 @@ namespace BudgetCast.Common.Web.Extensions
                     var exceptionFeature = context.Features.Get<IExceptionHandlerFeature>();
                     var connection = context.Features.Get<IHttpConnectionFeature>();
 
-                    await WriteGeneralExceptionResponseAsync(context, isDevelopment, exceptionFeature, exceptionId, connection);
+                    switch (exceptionFeature.Error)
+                    {
+                        case ResultValueIsNullException:
+                            await GenerateResultValueIsNullExceptionResponseAsync(context, isDevelopment, exceptionFeature, exceptionId, connection);
+                            break;
+                        default:
+                            await WriteGeneralExceptionResponseAsync(context, isDevelopment, exceptionFeature, exceptionId, connection); 
+                            break;
+                    }
                 },
             });
 
@@ -84,6 +94,35 @@ namespace BudgetCast.Common.Web.Extensions
 
             var executor = context.RequestServices
                 .GetRequiredService<IActionResultExecutor<ObjectResult>>();
+
+            return executor.ExecuteAsync(actionContext, result);
+        }
+        
+        private static Task GenerateResultValueIsNullExceptionResponseAsync(
+            HttpContext context,
+            bool isDevelopment,
+            IExceptionHandlerFeature exceptionFeature,
+            Guid exceptionId,
+            IHttpConnectionFeature connection)
+        {
+            var routeData = context.GetRouteData() ?? new RouteData();
+            var actionContext = new ActionContext(context, routeData, new ActionDescriptor());
+            var exception = exceptionFeature.Error as ResultValueIsNullException;
+            var envelope = ProblemDetailsEnvelope.Exception(exception?.Errors, new Dictionary<string, object>
+            {
+                { "traceId", exceptionId.ToString() },
+                { "connectionId", connection.ConnectionId },
+            });
+            envelope.Detail = isDevelopment
+                ? exceptionFeature.Error.StackTrace
+                : "Check logs with the provided trace or operation id";
+
+            var result = new ObjectResult(envelope)
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+            };
+
+            var executor = context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
 
             return executor.ExecuteAsync(actionContext, result);
         }

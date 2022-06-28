@@ -18,10 +18,10 @@ public class InvalidInputTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_InvalidInput_Type()
     {
         // Arrange
-        static InvalidInput FromError(Error error)
+        static InvalidInput FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);
@@ -35,10 +35,10 @@ public class InvalidInputTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_Generic_InvalidInput_Type()
     {
         // Arrange
-        static InvalidInput<FakeData> FromError(Error error)
+        static InvalidInput<FakeData> FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);

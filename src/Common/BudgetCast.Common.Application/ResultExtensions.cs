@@ -23,23 +23,6 @@ namespace BudgetCast.Common.Application
             return (Result)result;
         }
 
-        public static bool IsSuccess(this Result result) 
-            => result is Success;
-
-        public static bool IsSuccess<T>(this Result<T> result)
-            => result is Success<T>;
-
-        public static bool IsSuccess<T>(this Result<T> result, out Success<T> successResult)
-        {
-            if(result is Success<T> success)
-            {
-                successResult = success;
-                return true;
-            }
-            successResult = default!;
-            return false;
-        }
-
         public static (bool IsOfSuccessType, bool IsGeneric) CheckIfSuccess(this object response)
         {
             var responseType = response.GetType();

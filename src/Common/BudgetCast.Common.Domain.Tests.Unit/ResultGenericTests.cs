@@ -20,10 +20,10 @@ public class ResultGenericTests
     public void Implicit_Conversion_From_ErrorType_Should_Create_New_Instance_Of_Typed_GenericFail_Type()
     {
         // Arrange
-        static Result<FakeData> FromError(Error error)
+        static Result<FakeData> FromError(ValidationError error)
             => error;
 
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);

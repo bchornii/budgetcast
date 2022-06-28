@@ -146,7 +146,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Domain.Expenses
             public Expense CreateFakeExpense()
             {
                 var campaign = Campaign.Create(Fixture.Create<string>()).Value;
-                return Expense.Create(Fixture.Create<DateTime>(), campaign, Fixture.Create<string>()).Value;
+                return Expense.Create(DateTime.Today, campaign, Fixture.Create<string>()).Value;
             }
 
             public ExpenseItem[] CreateFakeExpenseItems(int totalItems = 5)

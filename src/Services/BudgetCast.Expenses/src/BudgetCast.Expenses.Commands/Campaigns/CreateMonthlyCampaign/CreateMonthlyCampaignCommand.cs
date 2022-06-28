@@ -31,7 +31,7 @@ namespace BudgetCast.Expenses.Commands.Campaigns.CreateMonthlyCampaign
 
             if (campaignExists)
             {
-                return Errors.Campaigns.CampaignWithTheSameNameAlreadyExists();
+                return InvariantViolations.Campaigns.CampaignWithTheSameNameAlreadyExists();
             }
             
             var campaign = Campaign.Create(request.Name).Value;

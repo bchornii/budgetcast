@@ -24,7 +24,7 @@ public class ResultTests
     [Theory]
     public void IsOfFailure_Any_Non_SuccessType_Should_Return_True(Result result)
     {
-        // Arrange
+        // Arrange 
         
         // Act
         
@@ -107,14 +107,14 @@ public class ResultTests
         // Arrange
         var errorMessage1 = _fixture.Fixture.Create<string>();
         var errorMessage2 = _fixture.Fixture.Create<string>();
-        
+
         // Act
         result.AddErrors(errorMessage1);
         result.AddErrors(errorMessage2);
 
         // Assert
-        result.Errors["general"].Should().Contain(d => d == errorMessage1);
-        result.Errors["general"].Should().Contain(d => d == errorMessage2);
+        result.Errors[Result.NotClassifiedApplicationError].Should().Contain(d => d == errorMessage1);
+        result.Errors[Result.NotClassifiedApplicationError].Should().Contain(d => d == errorMessage2);
     }
     
     [MemberData(nameof(ResultFixture.GetSuccessResultInstances), MemberType = typeof(ResultFixture))]
@@ -126,7 +126,7 @@ public class ResultTests
         // Act
         Action addError = () =>
         {
-            result.AddErrors(new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>()));
+            result.AddErrors(new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>()));
         };
 
         // Assert
@@ -138,8 +138,8 @@ public class ResultTests
     public void AddErrors_ErrorType_Should_Create_Records_In_Errors_HashTable_Under_Error_Key(Result result)
     {
         // Arrange
-        var error1 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
-        var error2 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error1 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error2 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         result.AddErrors(error1);
@@ -194,10 +194,10 @@ public class ResultTests
     public void Implicit_Conversion_From_ErrorType_ShouldCreate_Untyped_GeneralFail()
     {
         // Arrange
-        static Result FromError(Error error)
+        static Result FromError(ValidationError error)
             => error;
         
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = FromError(error);
@@ -330,7 +330,7 @@ public class ResultTests
     public void GeneralFail_ErrorType_Should_Create_New_Instance_Of_Untyped_GeneralFail_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.GeneralFail(error);
@@ -360,16 +360,16 @@ public class ResultTests
     public void GeneralFailOf_4_FailedResults_Should_Return_New_Instance_Of_Untyped_GeneralFail_With_Errors_From_Passed_Results()
     {
         // Arrange
-        var e1 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e1 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r1 = Result.GeneralFail(e1);
         
-        var e2 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e2 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r2 = Result.GeneralFail(e2);
         
-        var e3 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e3 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r3 = Result.GeneralFail(e3);
         
-        var e4 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e4 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r4 = Result.GeneralFail(e4);
 
         // Act
@@ -420,7 +420,7 @@ public class ResultTests
     public void GeneralFail_ErrorType_Should_Create_New_Instance_Of_Typed_GeneralFail_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.GeneralFail<FakeData>(error);
@@ -435,13 +435,13 @@ public class ResultTests
     {
         // Arrange
         var errorMessage = _fixture.Fixture.Create<string>();
-        
+
         // Act
         var result = Result.GeneralFail<FakeData>(errorMessage);
 
         // Assert
         result.Should().BeOfType<GeneralFail<FakeData>>();
-        result.Errors["general"].Should().Contain(v => v == errorMessage);
+        result.Errors[Result.NotClassifiedApplicationError].Should().Contain(v => v == errorMessage);
     }
     
     [Fact]
@@ -464,16 +464,16 @@ public class ResultTests
     public void GeneralFailOf_4_FailedResults_Should_Return_New_Instance_Of_Typed_GeneralFail_With_Errors_From_Passed_Results()
     {
         // Arrange
-        var e1 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e1 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r1 = Result.GeneralFail<FakeData>(e1);
         
-        var e2 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e2 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r2 = Result.GeneralFail<FakeData>(e2);
         
-        var e3 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e3 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r3 = Result.GeneralFail<FakeData>(e3);
         
-        var e4 = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var e4 = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         var r4 = Result.GeneralFail<FakeData>(e4);
 
         // Act
@@ -524,7 +524,7 @@ public class ResultTests
     public void InvalidInput_ErrorType_Should_Create_New_Instance_Of_Untyped_InvalidInput_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.InvalidInput(error);
@@ -550,7 +550,7 @@ public class ResultTests
     public void InvalidInput_ErrorType_Should_Create_New_Instance_Of_Typed_InvalidInput_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.InvalidInput<FakeData>(error);
@@ -580,7 +580,7 @@ public class ResultTests
     public void NotFound_ErrorType_Should_Create_New_Instance_Of_Untyped_NotFound_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.NotFound(error);
@@ -606,7 +606,7 @@ public class ResultTests
     public void NotFound_ErrorType_Should_Create_New_Instance_Of_Typed_NotFound_Type_With_Errors()
     {
         // Arrange
-        var error = new Error(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
         
         // Act
         var result = Result.NotFound<FakeData>(error);

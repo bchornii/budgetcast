@@ -50,6 +50,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
+            command = command with {AddedAt = DateTime.Today};
             var campaign = Campaign.Create(_fixture.Fixture.Create<string>()).Value;
 
             Mock.Get(_fixture.CampaignRepository)
@@ -72,6 +73,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
+            command = command with {AddedAt = DateTime.Today};
 
             // Act
             await _fixture.Handler.Handle(command, CancellationToken.None);
@@ -91,6 +93,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
         {
             // Arrange
             var command = _fixture.Fixture.Create<AddExpenseCommand>();
+            command = command with {AddedAt = DateTime.Today};
 
             // Act
             await _fixture.Handler.Handle(command, CancellationToken.None);
@@ -169,7 +172,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                     .Setup(c => c.AddAsync(It.IsAny<Campaign>(), CancellationToken.None))
                     .ReturnsAsync(campaign);
 
-                var expense = Expense.Create(Fixture.Create<DateTime>(), campaign, Fixture.Create<string>()).Value;
+                var expense = Expense.Create(DateTime.Today, campaign, Fixture.Create<string>()).Value;
                 Mock.Get(ExpensesRepository)
                     .Setup(e => e.AddAsync(It.IsAny<Expense>(), CancellationToken.None))
                     .ReturnsAsync(expense);

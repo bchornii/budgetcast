@@ -85,7 +85,7 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             {
                 var campaign = Campaign.Create(Fixture.Create<string>()).Value;
                 return Expense.Create(
-                    Fixture.Create<DateTime>(),
+                    DateTime.Today, 
                     campaign,
                     Fixture.Create<string>()).Value;
             }

@@ -7,12 +7,19 @@ namespace BudgetCast.Common.Domain.Results;
 /// </summary>
 public abstract record Result
 {
+    public const string NotClassifiedApplicationError = "app.general";
+    
     #region Public contract properties
 
     /// <summary>
-    /// Verifies if underlying type of <see cref="Result"/> if of any failure type.
+    /// Verifies if underlying type of <see cref="Result"/> if of failure type.
     /// </summary>
-    public bool IsOfFailure => Errors.Count > 0 || !IsOfSuccessType();
+    public bool IsOfFailure => HasErrors || !IsOfSuccessType();
+
+    /// <summary>
+    /// Verifies if underlying type has any errors added.
+    /// </summary>
+    public bool HasErrors => Errors.Count > 0;
     
     /// <summary>
     /// Represents errors hash table associated with an instance of <see cref="Result"/> type.
@@ -25,7 +32,7 @@ public abstract record Result
 
     /// <summary>
     /// Adds an error to <see cref="Result"/> instance's errors hash table with
-    /// value of <paramref name="error"/> passed parameter under 'general' key.
+    /// value of <paramref name="error"/> passed parameter under <see cref="NotClassifiedApplicationError"/>.
     /// </summary>
     /// <param name="error">Error text</param>
     /// <returns></returns>
@@ -38,15 +45,13 @@ public abstract record Result
                 "Adding exceptions to success result is not allowed.");
         }
 
-        const string generalKey = "general";
-        
-        if (Errors.ContainsKey(generalKey))
+        if (Errors.ContainsKey(NotClassifiedApplicationError))
         {
-            Errors[generalKey].Add(error);
+            Errors[NotClassifiedApplicationError].Add(error);
         }
         else
         {
-            Errors.Add(generalKey, new List<string> { error });
+            Errors.Add(NotClassifiedApplicationError, new List<string> { error });
         }
 
         return this;
@@ -54,12 +59,12 @@ public abstract record Result
     
     /// <summary>
     /// Adds an error to <see cref="Result"/> instance's errors hash table with
-    /// key <see cref="Error.Code"/> and value of <see cref="Error.Value"/>.
+    /// key <see cref="ValidationError.Code"/> and value of <see cref="ValidationError.Value"/>.
     /// </summary>
     /// <param name="error"></param>
     /// <returns></returns>
     /// <exception cref="AddingErrorsToSuccessResultException"></exception>
-    public Result AddErrors(Error error)
+    public Result AddErrors(ValidationError error)
     {
         if (!IsOfFailure)
         {
@@ -114,12 +119,12 @@ public abstract record Result
     #region Implicit conversion
 
     /// <summary>
-    /// Converts instances of <see cref="Error"/> type into <see cref="Result"/>
+    /// Converts instances of <see cref="ValidationError"/> type into <see cref="Result"/>
     /// with underlying <see cref="BudgetCast.Common.Domain.Results.GeneralFail"/> type.
     /// </summary>
     /// <param name="error"></param>
     /// <returns></returns>
-    public static implicit operator Result(Error error) => GeneralFail(error);
+    public static implicit operator Result(ValidationError error) => GeneralFail(error);
     
     /// <summary>
     /// Converts <see cref="Result"/> into <see cref="bool"/>. Returns <c>true</c>
@@ -151,7 +156,7 @@ public abstract record Result
 
     public static GeneralFail GeneralFail() => new();
     
-    public static GeneralFail GeneralFail(Error error)
+    public static GeneralFail GeneralFail(ValidationError error)
     {
         var fail = GeneralFail();
         fail.AddErrors(error);
@@ -216,7 +221,7 @@ public abstract record Result
     public static GeneralFail<T> GeneralFail<T>() 
         where T : notnull => new();
     
-    public static GeneralFail<T> GeneralFail<T>(Error error)
+    public static GeneralFail<T> GeneralFail<T>(ValidationError error)
         where T : notnull
     {
         var fail = GeneralFail<T>();
@@ -291,15 +296,16 @@ public abstract record Result
     
     #region Creation methods - invalid input
     public static InvalidInput InvalidInput() => new();
-    public static InvalidInput InvalidInput(Error error)
+    public static InvalidInput InvalidInput(ValidationError error)
     {
         var fail = InvalidInput();
         fail.AddErrors(error);
         return fail;
     }
 
-    public static InvalidInput<T> InvalidInput<T>() where T : notnull => new();
-    public static InvalidInput<T> InvalidInput<T>(Error error)
+    public static InvalidInput<T> InvalidInput<T>() 
+        where T : notnull => new();
+    public static InvalidInput<T> InvalidInput<T>(ValidationError error)
         where T : notnull
     {
         var fail = InvalidInput<T>();
@@ -312,15 +318,16 @@ public abstract record Result
     #region Creation methods - not found
 
     public static NotFound NotFound() => new();
-    public static NotFound NotFound(Error error)
+    public static NotFound NotFound(ValidationError error)
     {
         var fail = NotFound();
         fail.AddErrors(error);
         return fail;
     }
     
-    public static NotFound<T> NotFound<T>() where T : notnull => new();
-    public static NotFound<T> NotFound<T>(Error error)
+    public static NotFound<T> NotFound<T>() 
+        where T : notnull => new();
+    public static NotFound<T> NotFound<T>(ValidationError error)
         where T : notnull
     {
         var fail = NotFound<T>();
@@ -356,6 +363,7 @@ public abstract record Result<T> : Result
     where T : notnull
 {
     private readonly T _value = default!;
+    private readonly bool _isValueSet;
     
     /// <summary>
     /// Operation result value.
@@ -366,30 +374,33 @@ public abstract record Result<T> : Result
     {
         get
         {
-            if (_value is null)
+            if (!_isValueSet || _value is null)
             {
-                throw new ResultValueIsNullException();
+                throw new ResultValueIsNullException(Errors);
             }
-            
+
             return _value;
         }
+
         protected init
         {
             if (value is null)
             {
-                throw new ResultValueIsNullException();
+                throw new ResultValueIsNullException(Errors);
             }
+
             _value = value;
+            _isValueSet = true;
         }
     }
 
     /// <summary>
-    /// Converts instances of <see cref="Error"/> type into <see cref="Result{T}"/>
+    /// Converts instances of <see cref="ValidationError"/> type into <see cref="Result{T}"/>
     /// with underlying <see cref="BudgetCast.Common.Domain.Results.GeneralFail{T}"/> type.
     /// </summary>
     /// <param name="error"></param>
     /// <returns></returns>
-    public static implicit operator Result<T>(Error error) => GeneralFail<T>(error);
+    public static implicit operator Result<T>(ValidationError error) => GeneralFail<T>(error);
     
     /// <summary>
     /// Converts instances of <typeparamref name="T"/> into <see cref="BudgetCast.Common.Domain.Results.Success{T}"/>.

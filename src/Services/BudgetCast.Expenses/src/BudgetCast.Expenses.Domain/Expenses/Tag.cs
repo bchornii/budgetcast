@@ -16,7 +16,7 @@ namespace BudgetCast.Expenses.Domain.Expenses
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return Errors.Expenses.Tags.TagNameShouldHaveValue();
+                return InvariantViolations.Expenses.Tags.TagNameShouldHaveValue();
             }
 
             return new Tag(name);
