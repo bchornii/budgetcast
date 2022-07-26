@@ -5,11 +5,15 @@ namespace BudgetCast.Common.Domain
     public abstract class Entity : IAuditableEntity
     {
         private int? _requestedHashCode;
-        private List<INotification> _domainEvents;
+        private List<IDomainEvent> _domainEvents;
+        private List<IDomainEventNotification> _domainEventNotifications;
 
         public long Id { get; set; }
 
-        public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
+        public IReadOnlyCollection<IDomainEvent>? DomainEvents => _domainEvents?.AsReadOnly();
+
+        public IReadOnlyCollection<IDomainEventNotification>? DomainEventNotifications =>
+            _domainEventNotifications?.AsReadOnly();
 
         public string CreatedBy { get; set; }
 
@@ -22,6 +26,7 @@ namespace BudgetCast.Common.Domain
         protected Entity()
         {
             _domainEvents = default!;
+            _domainEventNotifications = default!;
             CreatedBy = default!;
             LastModifiedBy = default!;
         }
@@ -79,21 +84,29 @@ namespace BudgetCast.Common.Domain
             return !(left == right);
         }
 
-        public void AddDomainEvent(INotification eventItem)
+        public void AddDomainEvent(IDomainEvent eventItem)
         {
-            _domainEvents = _domainEvents ?? new List<INotification>();
+            _domainEvents = _domainEvents ?? new List<IDomainEvent>();
             _domainEvents.Add(eventItem);
         }
 
-        public void RemoveDomainEvent(INotification eventItem)
+        public void AddDomainEventNotification(IDomainEventNotification notification)
         {
-            _domainEvents?.Remove(eventItem);
+            _domainEventNotifications = _domainEventNotifications ?? new List<IDomainEventNotification>();
+            _domainEventNotifications.Add(notification);
         }
 
-        public void ClearDomainEvents()
-        {
-            _domainEvents?.Clear();
-        }
+        public void RemoveDomainEvent(IDomainEvent eventItem) 
+            => _domainEvents?.Remove(eventItem);
+
+        public void RemoveDomainEventNotification(IDomainEventNotification notification)
+            => _domainEventNotifications?.Remove(notification);
+
+        public void ClearDomainEvents() 
+            => _domainEvents?.Clear();
+
+        public void ClearDomainEventNotifications()
+            => _domainEventNotifications?.Clear();
 
         private bool IsTransient() => Id == default;
     }

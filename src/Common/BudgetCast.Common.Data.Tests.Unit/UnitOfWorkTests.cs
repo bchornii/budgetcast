@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using BudgetCast.Common.Application.Outbox;
 using BudgetCast.Common.Data.Tests.Unit.Fakes;
+using BudgetCast.Common.Domain;
 using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Expenses.Commands;
 using FluentAssertions;
@@ -20,7 +21,7 @@ namespace BudgetCast.Common.Data.Tests.Unit;
 
 public class UnitOfWorkTests
 {
-    private UnitOfWorkFixture _fixture;
+    private readonly UnitOfWorkFixture _fixture;
 
     public UnitOfWorkTests()
     {
@@ -44,12 +45,25 @@ public class UnitOfWorkTests
     }
 
     [Fact]
+    public async Task Commit_Should_Dispatch_Domain_Events()
+    {
+        // Arrange
+
+        // Act
+        await _fixture.UnitOfWork.Commit(CancellationToken.None);
+
+        // Assert
+        Mock.Get(_fixture.DomainEventsDispatcher)
+            .Verify(v => v.DispatchEventsAsync(CancellationToken.None));
+    }
+    
+    [Fact]
     public async Task Commit_Should_Execute_And_Wrap_SaveChanges_In_Transaction()
     {
         // Arrange
         var transaction = Mock.Of<IDbContextTransaction>();
         Mock.Get(_fixture.OperationalDbContext)
-            .Setup(s => s.BeginTransactionAsync())
+            .Setup(s => s.BeginTransactionAsync(CancellationToken.None))
             .ReturnsAsync(transaction);
         
         // Act
@@ -98,6 +112,8 @@ public class UnitOfWorkTests
         
         public IEventsPublisher EventsPublisher { get; }
         
+        public IDomainEventsDispatcher DomainEventsDispatcher { get; }
+        
         public Fixture Fixture { get; }
 
         public UnitOfWork UnitOfWork { get; }
@@ -110,7 +126,8 @@ public class UnitOfWorkTests
             Logger = Mock.Of<ILogger<UnitOfWork>>();
             EventLogService = Mock.Of<IIntegrationEventLogService>();
             EventsPublisher = Mock.Of<IEventsPublisher>();
-            UnitOfWork = new UnitOfWork(OperationalDbContext, Logger, EventLogService, EventsPublisher);
+            DomainEventsDispatcher = Mock.Of<IDomainEventsDispatcher>();
+            UnitOfWork = new UnitOfWork(OperationalDbContext, Logger, EventLogService, EventsPublisher, DomainEventsDispatcher);
         }
 
         public UnitOfWorkFixture InitializeDefaultStubs()
@@ -126,7 +143,7 @@ public class UnitOfWorkTests
                 .Returns(database);
             
             Mock.Get(OperationalDbContext)
-                .Setup(s => s.BeginTransactionAsync())
+                .Setup(s => s.BeginTransactionAsync(CancellationToken.None))
                 .ReturnsAsync(Mock.Of<IDbContextTransaction>());
             
             return this;
