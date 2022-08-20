@@ -12,17 +12,20 @@ public class UnitOfWork : IUnitOfWork
     private readonly ILogger<UnitOfWork> _logger;
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly IEventsPublisher _eventsPublisher;
+    private readonly IDomainEventsDispatcher _domainEventsDispatcher;
 
     public UnitOfWork(
         OperationalDbContext dbContext,
         ILogger<UnitOfWork> logger, 
         IIntegrationEventLogService eventLogService, 
-        IEventsPublisher eventsPublisher)
+        IEventsPublisher eventsPublisher, 
+        IDomainEventsDispatcher domainEventsDispatcher)
     {
         _dbContext = dbContext;
         _logger = logger;
         _eventLogService = eventLogService;
         _eventsPublisher = eventsPublisher;
+        _domainEventsDispatcher = domainEventsDispatcher;
     }
         
     public async Task<bool> Commit(CancellationToken cancellationToken)
@@ -36,8 +39,11 @@ public class UnitOfWork : IUnitOfWork
         
         var result = await strategy.ExecuteAsync(_dbContext, async (dbContext, token) =>
         {
-            await using var transaction = await dbContext.BeginTransactionAsync();
+            await using var transaction = await dbContext.BeginTransactionAsync(token);
             _logger.LogInformation("----- Begin transaction {TransactionId}", transaction.TransactionId);
+            
+            _logger.LogInformation("Dispatching domain events for {TransactionId} transaction", transaction.TransactionId);
+            await _domainEventsDispatcher.DispatchEventsAsync(token);
             
             _logger.LogInformation("Saving changes to the database transaction {TransactionId})", transaction.TransactionId);
             var result = await dbContext.SaveChangesAsync(token);
@@ -47,6 +53,8 @@ public class UnitOfWork : IUnitOfWork
             
             return result;
         }, cancellationToken);
+
+        await _domainEventsDispatcher.DispatchNotificationsAsync(cancellationToken);
         
         await PublishPendingIntegrationEvents(cancellationToken);
 

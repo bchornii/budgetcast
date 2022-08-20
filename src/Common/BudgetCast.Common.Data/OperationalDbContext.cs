@@ -34,14 +34,14 @@ public class OperationalDbContext : DbContext
     public virtual IDbContextTransaction? GetCurrentTransaction() 
         => _currentTransaction;
     
-    public virtual async Task<IDbContextTransaction?> BeginTransactionAsync()
+    public virtual async Task<IDbContextTransaction?> BeginTransactionAsync(CancellationToken cancellationToken)
     {
         if (_currentTransaction != null)
         {
             return null;
         }
 
-        _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
 
         return _currentTransaction;
     }

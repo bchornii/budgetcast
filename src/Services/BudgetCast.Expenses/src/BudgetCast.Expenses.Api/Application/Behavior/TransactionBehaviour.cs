@@ -32,7 +32,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         return await strategy.ExecuteAsync(_dbContext, async (dbCxt, token) =>
         {
             var typeName = request.GetGenericTypeName();
-            await using var transaction = await dbCxt.BeginTransactionAsync();
+            await using var transaction = await dbCxt.BeginTransactionAsync(token);
             
             _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
             var response = await next();

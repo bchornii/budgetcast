@@ -30,5 +30,8 @@
                 action(item);
             }
         }
+        
+        public static T[] AsArray<T>(this T obj)
+            => new[] { obj, };
     }
 }

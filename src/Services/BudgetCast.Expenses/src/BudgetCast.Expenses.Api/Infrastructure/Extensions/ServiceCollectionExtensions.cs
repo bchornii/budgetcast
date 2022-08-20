@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 using BudgetCast.Common.Data;
+using BudgetCast.Common.Data.DomainEvents;
 using BudgetCast.Common.Data.EventLog;
 using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Web.Extensions;
@@ -151,6 +152,7 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
         {
             services.AddScoped<ICampaignRepository, CampaignRepository>();
             services.AddScoped<IExpensesRepository, ExpensesRepository>();
+            services.AddScoped<IDomainEventsDispatcher, DomainEventsDispatcher>();
             return services;
         }
 
