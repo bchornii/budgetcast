@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BudgetCast.Common.Domain;
 using BudgetCast.Common.Domain.Results;
 
 namespace BudgetCast.Common.Application
@@ -20,6 +21,16 @@ namespace BudgetCast.Common.Application
                 nameof(NotFound.Errors),
                 BindingFlags.Public | BindingFlags.Instance);
             errorsProperty?.SetValue(result, errors, null);
+            return (Result)result;
+        }
+        
+        public static Result WithErrors(this object result, ValidationError error)
+        {
+            var resultType = result.GetType();
+            var addErrorsMethod = resultType.GetMethod(
+                nameof(Result.AddErrors),
+                new []{typeof(ValidationError)});
+            addErrorsMethod?.Invoke(result, parameters: new[] {error});
             return (Result)result;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BudgetCast.Common.Application.Behavior.Authorization;
 using BudgetCast.Common.Application.Behavior.Idempotency;
 using BudgetCast.Common.Application.Behavior.Logging;
 using BudgetCast.Common.Application.Behavior.Validation;
@@ -29,9 +30,15 @@ public static class ServiceCollectionExtensions
                 enableRequestPayloadTrace: currentValue.IncludeRequestBody,
                 enableResponsePayloadTrace: currentValue.IncludePayload);
         });
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotentBehavior<,>));
 
+        foreach (var assembly in commandAndQueryAssemblies)
+        {
+            services.AddAuthorizersFromAssembly(assembly);
+        }
+        
         if (operationRegistryType is null)
         {
             services.AddScoped<IOperationsRegistry, NoStorageOperationsRegistry>();
@@ -53,5 +60,46 @@ public static class ServiceCollectionExtensions
         }
 
         return services;
+    }
+    
+    public static void AddAuthorizersFromAssembly(
+        this IServiceCollection services,
+        Assembly assembly,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    {
+        var authorizerType = typeof(IAuthorizer<>);
+        assembly.GetTypesAssignableTo(authorizerType).ForEach((type) =>
+        {
+            foreach (var implementedInterface in type.ImplementedInterfaces)
+            {
+                switch (lifetime)
+                {
+                    case ServiceLifetime.Scoped:
+                        services.AddScoped(implementedInterface, type);
+                        break;
+                    case ServiceLifetime.Singleton:
+                        services.AddSingleton(implementedInterface, type);
+                        break;
+                    case ServiceLifetime.Transient:
+                        services.AddTransient(implementedInterface, type);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, null);
+                }
+            }
+        });
+    }
+    
+    private static List<TypeInfo> GetTypesAssignableTo(this Assembly assembly, Type compareType)
+    {
+        var typeInfoList = assembly.DefinedTypes
+            .Where(x => 
+                x.IsClass && 
+                !x.IsAbstract && 
+                x != compareType && 
+                x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == compareType))
+            .ToList();
+
+        return typeInfoList;
     }
 }
