@@ -32,7 +32,6 @@ public class AuthorizationBehavior<TRequest, TResponse> :
         _logger = logger;
     }
     
-    // TODO: implement proper validation result for authorization instead of returning GenericFail
     public async Task<TResponse> Handle(
         TRequest request, 
         CancellationToken cancellationToken, 
@@ -71,14 +70,14 @@ public class AuthorizationBehavior<TRequest, TResponse> :
                     var genericArgumentType = typeof(TResponse)
                         .GetGenericResultArgumentType();
                     
-                    var genericFailResult = typeof(GeneralFail<>)
+                    var genericFailResult = typeof(Forbidden<>)
                         .CreateInstanceOf(genericArgumentType)
                         .WithErrors(error);
 
                     return (genericFailResult as TResponse)!;
                 }
 
-                var nonGenericFailResult = Result.GeneralFail(error);
+                var nonGenericFailResult = Result.Forbidden(error);
                 return (nonGenericFailResult as TResponse)!;
             }
         }
