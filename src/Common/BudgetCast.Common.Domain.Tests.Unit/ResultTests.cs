@@ -562,6 +562,62 @@ public class ResultTests
     
     #endregion
     
+    #region Creation methods - forbidden
+
+    [Fact]
+    public void Forbidden_Should_Return_New_Instance_Of_Untyped_Forbidden_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.Forbidden();
+
+        // Assert
+        result.Should().BeOfType<Forbidden>();
+    }
+    
+    [Fact]
+    public void Forbidden_ErrorType_Should_Create_New_Instance_Of_Untyped_Forbidden_Type_With_Errors()
+    {
+        // Arrange
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.Forbidden(error);
+
+        // Assert
+        result.Should().BeOfType<Forbidden>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    [Fact]
+    public void Forbidden_Should_Return_New_Instance_Of_Typed_Forbidden_Type()
+    {
+        // Arrange
+        
+        // Act
+        var result = Result.Forbidden<FakeData>();
+
+        // Assert
+        result.Should().BeOfType<Forbidden<FakeData>>();
+    }
+    
+    [Fact]
+    public void Forbidden_ErrorType_Should_Create_New_Instance_Of_Typed_Forbidden_Type_With_Errors()
+    {
+        // Arrange
+        var error = new ValidationError(_fixture.Fixture.Create<string>(), _fixture.Fixture.Create<string>());
+        
+        // Act
+        var result = Result.Forbidden<FakeData>(error);
+
+        // Assert
+        result.Should().BeOfType<Forbidden<FakeData>>();
+        result.Errors[error.Code].Should().Contain(v => v == error.Value);
+    }
+    
+    #endregion
+    
     #region Creation methods - not found
     
     [Fact]

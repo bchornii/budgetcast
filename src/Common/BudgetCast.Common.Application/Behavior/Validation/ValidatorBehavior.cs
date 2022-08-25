@@ -34,6 +34,12 @@ namespace BudgetCast.Common.Application.Behavior.Validation
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
+            if (!request.IsQuery<TRequest, TResponse>() &&
+                !request.IsCommand<TRequest, TResponse>())
+            {
+                return await next();
+            }
+            
             var commandName = request!.GetGenericTypeName();
             _logger.LogInformation("Validating {CommandName}", commandName);
 

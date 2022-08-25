@@ -337,6 +337,29 @@ public abstract record Result
 
     #endregion
 
+    #region Creation methods - forbidden
+
+    public static Forbidden Forbidden() => new();
+    public static Forbidden Forbidden(ValidationError error)
+    {
+        var fail = Forbidden();
+        fail.AddErrors(error);
+        return fail;
+    }
+
+    public static Forbidden<T> Forbidden<T>()
+        where T : notnull => new();
+
+    public static Forbidden<T> Forbidden<T>(ValidationError error)
+        where T : notnull
+    {
+        var fail = Forbidden<T>();
+        fail.AddErrors(error);
+        return fail;
+    }
+
+    #endregion
+
     #region Private members
 
     /// <summary>
