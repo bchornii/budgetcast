@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BudgetCast.Common.Authentication;
+using BudgetCast.Common.Domain.Results;
 using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Expenses.Commands;
 using BudgetCast.Expenses.Messaging;
@@ -146,6 +147,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             public IIntegrationEventLogService EventLogService { get; }
             
             public IIdentityContext IdentityContext { get; }
+            
+            public IBusinessRuleRegistry BusinessRuleRegistry { get; }
 
             public AddExpenseCommandHandler Handler { get; }
 
@@ -157,12 +160,14 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 UnitOfWork = Mock.Of<IUnitOfWork>();
                 EventLogService = Mock.Of<IIntegrationEventLogService>();
                 IdentityContext = Mock.Of<IIdentityContext>();
+                BusinessRuleRegistry = Mock.Of<IBusinessRuleRegistry>();
                 Handler = new AddExpenseCommandHandler(
                     ExpensesRepository, 
                     CampaignRepository, 
                     UnitOfWork,
                     IdentityContext,
-                    EventLogService);
+                    EventLogService,
+                    BusinessRuleRegistry);
             }
 
             public AddExpenseCommandHandlerFixture InitDefaultStubs()
@@ -180,6 +185,14 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 Mock.Get(IdentityContext)
                     .Setup(s => s.TenantId)
                     .Returns(Fixture.Create<long>());
+
+                var businessRule = Mock.Of<IBusinessRule>();
+                Mock.Get(businessRule)
+                    .Setup(s => s.ValidateAsync(CancellationToken.None))
+                    .ReturnsAsync(Success.Empty);
+                Mock.Get(BusinessRuleRegistry)
+                    .Setup(s => s.Locate(It.IsAny<Type>()))
+                    .Returns(businessRule);
 
                 return this;
             }

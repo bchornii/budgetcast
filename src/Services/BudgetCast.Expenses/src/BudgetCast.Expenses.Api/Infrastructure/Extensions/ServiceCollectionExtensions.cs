@@ -1,4 +1,5 @@
-﻿using BudgetCast.Common.Domain;
+﻿using System.Reflection;
+using BudgetCast.Common.Domain;
 using BudgetCast.Expenses.Api.Infrastructure.AppSettings;
 using BudgetCast.Expenses.Data;
 using BudgetCast.Expenses.Data.Campaigns;
@@ -22,6 +23,9 @@ using BudgetCast.Common.Messaging.Abstractions.Events;
 using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Common.Web.Filters;
 using BudgetCast.Expenses.Commands;
+using BudgetCast.Expenses.Commands.Expenses;
+using BudgetCast.Expenses.Domain;
+using BudgetCast.Expenses.Domain.Expenses.Rules;
 using BudgetCast.Expenses.Messaging;
 
 namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
@@ -153,6 +157,14 @@ namespace BudgetCast.Expenses.Api.Infrastructure.Extensions
             services.AddScoped<ICampaignRepository, CampaignRepository>();
             services.AddScoped<IExpensesRepository, ExpensesRepository>();
             services.AddScoped<IDomainEventsDispatcher, DomainEventsDispatcher>();
+
+            services.AddScoped<ExpenseIsExternallyApproved>();
+            services.AddScoped<ExpenseIsInternallyApproved>();
+            services.AddScoped<IBusinessRuleRegistry, BusinessRulesRegistry>();
+            
+            services.AddScoped<IExpenseBarCodeChecker, ExpenseBarCodeChecker>();
+            services.AddScoped<IExpenseApprovalVerifier, ExpenseApprovalVerifier>();
+
             return services;
         }
 

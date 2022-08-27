@@ -29,19 +29,22 @@ namespace BudgetCast.Expenses.Commands.Expenses
         private readonly IUnitOfWork _unitOfWork;
         private readonly IIdentityContext _identityContext;
         private readonly IIntegrationEventLogService _eventLogService;
+        private readonly IBusinessRuleRegistry _businessRuleRegistry;
 
         public AddExpenseCommandHandler(
             IExpensesRepository expensesRepository, 
             ICampaignRepository  campaignRepository,
             IUnitOfWork unitOfWork, 
             IIdentityContext identityContext,
-            IIntegrationEventLogService eventLogService)
+            IIntegrationEventLogService eventLogService,
+            IBusinessRuleRegistry businessRuleRegistry)
         {
             _expensesRepository = expensesRepository;
             _campaignRepository = campaignRepository;
             _unitOfWork = unitOfWork;
             _identityContext = identityContext;
             _eventLogService = eventLogService;
+            _businessRuleRegistry = businessRuleRegistry;
         }
 
         public async Task<Result<long>> Handle(
@@ -63,7 +66,7 @@ namespace BudgetCast.Expenses.Commands.Expenses
             var addTagsResult = expense.AddTags(tags);
 
             var expenseItem = ExpenseItem.Create("Default item", request.TotalAmount).Value;
-            var addItemResult = expense.AddItem(expenseItem);
+            var addItemResult = await expense.AddItemAsync(expenseItem, _businessRuleRegistry, cancellationToken);
             
             if (!addTagsResult || !addItemResult)
             {

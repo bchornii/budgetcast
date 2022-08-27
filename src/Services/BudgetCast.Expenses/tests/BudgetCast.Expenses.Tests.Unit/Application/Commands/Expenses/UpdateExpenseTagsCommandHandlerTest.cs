@@ -70,6 +70,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
             public IExpensesRepository ExpensesRepository { get; }
 
             public IUnitOfWork UnitOfWork { get; }
+            
+            public IBusinessRuleRegistry BusinessRuleRegistry { get; }
 
             public UpdateExpenseTagsCommandHandler Handler { get; }
 
@@ -78,7 +80,8 @@ namespace BudgetCast.Expenses.Tests.Unit.Application.Expenses
                 Fixture = new Fixture();
                 ExpensesRepository = Mock.Of<IExpensesRepository>();
                 UnitOfWork = Mock.Of<IUnitOfWork>();
-                Handler = new UpdateExpenseTagsCommandHandler(ExpensesRepository, UnitOfWork);
+                BusinessRuleRegistry = Mock.Of<IBusinessRuleRegistry>();
+                Handler = new UpdateExpenseTagsCommandHandler(ExpensesRepository, UnitOfWork, BusinessRuleRegistry);
             }
 
             public Expense CreateExpenseWithDefaultData()

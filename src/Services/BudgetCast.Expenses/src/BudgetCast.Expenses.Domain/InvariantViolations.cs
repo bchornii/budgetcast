@@ -33,6 +33,9 @@ public static class InvariantViolations
         public static ValidationError AddedAtIsLessThan365() 
             => new(ErrorsExpenses, "Expense can be created with past date not more than 365 ago.");
 
+        public static ValidationError ExpenseDoesNotHaveApproval()
+            => new(ErrorsExpenses, "Expense does not have approval.");
+
         public static class Tags
         {
             public static readonly string ErrorsTags = $"{AppPrefix}.{nameof(Tag)}".ToLowerInvariant();

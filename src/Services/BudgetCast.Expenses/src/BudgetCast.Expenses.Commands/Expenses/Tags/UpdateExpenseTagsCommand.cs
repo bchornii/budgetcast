@@ -15,13 +15,16 @@ namespace BudgetCast.Expenses.Commands.Tags
     {
         private readonly IExpensesRepository _expensesRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBusinessRuleRegistry _businessRuleRegistry;
 
         public UpdateExpenseTagsCommandHandler(
             IExpensesRepository expensesRepository,
-            IUnitOfWork unitOfWork) 
+            IUnitOfWork unitOfWork, 
+            IBusinessRuleRegistry businessRuleRegistry) 
         {
             _expensesRepository = expensesRepository;
             _unitOfWork = unitOfWork;
+            _businessRuleRegistry = businessRuleRegistry;
         }
 
         public async Task<Result> Handle(

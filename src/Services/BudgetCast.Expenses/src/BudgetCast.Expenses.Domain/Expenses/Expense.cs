@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Domain;
 using BudgetCast.Common.Domain.Results;
 using BudgetCast.Expenses.Domain.Campaigns;
+using BudgetCast.Expenses.Domain.Expenses.Rules;
 
 namespace BudgetCast.Expenses.Domain.Expenses
 {
@@ -59,11 +60,25 @@ namespace BudgetCast.Expenses.Domain.Expenses
             return value;
         }
 
-        public virtual Result AddItem(ExpenseItem expenseItem)
+        public virtual async Task<Result> AddItemAsync(
+            ExpenseItem expenseItem, 
+            IBusinessRuleRegistry ruleRegistry, 
+            CancellationToken cancellationToken)
         {
-            if (_expenseItems.Count >= 100)
+            if (ExpenseItems.Count >= 100)
             {
                 return InvariantViolations.Expenses.NoMoreThan1000Items();
+            }
+
+            var approvalRulesIterator =
+                GetApprovalRulesIterator(ruleRegistry, cancellationToken);
+
+            await foreach (var approvalRule in approvalRulesIterator.WithCancellation(cancellationToken))
+            {
+                if (approvalRule.IsOfFailure)
+                {
+                    return InvariantViolations.Expenses.ExpenseDoesNotHaveApproval();
+                }
             }
 
             _expenseItems.Add(expenseItem);
@@ -100,6 +115,16 @@ namespace BudgetCast.Expenses.Domain.Expenses
         private void RecalculateTotalPrice()
         {
             TotalPrice = GetTotalAmount();
+        }
+
+        private static IAsyncEnumerable<Result> GetApprovalRulesIterator(
+            IBusinessRuleRegistry ruleRegistry, 
+            CancellationToken cancellationToken)
+        {
+            return ruleRegistry.Locate(
+                    typeof(ExpenseIsInternallyApproved),
+                    typeof(ExpenseIsExternallyApproved))
+                .ValidateAsync(cancellationToken);
         }
     }
 }

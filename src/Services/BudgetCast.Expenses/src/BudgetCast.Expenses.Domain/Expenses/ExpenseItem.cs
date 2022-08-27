@@ -12,11 +12,14 @@ namespace BudgetCast.Expenses.Domain.Expenses
         public decimal Price { get; private set; }
 
         public int Quantity { get; private set; }
+        
+        public string BarCode { get; private set; }
 
         protected ExpenseItem() 
         {
             Title = default!;
             Note = default!;
+            BarCode = default!;
         }
 
         public ExpenseItem(string title, decimal price, int quantity = 1) : this()
