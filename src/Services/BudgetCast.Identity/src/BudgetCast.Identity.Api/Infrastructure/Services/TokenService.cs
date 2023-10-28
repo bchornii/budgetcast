@@ -116,7 +116,7 @@ namespace BudgetCast.Identity.Api.Infrastructure.Services
                 new(ClaimTypes.GivenName, user.GivenName ?? string.Empty),
                 new(ClaimTypes.Surname, user.LastName ?? string.Empty),
                 new(ClaimConstants.IpAddress, ipAddress),
-                new(ClaimConstants.Tenant, "7064"),
+                new(ClaimConstants.Tenant, "1971"),
                 new(ClaimConstants.ImageUrl, user.ImageUrl ?? string.Empty),
                 new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
             };
