@@ -8,6 +8,7 @@ public static class AppConstants
     public const string DefaultAppAuthScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     public const string TokenPrefix = ".Token.";
     public const string AccessTokenName = $"{TokenPrefix}{OpenIdConnectParameterNames.AccessToken}";
+    public const string RefreshTokenName = $"{TokenPrefix}{OpenIdConnectParameterNames.RefreshToken}";
     public const string ExpiresAtName = $"{TokenPrefix}expires_at";
     
     /// <summary>

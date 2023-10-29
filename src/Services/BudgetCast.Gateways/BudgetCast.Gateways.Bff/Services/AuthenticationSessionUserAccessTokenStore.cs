@@ -55,7 +55,7 @@ public class AuthenticationSessionUserAccessTokenStore : IUserAccessTokenStore
         }
         
         var accessToken = tokens.SingleOrDefault(t => t.Key == AppConstants.AccessTokenName);
-        var refreshToken = tokens.SingleOrDefault(t => t.Key == $"{AppConstants.TokenPrefix}{OpenIdConnectParameterNames.RefreshToken}");
+        var refreshToken = tokens.SingleOrDefault(t => t.Key == AppConstants.RefreshTokenName);
         var expiresAt = tokens.SingleOrDefault(t => t.Key == AppConstants.ExpiresAtName);
 
         DateTimeOffset? dtExpires = null;
@@ -86,7 +86,7 @@ public class AuthenticationSessionUserAccessTokenStore : IUserAccessTokenStore
 
         if (refreshToken != null)
         {
-            result.Properties.UpdateTokenValue(OpenIdConnectParameterNames.RefreshToken, refreshToken);
+            result.Properties.UpdateTokenValue(AppConstants.RefreshTokenName, refreshToken);
         }
         
         var options = _contextAccessor.HttpContext!.RequestServices.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>();
