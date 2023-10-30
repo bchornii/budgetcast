@@ -1,12 +1,6 @@
-﻿using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using BudgetCast.Gateways.Bff.Models;
-using BudgetCast.Gateways.Bff.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using BudgetCast.Gateways.Bff.Services.TokenManagement;
 using Yarp.ReverseProxy.Transforms;
 using Yarp.ReverseProxy.Transforms.Builder;
 
@@ -69,7 +63,7 @@ public class AccessTokenTransformProvider : ITransformProvider
             }
             else
             {
-                _logger.LogError("Access token is missing on {0}", transformBuildContext.Route.RouteId);
+                _logger.LogWarning("Access token is missing on {0} route", transformBuildContext.Route.RouteId);
             }
         });
     }

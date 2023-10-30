@@ -2,8 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BudgetCast.Gateways.Bff.Extensions;
 using BudgetCast.Gateways.Bff.Models;
+using BudgetCast.Gateways.Bff.Services.Identity;
+using BudgetCast.Gateways.Bff.Services.TokenStore;
 
-namespace BudgetCast.Gateways.Bff.Services;
+namespace BudgetCast.Gateways.Bff.Services.TokenManagement;
 
 public class UserAccessTokenManagementService : IUserAccessTokenManagementService
 {
@@ -76,14 +78,14 @@ public class UserAccessTokenManagementService : IUserAccessTokenManagementServic
 
         if (!response.IsSuccess)
         {
-            _logger.LogError("Error refreshing access token. StatusCode = {statusCode}", response.StatusCode);
+            _logger.LogError("Error refreshing access token. StatusCode = {statusCode}", (int)response.StatusCode);
+            return null!;
         }
         else
         {
             var tokenJwt = new JwtSecurityTokenHandler().ReadJwtToken(response.NewAccessToken);
             await _userAccessTokenStore.StoreTokenAsync(user, response.NewAccessToken, tokenJwt.ValidTo);
+            return response.NewAccessToken;
         }
-
-        return response.NewAccessToken;
     }
 }

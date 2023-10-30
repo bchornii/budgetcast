@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
 using System.Security.Claims;
-using BudgetCast.Gateways.Bff.Extensions;
 using BudgetCast.Gateways.Bff.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace BudgetCast.Gateways.Bff.Services;
+namespace BudgetCast.Gateways.Bff.Services.TokenStore;
 
 public class AuthenticationSessionUserAccessTokenStore : IUserAccessTokenStore
 {

@@ -1,4 +1,4 @@
-﻿namespace BudgetCast.Gateways.Bff.Models;
+﻿namespace BudgetCast.Gateways.Bff.Endpoints.Login;
 
 public class LoginVm
 {

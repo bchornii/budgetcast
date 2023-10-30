@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace BudgetCast.Gateways.Bff.Services;
+namespace BudgetCast.Gateways.Bff.Services.TokenStore;
 
 public interface IUserAccessTokenStore
 {
