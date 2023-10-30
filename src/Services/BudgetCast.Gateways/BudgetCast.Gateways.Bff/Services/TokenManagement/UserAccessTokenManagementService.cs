@@ -83,7 +83,7 @@ public class UserAccessTokenManagementService : IUserAccessTokenManagementServic
         }
         else
         {
-            var tokenJwt = new JwtSecurityTokenHandler().ReadJwtToken(response.NewAccessToken);
+            var tokenJwt = response.NewAccessToken.AsJwt();
             await _userAccessTokenStore.StoreTokenAsync(user, response.NewAccessToken, tokenJwt.ValidTo);
             return response.NewAccessToken;
         }

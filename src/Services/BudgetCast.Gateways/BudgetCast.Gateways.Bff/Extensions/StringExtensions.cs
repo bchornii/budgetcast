@@ -1,4 +1,6 @@
-﻿namespace BudgetCast.Gateways.Bff.Extensions;
+﻿using System.IdentityModel.Tokens.Jwt;
+
+namespace BudgetCast.Gateways.Bff.Extensions;
 
 public static class StringExtensions
 {
@@ -11,4 +13,7 @@ public static class StringExtensions
     {
         return !string.IsNullOrWhiteSpace(value);
     }
+
+    public static JwtSecurityToken? AsJwt(this string value)
+        => new JwtSecurityTokenHandler().ReadJwtToken(value);
 }

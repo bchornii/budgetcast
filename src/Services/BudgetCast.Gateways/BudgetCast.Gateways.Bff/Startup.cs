@@ -2,7 +2,6 @@
 using BudgetCast.Common.Web.Logs;
 using BudgetCast.Gateways.Bff.Extensions;
 using BudgetCast.Gateways.Bff.Models;
-using BudgetCast.Gateways.Bff.Services;
 using BudgetCast.Gateways.Bff.Services.Identity;
 using BudgetCast.Gateways.Bff.Services.TokenManagement;
 using BudgetCast.Gateways.Bff.Services.TokenStore;
@@ -27,6 +26,7 @@ public class Startup
         
         var builder = services.AddReverseProxy()
             .AddTransforms<AccessTokenTransformProvider>()
+            .AddTransforms<XTokenTransformProvider>()
             .AddTransforms<LoggingTransformProvider>();
         BuildRoutes(builder);
 
@@ -55,7 +55,7 @@ public class Startup
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.Cookie.Name = "__BudgetCast-gw-bff";
+                options.Cookie.Name = opts.BffAuthenticationCookieName;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
@@ -124,7 +124,37 @@ public class Startup
                     {
                         Path = "/api/campaigns/{**catch-all}"
                     }
-                }.WithAccessToken(TokenType.User)
+                }.WithAccessToken(TokenType.User),
+                new RouteConfig
+                {
+                    RouteId = "ext-logins",
+                    ClusterId = "identity-api",
+                    
+                    Match = new RouteMatch
+                    {
+                        Path = "/api/signin/{**catch-all}"
+                    }
+                },
+                new RouteConfig
+                {
+                    RouteId = "google-callback",
+                    ClusterId = "identity-api",
+                    
+                    Match = new RouteMatch
+                    {
+                        Path = "/g-callback/{**catch-all}"
+                    }
+                },
+                new RouteConfig
+                {
+                    RouteId = "facebook-logins",
+                    ClusterId = "identity-api",
+                    
+                    Match = new RouteMatch
+                    {
+                        Path = "/fb-callback/{**catch-all}"
+                    }
+                }
             },
             clusters: new []
             {
@@ -134,6 +164,14 @@ public class Startup
                     Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
                     {
                         {"destination1", new DestinationConfig() { Address = "http://localhost:5234"}}
+                    }
+                },
+                new ClusterConfig
+                {
+                    ClusterId = "identity-api",
+                    Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        {"destination1", new DestinationConfig() { Address = "https://localhost:44305"}}
                     }
                 }
             });

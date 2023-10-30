@@ -48,7 +48,7 @@ public class AccessTokenTransformProvider : ITransformProvider
         {
             throw new ArgumentException($"Invalid value for {AppConstants.Yarp.TokenTypeMetadata} metadata");
         }
-        
+
         transformBuildContext.AddRequestTransform(async transformContext =>
         {
             var tms = transformContext.HttpContext.RequestServices

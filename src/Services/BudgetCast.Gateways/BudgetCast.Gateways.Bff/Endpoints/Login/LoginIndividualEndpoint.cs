@@ -1,11 +1,5 @@
-﻿using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Security.Claims;
-using BudgetCast.Gateways.Bff.Models;
+﻿using BudgetCast.Gateways.Bff.Extensions;
 using BudgetCast.Gateways.Bff.Services.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetCast.Gateways.Bff.Endpoints.Login;
@@ -34,24 +28,8 @@ public class LoginIndividualEndpoint : IEndpoint<LoginIndividualRequest, IResult
         
         if (!string.IsNullOrWhiteSpace(result.AccessToken))
         {
-            var claims = new[]
-            {
-                new Claim("uuid", Guid.NewGuid().ToString("N")),
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            var authProperties = new AuthenticationProperties();
-
-            var expiration = new JwtSecurityTokenHandler()
-                .ReadJwtToken(result.AccessToken).ValidTo;
-            authProperties.Items[AppConstants.ExpiresAtName] = expiration.ToString("o", CultureInfo.InvariantCulture);
-            authProperties.Items[AppConstants.AccessTokenName] = result.AccessToken;
-            authProperties.Items[AppConstants.RefreshTokenName] = "Not-passed";
-
-            await request.HttpContext.SignInAsync(
-                AppConstants.DefaultAppAuthScheme, 
-                principal,
-                authProperties);
+            await request.HttpContext
+                .SignInAsCookieAsync(result.AccessToken);
         }
             
         return Results.NoContent();
