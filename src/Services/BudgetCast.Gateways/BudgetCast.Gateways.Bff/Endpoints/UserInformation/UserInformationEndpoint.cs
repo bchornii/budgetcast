@@ -22,7 +22,7 @@ public class UserInformationEndpoint : IEndpoint<UserInformationRequest, IResult
 
     public async Task<IResult> HandleAsync(UserInformationRequest request, CancellationToken token)
     {
-        var result = await request.HttpContext.AuthenticateAsync();
+        var result = await request.HttpContext.AuthenticateAsync(AppConstants.DefaultAppAuthScheme);
 
         if (!result.Succeeded)
         {
