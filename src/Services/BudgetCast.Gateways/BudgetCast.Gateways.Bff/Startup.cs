@@ -3,6 +3,7 @@ using BudgetCast.Common.Web.Logs;
 using BudgetCast.Gateways.Bff.Extensions;
 using BudgetCast.Gateways.Bff.Models;
 using BudgetCast.Gateways.Bff.Services.Identity;
+using BudgetCast.Gateways.Bff.Services.Session;
 using BudgetCast.Gateways.Bff.Services.TokenManagement;
 using BudgetCast.Gateways.Bff.Services.TokenStore;
 using BudgetCast.Gateways.Bff.TransformProviders;
@@ -26,8 +27,7 @@ public class Startup
         
         var builder = services.AddReverseProxy()
             .AddTransforms<AccessTokenTransformProvider>()
-            .AddTransforms<XTokenTransformProvider>()
-            .AddTransforms<LoggingTransformProvider>();
+            .AddTransforms<XTokenTransformProvider>();
         BuildRoutes(builder);
 
         services
@@ -60,8 +60,51 @@ public class Startup
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
                 
-                // automatically revoke refresh token at signout time
-                options.Events.OnSigningOut = async e => { await Task.CompletedTask; };
+                // Revoke the session on signout time in order to eliminate issues with non-expired cached cookies.
+                options.Events.OnSigningOut = async context =>
+                {
+                    var logger = context.HttpContext
+                        .RequestServices.GetService<ILogger<CookieAuthenticationHandler>>();
+                    
+                    var uuid = context.HttpContext.User.GetUuid();
+                    if (uuid.IsPresent())
+                    {
+                        var sessionTracker = context.HttpContext
+                            .RequestServices.GetService<ISessionTrackerService>();
+                        if (sessionTracker is not null)
+                        {
+                            logger.LogDebug("Revoked principal with {uuid} id", uuid);
+                            await sessionTracker.RevokeAsync(uuid!);
+                        }
+                    }
+                };
+                
+                // Validate session for expiration to eliminate usage of cached non-expired cookies.
+                options.Events.OnValidatePrincipal = async context =>
+                {
+                    var logger = context.HttpContext
+                        .RequestServices.GetService<ILogger<CookieAuthenticationHandler>>();
+                    
+                    var uuid = context.Principal.GetUuid();
+                    logger?.LogDebug("Principal validation for {uuid}", uuid);
+                    if (uuid.IsPresent())
+                    {
+                        var sessionTracker = context.HttpContext
+                            .RequestServices.GetService<ISessionTrackerService>();
+                        if (sessionTracker is not null)
+                        {
+                            if (await sessionTracker.IsRevokedAsync(uuid!))
+                            {
+                                context.RejectPrincipal();
+                                logger?.LogWarning("Principal with {uuid} id rejected", uuid);
+                            }
+                            else
+                            {
+                                logger?.LogDebug("Principal with {uuid} id is valid", uuid);
+                            }
+                        }   
+                    }
+                };
                 options.Events.OnRedirectToLogin = context =>
                 {
                     context.Response.StatusCode = 401; // Set the status code to 401
@@ -69,10 +112,14 @@ public class Startup
                 };
                 options.Events.OnRedirectToAccessDenied = context =>
                 {
-                    context.Response.StatusCode = 403; // Set the status code to 401
+                    context.Response.StatusCode = 403; // Set the status code to 403
                     return Task.CompletedTask;
                 };
             });
+
+        services
+            .AddDistributedMemoryCache()
+            .AddScoped<ISessionTrackerService, SessionTrackerService>();
 
         services
             .AddHttpClient<IIdentityEndpointService, IdentityEndpointService>(client =>
