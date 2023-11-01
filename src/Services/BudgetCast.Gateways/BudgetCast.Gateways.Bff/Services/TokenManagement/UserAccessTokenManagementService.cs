@@ -12,15 +12,18 @@ public class UserAccessTokenManagementService : IUserAccessTokenManagementServic
     private readonly IUserAccessTokenStore _userAccessTokenStore;
     private readonly ILogger<UserAccessTokenManagementService> _logger;
     private readonly IIdentityEndpointService _identityEndpointService;
+    private readonly IUserAccessTokenRequestSynchronization _sync;
 
     public UserAccessTokenManagementService(
         IUserAccessTokenStore userAccessTokenStore, 
         ILogger<UserAccessTokenManagementService> logger,
-        IIdentityEndpointService identityEndpointService)
+        IIdentityEndpointService identityEndpointService,
+        IUserAccessTokenRequestSynchronization sync)
     {
         _userAccessTokenStore = userAccessTokenStore;
         _logger = logger;
         _identityEndpointService = identityEndpointService;
+        _sync = sync;
     }
     
     public async Task<string> GetUserAccessTokenAsync(ClaimsPrincipal user, CancellationToken cancellationToken = default)
@@ -61,15 +64,37 @@ public class UserAccessTokenManagementService : IUserAccessTokenManagementServic
         if (dtRefresh < DateTimeOffset.UtcNow)
         {
             _logger.LogDebug("Token for user {user} needs refreshing.", userName);
-            
-            // TODO: need to add concurrency control
-            var newAccessToken = await RefreshUserAccessTokenAsync(user, cancellationToken);
-            return newAccessToken;
+
+            var uuid = user.GetUuid();
+
+            if (string.IsNullOrWhiteSpace(uuid))
+            {
+                _logger.LogWarning("User dont' have valid uuid. Current value is {uuid}. Returning old access token", uuid);
+                return userToken.AccessToken;
+            }
+
+            try
+            {
+                // Since multiple request may occur in near the same time for the same user, we must handle concurrency
+                // and eliminate refreshing token multiple times.
+                return await _sync.Dictionary.GetOrAdd(uuid, _ =>
+                {
+                    return new Lazy<Task<string>>(async () =>
+                    {
+                        var newAccessToken = await RefreshUserAccessTokenAsync(user, cancellationToken);
+                        return newAccessToken;
+                    });
+                }).Value;
+            }
+            finally
+            {
+                _sync.Dictionary.TryRemove(uuid, out var _);
+            }
         }
         
         return userToken.AccessToken;
     }
-
+    
     private async Task<string> RefreshUserAccessTokenAsync(ClaimsPrincipal user, CancellationToken cancellationToken = default)
     {
         var userToken = await _userAccessTokenStore.GetTokenAsync(user);

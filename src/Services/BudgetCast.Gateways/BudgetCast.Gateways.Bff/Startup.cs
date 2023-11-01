@@ -62,7 +62,8 @@ public class Startup
 
         services
             .AddScoped<IUserAccessTokenStore, AuthenticationSessionUserAccessTokenStore>()
-            .AddScoped<IUserAccessTokenManagementService, UserAccessTokenManagementService>();
+            .AddScoped<IUserAccessTokenManagementService, UserAccessTokenManagementService>()
+            .AddSingleton<IUserAccessTokenRequestSynchronization, AccessTokenRequestSynchronization>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) =>
