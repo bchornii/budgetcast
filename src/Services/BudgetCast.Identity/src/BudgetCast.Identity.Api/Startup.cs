@@ -6,6 +6,7 @@ using BudgetCast.Identity.Api.Infrastructure.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 
 namespace BudgetCast.Identity.Api
@@ -46,15 +47,25 @@ namespace BudgetCast.Identity.Api
                 {
                     options.LoggingFields = HttpLoggingFields.All;
                     options.RequestHeaders.Add("X-Correlation-ID");
+                    options.RequestHeaders.Add("Authorization");
+                    options.RequestHeaders.Add("WWW-Authenticate");
+                    options.RequestHeaders.Add("x-forwarded-host");
+                    options.RequestHeaders.Add("x-forwarded-proto");
+                    options.RequestHeaders.Add("x-forwarded-for");
                     options.RequestBodyLogLimit = 4096;
                     options.ResponseBodyLogLimit = 4096;
                 });
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.All;
+            });
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseApiExceptionHandling(isDevelopment: false);
-
+            app.UseForwardedHeaders();
             app.UseHttpsRedirection();
 
             app.UseSwagger();

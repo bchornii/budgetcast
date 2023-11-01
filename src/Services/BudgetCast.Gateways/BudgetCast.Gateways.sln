@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Gateways.Bff", "BudgetCast.Gateways.Bff\BudgetCast.Gateways.Bff.csproj", "{FD9C12D8-DBF0-4445-B59B-0F0E910679F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{3AF0125D-0DD4-43CA-94CC-DE4A43416094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetCast.Common.Web", "..\..\Common\BudgetCast.Common.Web\BudgetCast.Common.Web.csproj", "{AD2F143C-74F5-4E93-977D-297097A21089}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD9C12D8-DBF0-4445-B59B-0F0E910679F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9C12D8-DBF0-4445-B59B-0F0E910679F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9C12D8-DBF0-4445-B59B-0F0E910679F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9C12D8-DBF0-4445-B59B-0F0E910679F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD2F143C-74F5-4E93-977D-297097A21089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD2F143C-74F5-4E93-977D-297097A21089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD2F143C-74F5-4E93-977D-297097A21089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD2F143C-74F5-4E93-977D-297097A21089}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AD2F143C-74F5-4E93-977D-297097A21089} = {3AF0125D-0DD4-43CA-94CC-DE4A43416094}
+	EndGlobalSection
+EndGlobal
