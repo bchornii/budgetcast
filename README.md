@@ -49,6 +49,7 @@ Azure SignalR Service integration was added in order to avoid potential problems
     - MS Sql Server
     - Azure SDK
     - Seq
+    - YARP (reverse proxy, bff)
     
  - **UI**
     - Asp.Net 6 (as prod hosting web server)
