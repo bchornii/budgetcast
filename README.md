@@ -16,7 +16,8 @@ To achieve runtime notifications when significant changes in the system occur an
 
 Azure SignalR Service integration was added in order to avoid potential problems with performance, scalability and availability of the solutions based on persistent client connections (aka. web sockets). These issues are handler for us with a 99.9% SLA.
 
-![budgetcast-containers-diagram](https://github.com/bchornii/budgetcast/assets/16306082/f86254af-8eee-4481-a6ac-422b73f3323c)
+![budgetcast-containers-diagram](https://github.com/bchornii/budgetcast/assets/16306082/44472e8b-b102-4a79-bb0c-76f052cb31a5)
+
 
 ## Code details 
  #### CRUD
