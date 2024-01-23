@@ -5,7 +5,13 @@ namespace BudgetCast.Gateways.Bff.Extensions;
 
 public static class ProxyConfigExtensions
 {
-    public static RouteConfig WithAccessToken(this RouteConfig config, TokenType tokenType)
+    public static RouteConfig WithAccessToken(this RouteConfig config, TokenType tokenType) 
+        => config.WithMetadata(AppConstants.Yarp.TokenTypeMetadata, tokenType.ToString());
+
+    public static RouteConfig WithAntiforgeryCheck(this RouteConfig config) 
+        => config.WithMetadata(AppConstants.Yarp.AntiforgeryCheckMetadata, "true");
+
+    private static RouteConfig WithMetadata(this RouteConfig config, string key, string value)
     {
         Dictionary<string, string> metadata;
 
@@ -18,7 +24,7 @@ public static class ProxyConfigExtensions
             metadata = new();
         }
 
-        metadata.TryAdd(AppConstants.Yarp.TokenTypeMetadata, tokenType.ToString());
+        metadata.TryAdd(key, value);
             
         return config with { Metadata = metadata };
     }

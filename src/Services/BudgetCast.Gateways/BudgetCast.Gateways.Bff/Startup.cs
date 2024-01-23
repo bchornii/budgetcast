@@ -1,6 +1,7 @@
 ﻿using BudgetCast.Common.Web.Extensions;
 using BudgetCast.Common.Web.Logs;
 using BudgetCast.Gateways.Bff.Extensions;
+using BudgetCast.Gateways.Bff.Middleware;
 using BudgetCast.Gateways.Bff.Services.Identity;
 using BudgetCast.Gateways.Bff.Services.Session;
 using BudgetCast.Gateways.Bff.Services.TokenManagement;
@@ -77,5 +78,6 @@ public class Startup
             .UseAuthorization()
             .UseEndpoints(endpoints => endpoints
                 .MapEndpoints()
-                .MapReverseProxy());
+                .MapReverseProxy(proxy => proxy
+                    .UseMiddleware<AntiforgeryMiddleware>()));
 }
