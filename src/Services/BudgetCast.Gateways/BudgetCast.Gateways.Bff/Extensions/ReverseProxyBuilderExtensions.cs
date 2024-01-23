@@ -20,7 +20,7 @@ public static class ReverseProxyBuilderExtensions
                     {
                         Path = "/api/expenses/{**catch-all}"
                     }
-                }.WithAccessToken(TokenType.User),
+                }.WithAccessToken(TokenType.User).WithAntiforgeryCheck(),
                 new RouteConfig
                 {
                     RouteId = "campaigns",
@@ -30,7 +30,7 @@ public static class ReverseProxyBuilderExtensions
                     {
                         Path = "/api/campaigns/{**catch-all}"
                     }
-                }.WithAccessToken(TokenType.User),
+                }.WithAccessToken(TokenType.User).WithAntiforgeryCheck(),
                 
                 // Identity API
                 new RouteConfig

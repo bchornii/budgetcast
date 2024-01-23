@@ -38,4 +38,16 @@ public class BffOptions
     /// Defines if X-TOKEN should be removed from a response after extrificated.
     /// </summary>
     public bool RemoveXTokenCookieFromResponse { get; } = true;
+    
+    /// <summary>
+    /// Specifies the name of the header used for anti-forgery header protection.
+    /// Defaults to X-CSRF.
+    /// </summary>
+    public string AntiForgeryHeaderName { get; set; } = "X-CSRF";
+
+    /// <summary>
+    /// Specifies the expected value of the anti-forgery header.
+    /// Defaults to 1.
+    /// </summary>
+    public string AntiForgeryHeaderValue { get; set; } = "1";
 }
