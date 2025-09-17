@@ -20,7 +20,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         _logger = logger;
     }
     
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (_dbContext.HasActiveTransaction)
         {
