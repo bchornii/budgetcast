@@ -36,7 +36,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(Success.Empty);
@@ -56,7 +56,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result
@@ -83,7 +83,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -103,7 +103,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, handler);
+                .Handle(new FakeGenericCommand(), handler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -128,7 +128,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().BeOfType(resultType);
@@ -150,7 +150,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().BeOfType(resultType);
@@ -176,7 +176,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result
@@ -201,7 +201,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result
@@ -223,7 +223,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
@@ -238,7 +238,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             // Act
             var result = _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);

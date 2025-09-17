@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
         Type? operationRegistryType = null,
         params Assembly[] commandAndQueryAssemblies)
     {
-        services.AddMediatR(commandAndQueryAssemblies);
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(commandAndQueryAssemblies));
 
         // Register MediatR pipelines for logging, validation and idempotency
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));

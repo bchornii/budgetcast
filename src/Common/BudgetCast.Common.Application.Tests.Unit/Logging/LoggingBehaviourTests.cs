@@ -43,7 +43,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = await _nonGenericResultQueryBehavior
                 .Behavior
-                .Handle(new FakeQuery(), CancellationToken.None, successHandler);
+                .Handle(new FakeQuery(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -59,7 +59,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = await _genericResultQueryBehavior
                 .Behavior
-                .Handle(new FakeGenericQuery(), CancellationToken.None, handler);
+                .Handle(new FakeGenericQuery(), handler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -75,7 +75,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = await _nonGenericResultCommandBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -91,7 +91,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = await _genericResultCommandBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, handler);
+                .Handle(new FakeGenericCommand(), handler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -110,7 +110,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = _nonGenericResultQueryBehavior
                 .Behavior
-                .Handle(new FakeQuery(), CancellationToken.None, successHandler);
+                .Handle(new FakeQuery(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
@@ -125,7 +125,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = _genericResultQueryBehavior
                 .Behavior
-                .Handle(new FakeGenericQuery(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericQuery(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
@@ -140,7 +140,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = _nonGenericResultCommandBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
@@ -155,7 +155,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             // Act
             var result = _genericResultCommandBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
@@ -179,16 +179,16 @@ namespace BudgetCast.Common.Application.Tests.Unit.Logging
             }
 
             public RequestHandlerDelegate<Result> HandlerDelegate(Result result)
-                => () => Task.FromResult(result);
+                => _ => Task.FromResult(result);
 
             public RequestHandlerDelegate<Result<FakeData>> HandlerDelegate(Result<FakeData> result)
-                => () => Task.FromResult(result);
+                => _ => Task.FromResult(result);
 
             /// <summary>
             /// Used to represent command handler which throws an exception.
             /// </summary>
             public RequestHandlerDelegate<TResponse> ExceptionHandlerDelegate()
-                => () => throw new InvalidOperationException();
+                => _ => throw new InvalidOperationException();
         }
     }
 }
