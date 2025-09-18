@@ -27,4 +27,10 @@ public static class HttpContextExtensions
             principal,
             authProperties);
     }
+    
+    public static bool CheckAntiForgeryHeader(this HttpContext context, BffOptions options)
+    {
+        var antiForgeryHeader = context.Request.Headers[options.AntiForgeryHeaderName].FirstOrDefault();
+        return antiForgeryHeader != null && antiForgeryHeader == options.AntiForgeryHeaderValue;
+    }
 }

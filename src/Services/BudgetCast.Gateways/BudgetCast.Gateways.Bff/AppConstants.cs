@@ -20,5 +20,10 @@ public static class AppConstants
         /// Name of toke type metadata
         /// </summary>
         public const string TokenTypeMetadata = "BudgetCast.Gw.Bff.Yarp.TokenType";
+        
+        /// <summary>
+        /// Name of toke type metadata
+        /// </summary>
+        public const string AntiforgeryCheckMetadata = "Duende.Bff.Yarp.AntiforgeryCheck";
     }
 }

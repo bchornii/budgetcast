@@ -16,7 +16,8 @@ To achieve runtime notifications when significant changes in the system occur an
 
 Azure SignalR Service integration was added in order to avoid potential problems with performance, scalability and availability of the solutions based on persistent client connections (aka. web sockets). These issues are handler for us with a 99.9% SLA.
 
-![budgetcast-containers-diagram](https://user-images.githubusercontent.com/16306082/159164208-b74c080b-f59c-4ab2-9519-05dcd8e5dcc4.jpg)
+![budgetcast-containers-diagram](https://github.com/bchornii/budgetcast/assets/16306082/44472e8b-b102-4a79-bb0c-76f052cb31a5)
+
 
 ## Code details 
  #### CRUD
@@ -48,6 +49,7 @@ Azure SignalR Service integration was added in order to avoid potential problems
     - MS Sql Server
     - Azure SDK
     - Seq
+    - YARP (reverse proxy, bff)
     
  - **UI**
     - Asp.Net 6 (as prod hosting web server)
