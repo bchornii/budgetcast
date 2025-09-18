@@ -71,7 +71,7 @@ namespace BudgetCast.Identity.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Budget Cast API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API");
             });
 
             app.UseRouting();
