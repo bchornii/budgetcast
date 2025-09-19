@@ -22,7 +22,6 @@ namespace BudgetCast.Identity.Api.HostedServices
             var logger = services.GetRequiredService<ILogger<AppIdentityContext>>();
             var context = services.GetService<AppIdentityContext>()!;
 
-            var cs = context.Database.GetConnectionString();
             try
             {
                 logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(AppIdentityContext).Name);
