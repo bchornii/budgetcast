@@ -50,6 +50,7 @@ namespace BudgetCast.Expenses.Api
                 {
                     options.LoggingFields = HttpLoggingFields.All;
                     options.RequestHeaders.Add("X-Correlation-ID");
+                    options.ResponseHeaders.Add("WWW-Authenticate");
                     options.RequestBodyLogLimit = 4096;
                     options.ResponseBodyLogLimit = 4096;
                 });
