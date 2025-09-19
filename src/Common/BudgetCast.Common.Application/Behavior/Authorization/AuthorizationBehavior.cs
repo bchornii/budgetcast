@@ -34,8 +34,8 @@ public class AuthorizationBehavior<TRequest, TResponse> :
     
     public async Task<TResponse> Handle(
         TRequest request, 
-        CancellationToken cancellationToken, 
-        RequestHandlerDelegate<TResponse> next)
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
         if (request.IsAuthorizationRequirement<TRequest, TResponse>())
         {

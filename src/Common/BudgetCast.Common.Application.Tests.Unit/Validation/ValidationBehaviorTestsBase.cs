@@ -62,20 +62,20 @@ namespace BudgetCast.Common.Application.Tests.Unit.Validation
             /// where <c>TResult</c> is <see cref="Result"/>.
             /// </summary>
             public RequestHandlerDelegate<TResponse> HandlerDelegate(Result result)
-                => () => Task.FromResult(result as TResponse);
+                => _ => Task.FromResult(result as TResponse)!;
 
             /// <summary>
             /// Used to represent commands of non-generic response types such as <see cref="ICommand{TResult}"/>
             /// where <c>TResult</c> is <see cref="Result{T}"/>.
             /// </summary>
             public RequestHandlerDelegate<TResponse> HandlerDelegate(Result<FakeData> result)
-                => () => Task.FromResult(result as TResponse);
+                => _ => Task.FromResult(result as TResponse)!;
 
             /// <summary>
             /// Used to represent command handler which throws an exception.
             /// </summary>
             public RequestHandlerDelegate<TResponse> ExceptionHandlerDelegate()
-                => () => throw new InvalidOperationException();
+                => _ => throw new InvalidOperationException();
 
             public IValidator<TRequest>[] GetValidatorsWithNoErrorResults()
             {

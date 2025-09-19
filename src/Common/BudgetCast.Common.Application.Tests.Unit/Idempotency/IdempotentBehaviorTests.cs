@@ -42,7 +42,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(Success.Empty);
@@ -63,7 +63,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result
@@ -89,7 +89,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -108,7 +108,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             result.Should().Be(commandResult);
@@ -131,7 +131,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
@@ -153,7 +153,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             Mock.Get(_genericResultBehavior.OperationsRegistry)
@@ -179,7 +179,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             await _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
             Mock.Get(_nonGenericResultBehavior.OperationsRegistry)
@@ -203,7 +203,7 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             await _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
             Mock.Get(_genericResultBehavior.OperationsRegistry)
@@ -225,10 +225,10 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = _nonGenericResultBehavior
                 .Behavior
-                .Handle(new FakeCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeCommand(), successHandler, CancellationToken.None);
 
             // Assert
-            _ = Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
+            _ = await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
 
         [Fact]
@@ -242,10 +242,10 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             // Act
             var result = _genericResultBehavior
                 .Behavior
-                .Handle(new FakeGenericCommand(), CancellationToken.None, successHandler);
+                .Handle(new FakeGenericCommand(), successHandler, CancellationToken.None);
 
             // Assert
-            _ = Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
+            _ = await Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
         }
         #endregion
         private class IdempotentBehaviorFixture<TRequest, TResponse>
@@ -268,27 +268,27 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             /// Used only in cases when actual delegate execution is skipped.
             /// </summary>
             public RequestHandlerDelegate<TResponse> StubHandlerDelegate()
-                => () => Task.FromResult<TResponse>(default);
+                => _ => Task.FromResult<TResponse>(null!);
 
             /// <summary>
             /// Used to represent commands of non-generic response types such as <see cref="ICommand{TResult}"/>
             /// where <c>TResult</c> is <see cref="Result"/>.
             /// </summary>
             public RequestHandlerDelegate<TResponse> HandlerDelegate(Result result)
-                => () => Task.FromResult(result as TResponse);
+                => _ => Task.FromResult(result as TResponse)!;
 
             /// <summary>
             /// Used to represent commands of non-generic response types such as <see cref="ICommand{TResult}"/>
             /// where <c>TResult</c> is <see cref="Result{T}"/>.
             /// </summary>
             public RequestHandlerDelegate<TResponse> HandlerDelegate(Result<FakeData> result)
-                => () => Task.FromResult(result as TResponse);
+                => _ => Task.FromResult(result as TResponse)!;
 
             /// <summary>
             /// Used to represent command handler which throws an exception.
             /// </summary>
             public RequestHandlerDelegate<TResponse> ExceptionHandlerDelegate()
-                => () => throw new InvalidOperationException();
+                => _ => throw new InvalidOperationException()!;
 
         }
         public static IEnumerable<object[]> GetFakeObjectsAndTheirJson()
@@ -297,30 +297,30 @@ namespace BudgetCast.Common.Application.Tests.Unit.Idempotency
             var fakeObjects = fixture.CreateMany<FakeData>().ToArray();
             foreach (var fakeObject in fakeObjects)
             {
-                yield return new object[]
-                {
+                yield return
+                [
                     fakeObject,
-                    $"{{\"Value\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}",
-                };
+                    $"{{\"Value\": {JsonSerializer.Serialize(fakeObject, typeof(FakeData))}}}"
+                ];
             }
-            yield return new object[]
-            {
+            yield return
+            [
                 new FakeData
                 {
                     DealNumber = 123,
                     DwellingAge = 1,
                     Notes = "Some notes",
                 },
-                "{\"Value\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}",
-            };
-            yield return new object[]
-            {
+                "{\"Value\":{\"DealNumber\":123,\"DwellingAge\":1, \"Notes\":\"Some notes\", \"AdditionalProperty\": 123}}"
+            ];
+            yield return
+            [
                 new FakeData
                 {
                     DealNumber = 123,
                 },
-                "{\"Value\":{\"DealNumber\":123}}",
-            };
+                "{\"Value\":{\"DealNumber\":123}}"
+            ];
         }
     }
 }

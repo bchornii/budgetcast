@@ -31,8 +31,8 @@ namespace BudgetCast.Common.Application.Behavior.Validation
 
         public async Task<TResponse> Handle(
             TRequest request,
-            CancellationToken cancellationToken,
-            RequestHandlerDelegate<TResponse> next)
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken)
         {
             if (!request.IsQuery<TRequest, TResponse>() &&
                 !request.IsCommand<TRequest, TResponse>())
