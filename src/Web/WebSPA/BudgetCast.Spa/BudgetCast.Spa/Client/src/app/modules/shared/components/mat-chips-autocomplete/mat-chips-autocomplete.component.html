@@ -1,6 +1,6 @@
-<mat-form-field appearance="standard" [hideRequiredMarker]="true">
+<mat-form-field appearance="fill" [hideRequiredMarker]="true">
   <mat-label>{{label}}</mat-label>
-  <mat-chip-list #chipList>
+  <mat-chip-grid #chipList>
     <mat-chip
       *ngFor="let item of data"
       [removable]="removable"
@@ -20,7 +20,7 @@
       (matChipInputTokenEnd)="add($event)"
       (blur)="onBlur($event)"
       (focus)="onFocus($event)">
-  </mat-chip-list>
+  </mat-chip-grid>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
     <mat-option *ngIf="isLoading" class="is-loading">
       <mat-spinner diameter="25"></mat-spinner>
