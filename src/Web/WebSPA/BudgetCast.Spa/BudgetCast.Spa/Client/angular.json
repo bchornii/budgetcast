@@ -140,5 +140,8 @@
         }
       }
     }},
-  "defaultProject": "budgetcast"
+  "defaultProject": "budgetcast",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -1,16 +1,15 @@
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import { format } from 'date-fns';
 
 export class AddExpenseDto {
-    addedAt: Moment;
+    addedAt: Date;
     totalAmount: number;
     tags: string[];
     campaignName: string;
     description: string;
 
     constructor() {
-        this.addedAt = moment();
-        this.campaignName = moment().format("MMMM YYYY");
+        this.addedAt = new Date();
+        this.campaignName = format(new Date(), 'MMMM yyyy');
         this.tags = [] as string[];
     }
 

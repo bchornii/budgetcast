@@ -1,5 +1,5 @@
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
 
 $grid-breakpoints: (
   xs: 0,
@@ -16,9 +16,9 @@ $container-max-widths: (
   xl: 1540px
 );
 
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/reboot";
-@import "~bootstrap/scss/grid"; // add the grid
-@import "~bootstrap/scss/utilities/sizing";
-@import "~bootstrap/scss/utilities/spacing";
-@import "~bootstrap/scss/utilities/flex";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/grid"; // add the grid
+@import "bootstrap/scss/utilities/sizing";
+@import "bootstrap/scss/utilities/spacing";
+@import "bootstrap/scss/utilities/flex";

@@ -13,20 +13,13 @@ import {
 import { MatFormElement } from '../mat-form-element';
 import { NgControl } from '@angular/forms';
 
-import * as moment from 'moment';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { parse } from 'date-fns';
 
 import { SMALL_WIDTH_BREAKPOINT } from 'src/app/util/constants/response-status';
-import { Moment } from 'moment';
 
 @Component({
   selector: 'app-mat-datepicker',
-  templateUrl: './mat-datepicker.component.html',
-  providers: [    
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-  ]
+  templateUrl: './mat-datepicker.component.html'
 })
 export class MatDatepickerComponent extends MatFormElement implements OnInit, OnDestroy, AfterViewInit {
 
@@ -45,8 +38,8 @@ export class MatDatepickerComponent extends MatFormElement implements OnInit, On
   @Output('blur') onBlurChange = new EventEmitter<Event>();
   @Output('focus') onFocusChange = new EventEmitter<Event>();
   
-  minDt: Moment;
-  maxDt: Moment;
+  minDt: Date;
+  maxDt: Date;
 
   constructor(public elementRef: ElementRef,
     @Optional() @Self() public ngCrtl: NgControl) {
@@ -55,8 +48,9 @@ export class MatDatepickerComponent extends MatFormElement implements OnInit, On
 
   ngOnInit() {
     this.setElementId();
-    this.minDt = moment(this.minDate, this.format);
-    this.maxDt = moment(this.maxDate, this.format);
+  // parse strings like "MM-DD-YYYY" into Date objects
+  this.minDt = parse(this.minDate, this.format, new Date());
+  this.maxDt = parse(this.maxDate, this.format, new Date());
   }
 
   ngOnDestroy() {

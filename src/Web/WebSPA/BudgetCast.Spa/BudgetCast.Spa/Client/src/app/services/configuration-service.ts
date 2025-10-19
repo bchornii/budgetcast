@@ -11,7 +11,7 @@ import { Endpoints } from '../util/constants/api-endpoints';
 })
 export class ConfigurationService {
 
-    private settingsLoadedSource = new Subject();
+    private settingsLoadedSource = new Subject<void>();
 
     endpoints: Endpoints;
     settingsLoaded$ = this.settingsLoadedSource.asObservable();
@@ -29,7 +29,7 @@ export class ConfigurationService {
             const endpointsConfig = (response as IConfiguration);
             this.endpoints = this.getEndpoints(endpointsConfig);
             this.isReady = true;
-            this.settingsLoadedSource.next();
+            this.settingsLoadedSource.next(undefined);
         }));
     }
 
