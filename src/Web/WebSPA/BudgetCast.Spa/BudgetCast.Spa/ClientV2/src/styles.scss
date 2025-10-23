@@ -1,0 +1,86 @@
+/* You can add global styles to this file, and also import other style files */
+// Angular 20 Modern SCSS Architecture
+// Component-first approach with minimal global styles
+
+// 1. Design Tokens & Abstracts
+@use 'styles/abstracts/variables';
+
+// 2. Base Styles (Critical for layout and typography)
+@use 'styles/base/reset';
+@use 'styles/base/typography';
+@use 'styles/base/utilities';
+
+// 3. Themes
+@use 'styles/themes/default';
+@use 'styles/themes/dark';
+
+// 4. Vendor Overrides (only if using third-party UI libraries)
+@use 'styles/vendors/angular-material';
+
+// Application-specific global styles
+// Keep this minimal - most styles should be component-scoped
+
+// Global focus styles for better accessibility
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Smooth transitions for theme switching
+* {
+  transition: background-color var(--transition-normal), border-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+// Print styles
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: ' (' attr(href) ')';
+  }
+
+  abbr[title]:after {
+    content: ' (' attr(title) ')';
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}

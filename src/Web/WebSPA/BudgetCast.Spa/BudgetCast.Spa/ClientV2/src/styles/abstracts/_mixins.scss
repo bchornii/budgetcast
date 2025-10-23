@@ -1,0 +1,240 @@
+// Mixins for common patterns
+@use 'sass:map';
+@use 'functions' as func;
+
+/// Responsive breakpoint mixin
+/// @param {String} $breakpoint - Breakpoint name
+/// @param {String} $direction - 'up' or 'down' (default: up)
+@mixin breakpoint($breakpoint, $direction: 'up') {
+  $breakpoints: (
+    'sm': 640px,
+    'md': 768px,
+    'lg': 1024px,
+    'xl': 1280px,
+    '2xl': 1536px,
+  );
+
+  @if not map.has-key($breakpoints, $breakpoint) {
+    @warn "Unknown breakpoint: #{$breakpoint}. Available: #{map.keys($breakpoints)}";
+  } @else {
+    $value: map.get($breakpoints, $breakpoint);
+
+    @if $direction == 'up' {
+      @media (min-width: #{$value}) {
+        @content;
+      }
+    } @else if $direction == 'down' {
+      @media (max-width: #{$value - 1px}) {
+        @content;
+      }
+    }
+  }
+}
+
+/// Focus styles for accessibility
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    @content;
+  }
+}
+
+/// Visually hidden but accessible to screen readers
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/// Button base styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+
+  @include focus-visible;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/// Button variant styles
+/// @param {String} $variant - primary, secondary, outline, ghost
+@mixin button-variant($variant: 'primary') {
+  @if $variant == 'primary' {
+    background-color: var(--color-primary);
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary-700);
+    }
+
+    &:active {
+      background-color: var(--color-primary-800);
+    }
+  } @else if $variant == 'secondary' {
+    background-color: var(--color-gray-200);
+    color: var(--color-text-primary);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-gray-300);
+    }
+
+    &:active {
+      background-color: var(--color-gray-400);
+    }
+  } @else if $variant == 'outline' {
+    background-color: transparent;
+    border-color: var(--color-border-medium);
+    color: var(--color-text-primary);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg-secondary);
+      border-color: var(--color-border-dark);
+    }
+  } @else if $variant == 'ghost' {
+    background-color: transparent;
+    color: var(--color-text-primary);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg-secondary);
+    }
+  }
+}
+
+/// Card component base styles
+@mixin card {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition-normal);
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/// Truncate text with ellipsis
+/// @param {Number} $lines - Number of lines (default: 1)
+@mixin text-truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/// Flexible grid layout
+/// @param {Number} $columns - Number of columns
+/// @param {String} $gap - Gap size (default: var(--spacing-lg))
+@mixin grid($columns, $gap: var(--spacing-lg)) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+/// Auto-fit grid with minimum column width
+/// @param {String} $min-width - Minimum column width
+/// @param {String} $gap - Gap size (default: var(--spacing-lg))
+@mixin grid-auto-fit($min-width, $gap: var(--spacing-lg)) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+/// Flexbox shortcuts
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/// Container with max-width and responsive padding
+/// @param {String} $max-width - Maximum width (default: 1200px)
+@mixin container($max-width: 1200px) {
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+
+  @include breakpoint('md') {
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+}
+
+/// Aspect ratio box
+/// @param {Number} $ratio - Aspect ratio (width/height)
+@mixin aspect-ratio($ratio: 1) {
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    padding-top: percentage(1 / $ratio);
+  }
+
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/// Loading spinner animation
+@mixin spinner($size: 1rem, $border-width: 2px) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  border: $border-width solid var(--color-border-light);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

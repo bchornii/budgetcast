@@ -27,7 +27,8 @@ public static class HttpContextExtensions
             principal,
             authProperties);
     }
-    
+
+    // TODO: replace with actual validation of the token
     public static bool CheckAntiForgeryHeader(this HttpContext context, BffOptions options)
     {
         var antiForgeryHeader = context.Request.Headers[options.AntiForgeryHeaderName].FirstOrDefault();

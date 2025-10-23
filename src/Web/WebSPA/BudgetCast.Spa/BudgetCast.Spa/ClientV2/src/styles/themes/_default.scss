@@ -1,0 +1,42 @@
+// Default Theme
+// Light theme color values and overrides
+
+:root {
+  // Theme-specific color overrides
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: var(--color-gray-50);
+  --color-bg-tertiary: var(--color-gray-100);
+
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-700);
+  --color-text-muted: var(--color-gray-500);
+  --color-text-inverse: var(--color-gray-50);
+
+  --color-border-light: var(--color-gray-200);
+  --color-border-medium: var(--color-gray-300);
+  --color-border-dark: var(--color-gray-400);
+
+  // Form-specific colors
+  --color-form-bg: var(--color-bg-primary);
+  --color-form-border: var(--color-border-medium);
+  --color-form-border-focus: var(--color-primary);
+  --color-form-text: var(--color-text-primary);
+  --color-form-placeholder: var(--color-text-muted);
+
+  // State colors with proper contrast
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-success-text: #166534;
+
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fed7aa;
+  --color-warning-text: #9a3412;
+
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
+  --color-error-text: #991b1b;
+
+  --color-info-bg: #eff6ff;
+  --color-info-border: #bfdbfe;
+  --color-info-text: #1e40af;
+}

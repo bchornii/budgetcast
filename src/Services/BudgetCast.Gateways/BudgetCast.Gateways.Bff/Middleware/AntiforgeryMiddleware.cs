@@ -9,19 +9,9 @@ namespace BudgetCast.Gateways.Bff.Middleware;
 /// (or sub-domain takeover) occurs when an attacker is able to claim an abandoned web host that still has valid DNS
 /// records configured. Combination of SameSite cookie and CSRF header combo is a sophisticated protection.</remarks>
 /// </summary>
-public class AntiforgeryMiddleware
+public class AntiforgeryMiddleware(RequestDelegate next, BffOptions options, ILogger<AntiforgeryMiddleware> logger)
 {
     private static readonly string True = true.ToString();
-    private readonly RequestDelegate _next;
-    private readonly BffOptions _options;
-    private readonly ILogger<AntiforgeryMiddleware> _logger;
-
-    public AntiforgeryMiddleware(RequestDelegate next, BffOptions options, ILogger<AntiforgeryMiddleware> logger)
-    {
-        _next = next;
-        _options = options;
-        _logger = logger;
-    }
 
     /// <summary>
     /// Get invoked for YARP requests
@@ -37,10 +27,10 @@ public class AntiforgeryMiddleware
             {
                 if (string.Equals(value, True, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (!context.CheckAntiForgeryHeader(_options))
+                    if (!context.CheckAntiForgeryHeader(options))
                     {
                         context.Response.StatusCode = 401;
-                        _logger.LogWarning("CSRF token is missing from the request to {routeId}", route.Config.RouteId);
+                        logger.LogWarning("CSRF token is missing from the request to {routeId}", route.Config.RouteId);
                         
                         return;
                     }
@@ -48,6 +38,6 @@ public class AntiforgeryMiddleware
             }
         }
         
-        await _next(context);
+        await next(context);
     }
 }

@@ -1,0 +1,109 @@
+// Example Component Styles - Modern Angular 20 Approach
+// This demonstrates how to style components using the new architecture
+
+@use '../../styles/abstracts/mixins' as mixins;
+@use '../../styles/abstracts/functions' as func;
+
+:host {
+  // Component container styles
+  display: block;
+
+  // Use design tokens from the global system
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+
+  // Component-specific custom properties
+  --component-gap: var(--spacing-md);
+  --component-border-width: 2px;
+}
+
+.header {
+  @include mixins.flex-between;
+
+  margin-bottom: var(--component-gap);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: var(--component-border-width) solid var(--color-border-light);
+
+  h2 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xl);
+  }
+}
+
+.content {
+  @include mixins.flex-column;
+  gap: var(--component-gap);
+
+  p {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
+  }
+}
+
+.actions {
+  @include mixins.flex-center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+
+  .btn {
+    @include mixins.button-base;
+
+    // Primary button variant
+    &--primary {
+      @include mixins.button-variant('primary');
+    }
+
+    // Secondary button variant
+    &--secondary {
+      @include mixins.button-variant('secondary');
+    }
+  }
+}
+
+// Responsive behavior using mixins
+@include mixins.breakpoint('md') {
+  :host {
+    padding: var(--spacing-xl);
+  }
+
+  .header {
+    h2 {
+      font-size: var(--font-size-2xl);
+    }
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+}
+
+// State variants
+:host(.loading) {
+  .content {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    @include mixins.spinner(2rem, 3px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+:host(.error) {
+  border-left: 4px solid var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
+:host(.success) {
+  border-left: 4px solid var(--color-success);
+  background-color: var(--color-success-bg);
+}

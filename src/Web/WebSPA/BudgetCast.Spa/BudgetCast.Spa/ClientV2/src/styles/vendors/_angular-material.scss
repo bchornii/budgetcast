@@ -1,0 +1,72 @@
+// Vendor Overrides
+// Overrides for third-party libraries
+
+// Angular Material overrides (if using Angular Material)
+.mat-button,
+.mat-raised-button,
+.mat-icon-button,
+.mat-fab,
+.mat-mini-fab {
+  // Override Angular Material button styles to match design system
+  --mdc-protected-button-container-color: var(--color-primary);
+  --mdc-protected-button-label-text-color: white;
+}
+
+.mat-form-field {
+  // Override form field colors
+  --mdc-filled-text-field-active-indicator-color: var(--color-primary);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--color-primary);
+}
+
+// Angular CDK overlay overrides
+.cdk-overlay-backdrop {
+  background-color: var(--color-bg-overlay);
+}
+
+.cdk-overlay-pane {
+  // Ensure overlays respect the theme
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+}
+
+// Angular components that might need theme integration
+.mat-card {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.mat-toolbar {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+// Override any other third-party library styles here
+// Example for other UI libraries:
+
+// PrimeNG overrides (if using PrimeNG)
+/*
+.p-button {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.p-inputtext {
+  background-color: var(--color-form-bg);
+  border-color: var(--color-form-border);
+  color: var(--color-form-text);
+}
+*/
+
+// Ng-Bootstrap overrides (if using ng-bootstrap)
+/*
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.form-control {
+  background-color: var(--color-form-bg);
+  border-color: var(--color-form-border);
+  color: var(--color-form-text);
+}
+*/

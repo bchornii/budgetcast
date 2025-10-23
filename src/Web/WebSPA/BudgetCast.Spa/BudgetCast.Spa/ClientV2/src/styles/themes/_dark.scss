@@ -1,0 +1,97 @@
+// Dark Theme
+// Dark mode color values and overrides
+
+[data-theme='dark'] {
+  --color-bg-primary: var(--color-gray-900);
+  --color-bg-secondary: var(--color-gray-800);
+  --color-bg-tertiary: var(--color-gray-700);
+
+  --color-text-primary: var(--color-gray-100);
+  --color-text-secondary: var(--color-gray-300);
+  --color-text-muted: var(--color-gray-400);
+  --color-text-inverse: var(--color-gray-900);
+
+  --color-border-light: var(--color-gray-700);
+  --color-border-medium: var(--color-gray-600);
+  --color-border-dark: var(--color-gray-500);
+
+  // Adjust primary color for better contrast in dark mode
+  --color-primary: var(--color-primary-400);
+
+  // Form colors for dark theme
+  --color-form-bg: var(--color-gray-800);
+  --color-form-border: var(--color-gray-600);
+  --color-form-border-focus: var(--color-primary-400);
+  --color-form-text: var(--color-gray-100);
+  --color-form-placeholder: var(--color-gray-400);
+
+  // State colors adjusted for dark mode
+  --color-success-bg: rgba(5, 150, 105, 0.1);
+  --color-success-border: rgba(5, 150, 105, 0.3);
+  --color-success-text: #86efac;
+
+  --color-warning-bg: rgba(217, 119, 6, 0.1);
+  --color-warning-border: rgba(217, 119, 6, 0.3);
+  --color-warning-text: #fbbf24;
+
+  --color-error-bg: rgba(220, 38, 38, 0.1);
+  --color-error-border: rgba(220, 38, 38, 0.3);
+  --color-error-text: #fca5a5;
+
+  --color-info-bg: rgba(14, 165, 233, 0.1);
+  --color-info-border: rgba(14, 165, 233, 0.3);
+  --color-info-text: #7dd3fc;
+
+  // Adjust shadows for dark mode
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+// System preference based dark mode
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg-primary: var(--color-gray-900);
+    --color-bg-secondary: var(--color-gray-800);
+    --color-bg-tertiary: var(--color-gray-700);
+
+    --color-text-primary: var(--color-gray-100);
+    --color-text-secondary: var(--color-gray-300);
+    --color-text-muted: var(--color-gray-400);
+    --color-text-inverse: var(--color-gray-900);
+
+    --color-border-light: var(--color-gray-700);
+    --color-border-medium: var(--color-gray-600);
+    --color-border-dark: var(--color-gray-500);
+
+    --color-primary: var(--color-primary-400);
+
+    --color-form-bg: var(--color-gray-800);
+    --color-form-border: var(--color-gray-600);
+    --color-form-border-focus: var(--color-primary-400);
+    --color-form-text: var(--color-gray-100);
+    --color-form-placeholder: var(--color-gray-400);
+
+    --color-success-bg: rgba(5, 150, 105, 0.1);
+    --color-success-border: rgba(5, 150, 105, 0.3);
+    --color-success-text: #86efac;
+
+    --color-warning-bg: rgba(217, 119, 6, 0.1);
+    --color-warning-border: rgba(217, 119, 6, 0.3);
+    --color-warning-text: #fbbf24;
+
+    --color-error-bg: rgba(220, 38, 38, 0.1);
+    --color-error-border: rgba(220, 38, 38, 0.3);
+    --color-error-text: #fca5a5;
+
+    --color-info-bg: rgba(14, 165, 233, 0.1);
+    --color-info-border: rgba(14, 165, 233, 0.3);
+    --color-info-text: #7dd3fc;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+}

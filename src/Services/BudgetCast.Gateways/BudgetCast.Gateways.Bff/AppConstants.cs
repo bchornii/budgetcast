@@ -24,6 +24,6 @@ public static class AppConstants
         /// <summary>
         /// Name of toke type metadata
         /// </summary>
-        public const string AntiforgeryCheckMetadata = "Duende.Bff.Yarp.AntiforgeryCheck";
+        public const string AntiforgeryCheckMetadata = "BudgetCast.Bff.Yarp.AntiforgeryCheck";
     }
 }

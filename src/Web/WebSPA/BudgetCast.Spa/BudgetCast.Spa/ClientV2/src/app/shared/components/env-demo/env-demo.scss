@@ -1,0 +1,43 @@
+// Environment Demo Component Styles
+// Aligned with the main app design system
+
+.environment-demo {
+  margin-top: var(--spacing-xl);
+  width: 100%;
+}
+
+.environment-demo h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: var(--line-height-tight);
+}
+
+.environment-info {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin: 0;
+}
+
+.environment-info h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: var(--line-height-tight);
+}
+
+.environment-info p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xs) 0;
+  line-height: var(--line-height-normal);
+}
+
+.environment-info strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}

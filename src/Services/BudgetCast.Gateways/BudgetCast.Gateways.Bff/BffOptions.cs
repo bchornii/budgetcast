@@ -38,12 +38,13 @@ public class BffOptions
     /// Defines if X-TOKEN should be removed from a response after extrificated.
     /// </summary>
     public bool RemoveXTokenCookieFromResponse { get; } = true;
-    
+
     /// <summary>
     /// Specifies the name of the header used for anti-forgery header protection.
-    /// Defaults to X-CSRF.
+    /// Defaults to X-XSRF-TOKEN for Angular.
+    /// https://angular.dev/best-practices/security#httpclient-xsrf-csrf-security
     /// </summary>
-    public string AntiForgeryHeaderName { get; set; } = "X-CSRF";
+    public string AntiForgeryHeaderName { get; set; } = "X-XSRF-TOKEN";
 
     /// <summary>
     /// Specifies the expected value of the anti-forgery header.

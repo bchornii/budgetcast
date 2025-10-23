@@ -1,0 +1,74 @@
+// Utility Functions for SCSS
+@use 'sass:math';
+@use 'sass:string';
+@use 'sass:map';
+
+/// Convert pixels to rem units
+/// @param {Number} $pixels - Pixel value to convert
+/// @param {Number} $base-font-size - Base font size in pixels (default: 16)
+/// @return {Number} - Value in rem units
+@function rem($pixels, $base-font-size: 16) {
+  @if math.unit($pixels) == 'px' {
+    @return math.div($pixels, $base-font-size * 1px) * 1rem;
+  }
+  @return $pixels;
+}
+
+/// Get a spacing value from the scale
+/// @param {String} $key - Spacing scale key (xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl)
+/// @return {Number} - Spacing value
+@function spacing($key) {
+  $spacing-map: (
+    'xs': 0.25rem,
+    'sm': 0.5rem,
+    'md': 0.75rem,
+    'lg': 1rem,
+    'xl': 1.5rem,
+    '2xl': 2rem,
+    '3xl': 3rem,
+    '4xl': 4rem,
+    '5xl': 6rem,
+  );
+
+  @if map.has-key($spacing-map, $key) {
+    @return map.get($spacing-map, $key);
+  }
+
+  @warn "Unknown spacing key: #{$key}. Available keys: #{map.keys($spacing-map)}";
+  @return 1rem;
+}
+
+/// Generate a CSS custom property reference
+/// @param {String} $property - Property name
+/// @return {String} - CSS custom property reference
+@function css-var($property) {
+  @return var(--#{$property});
+}
+
+/// Calculate fluid typography between two breakpoints
+/// @param {Number} $min-size - Minimum font size
+/// @param {Number} $max-size - Maximum font size
+/// @param {Number} $min-width - Minimum viewport width (default: 320px)
+/// @param {Number} $max-width - Maximum viewport width (default: 1200px)
+/// @return {String} - Clamp function for fluid typography
+@function fluid-type($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  $slope: math.div($max-size - $min-size, $max-width - $min-width);
+  $intersection: (-$min-width * $slope) + $min-size;
+
+  @return clamp(#{$min-size}, #{$intersection} + #{$slope * 100vw}, #{$max-size});
+}
+
+/// Strip units from a value
+/// @param {Number} $value - Value with units
+/// @return {Number} - Unitless value
+@function strip-unit($value) {
+  @return math.div($value, ($value * 0 + 1));
+}
+
+/// Get color with opacity
+/// @param {String} $color - CSS custom property name (without --)
+/// @param {Number} $opacity - Opacity value (0-1)
+/// @return {String} - RGBA color value
+@function color-alpha($color, $opacity) {
+  @return rgba(var(--#{$color}), $opacity);
+}
