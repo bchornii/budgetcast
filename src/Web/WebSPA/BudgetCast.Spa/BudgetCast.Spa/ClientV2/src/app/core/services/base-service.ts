@@ -88,18 +88,18 @@ export class BaseService {
 
     switch (level) {
       case 'error':
-        console.error(logMessage, data);
+        console.error('%c[BaseService]', 'background: #222; color: #e65454ff', logMessage, data);
         break;
       case 'warn':
-        console.warn(logMessage, data);
+        console.warn('%c[BaseService]', 'background: #222; color: #e6b54fff', logMessage, data);
         break;
       case 'debug':
         if (this.environmentService.enableDebugMode) {
-          console.debug(logMessage, data);
+          console.debug('%c[BaseService]', 'background: #222; color: #78e247ff', logMessage, data);
         }
         break;
       default:
-        console.log(logMessage, data);
+        console.log('%c[BaseService]', 'background: #222; color: #78e247ff', logMessage, data);
     }
   }
 

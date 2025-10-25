@@ -11,24 +11,24 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const started = Date.now();
+  const started = new Date();
   if (!environment.production) {
     const url = new URL(req.url, window.location.origin);
     const host = url.origin;
     const path = url.pathname + url.search;
-    const message = `HTTP Request (${req.method} ${path}) started. Host: ${host}`;
-    console.log('%c[LoggingInterceptor]', 'background: #222; color: #bada55', message);
+    const message = `[${started.toISOString()}] HTTP Request (${req.method} ${path}). Host: ${host}`;
+    console.log('%c[LoggingInterceptor]', 'background: #222; color: #eeeb4bff', message);
   }
 
   return next(req).pipe(
     finalize(() => {
       if (!environment.production) {
-        const elapsed = Date.now() - started;
+        const elapsed = new Date().getTime() - started.getTime();
         const url = new URL(req.url, window.location.origin);
         const host = url.origin;
         const path = url.pathname + url.search;
-        const message = `HTTP Request (${req.method} ${path}) completed in ${elapsed}ms. Host: ${host}`;
-        console.log('%c[LoggingInterceptor]', 'background: #222; color: #bada55', message);
+        const message = `[${new Date().toISOString()}] HTTP Request (${req.method} ${path}) completed in ${elapsed}ms. Host: ${host}`;
+        console.log('%c[LoggingInterceptor]', 'background: #222; color: #eeeb4bff', message);
       }
     }),
   );
