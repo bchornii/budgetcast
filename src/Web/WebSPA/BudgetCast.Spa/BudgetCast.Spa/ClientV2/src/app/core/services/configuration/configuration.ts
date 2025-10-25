@@ -4,12 +4,16 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Endpoints } from '../../constants/api-endpoints';
+import { BaseService } from '../base-service';
 import { IConfiguration } from './models/configuration-vm';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Configuration {
+export class Configuration extends BaseService {
+  private readonly retryCount = 2;
+  private readonly retryDelay = 500;
+
   private settingsLoadedSource = new Subject<void>();
   private http: HttpClient = inject(HttpClient);
 
@@ -18,17 +22,21 @@ export class Configuration {
   isReady = false;
 
   load(url: string): Observable<IConfiguration> {
-    return this.http.get<IConfiguration>(url).pipe(
+    this.log('info', `Loading configuration from ${url}`);
+
+    const request = this.http.get<IConfiguration>(url).pipe(
       tap((response) => {
-        console.log('server settings loaded');
-        console.log(response);
+        this.log('info', 'Server settings loaded');
+        this.log('info', JSON.stringify(response));
 
         const endpointsConfig = response as IConfiguration;
         this.endpoints = this.getEndpoints(endpointsConfig);
         this.isReady = true;
         this.settingsLoadedSource.next(undefined);
       }),
+      this.retryRequest(this.retryCount, this.retryDelay),
     );
+    return this.executeRequest(request, 'Loading configuration', url);
   }
 
   private getEndpoints(endpointsConfig: IConfiguration): Endpoints {

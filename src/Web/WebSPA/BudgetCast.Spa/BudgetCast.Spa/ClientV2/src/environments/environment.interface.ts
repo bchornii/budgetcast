@@ -3,6 +3,7 @@ export interface Environment {
   name: string;
   apiUrl: string;
   baseUrl: string;
+  devBaseUrl: string;
   enableLogging: boolean;
   enableDebugMode: boolean;
   features: {

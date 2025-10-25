@@ -5,6 +5,7 @@ export const environment: Environment = {
   name: 'production',
   apiUrl: 'https://api.eoi-portal.gov.ab.ca/api',
   baseUrl: 'https://eoi-portal.gov.ab.ca',
+  devBaseUrl: 'https://api-dev.eoi-portal.gov.ab.ca/api',
   enableLogging: false,
   enableDebugMode: false,
   features: {

@@ -24,6 +24,10 @@ export class EnvironmentService {
     return this.env.baseUrl;
   }
 
+  get devBaseUrl(): string {
+    return this.env.devBaseUrl;
+  }
+
   get enableLogging(): boolean {
     return this.env.enableLogging;
   }

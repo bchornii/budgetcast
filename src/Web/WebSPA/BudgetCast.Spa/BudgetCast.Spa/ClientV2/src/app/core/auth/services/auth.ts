@@ -1,17 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT, inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, mergeMap, Observable, tap } from 'rxjs';
 import { BaseService } from '../../services/base-service';
 import { Configuration } from '../../services/configuration/configuration';
 import { ForgotPasswordDto } from '../models/forgot-password-dto';
 import { ResetPasswordDto } from '../models/reset-password-dto';
 import { UserIdentity } from '../models/user-identity-vm';
+import { UserLoginDto } from '../models/user-login-dto';
+import { UserLoginVm } from '../models/user-login-vm';
 import { UserRegistrationDto } from '../models/user-registration-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth extends BaseService {
+  private retryCount = 2;
+  private retryDelay = 500;
+
   private document = inject(DOCUMENT);
   private httpClient = inject(HttpClient);
   private configuration = inject(Configuration);
@@ -39,10 +44,27 @@ export class Auth extends BaseService {
         this.log('info', `User authentication status: ${JSON.stringify(r)}`);
         this.userIdentitySubject.next(r);
       }),
-      this.retryRequest(2, 500),
+      this.retryRequest(this.retryCount, this.retryDelay),
     );
 
     return this.executeRequest(request, 'Checking user authentication status', url);
+  }
+
+  login(userLogin: UserLoginDto): Observable<any> {
+    const url = `${this.configuration.endpoints.identity.signIn.individual}`;
+    this.log('info', `Making request to ${url} to log in user.`);
+
+    const request = this.httpClient
+      .post<UserLoginVm>(`${this.configuration.endpoints.identity.signIn.individual}`, userLogin)
+      .pipe(
+        tap((userLoginVm) => {
+          this.log('info', 'User logged in successfully: ' + JSON.stringify(userLoginVm));
+        }),
+        mergeMap(() => this.checkUserAuthenticationStatus()),
+        this.retryRequest(this.retryCount, this.retryDelay),
+      );
+
+    return this.executeRequest(request, 'Logging in user', url);
   }
 
   googleLogin(): void {
@@ -75,6 +97,7 @@ export class Auth extends BaseService {
       tap(() => {
         this.log('info', 'User registered successfully.');
       }),
+      this.retryRequest(this.retryCount, this.retryDelay),
     );
     return this.executeRequest(request, 'Registering new user', url);
   }
@@ -87,6 +110,7 @@ export class Auth extends BaseService {
       tap(() => {
         this.log('info', 'Password reset request successful.');
       }),
+      this.retryRequest(this.retryCount, this.retryDelay),
     );
     return this.executeRequest(request, 'Requesting password reset', url);
   }
@@ -101,6 +125,7 @@ export class Auth extends BaseService {
         tap(() => {
           this.log('info', 'Password reset successful.');
         }),
+        this.retryRequest(this.retryCount, this.retryDelay),
       );
     return this.executeRequest(request, 'Resetting password', url);
   }

@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.HttpLogging;
 
 namespace BudgetCast.Gateways.Bff;
 
-public class Startup
+public class Startup(
+    IConfiguration configuration, 
+    Microsoft.Extensions.Hosting.IHostingEnvironment environment)
 {
-    private IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; } = configuration;
 
-    public Startup(IConfiguration configuration) 
-        => Configuration = configuration;
+    public Microsoft.Extensions.Hosting.IHostingEnvironment Environment { get; } = environment;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -49,7 +50,7 @@ public class Startup
                 options.ResponseBodyLogLimit = 4096;
             })
             .AddAuthorization()
-            .AddCookieAuthentication(opts);
+            .AddCookieAuthentication(opts, isDevEnv: Environment.IsDevelopment());
 
         services
             .AddDistributedMemoryCache()

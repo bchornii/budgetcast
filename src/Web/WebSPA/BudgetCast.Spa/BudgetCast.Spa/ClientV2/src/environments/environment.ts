@@ -7,8 +7,9 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   production: false,
   name: 'development',
-  apiUrl: 'http://localhost:3000/api',
-  baseUrl: 'http://localhost:4200',
+  apiUrl: 'https://localhost:7058', // API Gateway URL
+  baseUrl: 'http://localhost:4200', // Frontend URL
+  devBaseUrl: 'http://localhost:5000', // Development backend URL for (host of UI to be used in production mode)
   enableLogging: true,
   enableDebugMode: true,
   features: {

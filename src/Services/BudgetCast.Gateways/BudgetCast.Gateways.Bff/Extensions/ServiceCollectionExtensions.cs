@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services"></param>
     /// <param name="opts"></param>
     /// <returns></returns>
-    public static IServiceCollection AddCookieAuthentication(this IServiceCollection services, BffOptions opts)
+    public static IServiceCollection AddCookieAuthentication(this IServiceCollection services, BffOptions opts, bool isDevEnv)
     {
         services
             .AddAuthentication(options =>
@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.Cookie.Name = opts.BffAuthenticationCookieName;
-                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = isDevEnv ? SameSiteMode.None : SameSiteMode.Strict;
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
 

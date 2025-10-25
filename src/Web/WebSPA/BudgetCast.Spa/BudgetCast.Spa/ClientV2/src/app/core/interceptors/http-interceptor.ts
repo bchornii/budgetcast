@@ -6,18 +6,20 @@ import { catchError, throwError } from 'rxjs';
 /**
  * HTTP Interceptor that handles:
  * 1. Adding default headers to all requests
- * 2. Handling authentication errors (401/403) with redirect to login
+ * 2. Enabling credentials (cookies) for cross-origin requests
+ * 3. Handling authentication errors (401/403) with redirect to login
  */
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = inject(Router);
 
-  // Add default headers to all requests
+  // Add default headers and enable credentials (cookies) for all requests
   const modifiedReq = req.clone({
     setHeaders: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
+    withCredentials: true, // Enable sending cookies with cross-origin requests
   });
 
   return next(modifiedReq).pipe(
