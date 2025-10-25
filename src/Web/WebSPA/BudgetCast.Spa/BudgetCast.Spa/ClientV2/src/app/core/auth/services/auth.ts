@@ -33,15 +33,9 @@ export class Auth extends BaseService {
   }
 
   checkUserAuthenticationStatus(): Observable<UserIdentity> {
-    this.log(
-      'info',
-      `Making request to ${this.configuration.endpoints.identity.account.isAuthenticated}`,
-    );
-
     const url = `${this.configuration.endpoints.identity.account.isAuthenticated}`;
     const request = this.httpClient.get<UserIdentity>(url).pipe(
       tap((r) => {
-        this.log('info', `User authentication status: ${JSON.stringify(r)}`);
         this.userIdentitySubject.next(r);
       }),
       this.retryRequest(this.retryCount, this.retryDelay),
@@ -52,7 +46,6 @@ export class Auth extends BaseService {
 
   login(userLogin: UserLoginDto): Observable<any> {
     const url = `${this.configuration.endpoints.identity.signIn.individual}`;
-    this.log('info', `Making request to ${url} to log in user.`);
 
     const request = this.httpClient
       .post<UserLoginVm>(`${this.configuration.endpoints.identity.signIn.individual}`, userLogin)
@@ -77,8 +70,6 @@ export class Auth extends BaseService {
 
   logout() {
     const url = `${this.configuration.endpoints.identity.signOut.all}`;
-
-    this.log('info', `Making request to ${url} to log out user.`);
     const request = this.httpClient.post(url, {}).pipe(
       tap(() => {
         this.log('info', 'User logged out successfully. Invalidating user authentication.');
@@ -91,8 +82,6 @@ export class Auth extends BaseService {
 
   register(userRegistration: UserRegistrationDto): Observable<any> {
     const url = `${this.configuration.endpoints.identity.account.register}`;
-    this.log('info', `Making request to ${url} to register new user.`);
-
     const request = this.httpClient.post(url, userRegistration).pipe(
       tap(() => {
         this.log('info', 'User registered successfully.');
@@ -104,8 +93,6 @@ export class Auth extends BaseService {
 
   forgotPassword(forgotPassword: ForgotPasswordDto) {
     const url = `${this.configuration.endpoints.identity.account.passwordForgot}`;
-    this.log('info', `Making request to ${url} for forgot password.`);
-
     const request = this.httpClient.post(url, forgotPassword).pipe(
       tap(() => {
         this.log('info', 'Password reset request successful.');
@@ -117,8 +104,6 @@ export class Auth extends BaseService {
 
   resetPassword(resetPassword: ResetPasswordDto) {
     const url = `${this.configuration.endpoints.identity.account.passwordReset}`;
-    this.log('info', `Making request to ${url} to reset password.`);
-
     const request = this.httpClient
       .post(`${this.configuration.endpoints.identity.account.passwordReset}`, resetPassword)
       .pipe(

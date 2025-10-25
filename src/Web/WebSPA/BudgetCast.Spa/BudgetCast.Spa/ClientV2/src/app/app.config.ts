@@ -13,6 +13,7 @@ import { httpInterceptor } from './core/interceptors/http-interceptor';
 import { Configuration } from './core/services/configuration/configuration';
 
 import { routes } from './app.routes';
+import { loggingInterceptor } from './core/interceptors/logging-interceptor';
 import { EnvironmentService } from './core/services/environment.service';
 
 /**
@@ -61,7 +62,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([httpInterceptor])),
+    provideHttpClient(withInterceptors([httpInterceptor, loggingInterceptor])),
     provideAppInitializer(() => {
       const configuration = inject(Configuration);
       const auth = inject(Auth);

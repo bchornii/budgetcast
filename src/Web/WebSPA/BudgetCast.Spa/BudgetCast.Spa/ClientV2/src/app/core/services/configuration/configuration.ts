@@ -22,8 +22,6 @@ export class Configuration extends BaseService {
   isReady = false;
 
   load(url: string): Observable<IConfiguration> {
-    this.log('info', `Loading configuration from ${url}`);
-
     const request = this.http.get<IConfiguration>(url).pipe(
       tap((response) => {
         this.log('info', 'Server settings loaded');
