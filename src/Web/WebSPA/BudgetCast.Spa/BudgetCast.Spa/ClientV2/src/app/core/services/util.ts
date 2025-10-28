@@ -2,7 +2,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 let id = 0;
 
-export function generateId(): number {
+export function getNewId(): number {
   return ++id;
 }
 

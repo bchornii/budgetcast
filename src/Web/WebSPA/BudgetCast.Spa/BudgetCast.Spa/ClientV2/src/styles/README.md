@@ -21,6 +21,7 @@ src/
 │   │   ├── _default.scss        # Default theme variables
 │   │   └── _dark.scss           # Dark theme (if needed)
 │   └── vendors/
+│       ├── _bootstrap.scss      # Bootstrap 5 with custom overrides
 │       └── _angular-material.scss # Third-party overrides
 └── styles.scss                  # Main global entry point
 ```

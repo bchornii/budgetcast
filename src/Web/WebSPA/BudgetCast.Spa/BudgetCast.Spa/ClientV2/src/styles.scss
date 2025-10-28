@@ -2,7 +2,7 @@
 // Angular 20 Modern SCSS Architecture
 // Component-first approach with minimal global styles
 
-// 1. Design Tokens & Abstracts
+// 1. Design Tokens & Abstracts (must be first for overrides)
 @use 'styles/abstracts/variables';
 
 // 2. Base Styles (Critical for layout and typography)
@@ -15,6 +15,8 @@
 @use 'styles/themes/dark';
 
 // 4. Vendor Overrides (only if using third-party UI libraries)
+// Bootstrap is imported here with proper overrides
+@use 'styles/vendors/bootstrap';
 @use 'styles/vendors/angular-material';
 
 // Application-specific global styles
@@ -28,7 +30,9 @@
 
 // Smooth transitions for theme switching
 * {
-  transition: background-color var(--transition-normal), border-color var(--transition-normal),
+  transition:
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
     color var(--transition-normal);
 }
 

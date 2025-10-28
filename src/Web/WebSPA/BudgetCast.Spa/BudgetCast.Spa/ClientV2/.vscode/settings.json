@@ -37,5 +37,12 @@
     "**/node_modules": true,
     "**/dist": true
   },
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "workbench.colorCustomizations": {
+    "peekView.border": "#ff9900",
+    "peekViewResult.background": "#1e1e1e",
+    "peekViewEditor.background": "#141414",
+    "peekViewEditor.matchHighlightBackground": "#264f78",
+    "peekViewEditor.matchHighlightBorder": "#003f5c"
+  }
 }

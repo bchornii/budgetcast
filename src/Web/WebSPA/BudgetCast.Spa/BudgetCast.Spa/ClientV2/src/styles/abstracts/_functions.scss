@@ -2,6 +2,7 @@
 @use 'sass:math';
 @use 'sass:string';
 @use 'sass:map';
+@use 'variables' as *;
 
 /// Convert pixels to rem units
 /// @param {Number} $pixels - Pixel value to convert
@@ -71,4 +72,18 @@
 /// @return {String} - RGBA color value
 @function color-alpha($color, $opacity) {
   @return rgba(var(--#{$color}), $opacity);
+}
+
+@function get-color($group, $color) {
+  @if map.has-key($default-palette, $group) {
+    @if map.has-key(map.get($default-palette, $group), $color) {
+      @return map.get(map.get($default-palette, $group), $color);
+    }
+
+    @warn "Unknown `#{$color}` in palette group.";
+    @return null;
+  }
+
+  @warn "Unknown `#{$group}` in palette.";
+  @return null;
 }

@@ -75,12 +75,12 @@ export class Configuration extends BaseService {
       signIn: {
         google: `${baseUrl}/signin/google`,
         facebook: `${baseUrl}/signin/facebook`,
-        individual: `${baseUrl}/signin/individual`,
+        individual: `${baseUrl.replace('api', 'bff')}/login/individual`,
         refreshAccessToken: `${baseUrl}/signin/refresh`,
       },
 
       signOut: {
-        all: `${baseUrl}/signout`,
+        all: `${baseUrl.replace('api', 'bff')}/logout/individual`,
       },
     };
   }
