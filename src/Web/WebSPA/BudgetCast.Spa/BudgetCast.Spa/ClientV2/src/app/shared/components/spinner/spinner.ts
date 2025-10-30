@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-spinner',
@@ -6,15 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./spinner.scss'],
 })
 export class SpinnerComponent {
-  public isVisible = false;
+  public isVisible = signal(false);
 
   constructor() {}
 
   public show(): void {
-    this.isVisible = true;
+    this.isVisible.set(true);
   }
 
   public hide(): void {
-    this.isVisible = false;
+    this.isVisible.set(false);
   }
 }

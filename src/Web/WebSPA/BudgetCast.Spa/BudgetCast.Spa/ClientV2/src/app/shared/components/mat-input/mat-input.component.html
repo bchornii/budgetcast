@@ -1,0 +1,61 @@
+<mat-form-field class="w-full" [hideRequiredMarker]="true">
+  <mat-label>{{ label() }}</mat-label>
+  @if (!isTextArea()) {
+    @if (!isCurrency()) {
+      <input
+        #input
+        matInput
+        [id]="id"
+        [readonly]="readonly()"
+        [type]="innerType()"
+        [formControl]="inputControl"
+        (blur)="onBlur($event)"
+        (focus)="onFocus($event)"
+      />
+    } @else {
+      <input
+        #input
+        matInput
+        currencyMask
+        [options]="{ prefix: '₴ ' }"
+        [id]="id"
+        [readonly]="readonly()"
+        [type]="innerType()"
+        [formControl]="inputControl"
+        (blur)="onBlur($event)"
+        (focus)="onFocus($event)"
+      />
+    }
+  } @else {
+    <textarea
+      #input
+      matInput
+      [id]="id"
+      [readonly]="readonly()"
+      [formControl]="inputControl"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+    >
+    </textarea>
+  }
+  <mat-error>{{ errMsg() }}</mat-error>
+  @if (type() === 'password') {
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="showPassword($event)"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide()"
+    >
+      <mat-icon [style.color]="hasError() ? '#dc3545' : '#303538'">
+        {{ hide() ? 'visibility_off' : 'visibility' }}
+      </mat-icon>
+    </button>
+  }
+
+  @if (isSearch()) {
+    <button mat-icon-button matSuffix>
+      <mat-icon>search</mat-icon>
+    </button>
+  }
+</mat-form-field>
